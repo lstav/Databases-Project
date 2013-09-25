@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 
-		<title>Ex10</title>
+		<title>Categories</title>
 		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
 		<link rel="stylesheet" href="css/jquery.mobile-1.3.1.css" />
 		<link rel="stylesheet" href="css/project.css" />
@@ -10,21 +10,31 @@
 		<script src="js/jquery.mobile-1.3.1.js"></script>
 	</head>
 	<body>
-				<div id="Categories" data-role="page">
-			<div data-role="panel" id="mypanel" data-theme="a" data-position="left" data-display="reveal">
+			<div data-role="panel" id="mypanel" data-theme="a" data-position="right" data-display="reveal">
         		<ul data-role="listview" data-theme="a">
+        			<li><a href="advsearch.html" >Search</a></li>  
 					<li><a href="#Messages" >Messages</a></li>  
 					<li><a href="#Notifications" >Notifications</a></li>
-					<li><a href="#Settings" >Settings</a></li> 
-					<li><a href="login.html" >Log out</a></li>         		      		
+					<li><a href="#Settings" >Settings</a></li>        		      		
         		</ul>
     		</div><!-- /panel -->
+    		
+			<div data-role="panel" id="description" data-theme="a" data-position="right" data-display="reveal">
+        		<h1>Categories</h1>
+    		</div><!-- /panel -->
 
-			<div data-role="header" data-theme="b" data-position="fixed">
-				<a href="#mypanel" data-role="button" data-icon="bars">Menu</a>
-				<h1>Categories</h1>
+			<div data-class="cat" data-role="header" data-theme="b"> <h1>Categories</h1>
+				
+				<a href="product.html" data-role="button" data-position="left" data-icon="arrow-l" data-iconpos="notext" data-rel="back">Back</a>
+				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
+					<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
+					<a href="#mypanel" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
+				</div>
+
 			</div>
-			<div data-role="content">	
+			
+			<div data-role="content" class="cat">	
+					<a data-role="button" data-icon="search" data-theme="b" href="advsearch.html">Advance Search</a>
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 						<h1>Books</h1>
 					<ul data-role="listview" data-inset="true">
@@ -51,7 +61,7 @@
 					<h1>Clothing</h1>
 					<ul data-role="listview" data-inset="true" >
 					<li><a href="Children's Clothes">Children</a></li>
-					<div data-role="collapsible" data-theme="d" data-inset="false" data-iconpos="right">
+					<div class="Sub" data-role="collapsible" data-theme="d" data-inset="false" data-iconpos="right">
 						<h1>Men</h1>
 						<ul data-role="listview" data-inset="true" >
 							<li><a href="Men's Shirts">Shirts</a></li>
@@ -59,7 +69,7 @@
 							<li><a href="Men's Socks">Socks</a></li>
 						</ul>		
 					</div>
-					<div data-role="collapsible" data-theme="d" data-inset="false" data-iconpos="right">
+					<div class="Sub" data-role="collapsible" data-theme="d" data-inset="false" data-iconpos="right">
 						<h1>Women</h1>
 						<ul data-role="listview" data-inset="true" >
 							<li><a href="Women's Shirts">Shirts</a></li>
@@ -77,8 +87,7 @@
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 					<h1>Sports</h1>
 					<ul data-role="listview" data-inset="true" >
-					<li><a href="Bicycles">Bicycles</a></li>
-					<div data-role="collapsible" data-theme="d" data-inset="false" data-iconpos="right">
+					<div class="Sub" data-role="collapsible" data-theme="d" data-inset="false" data-iconpos="right">
 						<h1>Bicycles</h1>
 						<ul data-role="listview" data-inset="true" >
 							<li><a href="Bicycle Frames">Frames</a></li>
@@ -93,6 +102,5 @@
 					<li><a href="Basketball">Basketball</a></li>
 				</ul></div>
 			</div>
-		</div>
 	</body>
 </html>
