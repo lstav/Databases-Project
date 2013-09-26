@@ -11,16 +11,33 @@
 		<script src="appjs/app.js"></script>
 	</head>
 	<body>
-		<div id ="accounts" data-role="page">
-			<div data-role="header" data-theme="b" data-position="fixed">
-				<h1>
-					LHL Inc.
-				</h1>
-			</div>
-				<h3 style="text-align: center">Account</h3>	
-				<ul id="account-list" data-role="listview">
-				</ul>
+	<div id="accounts" data-role="page">
+		<div data-role="panel" id="mypanel" data-theme="a" data-position="right" data-display="reveal">
+        	<ul data-role="listview" data-theme="a">
+        		<li><a href="advsearch.html" >Search</a></li>  
+				<li><a href="#Messages" >Messages</a></li>  
+				<li><a href="#Notifications" >Notifications</a></li>
+				<li><a href="#Settings" >Settings</a></li>
+				<li><a href="login.html" >Log Out</a></li>      		      		
+        	</ul>
+   		</div><!-- /panel -->
+    		
+    	<div data-role="panel" id="description" data-theme="a" data-position="right" data-display="reveal">
+        	<h1>Account</h1>
+    	</div><!-- /panel --> 
+    		
+    	<div data-role="header" data-theme="b"> <h1>Account</h1>
 			
+			<a href="product.html" data-role="button" data-position="left" data-icon="arrow-l" data-iconpos="notext" data-rel="back">Back</a>
+			<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
+				<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
+				<a href="#mypanel" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
+			</div>
 		</div>
+		<div data-role="content">
+			<ul id="account-list" data-role="listview">
+			</ul>	
+		</div>
+	</div>
 	</body>
 </html>
