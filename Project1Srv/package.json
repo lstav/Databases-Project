@@ -1,0 +1,9 @@
+{
+  "name": "Project1Srv",
+  "description": "Project 1 Server",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "3.x"
+  }
+}
