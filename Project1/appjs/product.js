@@ -51,6 +51,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
     parameter = parameters.replace("p=","");  
     var table1= $("#my-table");
 	table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Price:	</b> $"+parameter+"</td>");
+	$('#item-image').prepend('<img id="theImg" src="http://image.weather.com/web/multimedia/images/slideshows/fall09/fall20.jpg" />');
 	table1.table("refresh"); 	
 });
 
