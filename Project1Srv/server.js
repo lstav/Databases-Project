@@ -56,7 +56,7 @@ app.get('/Project1Srv/account', function(req, res) {
 // REST Operation - HTTP GET to read a car based on its id
 app.get('/Project1Srv/:id', function(req, res) {
 	var id = req.params.id;
-		console.log("GET car: " + id);
+		console.log("GET account: " + id);
 
 	if ((id < 0) || (id >= accountNextId)){
 		// not found
