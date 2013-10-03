@@ -26,7 +26,7 @@ var account = require("./account.js");
 var Account = account.Account;
 
 var accountList = new Array(
-	new Account("Luis", "123", "Puerto Rico", "Puerto Rico", "987654321", "****");	
+	new Account("Luis M", "123", "Puerto Rico", "Puerto Rico", "987654321", "****")	
 );
  var accountNextId = 0;
  
@@ -44,24 +44,24 @@ for (var i=0; i < accountList.length;++i){
 // d) DELETE - Remove an individual object, or collection (Database delete operation)
 
 // REST Operation - HTTP GET to read all cars
-app.get('/Project1Srv/account', function(req, res) {
+app.get('/Project1Srv/accounts', function(req, res) {
 	console.log("GET");
 	//var tom = {"make" : "Ford", "model" : "Escape", "year" : "2013", "description" : "V4 engine, 30mpg, Gray", "price" : "$18,000"};
 	//var tom = new Car("Ford", "Escape", "2013", "V4 engine, 30mpg, Gray", "$18,000");
 	//console.log("tom: " + JSON.stringify(tom));
-	var response = {"account" : accountList};
+	var response = {"accounts" : accountList};
   	res.json(response);
 });
 
 // REST Operation - HTTP GET to read a car based on its id
-app.get('/Project1Srv/:id', function(req, res) {
+app.get('/Project1Srv/accounts/:id', function(req, res) {
 	var id = req.params.id;
 		console.log("GET account: " + id);
 
 	if ((id < 0) || (id >= accountNextId)){
 		// not found
 		res.statusCode = 404;
-		res.send("Car not found.");
+		res.send("Account not found.");
 	}
 	else {
 		var target = -1;
@@ -73,7 +73,7 @@ app.get('/Project1Srv/:id', function(req, res) {
 		}
 		if (target == -1){
 			res.statusCode = 404;
-			res.send("Car not found.");
+			res.send("Account not found.");
 		}
 		else {
 			var response = {"account" : accountList[target]};
@@ -83,19 +83,19 @@ app.get('/Project1Srv/:id', function(req, res) {
 });
 
 // REST Operation - HTTP PUT to updated a car based on its id
-app.put('/Project1Srv/accounr:id', function(req, res) {
+app.put('/Project1Srv/accounts/:id', function(req, res) {
 	var id = req.params.id;
-		console.log("PUT car: " + id);
+		console.log("PUT account: " + id);
 
 	if ((id < 0) || (id >= accountNextId)){
 		// not found
 		res.statusCode = 404;
-		res.send("Car not found.");
+		res.send("Account not found.");
 	}
 	else if(!req.body.hasOwnProperty('make') || !req.body.hasOwnProperty('model')
   	|| !req.body.hasOwnProperty('year') || !req.body.hasOwnProperty('price') || !req.body.hasOwnProperty('description')) {
     	res.statusCode = 400;
-    	return res.send('Error: Missing fields for car.');
+    	return res.send('Error: Missing fields for account.');
   	}
 	else {
 		var target = -1;
@@ -123,48 +123,49 @@ app.put('/Project1Srv/accounr:id', function(req, res) {
 });
 
 // REST Operation - HTTP DELETE to delete a car based on its id
-app.del('/ClassDemo3Srv/cars/:id', function(req, res) {
+app.del('/Project1Srv/accounts/:id', function(req, res) {
 	var id = req.params.id;
-		console.log("DELETE car: " + id);
+		console.log("DELETE account: " + id);
 
-	if ((id < 0) || (id >= carNextId)){
+	if ((id < 0) || (id >= accountNextId)){
 		// not found
 		res.statusCode = 404;
-		res.send("Car not found.");
+		res.send("Account not found.");
 	}
 	else {
 		var target = -1;
-		for (var i=0; i < carList.length; ++i){
-			if (carList[i].id == id){
+		for (var i=0; i < accountList.length; ++i){
+			if (accountList[i].id == id){
 				target = i;
 				break;	
 			}
 		}
 		if (target == -1){
 			res.statusCode = 404;
-			res.send("Car not found.");			
+			res.send("Account not found.");			
 		}	
 		else {
-			carList.splice(target, 1);
+			accountList.splice(target, 1);
   			res.json(true);
   		}		
 	}
 });
 
 // REST Operation - HTTP POST to add a new a car
-app.post('/ClassDemo3Srv/cars', function(req, res) {
+app.post('/Project1Srv/accounts', function(req, res) {
 	console.log("POST");
 
-  	if(!req.body.hasOwnProperty('make') || !req.body.hasOwnProperty('model')
-  	|| !req.body.hasOwnProperty('year') || !req.body.hasOwnProperty('price') || !req.body.hasOwnProperty('description')) {
+  	if(!req.body.hasOwnProperty('customerName') || !req.body.hasOwnProperty('accountNumber')
+  	|| !req.body.hasOwnProperty('mailingAddress') || !req.body.hasOwnProperty('billingAddress') || !req.body.hasOwnProperty('creditCard')
+  	|| !req.body.hasOwnProperty('rank')) {
     	res.statusCode = 400;
-    	return res.send('Error: Missing fields for car.');
+    	return res.send('Error: Missing fields for account.');
   	}
 
-  	var newCar = new Car(req.body.make, req.body.model, req.body.year, req.body.description, req.body.price);
-  	console.log("New Car: " + JSON.stringify(newCar));
-  	newCar.id = carNextId++;
-  	carList.push(newCar);
+  	var newAccount = new Account(req.body.customerName, req.body.accountNumber, req.body.mailingAddress, req.body.billingAddress, req.body.creditCard, req.body.rank);
+  	console.log("New Account: " + JSON.stringify(newAccount));
+  	newAccount.id = accountNextId++;
+  	accountList.push(newAccount);
   	res.json(true);
 });
 
