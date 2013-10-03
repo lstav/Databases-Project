@@ -26,7 +26,7 @@ var account = require("./account.js");
 var Account = account.Account;
 
 var accountList = new Array(
-	new Account("Luis M", "123", "Puerto Rico", "Puerto Rico", "987654321", "****")	
+	new Account("Luis", "123", "Puerto Rico", "Puerto Rico", "987654321", "****")	
 );
  var accountNextId = 0;
  

@@ -34,8 +34,31 @@
 			</div>
 		</div>
 		<div data-role="content">
-			<ul id="account-list" data-role="listview">
-			</ul>	
+			<ul id="account-list" data-role="listview" data-inset="true">
+			</ul>
+		</div>
+		<div id="account-view" data-role="page">
+			<div data-role="header" data-theme="b" data-position="fixed">
+				<a data-role="button" data-rel="back" href="#accounts">Cancel</a>
+				<h1>Account Info</h1>
+				<a data-role="button" data-rel="back" onclick="UpdateAccount()">Save</a>
+			</div>
+			<center>
+				<h2>Enter the new account info</h2>
+			</center>
+			<form id="account-view-form">
+ 				<fieldset data-role="controlgroup">
+ 					<ul>
+  					<li><label for="upd-name"> Name: <input id="upd-name" name="name" type="text"/></label></li>
+  					<li><label for="upd-mailing"> Mailing Address: <input id="upd-mailing" name="mailing" type="text"/></label></li>
+  					<li><label for="upd-billing"> Billing Address: <input id="upd-billing" name="mailing" type="text"/></label></li>
+  			  		<li><label for="upd-creditCard"> Credit Card Number: *****<input id="upd-creditCard" name="creditCard" type="text"/></label></li>
+  			  	</ul>
+			 </fieldset>
+			</form>
+			<center>
+				<a data-role="button" onclick="DeleteAccount()">Delete</a>
+			</center>
 		</div>
 	</div>
 	</body>

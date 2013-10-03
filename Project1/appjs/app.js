@@ -1,6 +1,6 @@
 
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
-	console.log("Jose");
+	console.log("Luis");
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accounts",
 		contentType: "application/json",
@@ -12,12 +12,12 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 			var account;
 			for (var i=0; i < len; ++i){
 				account = accountList[i];
-				list.append("<h2>" + account.customerName + "</h2>" + 
+				list.append("<li><a onClick=GetAccount(" + account.id + ")><h2>" + account.customerName + "</h2>" + 
 					"<p><strong>Number: " + account.accountNumber +  "</strong></p>" + 
 					"<p> Mailing Address: " + account.mailingAddress + "</p>" + 
 					"<p> Billing Address: " + account.billingAddress + "</p>" +
 					"<p> Credit Card: *****" + account.creditCard.substr(5,6) + "</p>" +
-					"<p class=\"ui-li-aside\"> Rank: " + account.rank + "</p>");
+					"<p class=\"ui-li-aside\"> Rank: " + account.rank + "</p></a></li>");
 			}
 			list.listview("refresh");
 		},
@@ -28,6 +28,15 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 	});
 });
 
+
+$(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
+	// currentAccount has been set at this point
+	$("#upd-name").val(currentAccount.customerName);
+	$("#upd-mailing").val(currentAccount.mailingAddress);
+	$("#upd-billing").val(currentAccount.billingAddress);
+	$("#upd-creditCard").val(currentAccount.creditCard.substr(5,6));
+	
+});
 ///////////////////////////////
 
 function ConverToJSON(formData){
@@ -44,7 +53,7 @@ function SaveAccount(){
 	var form = $("#account-form");
 	var formData = form.serializeArray();
 	console.log("form Data: " + formData);
-	var newCar = ConverToJSON(formData);
+	var newAccount = ConverToJSON(formData);
 	console.log("New Account: " + JSON.stringify(newAccount));
 	var newAccountJSON = JSON.stringify(newAccount);
 	$.ajax({
@@ -63,8 +72,6 @@ function SaveAccount(){
 			alert("Data could not be added!");
 		}
 	});
-
-
 }
 
 var currentAccount = {};
@@ -72,7 +79,7 @@ var currentAccount = {};
 function GetAccount(id){
 	$.mobile.loading("show");
 	$.ajax({
-		url : "http://localhost:3412Project1Srv/accounts/" + id,
+		url : "http://localhost:3412/Project1Srv/accounts/" + id,
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
@@ -99,9 +106,9 @@ function UpdateAccount(){
 	var form = $("#account-view-form");
 	var formData = form.serializeArray();
 	console.log("form Data: " + formData);
-	var updCar = ConverToJSON(formData);
-	updCar.id = currentAccount.id;
-	console.log("Updated Car: " + JSON.stringify(updAccount));
+	var updAccount = ConverToJSON(formData);
+	updAccount.id = currentAccount.id;
+	console.log("Updated Account: " + JSON.stringify(updAccount));
 	var updAccountJSON = JSON.stringify(updAccount);
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accounts/" + updAccount.id,
@@ -142,7 +149,7 @@ function DeleteAccount(){
 			console.log("textStatus: " + textStatus);
 			$.mobile.loading("hide");
 			if (data.status == 404){
-				alert("Car not found.");
+				alert("Account not found.");
 			}
 			else {
 				alter("Internal Server Error.");
