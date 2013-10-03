@@ -46,9 +46,7 @@ for (var i=0; i < accountList.length;++i){
 // REST Operation - HTTP GET to read all cars
 app.get('/Project1Srv/accounts', function(req, res) {
 	console.log("GET");
-	//var tom = {"make" : "Ford", "model" : "Escape", "year" : "2013", "description" : "V4 engine, 30mpg, Gray", "price" : "$18,000"};
-	//var tom = new Car("Ford", "Escape", "2013", "V4 engine, 30mpg, Gray", "$18,000");
-	//console.log("tom: " + JSON.stringify(tom));
+	
 	var response = {"accounts" : accountList};
   	res.json(response);
 });

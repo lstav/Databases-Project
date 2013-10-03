@@ -10,32 +10,33 @@
 		<script src="appjs/app.js"></script>
 	</head>
 	<body>		
-	<div id="accounts" data-role="page">
-		<div data-role="panel" id="mypanel" data-theme="a" data-position="right" data-display="reveal">
-        	<ul data-role="listview" data-theme="a">
-        		<li><a href="advsearch.html" >Search</a></li>  
-				<li><a href="#Messages" >Messages</a></li>  
-				<li><a href="#Notifications" >Notifications</a></li>
-				<li><a href="settings.html" >Settings</a></li>
-				<li><a href="login.html" >Log Out</a></li>      		      		
-        	</ul>
-   		</div><!-- /panel -->
+		<div id="accounts" data-role="page">
+			<div data-role="panel" id="mypanel" data-theme="a" data-position="right" data-display="reveal">
+        		<ul data-role="listview" data-theme="a">
+        			<li><a href="advsearch.html" >Search</a></li>  
+					<li><a href="#Messages" >Messages</a></li>  
+					<li><a href="#Notifications" >Notifications</a></li>
+					<li><a href="settings.html" >Settings</a></li>
+					<li><a href="login.html" >Log Out</a></li>      		      		
+        		</ul>
+   			</div><!-- /panel -->
     		
-    	<div data-role="panel" id="description" data-theme="a" data-position="right" data-display="reveal">
-        	<h1>Account</h1>
-    	</div><!-- /panel --> 
+    		<div data-role="panel" id="description" data-theme="a" data-position="right" data-display="reveal">
+        		<h1>Account</h1>
+    		</div><!-- /panel --> 
     		
-    	<div data-role="header" data-theme="b"> <h1>Account</h1>
+    		<div data-role="header" data-theme="b"> <h1>Account</h1>
 			
-			<a href="product.html" data-role="button" data-position="left" data-icon="arrow-l" data-iconpos="notext" data-rel="back">Back</a>
-			<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
-				<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
-				<a href="#mypanel" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
+				<a href="product.html" data-role="button" data-position="left" data-icon="arrow-l" data-iconpos="notext" data-rel="back">Back</a>
+				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
+					<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
+					<a href="#mypanel" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
+				</div>
 			</div>
-		</div>
-		<div data-role="content">
-			<ul id="account-list" data-role="listview" data-inset="true">
-			</ul>
+			<div data-role="content">
+				<ul id="account-list" data-role="listview" data-inset="true">
+				</ul>
+			</div>
 		</div>
 		<div id="account-view" data-role="page">
 			<div data-role="header" data-theme="b" data-position="fixed">
@@ -52,7 +53,7 @@
   					<li><label for="upd-name"> Name: <input id="upd-name" name="name" type="text"/></label></li>
   					<li><label for="upd-mailing"> Mailing Address: <input id="upd-mailing" name="mailing" type="text"/></label></li>
   					<li><label for="upd-billing"> Billing Address: <input id="upd-billing" name="mailing" type="text"/></label></li>
-  			  		<li><label for="upd-creditCard"> Credit Card Number: *****<input id="upd-creditCard" name="creditCard" type="text"/></label></li>
+  			  		<li><label for="upd-creditCard"> Credit Card Number: <input id="upd-creditCard" name="creditCard" type="text"/></label></li>
   			  	</ul>
 			 </fieldset>
 			</form>
@@ -60,6 +61,5 @@
 				<a data-role="button" onclick="DeleteAccount()">Delete</a>
 			</center>
 		</div>
-	</div>
 	</body>
 </html>

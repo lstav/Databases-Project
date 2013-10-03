@@ -34,7 +34,7 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	$("#upd-name").val(currentAccount.customerName);
 	$("#upd-mailing").val(currentAccount.mailingAddress);
 	$("#upd-billing").val(currentAccount.billingAddress);
-	$("#upd-creditCard").val(currentAccount.creditCard.substr(5,6));
+	$("#upd-creditCard").val(currentAccount.creditCard);
 	
 });
 ///////////////////////////////
