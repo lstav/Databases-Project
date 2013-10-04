@@ -42,8 +42,8 @@ var product = require("./product.js");
 var Product = product.Product;
 
 var artsBooksList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "http://image.weather.com/web/multimedia/images/slideshows/fall09/fall20.jpg"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "http://image.weather.com/web/multimedia/images/slideshows/fall09/fall20.jpg")
 );
 
 var comicBooksList= new Array(
@@ -151,11 +151,6 @@ var menPantsList= new Array(
 	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
 );
 
-var menSocksList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
 var womenShirtsList= new Array(
 	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
 	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
@@ -206,38 +201,37 @@ var fishingSportsList= new Array(
 var category= require("./category.js");
 var Category= category.Category;
 var categoryList= new Array(
-	new Category ("ArtBooks", artsBooksList),
-	new Category ("ComicBooks", comicBooksList),
-	new Category ("MysteryBooks", mysteryBooksList),
-	new Category ("RomanceBooks", romanceBooksList),
-	new Category ("ScienceFictionBooks", fictionBooksList),
-	new Category ("EntertainmentMagazine", entertainmentMagList),
-	new Category ("FashionMagazine", fashionMagList),
-	new Category ("MoviesMagazine", moviesMagList),
-	new Category ("NewsMagazine", newsMagList),
-	new Category ("ScienceMagazine", scienceMagList),
-	new Category ("TvElectronics", tvElecList),
-	new Category ("AudioElectronics", audioElecList),
-	new Category ("PhonesElectronics", phonesElecList),
-	new Category ("CamerasElectronics", camerasElecList),
-	new Category ("VideoElectronics", videoElecList),
-	new Category ("LaptopsComp", laptopCompList),
-	new Category ("DesktopComp", desktopCompList),
-	new Category ("TabletsComp", tabletsCompList),
-	new Category ("PrintersComp", printersCompList),
-	new Category ("ChildrenClothes", childrenClothesList),
-	new Category ("MenShirts", menShirtsList),
-	new Category ("MenPants", menPantsList),
-	new Category ("MenSocks", menSocksList),
-	new Category ("WomenShirts", womenShirtsList),
-	new Category ("WomenPants", womenPantsList),
-	new Category ("WomenDresses", womenDressesList),
-	new Category ("ChildrenShoes", childrenShoesList),
-	new Category ("MenShoes", menShoesList),
-	new Category ("BicycleSports", bicycleSportsList),
-	new Category ("KayakSports", kayakSportsList),
-	new Category ("GolfSports", golfSportsList),
-	new Category ("FishingSports", fishingSportsList)
+	new Category ("ArtBooks", "Arts & Photography", artsBooksList),
+	new Category ("ComicBooks", "Comic & Graphic Novels", comicBooksList),
+	new Category ("MysteryBooks", "Mystery, Thriller & Suspense", mysteryBooksList),
+	new Category ("RomanceBooks", "Romance", romanceBooksList),
+	new Category ("ScienceFictionBooks", "Science Fiction & Fantasy", fictionBooksList),
+	new Category ("EntertainmentMagazine", "Entertainment", entertainmentMagList),
+	new Category ("FashionMagazine", "Fashion & Style", fashionMagList),
+	new Category ("MoviesMagazine", "Movies & Music", moviesMagList),
+	new Category ("NewsMagazine", "News & Politics", newsMagList),
+	new Category ("ScienceMagazine", "Science", scienceMagList),
+	new Category ("TvElectronics", "TV", tvElecList),
+	new Category ("AudioElectronics", "Audio", audioElecList),
+	new Category ("PhonesElectronics", "Phones", phonesElecList),
+	new Category ("CamerasElectronics", "Cameras",camerasElecList),
+	new Category ("VideoElectronics", "Video", videoElecList),
+	new Category ("LaptopsComp", "Laptops", laptopCompList),
+	new Category ("DesktopComp", "Desktops", desktopCompList),
+	new Category ("TabletsComp", "Tablets", tabletsCompList),
+	new Category ("PrintersComp", "Printers", printersCompList),
+	new Category ("ChildrenClothes", "Children", childrenClothesList),
+	new Category ("MenShirts", "Men Shirts", menShirtsList),
+	new Category ("MenPants", "Men Pants", menPantsList),
+	new Category ("WomenShirts", "Women Shirts", womenShirtsList),
+	new Category ("WomenPants", "Women Pants", womenPantsList),
+	new Category ("WomenDresses", "Women Dresses", womenDressesList),
+	new Category ("ChildrenShoes", "Children Shoes", childrenShoesList),
+	new Category ("MenShoes", "Men Shoes", menShoesList),
+	new Category ("BicycleSports", "Bicycles", bicycleSportsList),
+	new Category ("KayakSports", "Kayaks", kayakSportsList),
+	new Category ("GolfSports", "Golf", golfSportsList),
+	new Category ("FishingSports", "Fishing", fishingSportsList)
 );
 
 var productId=0;

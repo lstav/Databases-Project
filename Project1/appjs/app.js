@@ -55,7 +55,13 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 		item =productCat[i];
 		list.append("<li><a onClick=GetProduct("+item.id+")>" + item.itemName + "</a></li>");
 		}
-		list.listview("refresh");},
+		list.listview("refresh");
+		
+		var iname= $("#catName2");
+		iname.empty();
+		iname.append("<center>"+currentCategory.name+"</center>");
+
+		},
 		
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -76,8 +82,12 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 
 	var idescription= $("#description");
 	idescription.append("<p>"+currentProduct.description+"</p>");
-	$('#item-image').prepend('<img id="theImg" src="http://image.weather.com/web/multimedia/images/slideshows/fall09/fall20.jpg" />');
+	$('#item-image').prepend('<center><img id="theImg" src="' + currentProduct.img+'"/></center>');
 	table1.table("refresh"); 
+	
+	var pname= $("#productName2");
+	pname.empty();
+	pname.append("<center>"+currentProduct.itemName+"</center>");
 });
 
 ///////////////////////////////
