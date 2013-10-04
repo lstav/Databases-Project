@@ -22,6 +22,8 @@ app.configure(function () {
 
 app.use(express.bodyParser());
 
+//Account: 
+
 var account = require("./account.js");
 var Account = account.Account;
 
@@ -33,6 +35,68 @@ var accountList = new Array(
 for (var i=0; i < accountList.length;++i){
 	accountList[i].id = accountNextId++;
 }
+
+//Category
+
+var category= require("./category.js");
+var Category= category.Category;
+var categoryList= new Array(
+	new Category ("ArtBooks"),
+	new Category ("ChildrenBooks"),
+	new Category ("ComicBooks"),
+	new Category ("MysteryBooks"),
+	new Category ("RomanceBooks"),
+	new Category ("ScienceBooks"),
+	new Category ("ScienceFictionBooks"),
+	new Category ("ArtsMagazine"),
+	new Category ("ElectronicsMagazine"),
+	new Category ("EntertainmentMagazine"),
+	new Category ("FashionMagazine"),
+	new Category ("MoviesMagazine"),
+	new Category ("NewsMagazine"),
+	new Category ("ScienceMagazine"),
+	new Category ("TvElectronics"),
+	new Category ("AudioElectronics"),
+	new Category ("PhonesElectronics"),
+	new Category ("CamerasElectronics"),
+	new Category ("VideoElectronics"),
+	new Category ("LaptopsComp"),
+	new Category ("DesktopComp"),
+	new Category ("TabletsComp"),
+	new Category ("PrintersComp"),
+	new Category ("ChildrenClothes"),
+	new Category ("MenShirts"),
+	new Category ("MenPants"),
+	new Category ("MenSocks"),
+	new Category ("WomenShirts"),
+	new Category ("WomenPants"),
+	new Category ("WomenDresses"),
+	new Category ("ChildrenShoes"),
+	new Category ("MenShoes"),
+	new Category ("BicycleSports"),
+	new Category ("KayakSports"),
+	new Category ("GolfSports"),
+	new Category ("FishingSports")
+);
+
+//Product:
+
+var product = require("./product.js");
+var Product = product.Product;
+
+var artsBooksList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var fictionBooksList= new Array(
+	new Product("Eragon", "5.00", "5", "New", "Puerto Rico", "Standard", "Paypal", "Author: Christopher Paolini", "item.html"),
+	new Product("Harry Potter", "12.00", "25", "New", "Wisconsin", "Standard", "Paypal", "Author: J.K. Rowling", "item.html")
+);
+
+categoryList[0].productList= artsBooksList;
+categoryList[6].productList= fictionBooksList;
+
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
 // identifies the resource to be created, read, updated, or deleted.
@@ -43,17 +107,53 @@ for (var i=0; i < accountList.length;++i){
 // c) PUT - Update an individual object, or collection  (Database update operation)
 // d) DELETE - Remove an individual object, or collection (Database delete operation)
 
-// REST Operation - HTTP GET to read all cars
+// REST Operation - HTTP GET 
 app.get('/Project1Srv/accounts', function(req, res) {
 	console.log("GET");
-	//var tom = {"make" : "Ford", "model" : "Escape", "year" : "2013", "description" : "V4 engine, 30mpg, Gray", "price" : "$18,000"};
-	//var tom = new Car("Ford", "Escape", "2013", "V4 engine, 30mpg, Gray", "$18,000");
-	//console.log("tom: " + JSON.stringify(tom));
+	
 	var response = {"accounts" : accountList};
   	res.json(response);
 });
 
-// REST Operation - HTTP GET to read a car based on its id
+app.get('/Project1Srv/products', function(req, res){
+	
+	console.log("GET");
+	var response = {"products": artsBooksList};
+	res.json(response);
+	
+});
+
+app.get('/Project1Srv/categories', function(req, res){
+	
+	console.log("GET");
+	var response = {"categories": categoryList};
+	res.json(response);
+	
+});
+
+app.get('/Project1Srv/categories:id', function(req, res){
+		
+	var id = req.params.id;
+	console.log("GET category:"+ id);
+	var target = -1;
+		for (var i=0; i < categoryList.length; ++i){
+			if (categoryList[i].id == id){
+				target = i;
+				break;	
+			}
+		}
+		if (target == -1){
+			res.statusCode = 404;
+			res.send("Category not found.");
+		}
+		else {
+			var response = {"category" : categoryList[target]};
+  			res.json(response);	
+  		}		
+});
+
+
+// REST Operation - HTTP GET 
 app.get('/Project1Srv/accounts/:id', function(req, res) {
 	var id = req.params.id;
 		console.log("GET account: " + id);

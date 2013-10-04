@@ -1,4 +1,5 @@
-function Product(itemName, price, quantity, condition, location, shipping, payment, description, itemPage){
+module.exports = {
+	Product: function Product(itemName, price, quantity, condition, location, shipping, payment, description, itemPage){
 	this.id="";
 	this.itemName = itemName;
 	this.price = price;
@@ -8,5 +9,5 @@ function Product(itemName, price, quantity, condition, location, shipping, payme
 	this.payment = payment;
 	this.description= description;
 	this.itemPage= itemPage;
-	this.toJSON = toJSON;
+	}
 }

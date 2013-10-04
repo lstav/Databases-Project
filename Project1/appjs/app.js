@@ -1,4 +1,3 @@
-
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 	console.log("Luis");
 	$.ajax({
@@ -37,6 +36,43 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	$("#upd-creditCard").val(currentAccount.creditCard.substr(5,6));
 	
 });
+
+
+$(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
+	
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/products",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+		var productCat = currentCategory.productList;
+		var len =productCat.length;
+		var list = $("#product-list");
+		list.empty();
+		var item;
+		for (var i=0; i < len; ++i){
+		item =productCat[i];
+		list.append("<li><a onClick=GetProduct("+item.price+")>" + item.itemName + "</a></li>");
+		}
+		list.listview("refresh");},
+		
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data item not found!");
+		}
+	});
+	
+});
+
+$(document).on('pagebeforeshow', "#productPage", function(event, ui) {
+	
+	var parameters= $(this).data("url").split("?")[1];
+    parameter = parameters.replace("p=","");  
+    var table1= $("#my-table");
+	table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Price:	</b> $"+parameter+"</td>");
+	$('#item-image').prepend('<img id="theImg" src="http://image.weather.com/web/multimedia/images/slideshows/fall09/fall20.jpg" />');
+	table1.table("refresh"); 	
+});
+
 ///////////////////////////////
 
 function ConverToJSON(formData){
@@ -150,6 +186,40 @@ function DeleteAccount(){
 			$.mobile.loading("hide");
 			if (data.status == 404){
 				alert("Account not found.");
+			}
+			else {
+				alter("Internal Server Error.");
+			}
+		}
+	});
+}
+
+function GetProduct(value){
+	$.mobile.changePage("item.html", {
+		data: { p: value},
+		type:'get'
+	});
+}
+
+var currentCategory = {};
+
+function GetCategory(id){
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/categories"+ id,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			currentCategory= data.category;
+			$.mobile.loading("hide");
+			$.mobile.navigate("#catProductView");},
+			
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Category error.");
 			}
 			else {
 				alter("Internal Server Error.");
