@@ -11,12 +11,12 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 			var account;
 			for (var i=0; i < len; ++i){
 				account = accountList[i];
-				list.append("<li><a onClick=GetAccount(" + account.cid + ")><h2>" + account.cfName + " " + 
+				list.append("<h2>" + account.cfName + " " + 
 					account.clName + "</h2><p><strong>Number: " + account.cAccountNumber +  "</strong></p>" + 
 					"<p> Mailing Address: " + account.cMailing + "</p>" + 
 					"<p> Billing Address: " + account.cBilling + "</p>" +
 					"<p> Credit Card: *****" + account.ccCard.substr(5,6) + "</p>" +
-					"<p class=\"ui-li-aside\"> Rank: " + account.rank + "</p></a></li>");
+					"<p class=\"ui-li-aside\"> Rank: " + account.rank + "</p></a>");
 			}
 			list.listview("refresh");
 		},
@@ -30,14 +30,29 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	// currentAccount has been set at this point
+	var len = currentAccount.cPassword.length;
+	var pass = "";
+	for (var i=0; i < len; ++i){
+		pass = pass + "*";
+	}
+	
 	$("#upd-fname").val(currentAccount.cfName);
 	$("#upd-lname").val(currentAccount.clName);
 	$("#upd-mailing").val(currentAccount.cMailing);
 	$("#upd-billing").val(currentAccount.cBilling);
-	$("#upd-creditCard").val(currentAccount.ccCard);
+	$("#upd-creditCard").val("*****" + currentAccount.ccCard.substr(5,6));
+	$("#upd-email").val(currentAccount.cEmail);
+	$("#upd-password").val(pass);
+	
+	$("#fname").html("First Name: " + currentAccount.cfName);
+	$("#lname").html("Last Name: " + currentAccount.clName);
+	$("#mailingA").html("Mailing Address: " + currentAccount.cMailing);
+	$("#billingA").html("Billing Address: " + currentAccount.cBilling);
+	$("#cCard").html("Credit Card Number: *****" + currentAccount.ccCard.substr(5,6));
+	$("#email").html("Email: " + currentAccount.cEmail);
+	$("#password").html("Password: " + pass);
 	
 });
-
 
 $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 	
@@ -91,7 +106,6 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 });
 
 ///////////////////////////////
-
 function ConverToJSON(formData){
 	var result = {};
 	$.each(formData, 
