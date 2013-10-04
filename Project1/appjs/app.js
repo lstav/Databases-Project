@@ -42,9 +42,10 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 	
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/products",
+		url : "http://localhost:3412/Project1Srv/categories",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
+
 		var productCat = currentCategory.productList;
 		var len =productCat.length;
 		var list = $("#product-list");
@@ -52,7 +53,7 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 		var item;
 		for (var i=0; i < len; ++i){
 		item =productCat[i];
-		list.append("<li><a onClick=GetProduct("+item.price+")>" + item.itemName + "</a></li>");
+		list.append("<li><a onClick=GetProduct("+item.id+")>" + item.itemName + "</a></li>");
 		}
 		list.listview("refresh");},
 		
@@ -66,12 +67,17 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 
 $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	
-	var parameters= $(this).data("url").split("?")[1];
-    parameter = parameters.replace("p=","");  
     var table1= $("#my-table");
-	table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Price:	</b> $"+parameter+"</td>");
+	table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Price:	</b> $"+currentProduct.price  +"</td>");
+	table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Quantity Available:	</b> "+currentProduct.quantity  +"</td>");
+	table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Condition:	</b> "+currentProduct.condition  +"</td>");
+	table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Shipping:	</b> "+currentProduct.shipping  +"</td>");
+	table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Payments:	</b> "+currentProduct.payment  +"</td>");
+
+	var idescription= $("#description");
+	idescription.append("<p>"+currentProduct.description+"</p>");
 	$('#item-image').prepend('<img id="theImg" src="http://image.weather.com/web/multimedia/images/slideshows/fall09/fall20.jpg" />');
-	table1.table("refresh"); 	
+	table1.table("refresh"); 
 });
 
 ///////////////////////////////
@@ -195,26 +201,49 @@ function DeleteAccount(){
 	});
 }
 
-function GetProduct(value){
-	$.mobile.changePage("item.html", {
-		data: { p: value},
-		type:'get'
-	});
-}
+var currentProduct= {};
+
+function GetProduct(id){
+	
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/products/"+ id,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			currentProduct= data.product;
+			$.mobile.loading("hide");	
+			$.mobile.changePage("item.html");
+			},
+			
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Product error.");
+			}
+			else {
+				alter("Internal Server Error.");
+			}
+		}
+	});}
 
 var currentCategory = {};
 
 function GetCategory(id){
 	$.mobile.loading("show");
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/categories"+ id,
+		url : "http://localhost:3412/Project1Srv/categories/"+ id,
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 			currentCategory= data.category;
 			$.mobile.loading("hide");
-			$.mobile.navigate("#catProductView");},
+			$.mobile.navigate("#catProductView", {
+				info: id,
+			});},
 			
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);

@@ -1,6 +1,6 @@
 module.exports =  { 
-	Category : function (id){
+	Category : function (id, productList){
 		this.id = id;
-		this.productList="";
+		this.productList=productList;
 	}
 }

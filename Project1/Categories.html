@@ -42,18 +42,14 @@
 						<h1>Books</h1>
 						<ul data-role="listview" data-inset="true">
 						<li><a onClick= GetCategory("ArtBooks")>Arts & Photography</a></li>
-						<li><a onClick= GetCategory("ChildrenBooks")>Children's Books</a></li>
 						<li><a onClick= GetCategory("ComicBooks")>Comic & Graphic Novels</a></li>
 						<li><a onClick= GetCategory("MysteryBooks")>Mystery, Thriller & Suspense</a></li>
 						<li><a onClick= GetCategory("RomanceBooks")>Romance</a></li>
-						<li><a onClick= GetCategory("ScienceBooks")>Science & Math</a></li>
 						<li><a onClick= GetCategory("ScienceFictionBooks")>Science Fiction & Fantasy</a></li></ul></div>						
 						
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 						<h1>Magazines</h1>
 						<ul data-role="listview" data-inset="true">
-						<li><a onClick= GetCategory("ArtsMagazine")>Arts & Photography</a></li>
-						<li><a onClick= GetCategory("ElectronicsMagazine")>Electronics & Audio</a></li>
 						<li><a onClick= GetCategory("EntertainmentMagazine")>Entertainment</a></li>
 						<li><a onClick= GetCategory("FashionMagazine")>Fashion & Style</a></li>
 						<li><a onClick= GetCategory("MoviesMagazine")>Movies & Music</a></li>	
@@ -112,7 +108,31 @@
 						</div></div>
 
 			
-				<div id= "catProductView" data-role="page"><ul id="product-list" data-role="listview"></ul></div>
+			<div id= "catProductView" data-role="page">
+					<div data-role="panel" id="mypanel2" data-theme="a" data-position="right" data-display="reveal">
+        			<ul data-role="listview" data-theme="a">
+        			<li><a href="advsearch.html" >Search</a></li>
+        			<li><a href="account.html" >Account</a></li>  
+					<li><a href="#Messages" >Messages</a></li>  
+					<li><a href="#Notifications" >Notifications</a></li>
+					<li><a href="login.html" >Log Out</a></li>      		      		
+        			</ul>
+    			</div><!-- /panel -->
+    		
+					<div data-role="header" data-theme="b"> 
+					<script>
+					document.write("<h1>"+currentCategory.id+"</h1>")</script>
+					<a href="product.html" data-role="button" data-position="left" data-icon="arrow-l" data-iconpos="notext" data-rel="back">Back</a>
+					<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
+					<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
+					<a href="#mypanel2" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
+					</div>
+					</div>
+			
+					<div data-role="content">
+					<ul id="product-list" data-role="listview"></ul>
+					</div>
+			</div>
 
 	</body>
 </html>

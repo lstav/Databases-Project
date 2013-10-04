@@ -1,5 +1,5 @@
-function Category(id){
+function Category(id, productList){
 	this.id=id;
-	this.productList="";
+	this.productList=productList;
 	this.toJSON = toJSON;
 }

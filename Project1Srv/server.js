@@ -36,49 +36,6 @@ for (var i=0; i < accountList.length;++i){
 	accountList[i].cid = accountNextId++;
 }
 
-//Category
-
-var category= require("./category.js");
-var Category= category.Category;
-var categoryList= new Array(
-	new Category ("ArtBooks"),
-	new Category ("ChildrenBooks"),
-	new Category ("ComicBooks"),
-	new Category ("MysteryBooks"),
-	new Category ("RomanceBooks"),
-	new Category ("ScienceBooks"),
-	new Category ("ScienceFictionBooks"),
-	new Category ("ArtsMagazine"),
-	new Category ("ElectronicsMagazine"),
-	new Category ("EntertainmentMagazine"),
-	new Category ("FashionMagazine"),
-	new Category ("MoviesMagazine"),
-	new Category ("NewsMagazine"),
-	new Category ("ScienceMagazine"),
-	new Category ("TvElectronics"),
-	new Category ("AudioElectronics"),
-	new Category ("PhonesElectronics"),
-	new Category ("CamerasElectronics"),
-	new Category ("VideoElectronics"),
-	new Category ("LaptopsComp"),
-	new Category ("DesktopComp"),
-	new Category ("TabletsComp"),
-	new Category ("PrintersComp"),
-	new Category ("ChildrenClothes"),
-	new Category ("MenShirts"),
-	new Category ("MenPants"),
-	new Category ("MenSocks"),
-	new Category ("WomenShirts"),
-	new Category ("WomenPants"),
-	new Category ("WomenDresses"),
-	new Category ("ChildrenShoes"),
-	new Category ("MenShoes"),
-	new Category ("BicycleSports"),
-	new Category ("KayakSports"),
-	new Category ("GolfSports"),
-	new Category ("FishingSports")
-);
-
 //Product:
 
 var product = require("./product.js");
@@ -89,13 +46,208 @@ var artsBooksList= new Array(
 	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
 );
 
+var comicBooksList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var mysteryBooksList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var romanceBooksList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
 var fictionBooksList= new Array(
 	new Product("Eragon", "5.00", "5", "New", "Puerto Rico", "Standard", "Paypal", "Author: Christopher Paolini", "item.html"),
 	new Product("Harry Potter", "12.00", "25", "New", "Wisconsin", "Standard", "Paypal", "Author: J.K. Rowling", "item.html")
 );
 
-categoryList[0].productList= artsBooksList;
-categoryList[6].productList= fictionBooksList;
+var entertainmentMagList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var fashionMagList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var moviesMagList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var newsMagList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var scienceMagList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var tvElecList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var audioElecList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var phonesElecList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var camerasElecList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var videoElecList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var laptopCompList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var desktopCompList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var tabletsCompList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var printersCompList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var childrenClothesList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var menShirtsList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var menPantsList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var menSocksList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var womenShirtsList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var womenPantsList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var womenDressesList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var childrenShoesList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var menShoesList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var bicycleSportsList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var kayakSportsList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var golfSportsList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+var fishingSportsList= new Array(
+	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
+	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+);
+
+//Category
+
+var category= require("./category.js");
+var Category= category.Category;
+var categoryList= new Array(
+	new Category ("ArtBooks", artsBooksList),
+	new Category ("ComicBooks", comicBooksList),
+	new Category ("MysteryBooks", mysteryBooksList),
+	new Category ("RomanceBooks", romanceBooksList),
+	new Category ("ScienceFictionBooks", fictionBooksList),
+	new Category ("EntertainmentMagazine", entertainmentMagList),
+	new Category ("FashionMagazine", fashionMagList),
+	new Category ("MoviesMagazine", moviesMagList),
+	new Category ("NewsMagazine", newsMagList),
+	new Category ("ScienceMagazine", scienceMagList),
+	new Category ("TvElectronics", tvElecList),
+	new Category ("AudioElectronics", audioElecList),
+	new Category ("PhonesElectronics", phonesElecList),
+	new Category ("CamerasElectronics", camerasElecList),
+	new Category ("VideoElectronics", videoElecList),
+	new Category ("LaptopsComp", laptopCompList),
+	new Category ("DesktopComp", desktopCompList),
+	new Category ("TabletsComp", tabletsCompList),
+	new Category ("PrintersComp", printersCompList),
+	new Category ("ChildrenClothes", childrenClothesList),
+	new Category ("MenShirts", menShirtsList),
+	new Category ("MenPants", menPantsList),
+	new Category ("MenSocks", menSocksList),
+	new Category ("WomenShirts", womenShirtsList),
+	new Category ("WomenPants", womenPantsList),
+	new Category ("WomenDresses", womenDressesList),
+	new Category ("ChildrenShoes", childrenShoesList),
+	new Category ("MenShoes", menShoesList),
+	new Category ("BicycleSports", bicycleSportsList),
+	new Category ("KayakSports", kayakSportsList),
+	new Category ("GolfSports", golfSportsList),
+	new Category ("FishingSports", fishingSportsList)
+);
+
+var productId=0;
+
+for (var i=0; i < categoryList.length; ++i){
+			for(var j=0; j< categoryList[i].productList.length; ++j)
+			{
+				categoryList[i].productList[j].id= productId++;
+			}
+}
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -113,14 +265,6 @@ app.get('/Project1Srv/accounts', function(req, res) {
 	
 	var response = {"accounts" : accountList};
   	res.json(response);
-});
-
-app.get('/Project1Srv/products', function(req, res){
-	
-	console.log("GET");
-	var response = {"products": artsBooksList};
-	res.json(response);
-	
 });
 
 app.get('/Project1Srv/categories', function(req, res){
@@ -152,6 +296,53 @@ app.get('/Project1Srv/categories:id', function(req, res){
   		}		
 });
 
+app.get('/Project1Srv/categories/:id', function(req, res){
+		
+	var id = req.params.id;
+	console.log("GET category:"+ id);
+	var target = -1;
+		for (var i=0; i < categoryList.length; ++i){
+			if (categoryList[i].id == id){
+				target = i;
+				break;	
+			}
+		}
+		if (target == -1){
+			res.statusCode = 404;
+			res.send("Category not found.");
+		}
+		else {
+			var response = {"category" : categoryList[target]};
+  			res.json(response);	
+  		}		
+});
+
+app.get('/Project1Srv/products/:id', function(req, res){
+		
+	var id = req.params.id;
+	
+	var target = -1;
+	var target2= -1;
+		for (var i=0; i < categoryList.length; ++i){
+			for(var j=0; j< categoryList[i].productList.length; ++j)
+			{
+				if(categoryList[i].productList[j].id== id){
+					target= i;
+					target2=j;
+					break;
+				}
+			}
+		}
+		
+		if (target == -1 || target2 == -1){
+			res.statusCode = 404;
+			res.send("Product not found.");
+		}
+		else {
+			var response = {"product" : categoryList[target].productList[target2]};
+  			res.json(response);	
+  		}		
+});
 
 
 // REST Operation - HTTP GET to read a car based on its id
