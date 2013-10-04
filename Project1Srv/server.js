@@ -28,12 +28,12 @@ var account = require("./account.js");
 var Account = account.Account;
 
 var accountList = new Array(
-	new Account("Luis", "123", "Puerto Rico", "Puerto Rico", "987654321", "****")	
+	new Account("Luis", "Tavarez", "123", "lt@example.com", "123456", "Puerto Rico", "Puerto Rico", "987654321", "****")
 );
  var accountNextId = 0;
  
 for (var i=0; i < accountList.length;++i){
-	accountList[i].id = accountNextId++;
+	accountList[i].cid = accountNextId++;
 }
 
 //Category
@@ -115,6 +115,7 @@ app.get('/Project1Srv/accounts', function(req, res) {
   	res.json(response);
 });
 
+<<<<<<< HEAD
 app.get('/Project1Srv/products', function(req, res){
 	
 	console.log("GET");
@@ -157,8 +158,14 @@ app.get('/Project1Srv/categories:id', function(req, res){
 app.get('/Project1Srv/accounts/:id', function(req, res) {
 	var id = req.params.id;
 		console.log("GET account: " + id);
+=======
+// REST Operation - HTTP GET to read a car based on its id
+app.get('/Project1Srv/accounts/:cid', function(req, res) {
+	var cid = req.params.cid;
+		console.log("GET account: " + cid);
+>>>>>>> f6b5282e7ef3066d813cb31a5ced7f43c2e6c926
 
-	if ((id < 0) || (id >= accountNextId)){
+	if ((cid < 0) || (cid >= accountNextId)){
 		// not found
 		res.statusCode = 404;
 		res.send("Account not found.");
@@ -166,7 +173,7 @@ app.get('/Project1Srv/accounts/:id', function(req, res) {
 	else {
 		var target = -1;
 		for (var i=0; i < accountList.length; ++i){
-			if (accountList[i].id == id){
+			if (accountList[i].cid == cid){
 				target = i;
 				break;	
 			}
@@ -183,11 +190,11 @@ app.get('/Project1Srv/accounts/:id', function(req, res) {
 });
 
 // REST Operation - HTTP PUT to updated a car based on its id
-app.put('/Project1Srv/accounts/:id', function(req, res) {
-	var id = req.params.id;
-		console.log("PUT account: " + id);
+app.put('/Project1Srv/accounts/:cid', function(req, res) {
+	var cid = req.params.cid;
+		console.log("PUT account: " + cid);
 
-	if ((id < 0) || (id >= accountNextId)){
+	if ((cid < 0) || (cid >= accountNextId)){
 		// not found
 		res.statusCode = 404;
 		res.send("Account not found.");
@@ -200,7 +207,7 @@ app.put('/Project1Srv/accounts/:id', function(req, res) {
 	else {
 		var target = -1;
 		for (var i=0; i < accountList.length; ++i){
-			if (accountList[i].id == id){
+			if (accountList[i].cid == id){
 				target = i;
 				break;	
 			}
@@ -223,9 +230,9 @@ app.put('/Project1Srv/accounts/:id', function(req, res) {
 });
 
 // REST Operation - HTTP DELETE to delete a car based on its id
-app.del('/Project1Srv/accounts/:id', function(req, res) {
-	var id = req.params.id;
-		console.log("DELETE account: " + id);
+app.del('/Project1Srv/accounts/:cid', function(req, res) {
+	var id = req.params.cid;
+		console.log("DELETE account: " + cid);
 
 	if ((id < 0) || (id >= accountNextId)){
 		// not found
@@ -235,7 +242,7 @@ app.del('/Project1Srv/accounts/:id', function(req, res) {
 	else {
 		var target = -1;
 		for (var i=0; i < accountList.length; ++i){
-			if (accountList[i].id == id){
+			if (accountList[i].cid == cid){
 				target = i;
 				break;	
 			}
