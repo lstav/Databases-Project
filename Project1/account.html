@@ -8,15 +8,28 @@
 		<script src="js/jquery.mobile-1.3.1.js"></script>
 		<script src="appjs/account.js"></script>
 		<script src="appjs/app.js"></script>
+		<style>
+			.center-wrapper{
+  				text-align: center;
+			}
+			.center-wrapper * {
+ 			 	margin: 0 auto;
+			}	
+		
+			#popupName
+			{
+				background-color: red
+			}
+		</style>
 	</head>
 	<body>		
 		<div id="accounts" data-role="page">
 			<div data-role="panel" id="mypanel" data-theme="a" data-position="right" data-display="reveal">
         		<ul data-role="listview" data-theme="a">
-        			<li><a href="advsearch.html" >Search</a></li>  
+        			<li><a href="advsearch.html" >Search</a></li>
+        			<li><a href="account.html" >Account</a></li>  
 					<li><a href="#Messages" >Messages</a></li>  
 					<li><a href="#Notifications" >Notifications</a></li>
-					<li><a href="settings.html" >Settings</a></li>
 					<li><a href="login.html" >Log Out</a></li>      		      		
         		</ul>
    			</div><!-- /panel -->
@@ -45,17 +58,27 @@
 				<a data-role="button" data-rel="back" onclick="UpdateAccount()">Save</a>
 			</div>
 			<center>
-				<h2>Enter the new account info</h2>
+				<h2>Edit Account Info</h2>
 			</center>
-			<form id="account-view-form">
- 				<fieldset data-role="controlgroup">
- 					<ul>
-  					<li><label for="upd-name"> Name: <input id="upd-name" name="name" type="text"/></label></li>
+			<form id="account-view-form" data-role="content" class="center-wrapper">
+ 				<!--<fieldset data-role="controlgroup">-->
+ 					<ul data-role="listview" data-icon="false">
+ 						<li data-icon= "gear"><a>First Name:</a>
+							<a href="#popupName" data-rel="popup" data-position-to="window">Edit</a>
+ 							<div data-role="popup" id="popupName">
+ 				 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+ 				 				<h1>First Name:</h1>
+        		 				<input id="upd-fname" name="name" type="text">
+        		 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
+ 				 			</div>
+						</li>
+  					<li><label for="upd-fname"> First Name: <input id="upd-fname" name="name" type="text"/></label></li>
+  					<li><label for="upd-lname"> Last Name: <input id="upd-lname" name="name" type="text"/></label></li>
   					<li><label for="upd-mailing"> Mailing Address: <input id="upd-mailing" name="mailing" type="text"/></label></li>
   					<li><label for="upd-billing"> Billing Address: <input id="upd-billing" name="mailing" type="text"/></label></li>
   			  		<li><label for="upd-creditCard"> Credit Card Number: <input id="upd-creditCard" name="creditCard" type="text"/></label></li>
   			  	</ul>
-			 </fieldset>
+			 <!--</fieldset>-->
 			</form>
 			<center>
 				<a data-role="button" onclick="DeleteAccount()">Delete</a>

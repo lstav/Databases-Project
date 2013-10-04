@@ -12,11 +12,11 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 			var account;
 			for (var i=0; i < len; ++i){
 				account = accountList[i];
-				list.append("<li><a onClick=GetAccount(" + account.id + ")><h2>" + account.customerName + "</h2>" + 
-					"<p><strong>Number: " + account.accountNumber +  "</strong></p>" + 
-					"<p> Mailing Address: " + account.mailingAddress + "</p>" + 
-					"<p> Billing Address: " + account.billingAddress + "</p>" +
-					"<p> Credit Card: *****" + account.creditCard.substr(5,6) + "</p>" +
+				list.append("<li><a onClick=GetAccount(" + account.cid + ")><h2>" + account.cfName + " " + 
+					account.clName + "</h2><p><strong>Number: " + account.cAccountNumber +  "</strong></p>" + 
+					"<p> Mailing Address: " + account.cMailing + "</p>" + 
+					"<p> Billing Address: " + account.cBilling + "</p>" +
+					"<p> Credit Card: *****" + account.ccCard.substr(5,6) + "</p>" +
 					"<p class=\"ui-li-aside\"> Rank: " + account.rank + "</p></a></li>");
 			}
 			list.listview("refresh");
@@ -31,10 +31,11 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	// currentAccount has been set at this point
-	$("#upd-name").val(currentAccount.customerName);
-	$("#upd-mailing").val(currentAccount.mailingAddress);
-	$("#upd-billing").val(currentAccount.billingAddress);
-	$("#upd-creditCard").val(currentAccount.creditCard);
+	$("#upd-fname").val(currentAccount.cfName);
+	$("#upd-lname").val(currentAccount.clName);
+	$("#upd-mailing").val(currentAccount.cMailing);
+	$("#upd-billing").val(currentAccount.cBilling);
+	$("#upd-creditCard").val(currentAccount.ccCard);
 	
 });
 ///////////////////////////////
@@ -76,10 +77,10 @@ function SaveAccount(){
 
 var currentAccount = {};
 
-function GetAccount(id){
+function GetAccount(cid){
 	$.mobile.loading("show");
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts/" + id,
+		url : "http://localhost:3412/Project1Srv/accounts/" + cid,
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
