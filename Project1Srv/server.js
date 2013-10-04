@@ -115,7 +115,6 @@ app.get('/Project1Srv/accounts', function(req, res) {
   	res.json(response);
 });
 
-<<<<<<< HEAD
 app.get('/Project1Srv/products', function(req, res){
 	
 	console.log("GET");
@@ -154,17 +153,11 @@ app.get('/Project1Srv/categories:id', function(req, res){
 });
 
 
-// REST Operation - HTTP GET 
-app.get('/Project1Srv/accounts/:id', function(req, res) {
-	var id = req.params.id;
-		console.log("GET account: " + id);
-=======
+
 // REST Operation - HTTP GET to read a car based on its id
 app.get('/Project1Srv/accounts/:cid', function(req, res) {
 	var cid = req.params.cid;
 		console.log("GET account: " + cid);
->>>>>>> f6b5282e7ef3066d813cb31a5ced7f43c2e6c926
-
 	if ((cid < 0) || (cid >= accountNextId)){
 		// not found
 		res.statusCode = 404;
