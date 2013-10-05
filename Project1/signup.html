@@ -19,36 +19,23 @@
 			<div type="text" align="center">
 			  	<p>All fields are required</p>
 			</div>
-			<div data-role="fieldcontain" align="center">
-	          	<input id="FirstName" placeholder="First Name" type="text" data-mini="true">
-    	    </div>
-    	    <div data-role="fieldcontain" align="center">
-	           	<input id="LastName" placeholder="Last Name" type="text" data-mini="true">
-    	    </div>
-        	<div data-role="fieldcontain" align="center">
-            	<input id="Username" placeholder="Username" type="text" data-mini="true">
-        	</div>
-        	<div data-role="fieldcontain" align="center">
-	           	<input id="Password" placeholder="Password" type="text" data-mini="true">
-    	    </div>
-    	    <div data-role="fieldcontain" align="center">
-	           	<input id="Email" placeholder="Email" type="text" data-mini="true">
-    	    </div>
-    	    <div data-role="fieldcontain" align="center">
-	           	<input id="ShippingAddress" placeholder="Shipping Address" type="text" data-mini="true">
-    	    </div>
-    	    <div data-role="fieldcontain" align="center">
-	           	<input id="MailingAddress" placeholder="Mailing Address" type="text" data-mini="true">
-    	    </div>
-    	    <div data-role="fieldcontain" align="center">
-	           	<input id="CreditCard" placeholder="Credit Card Number" type="text" data-mini="true">
-    	    </div>
-    		<div data-role="content">
-	    	    <a data-role="button" data-transition="slide" href="index.html">
-		            Sign Up!
-        		</a>
-    		</div>
-</div>
+			<form id="account-form" align="center">
+				<fieldset data-role="controlgroup">
+	          		<input id="cfName" name="cfName" placeholder="First Name" type="text" data-mini="true">
+	        	   	<input id="clName" name="clName" placeholder="Last Name" type="text" data-mini="true">
+        	    	<input id="Username" name="Username" placeholder="Username" type="text" data-mini="true">
+		       	   	<input id="Password" name="Password" placeholder="Password" type="password" data-mini="true">
+		           	<input id="Email" name="Email" placeholder="Email" type="text" data-mini="true">
+	    	       	<input id="ShippingAddress" name="ShippingAddress" placeholder="Shipping Address" type="text" data-mini="true">
+		           	<input id="MailingAddress" name="MailingAddress" placeholder="Mailing Address" type="text" data-mini="true">
+		           	<input id="CreditCard" name="CreditCard" placeholder="Credit Card Number" type="text" data-mini="true">
+
+	    	    	<a data-role="button" data-transition="slide" href="account.html" onclick=SaveAccount()>
+		            	Sign Up!
+        			</a>
+        		</fieldset>
+    		</form>
+		</div>
 
 	</body>
 </html>

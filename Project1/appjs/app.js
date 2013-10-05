@@ -36,6 +36,7 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 		pass = pass + "*";
 	}
 	
+	$("#upd-username").val(currentAccount.cUsername);
 	$("#upd-fname").val(currentAccount.cfName);
 	$("#upd-lname").val(currentAccount.clName);
 	$("#upd-mailing").val(currentAccount.cMailing);
@@ -44,6 +45,7 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	$("#upd-email").val(currentAccount.cEmail);
 	$("#upd-password").val(pass);
 	
+	$("#username").html("Username: " + currentAccount.cUsername);
 	$("#fname").html("First Name: " + currentAccount.cfName);
 	$("#lname").html("Last Name: " + currentAccount.clName);
 	$("#mailingA").html("Mailing Address: " + currentAccount.cMailing);

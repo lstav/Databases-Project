@@ -65,6 +65,15 @@
  				<!--<fieldset data-role="controlgroup">-->
  					<ul data-role="listview" data-icon="false">
  						<li>
+							<a href="#popupUsername" data-rel="popup" data-position-to="window" id="username"></a>
+ 							<div data-role="popup" id="popupUsername">
+ 				 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+ 				 				<h1>First Name:</h1>
+        		 				<input id="upd-username" name="name" type="text">
+        		 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
+ 				 			</div>
+						</li>
+ 						<li>
 							<a href="#popupfName" data-rel="popup" data-position-to="window" id="fname"></a>
  							<div data-role="popup" id="popupfName">
  				 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
@@ -131,7 +140,7 @@
 			 <!--</fieldset>-->
 			</form>
 			<center>
-				<a data-role="button" onclick="DeleteAccount()">Delete</a>
+				<a data-role="button" onclick=DeleteAccount()>Delete</a>
 			</center>
 		</div>
 	</body>

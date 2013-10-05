@@ -1,10 +1,11 @@
 module.exports =  { 
-	Account : function (cfName, clName, cAccountNumber, cEmail, cPassword, cMailing, cBilling, ccCard, rank){
+	Account : function (cfName, clName, cAccountNumber, cEmail, cPassword, cUsername, cMailing, cBilling, ccCard, rank){
 		this.cid = "";
 		this.cfName = cfName;
 		this.clName = clName;
 		this.cAccountNumber = cAccountNumber;
 		this.cEmail = cEmail;
+		this.cUsername = cUsername;
 		this.cPassword = cPassword;
 		this.cMailing = cMailing;
 		this.cBilling = cBilling;
