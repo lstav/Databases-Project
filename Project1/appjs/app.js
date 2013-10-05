@@ -171,60 +171,14 @@ function GetAccount(cid){
 }
 
 function UpdateAccount(){
-	$.mobile.loading("show");
-	var form = $("#account-view-form");
-	var formData = form.serializeArray();
-	console.log("form Data: " + formData);
-	var updAccount = ConverToJSON(formData);
-	updAccount.id = currentAccount.id;
-	console.log("Updated Account: " + JSON.stringify(updAccount));
-	var updAccountJSON = JSON.stringify(updAccount);
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts/" + updAccount.id,
-		method: 'put',
-		data : updAccountJSON,
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			$.mobile.loading("hide");
-			$.mobile.navigate("#accounts");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			if (data.status == 404){
-				alert("Data could not be updated!");
-			}
-			else {
-				alert("Internal Error.");		
-			}
-		}
-	});
+	alert("Account Saved!");
 }
 
 function DeleteAccount(){
-	$.mobile.loading("show");
-	var id = currentAccount.id;
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts/" + id,
-		method: 'delete',
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			$.mobile.loading("hide");
-			$.mobile.navigate("#accounts");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			if (data.status == 404){
-				alert("Account not found.");
-			}
-			else {
-				alter("Internal Server Error.");
-			}
-		}
-	});
+	var desicion = confirm("Delete Account?")
+	if(desicion == true) {
+		alert("Account Deleted");
+	}
 }
 
 var currentProduct= {};

@@ -369,89 +369,17 @@ app.get('/Project1Srv/accounts/:cid', function(req, res) {
 
 // REST Operation - HTTP PUT to updated a car based on its id
 app.put('/Project1Srv/accounts/:cid', function(req, res) {
-	var cid = req.params.cid;
-		console.log("PUT account: " + cid);
 
-	if ((cid < 0) || (cid >= accountNextId)){
-		// not found
-		res.statusCode = 404;
-		res.send("Account not found.");
-	}
-	else if(!req.body.hasOwnProperty('make') || !req.body.hasOwnProperty('model')
-  	|| !req.body.hasOwnProperty('year') || !req.body.hasOwnProperty('price') || !req.body.hasOwnProperty('description')) {
-    	res.statusCode = 400;
-    	return res.send('Error: Missing fields for account.');
-  	}
-	else {
-		var target = -1;
-		for (var i=0; i < accountList.length; ++i){
-			if (accountList[i].cid == id){
-				target = i;
-				break;	
-			}
-		}
-		if (target == -1){
-			res.statusCode = 404;
-			res.send("Car not found.");			
-		}	
-		else {
-			var theAccount= accountList[target];
-			theAccount.make = req.body.make;
-			theAccount.model = req.body.model;
-			theAccount.year = req.body.year;
-			theAccount.price = req.body.price;
-			theAccount.description = req.body.description;
-			var response = {"Carritos" : theAccount};
-  			res.json(response);		
-  		}
-	}
 });
 
 // REST Operation - HTTP DELETE to delete a car based on its id
 app.del('/Project1Srv/accounts/:cid', function(req, res) {
-	var id = req.params.cid;
-		console.log("DELETE account: " + cid);
-
-	if ((id < 0) || (id >= accountNextId)){
-		// not found
-		res.statusCode = 404;
-		res.send("Account not found.");
-	}
-	else {
-		var target = -1;
-		for (var i=0; i < accountList.length; ++i){
-			if (accountList[i].cid == cid){
-				target = i;
-				break;	
-			}
-		}
-		if (target == -1){
-			res.statusCode = 404;
-			res.send("Account not found.");			
-		}	
-		else {
-			accountList.splice(target, 1);
-  			res.json(true);
-  		}		
-	}
+	
 });
 
 // REST Operation - HTTP POST to add a new a car
 app.post('/Project1Srv/accounts', function(req, res) {
-	console.log("POST");
-
-  	if(!req.body.hasOwnProperty('customerName') || !req.body.hasOwnProperty('accountNumber')
-  	|| !req.body.hasOwnProperty('mailingAddress') || !req.body.hasOwnProperty('billingAddress') || !req.body.hasOwnProperty('creditCard')
-  	|| !req.body.hasOwnProperty('rank')) {
-    	res.statusCode = 400;
-    	return res.send('Error: Missing fields for account.');
-  	}
-
-  	var newAccount = new Account(req.body.customerName, req.body.accountNumber, req.body.mailingAddress, req.body.billingAddress, req.body.creditCard, req.body.rank);
-  	console.log("New Account: " + JSON.stringify(newAccount));
-  	newAccount.id = accountNextId++;
-  	accountList.push(newAccount);
-  	res.json(true);
+	
 });
 
 
