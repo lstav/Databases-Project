@@ -1,4 +1,4 @@
-$(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
+/**$(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 	console.log("Luis");
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accounts",
@@ -11,12 +11,12 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 			var account;
 			for (var i=0; i < len; ++i){
 				account = accountList[i];
-				list.append("<h2>" + account.cfName + " " + 
-					account.clName + "</h2><p><strong>Number: " + account.cAccountNumber +  "</strong></p>" + 
-					"<p> Mailing Address: " + account.cMailing + "</p>" + 
-					"<p> Billing Address: " + account.cBilling + "</p>" +
-					"<p> Credit Card: *****" + account.ccCard.substr(5,6) + "</p>" +
-					"<p class=\"ui-li-aside\"> Rank: " + account.rank + "</p></a>");
+				list.append("<li>" + account.cfName + " " +	account.clName + "</li>" + 
+					"<li>Number: " + account.cAccountNumber +  "</li>" + 
+					"<li>Mailing Address: " + account.cMailing + "</li>" + 
+					"<li>Billing Address: " + account.cBilling + "</li>" +
+					"<li>Credit Card: *****" + account.ccCard.substr(5,6) + "</li>" +
+					"<li> Rank: " + account.rank + "</li>");
 			}
 			list.listview("refresh");
 		},
@@ -25,8 +25,31 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 			alert("Data not found!");
 		}
 	});
-});
+});**/
 
+$(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
+	console.log("Luis");
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accounts",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var list = $("#account-list");
+			list.empty();	
+			var account = currentAccount;
+			list.append("<li>" + account.cfName + " " +	account.clName + "</li>" + 
+					"<li>Number: " + account.cAccountNumber +  "</li>" + 
+					"<li>Mailing Address: " + account.cMailing + "</li>" + 
+					"<li>Billing Address: " + account.cBilling + "</li>" +
+					"<li>Credit Card: *****" + account.ccCard.substr(5,6) + "</li>" +
+					"<li> Rank: " + account.rank + "</li>");
+			list.listview("refresh");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+});
 
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	// currentAccount has been set at this point
@@ -118,29 +141,7 @@ function ConverToJSON(formData){
 }
 
 function SaveAccount(){
-	$.mobile.loading("show");
-	var form = $("#account-form");
-	var formData = form.serializeArray();
-	console.log("form Data: " + formData);
-	var newAccount = ConverToJSON(formData);
-	console.log("New Account: " + JSON.stringify(newAccount));
-	var newAccountJSON = JSON.stringify(newAccount);
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts",
-		method: 'post',
-		data : newAccountJSON,
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			$.mobile.loading("hide");
-			$.mobile.navigate("#accounts");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			alert("Data could not be added!");
-		}
-	});
+	alert("Account Created!");
 }
 
 var currentAccount = {};
@@ -177,7 +178,7 @@ function UpdateAccount(){
 function DeleteAccount(){
 	var desicion = confirm("Delete Account?")
 	if(desicion == true) {
-		alert("Account Deleted");
+		alert("Account Deleted");		
 	}
 }
 

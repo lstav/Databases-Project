@@ -22,7 +22,7 @@
 			}
 		</style>
 	</head>
-	<body>		
+	<body onload="GetAccount(0)">
 		<div id="accounts" data-role="page" data-theme="b">
 			<div data-role="panel" id="mypanel" data-theme="a" data-position="right" data-display="reveal">
         		<ul data-role="listview" data-theme="a">
@@ -38,8 +38,8 @@
         		<h1>Account</h1>
     		</div><!-- /panel --> 
     		
-    		<div data-role="header" data-theme="b"> <h1>Account</h1>
-			
+    		<div data-role="header" data-theme="b"> 
+    			<h1>Account</h1>
 				<a href="product.html" data-role="button" data-position="left" data-icon="arrow-l" data-iconpos="notext" data-rel="back">Back</a>
 				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
 					<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
@@ -47,12 +47,13 @@
 				</div>
 			</div>
 			<div data-role="content">
-				<div id="account-list" data-role="listview" data-inset="true">
-				</div>
-				<a data-role="button" onClick=GetAccount(0)>Edit</a>
+				<ul id="account-list" data-role="listview" data-inset="true">
+				</ul>
+				<a data-role="button" href="history.html">Purchase History</a>
+				<a data-role="button" href="#account-view">Edit</a>
 			</div>
 		</div>
-		<div id="account-view" data-role="page">
+		<div id="account-view" data-role="page" data-theme"b">
 			<div data-role="header" data-theme="b" data-position="fixed">
 				<a data-role="button" data-rel="back" href="#accounts">Cancel</a>
 				<h1>Account Info</h1>
@@ -61,87 +62,85 @@
 			<center>
 				<h2>Edit Account Info</h2>
 			</center>
-			<form id="account-view-form" data-role="content" class="center-wrapper">
+			<form id="account-view-form" data-theme="b" data-role="content" class="center-wrapper">
  				<!--<fieldset data-role="controlgroup">-->
- 					<ul data-role="listview" data-icon="false">
- 						<li>
-							<a href="#popupUsername" data-rel="popup" data-position-to="window" id="username"></a>
- 							<div data-role="popup" id="popupUsername">
- 				 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 				 				<h1>First Name:</h1>
-        		 				<input id="upd-username" name="name" type="text">
-        		 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
- 				 			</div>
-						</li>
- 						<li>
-							<a href="#popupfName" data-rel="popup" data-position-to="window" id="fname"></a>
- 							<div data-role="popup" id="popupfName">
- 				 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 				 				<h1>First Name:</h1>
-        		 				<input id="upd-fname" name="name" type="text">
-        		 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
- 				 			</div>
-						</li>
-						<li>
-							<a href="#popuplName" data-rel="popup" data-position-to="window" id="lname"></a>
- 							<div data-role="popup" id="popuplName">
- 				 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 				 				<h1>Last Name:</h1>
-        		 				<input id="upd-lname" name="name" type="text">
-        		 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
- 				 			</div>
-						</li>
-						<li>
-							<a href="#popupMailingA" data-rel="popup" data-position-to="window" id="mailingA"></a>
- 							<div data-role="popup" id="popupMailingA">
- 				 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 				 				<h1>Mailing Address: </h1>
-        		 				<input id="upd-mailing" name="name" type="text">
-        		 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
- 				 			</div>
-						</li>
-						<li>
-							<a href="#popupBillingA" data-rel="popup" data-position-to="window" id="billingA"></a>
- 							<div data-role="popup" id="popupBillingA">
- 				 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 				 				<h1>Billing Address: </h1>
-        		 				<input id="upd-billing" name="name" type="text">
-        		 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
- 				 			</div>
-						</li>
-						<li>
-							<a href="#popupcCard" data-rel="popup" data-position-to="window" id="cCard"></a>
- 							<div data-role="popup" id="popupcCard">
- 				 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 				 				<h1>Credit Card Number: </h1>
-        		 				<input id="upd-creditCard" name="name" type="text">
-        		 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
- 				 			</div>
-						</li>
-						<li>
-							<a href="#popupEmail" data-rel="popup" data-position-to="window" id="email"></a>
- 							<div data-role="popup" id="popupEmail">
- 				 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 				 				<h1>Email: </h1>
-        		 				<input id="upd-email" name="name" type="text">
-        		 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
- 				 			</div>
-						</li>
-						<li>
-							<a href="#popupPassword" data-rel="popup" data-position-to="window" id="password"></a>
- 							<div data-role="popup" id="popupPassword">
- 				 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 				 				<h1>Password: </h1>
-        		 				<input id="upd-password" name="name" type="text">
-        		 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
- 				 			</div>
-						</li>
-  			  	</ul>
-			 <!--</fieldset>-->
+ 				<ul data-role="listview" data-icon="false">
+ 					<li>
+						<a href="#popupUsername" data-rel="popup" data-position-to="window" id="username"></a>
+ 						<div data-role="popup" id="popupUsername">
+ 			 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+ 			 				<h1>First Name:</h1>
+        	 				<input id="upd-username" name="name" type="text">
+        	 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
+ 			 			</div>
+					</li>
+ 					<li>
+						<a href="#popupfName" data-rel="popup" data-position-to="window" id="fname"></a>
+ 						<div data-role="popup" id="popupfName">
+ 			 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+ 			 				<h1>First Name:</h1>
+        	 				<input id="upd-fname" name="name" type="text">
+        	 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
+ 			 			</div>
+					</li>
+					<li>
+						<a href="#popuplName" data-rel="popup" data-position-to="window" id="lname"></a>
+ 						<div data-role="popup" id="popuplName">
+ 			 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+ 			 				<h1>Last Name:</h1>
+        	 				<input id="upd-lname" name="name" type="text">
+        	 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
+ 			 			</div>
+					</li>
+					<li>
+						<a href="#popupMailingA" data-rel="popup" data-position-to="window" id="mailingA"></a>
+ 						<div data-role="popup" id="popupMailingA">
+ 			 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+ 			 				<h1>Mailing Address: </h1>
+        	 				<input id="upd-mailing" name="name" type="text">
+        	 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
+ 			 			</div>
+					</li>
+					<li>
+						<a href="#popupBillingA" data-rel="popup" data-position-to="window" id="billingA"></a>
+ 						<div data-role="popup" id="popupBillingA">
+ 			 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+ 			 				<h1>Billing Address: </h1>
+        	 				<input id="upd-billing" name="name" type="text">
+        	 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
+ 			 			</div>
+					</li>
+					<li>
+						<a href="#popupcCard" data-rel="popup" data-position-to="window" id="cCard"></a>
+ 						<div data-role="popup" id="popupcCard">
+ 			 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+ 			 				<h1>Credit Card Number: </h1>
+        	 				<input id="upd-creditCard" name="name" type="text">
+        	 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
+ 			 			</div>
+					</li>
+					<li>
+						<a href="#popupEmail" data-rel="popup" data-position-to="window" id="email"></a>
+ 						<div data-role="popup" id="popupEmail">
+ 			 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+ 			 				<h1>Email: </h1>
+        	 				<input id="upd-email" name="name" type="text">
+        	 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
+ 			 			</div>
+					</li>
+					<li>
+						<a href="#popupPassword" data-rel="popup" data-position-to="window" id="password"></a>
+ 						<div data-role="popup" id="popupPassword">
+ 			 				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+ 			 				<h1>Password: </h1>
+        	 				<input id="upd-password" name="name" type="text">
+        	 				<a data-role="button" data-transition="slide" data-theme="b" href="#account-view">Submit</a>
+ 			 			</div>
+					</li>
+  			 	</ul>
+			<!--</fieldset>-->
 			</form>
-			<center>
-				<a data-role="button" onclick=DeleteAccount()>Delete</a>
-			</center>
+			<a  data-theme="b" data-role="button" onclick=DeleteAccount()>Delete</a>
 		</div>
 	</body>
 </html>
