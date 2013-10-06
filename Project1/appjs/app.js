@@ -309,6 +309,12 @@ function AddShoppingCart(){
 }
 
 function DeleteShoppingCart(id){
+	var decision = confirm("Delete Product?");
+		if(decision == true) {
+			alert("Product Deleted");		
+		}
+}
+/**function DeleteShoppingCart(id){
 	
 	$.mobile.loading("show");
 
@@ -333,7 +339,7 @@ function DeleteShoppingCart(id){
 		}
 	});
 	
-}
+}**/
 
 var currentCategory = {};
 
