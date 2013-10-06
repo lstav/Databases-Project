@@ -1,4 +1,4 @@
-/**$(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
+$(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 	console.log("Luis");
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accounts",
@@ -9,39 +9,15 @@
 			var list = $("#account-list");
 			list.empty();
 			var account;
-			for (var i=0; i < len; ++i){
-				account = accountList[i];
-				list.append("<li>" + account.cfName + " " +	account.clName + "</li>" + 
-					"<li>Number: " + account.cAccountNumber +  "</li>" + 
-					"<li>Mailing Address: " + account.cMailing + "</li>" + 
-					"<li>Billing Address: " + account.cBilling + "</li>" +
-					"<li>Credit Card: *****" + account.ccCard.substr(5,6) + "</li>" +
+			
+				account = accountList[0];
+				list.append("<li>" + account.afName + " " +	account.alName + "</li>" + 
+					"<li>Number: " + account.aAccountNumber +  "</li>" + 
+					"<li>Mailing Address: " + account.aMailing + "</li>" + 
+					"<li>Billing Address: " + account.aBilling + "</li>" +
+					"<li>Credit Card: *****" + account.acCard.substr(5,6) + "</li>" +
 					"<li> Rank: " + account.rank + "</li>");
-			}
-			list.listview("refresh");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			alert("Data not found!");
-		}
-	});
-});**/
-
-$(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
-	console.log("Luis");
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts",
-		contentType: "application/json",
-		success : function(data, textStatus, jqXHR){
-			var list = $("#account-list");
-			list.empty();	
-			var account = currentAccount;
-			list.append("<li>" + account.cfName + " " +	account.clName + "</li>" + 
-					"<li>Number: " + account.cAccountNumber +  "</li>" + 
-					"<li>Mailing Address: " + account.cMailing + "</li>" + 
-					"<li>Billing Address: " + account.cBilling + "</li>" +
-					"<li>Credit Card: *****" + account.ccCard.substr(5,6) + "</li>" +
-					"<li> Rank: " + account.rank + "</li>");
+			
 			list.listview("refresh");
 		},
 		error: function(data, textStatus, jqXHR){
@@ -53,28 +29,28 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	// currentAccount has been set at this point
-	var len = currentAccount.cPassword.length;
+	var len = currentAccount.aPassword.length;
 	var pass = "";
 	for (var i=0; i < len; ++i){
 		pass = pass + "*";
 	}
 	
-	$("#upd-username").val(currentAccount.cUsername);
-	$("#upd-fname").val(currentAccount.cfName);
-	$("#upd-lname").val(currentAccount.clName);
-	$("#upd-mailing").val(currentAccount.cMailing);
-	$("#upd-billing").val(currentAccount.cBilling);
-	$("#upd-creditCard").val("*****" + currentAccount.ccCard.substr(5,6));
-	$("#upd-email").val(currentAccount.cEmail);
+	$("#upd-username").val(currentAccount.aUsername);
+	$("#upd-fname").val(currentAccount.afName);
+	$("#upd-lname").val(currentAccount.alName);
+	$("#upd-mailing").val(currentAccount.aMailing);
+	$("#upd-billing").val(currentAccount.aBilling);
+	$("#upd-creditCard").val("*****" + currentAccount.acCard.substr(5,6));
+	$("#upd-email").val(currentAccount.aEmail);
 	$("#upd-password").val(pass);
 	
-	$("#username").html("Username: " + currentAccount.cUsername);
-	$("#fname").html("First Name: " + currentAccount.cfName);
-	$("#lname").html("Last Name: " + currentAccount.clName);
-	$("#mailingA").html("Mailing Address: " + currentAccount.cMailing);
-	$("#billingA").html("Billing Address: " + currentAccount.cBilling);
-	$("#cCard").html("Credit Card Number: *****" + currentAccount.ccCard.substr(5,6));
-	$("#email").html("Email: " + currentAccount.cEmail);
+	$("#username").html("Username: " + currentAccount.aUsername);
+	$("#fname").html("First Name: " + currentAccount.afName);
+	$("#lname").html("Last Name: " + currentAccount.alName);
+	$("#mailingA").html("Mailing Address: " + currentAccount.aMailing);
+	$("#billingA").html("Billing Address: " + currentAccount.aBilling);
+	$("#cCard").html("Credit Card Number: *****" + currentAccount.acCard.substr(5,6));
+	$("#email").html("Email: " + currentAccount.aEmail);
 	$("#password").html("Password: " + pass);
 	
 });
@@ -130,6 +106,28 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	pname.append("<center>"+currentProduct.itemName+"</center>");
 });
 
+/**$(document).on('pagebeforeshow', "#history", function(event, ui) {
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/histories",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var historyList = data.histories;
+			var len = historyList.length;
+			var list = $("#purchase-list");
+			list.empty();
+			var history;
+			history = historyList[0];
+			list.append("<li><a onClick=GetProduct("+ history.productList[0].id +")>"  
+				+ history.productList[0].itemName + "</a></li>"");
+			list.listview("refresh");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+});**/
+
 ///////////////////////////////
 function ConverToJSON(formData){
 	var result = {};
@@ -146,17 +144,17 @@ function SaveAccount(){
 
 var currentAccount = {};
 
-function GetAccount(cid){
+function GetAccount(aid){
 	$.mobile.loading("show");
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts/" + cid,
+		url : "http://localhost:3412/Project1Srv/accounts/" + aid,
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 			currentAccount = data.account;
 			$.mobile.loading("hide");
-			$.mobile.navigate("#account-view");
+			$.mobile.navigate("#accounts");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -165,7 +163,7 @@ function GetAccount(cid){
 				alert("Account not found.");
 			}
 			else {
-				alter("Internal Server Error.");
+				alert("Internal Server Error.");
 			}
 		}
 	});
@@ -231,6 +229,35 @@ function GetCategory(id){
 			$.mobile.loading("hide");
 			if (data.status == 404){
 				alert("Category error.");
+			}
+			else {
+				alter("Internal Server Error.");
+			}
+		}
+	});
+}
+
+var currentHistory = {};
+
+function GetHistory(hid){
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/histories/"+ hid,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			currentCategory= data.category;
+			$.mobile.loading("hide");
+			$.mobile.navigate("#history", {
+				info: hid,
+			});},
+			
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("History error.");
 			}
 			else {
 				alter("Internal Server Error.");

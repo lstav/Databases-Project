@@ -29,13 +29,14 @@ var Account = account.Account;
 
 var accountList = new Array(
 	new Account("Luis", "Tavarez", "123", "lt@example.com", "123456", "luistavarez", "Example Example Puerto Rico", "Example Example Puerto Rico", "987654321", "****"),
-	new Account("Lexter", "Seda", "232", "lt@example.com", "123456", "luistavarez", "Example Example Puerto Rico", "Example Example Puerto Rico", "987654321", "****")
+	new Account("Heidi", "Negron", "323", "lt@example.com", "321456", "heidinegron", "Example Example Puerto Rico", "Example Example Puerto Rico", "123456789", "****"),
+	new Account("Lexter", "Seda", "232", "lt@example.com", "123321", "lexterseda", "Example Example Puerto Rico", "Example Example Puerto Rico", "098765432", "****")
 	
 );
- var accountNextId = 0;
+var accountNextId = 0;
  
 for (var i=0; i < accountList.length;++i){
-	accountList[i].cid = accountNextId++;
+	accountList[i].aid = accountNextId++;
 }
 
 //Product:
@@ -245,6 +246,22 @@ for (var i=0; i < categoryList.length; ++i){
 			}
 }
 
+// History
+
+var history= require("./history.js");
+var History= history.History;
+
+var historyList= new Array(
+	new History("0", artsBooksList[0]),
+	new History("0", golfSportsList[1])
+);
+
+var historyNextId = 0;
+ 
+for (var i=0; i < historyList.length;++i){
+	historyList[i].hid = historyNextId++;
+}
+
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
 // identifies the resource to be created, read, updated, or deleted.
@@ -271,25 +288,11 @@ app.get('/Project1Srv/categories', function(req, res){
 	
 });
 
-app.get('/Project1Srv/categories:id', function(req, res){
-		
-	var id = req.params.id;
-	console.log("GET category:"+ id);
-	var target = -1;
-		for (var i=0; i < categoryList.length; ++i){
-			if (categoryList[i].id == id){
-				target = i;
-				break;	
-			}
-		}
-		if (target == -1){
-			res.statusCode = 404;
-			res.send("Category not found.");
-		}
-		else {
-			var response = {"category" : categoryList[target]};
-  			res.json(response);	
-  		}		
+app.get('/Project1Srv/histories', function(req, res) {
+	console.log("GET");
+	
+	var response = {"histories" : historyList};
+  	res.json(response);
 });
 
 app.get('/Project1Srv/categories/:id', function(req, res){
@@ -313,39 +316,34 @@ app.get('/Project1Srv/categories/:id', function(req, res){
   		}		
 });
 
-app.get('/Project1Srv/products/:id', function(req, res){
+app.get('/Project1Srv/histories/:hid', function(req, res){
 		
-	var id = req.params.id;
+	var hid = req.params.hid;
 	
 	var target = -1;
-	var target2= -1;
-		for (var i=0; i < categoryList.length; ++i){
-			for(var j=0; j< categoryList[i].productList.length; ++j)
-			{
-				if(categoryList[i].productList[j].id== id){
+		for (var i=0; i < historiesList.length; ++i){
+			if(historyList[0].productList[i].id == hid){
 					target= i;
-					target2=j;
 					break;
 				}
-			}
 		}
 		
-		if (target == -1 || target2 == -1){
+		if (target == -1){
 			res.statusCode = 404;
 			res.send("Product not found.");
 		}
 		else {
-			var response = {"product" : categoryList[target].productList[target2]};
+			var response = {"product" : categoryList[0].productList[target]};
   			res.json(response);	
   		}		
 });
 
 
 // REST Operation - HTTP GET to read a car based on its id
-app.get('/Project1Srv/accounts/:cid', function(req, res) {
-	var cid = req.params.cid;
-		console.log("GET account: " + cid);
-	if ((cid < 0) || (cid >= accountNextId)){
+app.get('/Project1Srv/accounts/:aid', function(req, res) {
+	var aid = req.params.aid;
+		console.log("GET account: " + aid);
+	if ((aid < 0) || (aid >= accountNextId)){
 		// not found
 		res.statusCode = 404;
 		res.send("Account not found.");
@@ -353,7 +351,7 @@ app.get('/Project1Srv/accounts/:cid', function(req, res) {
 	else {
 		var target = -1;
 		for (var i=0; i < accountList.length; ++i){
-			if (accountList[i].cid == cid){
+			if (accountList[i].aid == aid){
 				target = i;
 				break;	
 			}
@@ -370,12 +368,12 @@ app.get('/Project1Srv/accounts/:cid', function(req, res) {
 });
 
 // REST Operation - HTTP PUT to updated a car based on its id
-app.put('/Project1Srv/accounts/:cid', function(req, res) {
+app.put('/Project1Srv/accounts/:aid', function(req, res) {
 
 });
 
 // REST Operation - HTTP DELETE to delete a car based on its id
-app.del('/Project1Srv/accounts/:cid', function(req, res) {
+app.del('/Project1Srv/accounts/:aid', function(req, res) {
 	
 });
 
