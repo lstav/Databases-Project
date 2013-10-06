@@ -146,7 +146,7 @@ for (var i=0; i < categoryList.length; ++i){
 }
 
 //Shopping cart
-var shoppingCart= new Array();
+var shoppingCart=new Array();
 
 // History
 var history= require("./history.js");
@@ -196,14 +196,55 @@ app.get('/Project1Srv/histories', function(req, res) {
   	res.json(response);
 });
 
-app.get('/Project1Srv/shoppingCartList/:product', function(req, res){
+app.get('/Project1Srv/shoppingCartList/:id', function(req, res){
 	
-	var product= req.params.product;
-	shoppingCart.push(product);
-	console.log("Adding "+product.itemName);
-	var response = {"productsCart": shoppingCart};
+	var id= req.params.id;
+	
+	var target = -1;
+	var target2= -1;
+		for (var i=0; i < categoryList.length; ++i){
+			for(var j=0; j< categoryList[i].productList.length; ++j)
+			{
+				if(categoryList[i].productList[j].id== id){
+					target= i;
+					target2=j;
+					break;
+				}
+			}
+		}
+
+		if (target == -1 || target2 == -1){
+			res.statusCode = 404;
+			res.send("Product not found.");
+		}
+		
+		else {
+			var product= categoryList[target].productList[target2];
+  			shoppingCart.push(product);
+			console.log("Adding "+product.itemName);	
+			var response = {"productCart": shoppingCart};
+			res.json(response);
+  		}		
+});
+
+app.get('/Project1Srv/shoppingCartListDelete/:id', function(req, res){
+	
+	var id= req.params.id;	
+	var shoppingCart2=new Array(); 
+	var qty=0;
+		for (var i=0; i < shoppingCart.length; ++i){
+			
+				if(shoppingCart[i].id != id && qty==0){
+					shoppingCart2.push(shoppingCart[i]);
+					++qty;
+					break;
+				}
+		}
+		
+	shoppingCart= shoppingCart2;	
+	var response = {"productCart2": shoppingCart};
 	res.json(response);
-	
+  			
 });
 
 app.get('/Project1Srv/categories/:id', function(req, res){
