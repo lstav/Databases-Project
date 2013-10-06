@@ -127,7 +127,7 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	
 });
 
-/**$(document).on('pagebeforeshow', "#history", function(event, ui) {
+$(document).on('pagebeforeshow', "#history", function(event, ui) {
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/histories",
 		contentType: "application/json",
@@ -140,7 +140,7 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 			history = historyList[0];
 			for(var i=0; i<len; i++) {
 			list.append("<li><a onClick=GetProduct("+ history.productList[i].id +")>"  
-				+ history.productList[i].itemName + "</a></li>"");
+				+ history.productList[i].itemName + "</a></li>");
 			}
 			list.listview("refresh");
 		},
@@ -149,7 +149,7 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 			alert("Data not found!");
 		}
 	});
-});**/
+});
 
 ///////////////////////////////
 function ConverToJSON(formData){
