@@ -79,10 +79,10 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 		
 		var sort= $("#sort-bylist");
 		sort.empty();
-		sort.append("<li><a>Price: Best Sellers </a></li>");
+		sort.append("<li><a>Best Sellers </a></li>");
 		sort.append("<li><a>Price: Low to High</a></li>");
 		sort.append("<li><a>Price: High to Low</a></li>");
-		sort.append("<li><a>Price: Avg. Customer Review</a></li>");
+		sort.append("<li><a>Avg. Customer Review</a></li>");
 		sort.listview("refresh");
 		},
 		
