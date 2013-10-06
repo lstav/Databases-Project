@@ -15,14 +15,14 @@
         	<ul data-role="listview" data-theme="a">
         			<li><a href="advsearch.html" >Search</a></li>
         			<li><a href="account.html" >Account</a></li>  
-					<li><a href="#Messages" >Messages</a></li>  
+					<li><a href="message.html" >Messages</a></li>  
 					<li><a href="#Notifications" >Notifications</a></li>
 					<li><a href="login.html" >Log Out</a></li>      		      		
         		</ul>
    		</div><!-- /panel -->
 
 			<div data-role="header" data-theme="b" data-position="fixed">
-				<a data-role="button" data-position="left" data-icon="arrow-l" data-iconpos="notext" data-rel="back">Back</a>
+				<a href= "login.html" data-role="button" data-position="left" data-icon="arrow-l" data-iconpos="notext" data-rel="back">Back</a>
 				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
 				<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
 				<a href="#mypanel" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
@@ -31,11 +31,10 @@
 			</div>
 			<div data-role="content">
 				<ul data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Search Item ...">	
-					<a data-role="button" data-theme="b" href="Categories.html" data-icon="arrow-r" data-iconpos="right">
+					<a href= "categories.html" data-role="button" data-theme="b" href="Categories.html" data-icon="arrow-r" data-iconpos="right">
             			Browse
       				</a>
-        			<a data-role="button" data-theme="b" href="#Cart" data-icon="arrow-r"
-       				 data-iconpos="right">
+           			<a href= "shopping.html" data-role="button" data-theme="b" href="#Cart" data-icon="arrow-r" data-iconpos="right">
             			Shopping Cart
         			</a>
         			
@@ -44,30 +43,6 @@
 		</div>
 				
 
-		<div id="candy" data-role="page">
-			<div data-role="panel" id="mypanel" data-theme="a" data-position="left" data-display="reveal">
-        		<ul data-role="listview" data-theme="a">
-					<li><a href="#fruits">Fruits</a></li>  
-					<li><a href="#soft-drinks">Soft Drinks</a></li>        		
-					<li><a href="#candy">Candy</a></li>        		
-        		</ul>
-    		</div><!-- /panel -->
-
-			<div data-role="header" data-theme="b" data-position="fixed">
-				<a href="#mypanel" data-role="button" data-icon="bars">Menu</a>
-				<h1>Candy</h1>
-			</div>
-			<div data-role="content">
-				<ul data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Fruit name ...">	
-					<li>M&M</li>
-					<li>Snickers</li>
-					<li>Oreo</li>
-					<li>Mike&Ike</li>
-					<li>Nutella</li>
-					<li>Jujube</li>
-				</ul>
-			</div>
-		</div>
 
 	</body>
 </html>
