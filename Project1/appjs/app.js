@@ -113,6 +113,16 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	pname.append("<center>"+currentProduct.itemName+"</center>");
 });
 
+$(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
+	
+	var info= $("#totalPurchase");
+	info.empty();
+	info.append("Total: $     "+ shoppingCartTotal);
+	
+});
+
+var shoppingCartTotal=0;
+
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	
 	var len =shoppingCart.length;
@@ -123,8 +133,7 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	item =shoppingCart[i];
 	list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart("+item.id+")> <img src='"+ item.img+ "'/>" + item.itemName + "<h4> Price: $"+item.price+"<\h4></a></li>");
 	}
-	list.listview("refresh");
-	
+	list.listview("refresh");	
 });
 
 $(document).on('pagebeforeshow', "#history", function(event, ui) {
@@ -250,6 +259,32 @@ function AddShoppingCart(){
 			shoppingCart= data.productCart;
 			$.mobile.loading("hide");
 			$.mobile.changePage("shopping.html");},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Product error.");
+			}
+			else {
+				alter("Internal Server Error.");
+			}
+		}
+	});}
+	
+var shoppingCart={};
+
+function AddShoppingCart(){
+	$.mobile.loading("show");
+
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/shoppingCartList/"+ currentProduct.id,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			shoppingCart= data.productCart;
+			$.mobile.loading("hide");
+			$.mobile.changePage("shopping.html");},
 			
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -295,6 +330,7 @@ var currentCategory = {};
 
 function GetCategory(id){
 	$.mobile.loading("show");
+
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/categories/"+ id,
 		method: 'get',
@@ -305,8 +341,7 @@ function GetCategory(id){
 			$.mobile.loading("hide");
 			$.mobile.navigate("#catProductView", {
 				info: id,
-			});},
-			
+			});},			
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
 			$.mobile.loading("hide");
@@ -317,6 +352,7 @@ function GetCategory(id){
 				alter("Internal Server Error.");
 			}
 		}
+
 	});
 }
 

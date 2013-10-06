@@ -31,7 +31,6 @@ var accountList = new Array(
 	new Account("Luis", "Tavarez", "123", "lt@example.com", "123456", "luistavarez", "Example Example Puerto Rico", "Example Example Puerto Rico", "987654321", "****"),
 	new Account("Heidi", "Negron", "323", "lt@example.com", "321456", "heidinegron", "Example Example Puerto Rico", "Example Example Puerto Rico", "123456789", "****"),
 	new Account("Lexter", "Seda", "232", "lt@example.com", "123321", "lexterseda", "Example Example Puerto Rico", "Example Example Puerto Rico", "098765432", "****")
-	
 );
 var accountNextId = 0;
  
@@ -175,30 +174,37 @@ for (var i=0; i < historyList.length;++i){
 // REST Operation - HTTP GET 
 app.get('/Project1Srv/accounts', function(req, res) {
 	console.log("GET");
-	
+
 	var response = {"accounts" : accountList};
   	res.json(response);
 });
 
 app.get('/Project1Srv/categories', function(req, res){
-	
+
 	console.log("GET");
 	var response = {"categories": categoryList};
 	res.json(response);
-	
+
 });
 
 app.get('/Project1Srv/histories', function(req, res) {
 	console.log("GET");
-	
 	var response = {"histories" : historyList};
   	res.json(response);
 });
 
+
+app.get('/Project1Srv/shoppingCartList', function(req, res) {
+	console.log("GET");
+
+	var response = {"shoppingList" : shoppingCart};
+  	res.json(response);
+});
+
 app.get('/Project1Srv/shoppingCartList/:id', function(req, res){
-	
+
 	var id= req.params.id;
-	
+
 	var target = -1;
 	var target2= -1;
 		for (var i=0; i < categoryList.length; ++i){
@@ -216,7 +222,7 @@ app.get('/Project1Srv/shoppingCartList/:id', function(req, res){
 			res.statusCode = 404;
 			res.send("Product not found.");
 		}
-		
+
 		else {
 			var product= categoryList[target].productList[target2];
   			shoppingCart.push(product);
@@ -227,19 +233,16 @@ app.get('/Project1Srv/shoppingCartList/:id', function(req, res){
 });
 
 app.get('/Project1Srv/shoppingCartListDelete/:id', function(req, res){
-	
 	var id= req.params.id;	
 	var shoppingCart2=new Array(); 
 	var qty=0;
 		for (var i=0; i < shoppingCart.length; ++i){
-			
 				if(shoppingCart[i].id != id && qty==0){
 					shoppingCart2.push(shoppingCart[i]);
 					++qty;
 					break;
 				}
 		}
-		
 	shoppingCart= shoppingCart2;	
 	var response = {"productCart2": shoppingCart};
 	res.json(response);
@@ -247,7 +250,7 @@ app.get('/Project1Srv/shoppingCartListDelete/:id', function(req, res){
 });
 
 app.get('/Project1Srv/categories/:id', function(req, res){
-		
+
 	var id = req.params.id;
 	console.log("GET category:"+ id);
 	var target = -1;
@@ -300,18 +303,21 @@ app.get('/Project1Srv/histories/:hid', function(req, res){
 	console.log("GET history: " + hid);
 	var target = -1;
 		for (var i=0; i < historyList.length; ++i){
+
 			if(historyList[0].productList[i].id == hid){
 					target= i;
 					break;
 				}
 		}
-		
+
 		if (target == -1){
 			res.statusCode = 404;
 			res.send("Product not found.");
 		}
 		else {
+
 			var response = {"product" : historyList[0].productList[target]};
+
   			res.json(response);	
   		}		
 });
@@ -352,12 +358,12 @@ app.put('/Project1Srv/accounts/:aid', function(req, res) {
 
 // REST Operation - HTTP DELETE to delete a car based on its id
 app.del('/Project1Srv/accounts/:aid', function(req, res) {
-	
+
 });
 
 // REST Operation - HTTP POST to add a new a car
 app.post('/Project1Srv/accounts', function(req, res) {
-	
+
 });
 
 
