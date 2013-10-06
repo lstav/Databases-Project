@@ -106,6 +106,31 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	pname.append("<center>"+currentProduct.itemName+"</center>");
 });
 
+$(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
+	
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/shoppingCartList/productsCart",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+
+		var len =shoppingCart.length;
+		var list = $("#shopping-list");
+		list.empty();
+		var item;
+		for (var i=0; i < len; ++i){
+		item =shoppingCart[i];
+		list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/>" + item.itemName + "<h4> Total price: $"+item.price+"<\h4></a></li>");
+		}
+		list.listview("refresh");},
+		
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Shopping Cart list-view error!");
+		}
+	});
+	
+});
+
 /**$(document).on('pagebeforeshow', "#history", function(event, ui) {
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/histories",
@@ -207,6 +232,35 @@ function GetProduct(id){
 			}
 		}
 	});}
+	
+var shoppingCart={};
+
+function AddShoppingCart(){
+				
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/shoppingCartList/"+ currentProduct,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			shoppingCart= data.productsCart;
+			$.mobile.loading("hide");
+			$.mobile.changePage("shopping.html");},
+			
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Shopping Cart error.");
+			}
+			else {
+				alter("Internal Server Error.");
+			}
+		}
+	});
+	
+}
 
 var currentCategory = {};
 

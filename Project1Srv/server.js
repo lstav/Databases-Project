@@ -71,48 +71,48 @@ var fictionBooksList= new Array(
 
 //HERE
 var phonesElecList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+	new Product("Samsung Galaxy S4", "699.99", "12", "New", "California", "Standard", "Visa, Paypal", "White, (AT&T)", "http://img24.imageshack.us/img24/4017/6doj.jpg"),
+	new Product("Motorola DROID MINI", "599.99", "2", "New", "Florida", "Standard", "Paypal", "Verizon Wireless", "http://img844.imageshack.us/img844/392/nrmr.jpg")
 );
 
 var camerasElecList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+	new Product("Nikon COOLPIX L820", "200.00", "12", "New", "California", "Standard", "Visa, Paypal", "Specs: 16 MP CMOS Digital Camera with 30x Zoom Lens and Full HD 1080P Video", "http://img571.imageshack.us/img571/3025/ipxs.jpg"),
+	new Product("Canon PowerShot A2300", "99.00", "2", "New", "Florida", "Standard", "Paypal", "Specs: 16.0 MP Digital Camer with 5x Digital Image Stabilized Zoom 28mm Wide-Angle Lens with 720p HD Video Recording", "http://img692.imageshack.us/img692/2051/wum4.jpg")
 );
 
 var laptopCompList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+	new Product("Dell Inspiron 15 i15RV-6190BLK", "369.98", "12", "New", "California", "Standard", "Visa, Paypal", "15.6-Inch Laptop (Black Matte with Textured Finish)", "http://img545.imageshack.us/img545/5389/w3qm.jpg"),
+	new Product("Samsung Chromebook", "248.00", "2", "New", "Florida", "Standard", "Paypal", "Wi-Fi, 11.6-Inch", "http://img593.imageshack.us/img593/2941/ym85.jpg")
 );
 
 var tabletsCompList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+	new Product("Google Nexus 7 Tablet", "229.00", "12", "New", "California", "Standard", "Visa, Paypal", "7-Inch, 16GB, Black by ASUS", "http://img545.imageshack.us/img545/7964/guud.jpg"),
+	new Product("Acer Iconia A1-810- L416", "100.00", "2", "New", "Florida", "Standard", "Paypal", "7.9-Inch 16 GB Table (Pure White)", "http://img689.imageshack.us/img689/8669/k5sk.jpg")
 );
 
 var menShirtsList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+	new Product("Delhi Shirt", "32.00", "12", "New", "California", "Standard", "Visa, Paypal", "Blue", "http://img401.imageshack.us/img401/4610/o3xu.jpg"),
+	new Product("Plus Long Sleeve Shirt", "64.00", "2", "New", "Florida", "Standard", "Paypal", "Black", "http://img580.imageshack.us/img580/3644/2ug0.jpg")
 );
 
 var menPantsList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+	new Product("Kenneth Cole Reaction Men's Sharkskin", "80.00", "12", "New", "California", "Standard", "Visa, Paypal", "Slim Fit Flat Front Pant", "http://img6.imageshack.us/img6/5410/a6ih.jpg"),
+	new Product("Savane Men's Travel Intelligence", "62.00", "2", "New", "Florida", "Standard", "Paypal", "Gab-slim Fit Pant", "http://img27.imageshack.us/img27/3130/87k2.jpg")
 );
 
 var womenDressesList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+	new Product("Anne Klein Women's Dress", "89.98", "12", "New", "California", "Standard", "Visa, Paypal", "Jersey Swing Dress", "http://img46.imageshack.us/img46/6762/a3co.jpg"),
+	new Product("Sandra Darren Dress", "63.00", "2", "New", "Florida", "Standard", "Paypal", "Women's Fit and Flare Lace and Mesh Dress", "http://img34.imageshack.us/img34/6810/7ugz.png")
 );
 
 var bicycleSportsList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+	new Product("GMC Denali Road Bike", "347.06", "12", "New", "California", "Standard", "Visa, Paypal", "21-speed road bike features", "http://img20.imageshack.us/img20/9927/u8vn.jpg"),
+	new Product("Huffy Women's Deluxe Cruiser Bike", "139.99", "2", "New", "Florida", "Standard", "Paypal", "Mint Green, 26-Inch/Medium", "http://img266.imageshack.us/img266/65/sjau.jpg")
 );
 
 var kayakSportsList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+	new Product("Intex Challenger K1 Kayak", "76.47", "12", "New", "California", "Standard", "Visa, Paypal", "For lake or slow-moving river.", "http://img820.imageshack.us/img820/1607/a4gd.jpg"),
+	new Product("Sevylor Fiji Travel Pack Kayak", "106.99", "2", "New", "Florida", "Standard", "Paypal", "Blue, 2-Person", "http://img853.imageshack.us/img853/6994/s5je.jpg")
 );
 
 //Category
@@ -145,8 +145,10 @@ for (var i=0; i < categoryList.length; ++i){
 			}
 }
 
-// History
+//Shopping cart
+var shoppingCart= new Array();
 
+// History
 var history= require("./history.js");
 var History= history.History;
 
@@ -192,6 +194,16 @@ app.get('/Project1Srv/histories', function(req, res) {
 	
 	var response = {"histories" : historyList};
   	res.json(response);
+});
+
+app.get('/Project1Srv/shoppingCartList/:product', function(req, res){
+	
+	var product= req.params.product;
+	shoppingCart.push(product);
+	console.log("Adding "+product.itemName);
+	var response = {"productsCart": shoppingCart};
+	res.json(response);
+	
 });
 
 app.get('/Project1Srv/categories/:id', function(req, res){
