@@ -53,7 +53,7 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 		var item;
 		for (var i=0; i < len; ++i){
 		item =productCat[i];
-		list.append("<li><a onClick=GetProduct("+item.id+")> <img src="+ item.img+ "/>" + item.itemName + "</a></li>");
+		list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/>" + item.itemName + "<h4> Price: $"+item.price+"<\h4></a></li>");
 		}
 		list.listview("refresh");
 		

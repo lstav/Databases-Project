@@ -42,65 +42,31 @@ var product = require("./product.js");
 var Product = product.Product;
 
 var artsBooksList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "http://image.weather.com/web/multimedia/images/slideshows/fall09/fall20.jpg"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "http://image.weather.com/web/multimedia/images/slideshows/fall09/fall20.jpg")
+	new Product("Women Artists: An Illustrated History", "27.55", "12", "New", "California", "Standard", "Visa, Paypal", "Authors: Nancy G. Heller & Ovidio Guaita", "http://img689.imageshack.us/img689/9591/q9en.jpg"),
+	new Product("The Bay Area School", "52.43", "2", "New", "Florida", "Standard", "Paypal", "Authors: Thomas Williams & Michael Peppiatt", "http://img15.imageshack.us/img15/9931/aaku.jpg")
 );
 
 var comicBooksList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+	new Product("The Walking Dead Volume 19 TP: March to War", "9.07", "12", "New", "California", "Standard", "Visa, Paypal", "Authors: Robert Kirkman & Charlie Adlard", "http://img703.imageshack.us/img703/8320/ca18.jpg"),
+	new Product("Justice League, Vol.3: Throne of Atlantis (The New 52)", "16.98", "2", "New", "Florida", "Standard", "Paypal", "Authors: Geoff Johns & Ivan Reis", "http://img203.imageshack.us/img203/7104/s6hg.jpg")
 );
 
 var mysteryBooksList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+	new Product("Istanbul Passage: A Novel", "10.38", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Joseph Kanon", "http://img23.imageshack.us/img23/4227/kfh2.jpg"),
+	new Product("Doctor Sleep: A Novel", "10.99", "2", "New", "Florida", "Standard", "Paypal", "Author: Stephen King", "http://img703.imageshack.us/img703/2497/yyvw.jpg")
 );
 
 var romanceBooksList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
+	new Product("Beautiful Disaster: A Novel", "11.20", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Jamie McGuire", "http://img17.imageshack.us/img17/8192/cdt8.jpg"),
+	new Product("Fifty Shades of Grey", "10.04", "2", "New", "Florida", "Standard", "Paypal", "Author: E L James", "http://img694.imageshack.us/img694/8062/osbz.jpg")
 );
 
 var fictionBooksList= new Array(
-	new Product("Eragon", "5.00", "5", "New", "Puerto Rico", "Standard", "Paypal", "Author: Christopher Paolini", "item.html"),
-	new Product("Harry Potter", "12.00", "25", "New", "Wisconsin", "Standard", "Paypal", "Author: J.K. Rowling", "item.html")
+	new Product("A Dance with Dragons ( A Song of Ice and Fire, Book 5)", "19.97", "5", "New", "Puerto Rico", "Standard", "Paypal", "Author: George R.R. Martin", "http://img89.imageshack.us/img89/7601/abe.jpg"),
+	new Product("Eragon", "7.56", "5", "New", "Puerto Rico", "Standard", "Paypal", "Author: Christopher Paolini", "http://img191.imageshack.us/img191/7442/t8q7.png")
 );
 
-var entertainmentMagList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
-var fashionMagList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
-var moviesMagList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
-var newsMagList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
-var scienceMagList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
-var tvElecList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
-var audioElecList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
+//HERE
 var phonesElecList= new Array(
 	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
 	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
@@ -111,32 +77,12 @@ var camerasElecList= new Array(
 	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
 );
 
-var videoElecList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
 var laptopCompList= new Array(
 	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
 	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
 );
 
-var desktopCompList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
 var tabletsCompList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
-var printersCompList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
-var childrenClothesList= new Array(
 	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
 	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
 );
@@ -151,27 +97,7 @@ var menPantsList= new Array(
 	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
 );
 
-var womenShirtsList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
-var womenPantsList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
 var womenDressesList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
-var childrenShoesList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
-var menShoesList= new Array(
 	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
 	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
 );
@@ -186,16 +112,6 @@ var kayakSportsList= new Array(
 	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
 );
 
-var golfSportsList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
-var fishingSportsList= new Array(
-	new Product("Drawings", "50.00", "12", "New", "California", "Standard", "Visa, Paypal", "Author: Lala", "item.html"),
-	new Product("Color & Light", "28.00", "2", "New", "Florida", "Standard", "Paypal", "Author: Pablo", "item.html")
-);
-
 //Category
 
 var category= require("./category.js");
@@ -206,32 +122,15 @@ var categoryList= new Array(
 	new Category ("MysteryBooks", "Mystery, Thriller & Suspense", mysteryBooksList),
 	new Category ("RomanceBooks", "Romance", romanceBooksList),
 	new Category ("ScienceFictionBooks", "Science Fiction & Fantasy", fictionBooksList),
-	new Category ("EntertainmentMagazine", "Entertainment", entertainmentMagList),
-	new Category ("FashionMagazine", "Fashion & Style", fashionMagList),
-	new Category ("MoviesMagazine", "Movies & Music", moviesMagList),
-	new Category ("NewsMagazine", "News & Politics", newsMagList),
-	new Category ("ScienceMagazine", "Science", scienceMagList),
-	new Category ("TvElectronics", "TV", tvElecList),
-	new Category ("AudioElectronics", "Audio", audioElecList),
 	new Category ("PhonesElectronics", "Phones", phonesElecList),
 	new Category ("CamerasElectronics", "Cameras",camerasElecList),
-	new Category ("VideoElectronics", "Video", videoElecList),
 	new Category ("LaptopsComp", "Laptops", laptopCompList),
-	new Category ("DesktopComp", "Desktops", desktopCompList),
 	new Category ("TabletsComp", "Tablets", tabletsCompList),
-	new Category ("PrintersComp", "Printers", printersCompList),
-	new Category ("ChildrenClothes", "Children", childrenClothesList),
 	new Category ("MenShirts", "Men Shirts", menShirtsList),
 	new Category ("MenPants", "Men Pants", menPantsList),
-	new Category ("WomenShirts", "Women Shirts", womenShirtsList),
-	new Category ("WomenPants", "Women Pants", womenPantsList),
 	new Category ("WomenDresses", "Women Dresses", womenDressesList),
-	new Category ("ChildrenShoes", "Children Shoes", childrenShoesList),
-	new Category ("MenShoes", "Men Shoes", menShoesList),
 	new Category ("BicycleSports", "Bicycles", bicycleSportsList),
-	new Category ("KayakSports", "Kayaks", kayakSportsList),
-	new Category ("GolfSports", "Golf", golfSportsList),
-	new Category ("FishingSports", "Fishing", fishingSportsList)
+	new Category ("KayakSports", "Kayaks", kayakSportsList)
 );
 
 var productId=0;
