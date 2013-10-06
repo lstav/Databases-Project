@@ -1,6 +1,6 @@
 module.exports =  { 
 	History : function (aid, productList){
-		this.hcid = "";
+		this.hid = "";
 		this.aid = aid;
 		this.productList = productList;
 	}

@@ -137,13 +137,15 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 			var historyList = data.histories;
-			var len = historyList.length;
+			var len = historyList[0].productList.length;
 			var list = $("#purchase-list");
 			list.empty();
 			var history;
 			history = historyList[0];
-			list.append("<li><a onClick=GetProduct("+ history.productList[0].id +")>"  
-				+ history.productList[0].itemName + "</a></li>"");
+			for(var i=0; i<len; i++) {
+			list.append("<li><a onClick=GetProduct("+ history.productList[i].id +")>"  
+				+ history.productList[i].itemName + "</a></li>"");
+			}
 			list.listview("refresh");
 		},
 		error: function(data, textStatus, jqXHR){
@@ -301,7 +303,7 @@ function GetHistory(hid){
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			currentCategory= data.category;
+			currentHistory= data.history;
 			$.mobile.loading("hide");
 			$.mobile.navigate("#history", {
 				info: hid,
