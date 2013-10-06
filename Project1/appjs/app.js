@@ -173,6 +173,27 @@ $(document).on('pagebeforeshow', "#history", function(event, ui) {
 	});
 });
 
+$(document).on('pagebeforeshow', "#inbox", function(event, ui) {
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/messages",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var messageList = data.messages;
+			var len = messageList.length;
+			var list = $("#inbox-list");
+			list.empty();
+			var message;
+			message = messageList[0];
+			list.append("<li>"+message.sName +"</li>");
+			list.listview("refresh");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+});
+
 ///////////////////////////////
 function ConverToJSON(formData){
 	var result = {};
@@ -422,6 +443,35 @@ function GetHistory(hid){
 			}
 			else {
 				alter("Internal Server Error.");
+			}
+		}
+	});
+}
+var currentMessage = {};
+
+function GetMessage(mid){
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/messagess/" + mid,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			currentMessage = data.message;
+			$.mobile.loading("hide");
+			if(mid==0)
+			$.mobile.navigate("inbox.html");
+			else
+			$.mobile.navigate("sentMessages.html");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Message not found.");
+			}
+			else {
+				alert("Internal Server Error.");
 			}
 		}
 	});

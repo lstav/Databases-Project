@@ -161,6 +161,22 @@ for (var i=0; i < historyList.length;++i){
 	historyList[i].hid = historyNextId++;
 }
 
+//Message
+var message = require("./message.js");
+var Message = message.Message;
+
+var messageList = new Array(
+	new Message("0","1", "Luis", "Hola!!!"),
+	new Message("1","0", "Heidi", "Hello")
+	
+);
+var messageNextId = 0;
+ 
+for (var i=0; i < messageList.length;++i){
+	messageList[i].mid = messageNextId++;
+}
+
+
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
 // identifies the resource to be created, read, updated, or deleted.
@@ -193,6 +209,12 @@ app.get('/Project1Srv/histories', function(req, res) {
   	res.json(response);
 });
 
+app.get('/Project1Srv/messages', function(req, res) {
+	console.log("GET");
+
+	var response = {"messages" : messageList};
+  	res.json(response);
+});
 
 app.get('/Project1Srv/shoppingCartList', function(req, res) {
 	console.log("GET");
@@ -322,7 +344,32 @@ app.get('/Project1Srv/histories/:hid', function(req, res){
   		}		
 });
 
-
+app.get('/Project1Srv/messages/:mid', function(req, res) {
+	var mid = req.params.mid;
+		console.log("GET message: " + mid);
+	if ((mid < 0) || (mid >= midNextId)){
+		// not found
+		res.statusCode = 404;
+		res.send("Message not found.");
+	}
+	else {
+		var target = -1;
+		for (var i=0; i < messageList.length; ++i){
+			if (messageList[i].mid == mid){
+				target = i;
+				break;	
+			}
+		}
+		if (target == -1){
+			res.statusCode = 404;
+			res.send("Message not found.");
+		}
+		else {
+			var response = {"message" : messageList[target]};
+  			res.json(response);	
+  		}	
+	}
+});
 // REST Operation - HTTP GET to read a car based on its id
 app.get('/Project1Srv/accounts/:aid', function(req, res) {
 	var aid = req.params.aid;
