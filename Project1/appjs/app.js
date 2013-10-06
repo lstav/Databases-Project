@@ -184,7 +184,7 @@ $(document).on('pagebeforeshow', "#inbox", function(event, ui) {
 			list.empty();
 			var message;
 			message = messageList[0];
-			list.append("<li>"+message.sName +"</li>");
+			list.append("<li><h2>"+message.sName+ "</h2><p>" +message.mText+"</p></li>");
 			list.listview("refresh");
 		},
 		error: function(data, textStatus, jqXHR){
