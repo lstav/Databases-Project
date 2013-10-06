@@ -139,8 +139,12 @@ $(document).on('pagebeforeshow', "#history", function(event, ui) {
 			var history;
 			history = historyList[0];
 			for(var i=0; i<len; i++) {
-			list.append("<li><a onClick=GetProduct("+ history.productList[i].id +")>"  
-				+ history.productList[i].itemName + "</a></li>");
+			list.append("<li><a onclick=GetProduct(" + history.productList[i].id + ")>" +
+					"<h2>" + history.productList[i].itemName + "</h2>" + 
+					"<p><strong> Payment: " + history.productList[i].payment + "</strong></p>" + 
+					"<p>" + history.productList[i].description + "</p>" +
+					"<p class=\"ui-li-aside\">$" + history.productList[i].price + "</p>" +
+					"</a></li>");
 			}
 			list.listview("refresh");
 		},
