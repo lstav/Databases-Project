@@ -113,6 +113,14 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	pname.append("<center>"+currentProduct.itemName+"</center>");
 });
 
+$(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
+	
+	var info= $("#Address");
+	info.empty();
+	info.append("<h1>MY ADRRESS</h2>");
+	
+});
+
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	
 	var len =shoppingCart.length;
@@ -122,8 +130,14 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	for (var i=0; i < len; ++i){
 	item =shoppingCart[i];
 	list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart("+item.id+")> <img src='"+ item.img+ "'/>" + item.itemName + "<h4> Price: $"+item.price+"<\h4></a></li>");
+	}	
+	
+	if (len < 1){
+		list.append("<li data-icon='false'> <a No items in your shopping cart. </a> </li>");
 	}
+	
 	list.listview("refresh");
+
 	
 });
 
@@ -269,7 +283,7 @@ function DeleteShoppingCart(id){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 			shoppingCart= data.productCart2;
-			window.location.reload(true);},
+			$.mobile.changePage("shopping.html");},
 			
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -312,6 +326,32 @@ function GetCategory(id){
 			}
 		}
 	});
+}
+
+function checkOut(){
+	$.mobile.loading("show");
+
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/shoppingCartList",
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			shoppingCart= data.shoppingList;
+			$.mobile.loading("hide");
+			$.mobile.navigate("shopping.html#checkoutItem");},
+			
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Check out error.");
+			}
+			else {
+				alter("Internal Server Error.");
+			}
+		}
+	});	
 }
 
 var currentHistory = {};

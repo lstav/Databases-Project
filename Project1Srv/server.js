@@ -196,6 +196,13 @@ app.get('/Project1Srv/histories', function(req, res) {
   	res.json(response);
 });
 
+app.get('/Project1Srv/shoppingCartList', function(req, res) {
+	console.log("GET");
+	
+	var response = {"shoppingList" : shoppingCart};
+  	res.json(response);
+});
+
 app.get('/Project1Srv/shoppingCartList/:id', function(req, res){
 	
 	var id= req.params.id;
