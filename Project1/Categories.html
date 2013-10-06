@@ -35,49 +35,90 @@
 				</div>
 			</div>
 
-			<div data-role="content">	
+			<div data-role="content" >	
 					<a data-role="button" data-icon="search" data-theme="b" href="advsearch.html">Advanced Search</a>
 
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 						<h1>Books</h1>
-						<ul data-role="listview" data-inset="true">
+						<ul data-role="listview" data-inset="true" >
 						<li><a onClick= GetCategory("ArtBooks")>Arts & Photography</a></li>
+						<li><a onClick= GetCategory("ChildrenBooks")>Children's Books</a></li>
 						<li><a onClick= GetCategory("ComicBooks")>Comic & Graphic Novels</a></li>
 						<li><a onClick= GetCategory("MysteryBooks")>Mystery, Thriller & Suspense</a></li>
 						<li><a onClick= GetCategory("RomanceBooks")>Romance</a></li>
+						<li><a onClick= GetCategory("ScienceBooks")>Science & Math</a></li>
 						<li><a onClick= GetCategory("ScienceFictionBooks")>Science Fiction & Fantasy</a></li></ul></div>						
+
+					<div data-role="collapsible" data-theme="b" data-collapsed="false">
+						<h1>Magazines</h1>
+						<ul data-role="listview" data-inset="true">
+						<li><a onClick= GetCategory("ArtsMagazine")>Arts & Photography</a></li>
+						<li><a onClick= GetCategory("ElectronicsMagazine")>Electronics & Audio</a></li>
+						<li><a onClick= GetCategory("EntertainmentMagazine")>Entertainment</a></li>
+						<li><a onClick= GetCategory("FashionMagazine")>Fashion & Style</a></li>
+						<li><a onClick= GetCategory("MoviesMagazine")>Movies & Music</a></li>	
+						<li><a onClick= GetCategory("NewsMagazine")>News & Politics</a></li>
+						<li><a onClick= GetCategory("ScienceMagazine")>Science</a></li></ul></div>
 
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 						<h1>Electronics</h1>
 						<ul data-role="listview" data-inset="true" >
+						<li><a onClick= GetCategory("TvElectronics")>TV</a></li>
+						<li><a onClick= GetCategory("AudioElectronics")>Audio</a></li>
 						<li><a onClick= GetCategory("PhonesElectronics")>Phones</a></li>
-						<li><a onClick= GetCategory("CamerasElectronics")>Cameras</a></li></ul></div>	
+						<li><a onClick= GetCategory("CamerasElectronics")>Cameras</a></li>
+						<li><a onClick= GetCategory("VideoElectronics")>Video</a></li></ul></div>	
 
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 						<h1>Computers</h1>
 						<ul data-role="listview" data-inset="true" >
 						<li><a onClick= GetCategory("LaptopsComp")>Laptops</a></li>
-						<li><a onClick= GetCategory("TabletsComp")>Tablets</a></li></ul></div>	
+						<li><a onClick= GetCategory("DesktopComp")>Desktops</a></li>
+						<li><a onClick= GetCategory("TabletsComp")>Tablets</a></li>
+						<li><a onClick= GetCategory("PrintersComp")>Printers</a></li></ul></div>	
 
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 						<h1>Clothing</h1>
 						<ul data-role="listview" data-inset="true" >
+						<li><a onClick= GetCategory("ChildrenClothes")>Children</a></li>
 						<div class="Sub" data-role="collapsible" data-theme="d" data-inset="false" data-iconpos="right">
 							<h1>Men</h1>
 							<ul data-role="listview" data-inset="true" >
 							<li><a onClick= GetCategory("MenShirts")>Shirts</a></li>
-							<li><a onClick= GetCategory("MenPants")>Pants</a></li></ul></div>
+							<li><a onClick= GetCategory("MenPants")>Pants</a></li>
+							<li><a onClick= GetCategory("MenSocks")>Socks</a></li></ul></div>
 
 						<div class="Sub" data-role="collapsible" data-theme="d" data-inset="false" data-iconpos="right">
 							<h1>Women</h1>
 							<ul data-role="listview" data-inset="true" >
+							<li><a onClick= GetCategory("WomenShirts")>Shirts</a></li>
+							<li><a onClick= GetCategory("WomenPants")>Pants</a></li>
 							<li><a onClick= GetCategory("WomenDresses")>Dresses</a></li></ul></div></ul></div>
+
+					<div data-role="collapsible" data-theme="b" data-collapsed="false">
+						<h1>Shoes</h1>
+						<ul data-role="listview" data-inset="true" >
+						<li><a onClick= GetCategory("ChildrenShoes")>Children</a></li>
+						<li><a onClick= GetCategory("MenShoes")>Men</a></li>
+						<li><a onClick= GetCategory("WomenShoes")>Women</a></li></ul></div>
 
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 						<h1>Sports & Outdoors</h1>
 						<ul data-role="listview" data-inset="true" >							
-						<li><a onClick= GetCategory("BicycleSports")>Bicycles</a></li>
-						<li><a onClick= GetCategory("KayakSports")>Kayaks</a></li></ul></div>
+						<div data-role="collapsible" data-theme="d" data-inset="false" data-iconpos="right">
+						<h1>Bicycles</h1>
+						<ul data-role="listview" data-inset="true" >
+							<li><a onClick= GetCategory("BicycleSports")>Frames</a></li>
+							<li><a href="Bicycle Wheels">Wheels</a></li>
+							<li><a href="Bicycle Helmets">Helmet</a></li>
+							<li><a href="Bicycle Parts">Parts</a></li>
+						</ul>		
+						</div>
+						<li><a onClick= GetCategory("KayakSports")>Kayaks</a></li>
+						<li><a onClick= GetCategory("GolfSports")>Golf</a></li>
+						<li><a onClick= GetCategory("FishingSports")>Fishing</a></li></ul></div>
+						
+						
 						</div></div>
 
 
@@ -102,8 +143,14 @@
 					</div>
 
 					<div data-role="content">
-					<ul id="product-list" data-role="listview"></ul>
+					
+					<div data-role="collapsible"  data-inset="true" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d" data-iconpos="right">
+						<h1>Sort by...</h1>
+						<ul id="sort-bylist" data-role= "listview" data-inset="true" data-icon="false" ></ul></div><br>
+
+					<ul id="product-list" data-role="listview" data-filter="true"></ul>
 					</div>
+					
 			</div>
 
 	</body>
