@@ -1,14 +1,15 @@
 module.exports =  { 
-	Account : function (cfName, clName, cAccountNumber, cEmail, cPassword, cMailing, cBilling, ccCard, rank){
-		this.cid = "";
-		this.cfName = cfName;
-		this.clName = clName;
-		this.cAccountNumber = cAccountNumber;
-		this.cEmail = cEmail;
-		this.cPassword = cPassword;
-		this.cMailing = cMailing;
-		this.cBilling = cBilling;
-		this.ccCard = ccCard;
+	Account : function (afName, alName, aAccountNumber, aEmail, aPassword, aUsername, aMailing, aBilling, acCard, rank){
+		this.aid = "";
+		this.afName = afName;
+		this.alName = alName;
+		this.aAccountNumber = aAccountNumber;
+		this.aEmail = aEmail;
+		this.aUsername = aUsername;
+		this.aPassword = aPassword;
+		this.aMailing = aMailing;
+		this.aBilling = aBilling;
+		this.acCard = acCard;
 		this.rank = rank;
 	}
 }

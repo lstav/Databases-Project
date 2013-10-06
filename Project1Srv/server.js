@@ -28,12 +28,15 @@ var account = require("./account.js");
 var Account = account.Account;
 
 var accountList = new Array(
-	new Account("Luis", "Tavarez", "123", "lt@example.com", "123456", "Puerto Rico", "Puerto Rico", "987654321", "****")
+	new Account("Luis", "Tavarez", "123", "lt@example.com", "123456", "luistavarez", "Example Example Puerto Rico", "Example Example Puerto Rico", "987654321", "****"),
+	new Account("Heidi", "Negron", "323", "lt@example.com", "321456", "heidinegron", "Example Example Puerto Rico", "Example Example Puerto Rico", "123456789", "****"),
+	new Account("Lexter", "Seda", "232", "lt@example.com", "123321", "lexterseda", "Example Example Puerto Rico", "Example Example Puerto Rico", "098765432", "****")
+	
 );
- var accountNextId = 0;
+var accountNextId = 0;
  
 for (var i=0; i < accountList.length;++i){
-	accountList[i].cid = accountNextId++;
+	accountList[i].aid = accountNextId++;
 }
 
 //Product:
@@ -142,6 +145,22 @@ for (var i=0; i < categoryList.length; ++i){
 			}
 }
 
+// History
+
+var history= require("./history.js");
+var History= history.History;
+
+var historyList= new Array(
+	new History("0", artsBooksList[0]),
+	new History("0", golfSportsList[1])
+);
+
+var historyNextId = 0;
+ 
+for (var i=0; i < historyList.length;++i){
+	historyList[i].hid = historyNextId++;
+}
+
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
 // identifies the resource to be created, read, updated, or deleted.
@@ -168,25 +187,11 @@ app.get('/Project1Srv/categories', function(req, res){
 	
 });
 
-app.get('/Project1Srv/categories:id', function(req, res){
-		
-	var id = req.params.id;
-	console.log("GET category:"+ id);
-	var target = -1;
-		for (var i=0; i < categoryList.length; ++i){
-			if (categoryList[i].id == id){
-				target = i;
-				break;	
-			}
-		}
-		if (target == -1){
-			res.statusCode = 404;
-			res.send("Category not found.");
-		}
-		else {
-			var response = {"category" : categoryList[target]};
-  			res.json(response);	
-  		}		
+app.get('/Project1Srv/histories', function(req, res) {
+	console.log("GET");
+	
+	var response = {"histories" : historyList};
+  	res.json(response);
 });
 
 app.get('/Project1Srv/categories/:id', function(req, res){
@@ -210,39 +215,34 @@ app.get('/Project1Srv/categories/:id', function(req, res){
   		}		
 });
 
-app.get('/Project1Srv/products/:id', function(req, res){
+app.get('/Project1Srv/histories/:hid', function(req, res){
 		
-	var id = req.params.id;
+	var hid = req.params.hid;
 	
 	var target = -1;
-	var target2= -1;
-		for (var i=0; i < categoryList.length; ++i){
-			for(var j=0; j< categoryList[i].productList.length; ++j)
-			{
-				if(categoryList[i].productList[j].id== id){
+		for (var i=0; i < historiesList.length; ++i){
+			if(historyList[0].productList[i].id == hid){
 					target= i;
-					target2=j;
 					break;
 				}
-			}
 		}
 		
-		if (target == -1 || target2 == -1){
+		if (target == -1){
 			res.statusCode = 404;
 			res.send("Product not found.");
 		}
 		else {
-			var response = {"product" : categoryList[target].productList[target2]};
+			var response = {"product" : categoryList[0].productList[target]};
   			res.json(response);	
   		}		
 });
 
 
 // REST Operation - HTTP GET to read a car based on its id
-app.get('/Project1Srv/accounts/:cid', function(req, res) {
-	var cid = req.params.cid;
-		console.log("GET account: " + cid);
-	if ((cid < 0) || (cid >= accountNextId)){
+app.get('/Project1Srv/accounts/:aid', function(req, res) {
+	var aid = req.params.aid;
+		console.log("GET account: " + aid);
+	if ((aid < 0) || (aid >= accountNextId)){
 		// not found
 		res.statusCode = 404;
 		res.send("Account not found.");
@@ -250,7 +250,7 @@ app.get('/Project1Srv/accounts/:cid', function(req, res) {
 	else {
 		var target = -1;
 		for (var i=0; i < accountList.length; ++i){
-			if (accountList[i].cid == cid){
+			if (accountList[i].aid == aid){
 				target = i;
 				break;	
 			}
@@ -267,90 +267,18 @@ app.get('/Project1Srv/accounts/:cid', function(req, res) {
 });
 
 // REST Operation - HTTP PUT to updated a car based on its id
-app.put('/Project1Srv/accounts/:cid', function(req, res) {
-	var cid = req.params.cid;
-		console.log("PUT account: " + cid);
+app.put('/Project1Srv/accounts/:aid', function(req, res) {
 
-	if ((cid < 0) || (cid >= accountNextId)){
-		// not found
-		res.statusCode = 404;
-		res.send("Account not found.");
-	}
-	else if(!req.body.hasOwnProperty('make') || !req.body.hasOwnProperty('model')
-  	|| !req.body.hasOwnProperty('year') || !req.body.hasOwnProperty('price') || !req.body.hasOwnProperty('description')) {
-    	res.statusCode = 400;
-    	return res.send('Error: Missing fields for account.');
-  	}
-	else {
-		var target = -1;
-		for (var i=0; i < accountList.length; ++i){
-			if (accountList[i].cid == id){
-				target = i;
-				break;	
-			}
-		}
-		if (target == -1){
-			res.statusCode = 404;
-			res.send("Car not found.");			
-		}	
-		else {
-			var theAccount= accountList[target];
-			theAccount.make = req.body.make;
-			theAccount.model = req.body.model;
-			theAccount.year = req.body.year;
-			theAccount.price = req.body.price;
-			theAccount.description = req.body.description;
-			var response = {"Carritos" : theAccount};
-  			res.json(response);		
-  		}
-	}
 });
 
 // REST Operation - HTTP DELETE to delete a car based on its id
-app.del('/Project1Srv/accounts/:cid', function(req, res) {
-	var id = req.params.cid;
-		console.log("DELETE account: " + cid);
-
-	if ((id < 0) || (id >= accountNextId)){
-		// not found
-		res.statusCode = 404;
-		res.send("Account not found.");
-	}
-	else {
-		var target = -1;
-		for (var i=0; i < accountList.length; ++i){
-			if (accountList[i].cid == cid){
-				target = i;
-				break;	
-			}
-		}
-		if (target == -1){
-			res.statusCode = 404;
-			res.send("Account not found.");			
-		}	
-		else {
-			accountList.splice(target, 1);
-  			res.json(true);
-  		}		
-	}
+app.del('/Project1Srv/accounts/:aid', function(req, res) {
+	
 });
 
 // REST Operation - HTTP POST to add a new a car
 app.post('/Project1Srv/accounts', function(req, res) {
-	console.log("POST");
-
-  	if(!req.body.hasOwnProperty('customerName') || !req.body.hasOwnProperty('accountNumber')
-  	|| !req.body.hasOwnProperty('mailingAddress') || !req.body.hasOwnProperty('billingAddress') || !req.body.hasOwnProperty('creditCard')
-  	|| !req.body.hasOwnProperty('rank')) {
-    	res.statusCode = 400;
-    	return res.send('Error: Missing fields for account.');
-  	}
-
-  	var newAccount = new Account(req.body.customerName, req.body.accountNumber, req.body.mailingAddress, req.body.billingAddress, req.body.creditCard, req.body.rank);
-  	console.log("New Account: " + JSON.stringify(newAccount));
-  	newAccount.id = accountNextId++;
-  	accountList.push(newAccount);
-  	res.json(true);
+	
 });
 
 

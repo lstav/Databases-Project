@@ -9,15 +9,15 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 			var list = $("#account-list");
 			list.empty();
 			var account;
-			for (var i=0; i < len; ++i){
-				account = accountList[i];
-				list.append("<li><a onClick=GetAccount(" + account.cid + ")><h2>" + account.cfName + " " + 
-					account.clName + "</h2><p><strong>Number: " + account.cAccountNumber +  "</strong></p>" + 
-					"<p> Mailing Address: " + account.cMailing + "</p>" + 
-					"<p> Billing Address: " + account.cBilling + "</p>" +
-					"<p> Credit Card: *****" + account.ccCard.substr(5,6) + "</p>" +
-					"<p class=\"ui-li-aside\"> Rank: " + account.rank + "</p></a></li>");
-			}
+			
+				account = accountList[0];
+				list.append("<li>" + account.afName + " " +	account.alName + "</li>" + 
+					"<li>Number: " + account.aAccountNumber +  "</li>" + 
+					"<li>Mailing Address: " + account.aMailing + "</li>" + 
+					"<li>Billing Address: " + account.aBilling + "</li>" +
+					"<li>Credit Card: *****" + account.acCard.substr(5,6) + "</li>" +
+					"<li> Rank: " + account.rank + "</li>");
+			
 			list.listview("refresh");
 		},
 		error: function(data, textStatus, jqXHR){
@@ -27,17 +27,33 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 	});
 });
 
-
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	// currentAccount has been set at this point
-	$("#upd-fname").val(currentAccount.cfName);
-	$("#upd-lname").val(currentAccount.clName);
-	$("#upd-mailing").val(currentAccount.cMailing);
-	$("#upd-billing").val(currentAccount.cBilling);
-	$("#upd-creditCard").val(currentAccount.ccCard);
+	var len = currentAccount.aPassword.length;
+	var pass = "";
+	for (var i=0; i < len; ++i){
+		pass = pass + "*";
+	}
+	
+	$("#upd-username").val(currentAccount.aUsername);
+	$("#upd-fname").val(currentAccount.afName);
+	$("#upd-lname").val(currentAccount.alName);
+	$("#upd-mailing").val(currentAccount.aMailing);
+	$("#upd-billing").val(currentAccount.aBilling);
+	$("#upd-creditCard").val("*****" + currentAccount.acCard.substr(5,6));
+	$("#upd-email").val(currentAccount.aEmail);
+	$("#upd-password").val(pass);
+	
+	$("#username").html("Username: " + currentAccount.aUsername);
+	$("#fname").html("First Name: " + currentAccount.afName);
+	$("#lname").html("Last Name: " + currentAccount.alName);
+	$("#mailingA").html("Mailing Address: " + currentAccount.aMailing);
+	$("#billingA").html("Billing Address: " + currentAccount.aBilling);
+	$("#cCard").html("Credit Card Number: *****" + currentAccount.acCard.substr(5,6));
+	$("#email").html("Email: " + currentAccount.aEmail);
+	$("#password").html("Password: " + pass);
 	
 });
-
 
 $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 	
@@ -90,8 +106,29 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	pname.append("<center>"+currentProduct.itemName+"</center>");
 });
 
-///////////////////////////////
+/**$(document).on('pagebeforeshow', "#history", function(event, ui) {
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/histories",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var historyList = data.histories;
+			var len = historyList.length;
+			var list = $("#purchase-list");
+			list.empty();
+			var history;
+			history = historyList[0];
+			list.append("<li><a onClick=GetProduct("+ history.productList[0].id +")>"  
+				+ history.productList[0].itemName + "</a></li>"");
+			list.listview("refresh");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+});**/
 
+///////////////////////////////
 function ConverToJSON(formData){
 	var result = {};
 	$.each(formData, 
@@ -102,44 +139,22 @@ function ConverToJSON(formData){
 }
 
 function SaveAccount(){
-	$.mobile.loading("show");
-	var form = $("#account-form");
-	var formData = form.serializeArray();
-	console.log("form Data: " + formData);
-	var newAccount = ConverToJSON(formData);
-	console.log("New Account: " + JSON.stringify(newAccount));
-	var newAccountJSON = JSON.stringify(newAccount);
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts",
-		method: 'post',
-		data : newAccountJSON,
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			$.mobile.loading("hide");
-			$.mobile.navigate("#accounts");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			alert("Data could not be added!");
-		}
-	});
+	alert("Account Created!");
 }
 
 var currentAccount = {};
 
-function GetAccount(cid){
+function GetAccount(aid){
 	$.mobile.loading("show");
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts/" + cid,
+		url : "http://localhost:3412/Project1Srv/accounts/" + aid,
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 			currentAccount = data.account;
 			$.mobile.loading("hide");
-			$.mobile.navigate("#account-view");
+			$.mobile.navigate("#accounts");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -148,67 +163,21 @@ function GetAccount(cid){
 				alert("Account not found.");
 			}
 			else {
-				alter("Internal Server Error.");
+				alert("Internal Server Error.");
 			}
 		}
 	});
 }
 
 function UpdateAccount(){
-	$.mobile.loading("show");
-	var form = $("#account-view-form");
-	var formData = form.serializeArray();
-	console.log("form Data: " + formData);
-	var updAccount = ConverToJSON(formData);
-	updAccount.id = currentAccount.id;
-	console.log("Updated Account: " + JSON.stringify(updAccount));
-	var updAccountJSON = JSON.stringify(updAccount);
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts/" + updAccount.id,
-		method: 'put',
-		data : updAccountJSON,
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			$.mobile.loading("hide");
-			$.mobile.navigate("#accounts");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			if (data.status == 404){
-				alert("Data could not be updated!");
-			}
-			else {
-				alert("Internal Error.");		
-			}
-		}
-	});
+	alert("Account Saved!");
 }
 
 function DeleteAccount(){
-	$.mobile.loading("show");
-	var id = currentAccount.id;
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts/" + id,
-		method: 'delete',
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			$.mobile.loading("hide");
-			$.mobile.navigate("#accounts");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			if (data.status == 404){
-				alert("Account not found.");
-			}
-			else {
-				alter("Internal Server Error.");
-			}
-		}
-	});
+	var desicion = confirm("Delete Account?")
+	if(desicion == true) {
+		alert("Account Deleted");		
+	}
 }
 
 var currentProduct= {};
@@ -260,6 +229,35 @@ function GetCategory(id){
 			$.mobile.loading("hide");
 			if (data.status == 404){
 				alert("Category error.");
+			}
+			else {
+				alter("Internal Server Error.");
+			}
+		}
+	});
+}
+
+var currentHistory = {};
+
+function GetHistory(hid){
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/histories/"+ hid,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			currentCategory= data.category;
+			$.mobile.loading("hide");
+			$.mobile.navigate("#history", {
+				info: hid,
+			});},
+			
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("History error.");
 			}
 			else {
 				alter("Internal Server Error.");
