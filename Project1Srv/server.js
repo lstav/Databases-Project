@@ -215,6 +215,33 @@ app.get('/Project1Srv/categories/:id', function(req, res){
   		}		
 });
 
+app.get('/Project1Srv/products/:id', function(req, res){
+
+	var id = req.params.id;
+
+	var target = -1;
+	var target2= -1;
+		for (var i=0; i < categoryList.length; ++i){
+			for(var j=0; j< categoryList[i].productList.length; ++j)
+			{
+				if(categoryList[i].productList[j].id== id){
+					target= i;
+					target2=j;
+					break;
+				}
+			}
+		}
+
+		if (target == -1 || target2 == -1){
+			res.statusCode = 404;
+			res.send("Product not found.");
+		}
+		else {
+			var response = {"product" : categoryList[target].productList[target2]};
+  			res.json(response);	
+  		}		
+});
+
 app.get('/Project1Srv/histories/:hid', function(req, res){
 		
 	var hid = req.params.hid;
