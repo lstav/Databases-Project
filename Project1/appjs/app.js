@@ -121,6 +121,7 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 	
 });
 
+
 var shoppingCartTotal=0;
 
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
@@ -129,13 +130,21 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	var list = $("#shopping-list");
 	list.empty();
 	var item;
+	shoppingCartTotal=0;
 	for (var i=0; i < len; ++i){
 	item =shoppingCart[i];
+	shoppingCartTotal+= parseFloat(shoppingCart[i].price);
 	list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart("+item.id+")> <img src='"+ item.img+ "'/>" + item.itemName + "<h4> Price: $"+item.price+"<\h4></a></li>");
+	}	
+	
+	if (len < 1){
+		list.append("<li data-icon='false'> <a No items in your shopping cart. </a> </li>");
 	}
-	list.listview("refresh");	
-});
+	
+	list.listview("refresh");
 
+	
+});
 $(document).on('pagebeforeshow', "#history", function(event, ui) {
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/histories",
@@ -355,6 +364,33 @@ function GetCategory(id){
 
 	});
 }
+
+function checkOut(){
+	$.mobile.loading("show");
+
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/shoppingCartList",
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			shoppingCart= data.shoppingList;
+			$.mobile.loading("hide");
+			$.mobile.changePage("check.html");},
+			
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Check out error.");
+			}
+			else {
+				alter("Internal Server Error.");
+			}
+		}
+	});	
+}
+
 
 var currentHistory = {};
 
