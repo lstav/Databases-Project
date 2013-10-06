@@ -115,11 +115,13 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 
 $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 	
-	var info= $("#Address");
+	var info= $("#totalPurchase");
 	info.empty();
-	info.append("<h1>MY ADRRESS</h2>");
+	info.append("Total: $     "+ shoppingCartTotal);
 	
 });
+
+var shoppingCartTotal=0;
 
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	
@@ -127,8 +129,10 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	var list = $("#shopping-list");
 	list.empty();
 	var item;
+	shoppingCartTotal=0;
 	for (var i=0; i < len; ++i){
 	item =shoppingCart[i];
+	shoppingCartTotal+= parseFloat(shoppingCart[i].price);
 	list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart("+item.id+")> <img src='"+ item.img+ "'/>" + item.itemName + "<h4> Price: $"+item.price+"<\h4></a></li>");
 	}	
 	
@@ -345,7 +349,7 @@ function checkOut(){
 		success : function(data, textStatus, jqXHR){
 			shoppingCart= data.shoppingList;
 			$.mobile.loading("hide");
-			$.mobile.navigate("shopping.html#checkoutItem");},
+			$.mobile.changePage("check.html");},
 			
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
