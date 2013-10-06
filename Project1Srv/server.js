@@ -152,7 +152,7 @@ var History= history.History;
 
 var historyList= new Array(
 	new History("0", artsBooksList[0]),
-	new History("0", golfSportsList[1])
+	new History("0", kayakSportsList[1])
 );
 
 var historyNextId = 0;

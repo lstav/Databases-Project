@@ -12,9 +12,9 @@
 		<script src="appjs/app.js"></script>
 
 	</head>
-	
+
 	<body>
-		
+
 		<div id=catLayout data-role="page">
 			<div data-role="panel" id="mypanel" data-theme="a" data-position="right" data-display="reveal">
         		<ul data-role="listview" data-theme="a">
@@ -27,17 +27,17 @@
     		</div><!-- /panel -->
     		
 			<div data-role="header" data-theme="b"> <h1>Categories</h1>
-				
+
 				<a href="product.html" data-role="button" data-position="left" data-icon="arrow-l" data-iconpos="notext" data-rel="back">Back</a>
 				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
 					<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
 					<a href="#mypanel" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
 				</div>
 			</div>
-			
+
 			<div data-role="content">	
 					<a data-role="button" data-icon="search" data-theme="b" href="advsearch.html">Advanced Search</a>
-					
+
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 						<h1>Books</h1>
 						<ul data-role="listview" data-inset="true">
@@ -46,19 +46,19 @@
 						<li><a onClick= GetCategory("MysteryBooks")>Mystery, Thriller & Suspense</a></li>
 						<li><a onClick= GetCategory("RomanceBooks")>Romance</a></li>
 						<li><a onClick= GetCategory("ScienceFictionBooks")>Science Fiction & Fantasy</a></li></ul></div>						
-						
+
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 						<h1>Electronics</h1>
 						<ul data-role="listview" data-inset="true" >
 						<li><a onClick= GetCategory("PhonesElectronics")>Phones</a></li>
 						<li><a onClick= GetCategory("CamerasElectronics")>Cameras</a></li></ul></div>	
-											
+
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 						<h1>Computers</h1>
 						<ul data-role="listview" data-inset="true" >
 						<li><a onClick= GetCategory("LaptopsComp")>Laptops</a></li>
 						<li><a onClick= GetCategory("TabletsComp")>Tablets</a></li></ul></div>	
-						
+
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 						<h1>Clothing</h1>
 						<ul data-role="listview" data-inset="true" >
@@ -67,20 +67,20 @@
 							<ul data-role="listview" data-inset="true" >
 							<li><a onClick= GetCategory("MenShirts")>Shirts</a></li>
 							<li><a onClick= GetCategory("MenPants")>Pants</a></li></ul></div>
-					
+
 						<div class="Sub" data-role="collapsible" data-theme="d" data-inset="false" data-iconpos="right">
 							<h1>Women</h1>
 							<ul data-role="listview" data-inset="true" >
 							<li><a onClick= GetCategory("WomenDresses")>Dresses</a></li></ul></div></ul></div>
-					
+
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 						<h1>Sports & Outdoors</h1>
 						<ul data-role="listview" data-inset="true" >							
 						<li><a onClick= GetCategory("BicycleSports")>Bicycles</a></li>
-						<li><a onClick= GetCategory("KayakSports")>Kayaks</a></li>
+						<li><a onClick= GetCategory("KayakSports")>Kayaks</a></li></ul></div>
 						</div></div>
 
-			
+
 			<div id= "catProductView" data-role="page">
 					<div data-role="panel" id="mypanel2" data-theme="a" data-position="right" data-display="reveal">
         			<ul data-role="listview" data-theme="a">
@@ -100,7 +100,7 @@
 					<a href="#mypanel2" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
 					</div>
 					</div>
-			
+
 					<div data-role="content">
 					<ul id="product-list" data-role="listview"></ul>
 					</div>
