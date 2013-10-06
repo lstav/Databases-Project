@@ -13,7 +13,7 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 				account = accountList[0];
 				list.append("<li>" + account.afName + " " +	account.alName + "</li>" + 
 					"<li>Number: " + account.aAccountNumber +  "</li>" + 
-					"<li>Mailing Address: " + account.aMailing + "</li>" + 
+					"<li>Shipping Address: " + account.aShipping + "</li>" + 
 					"<li>Billing Address: " + account.aBilling + "</li>" +
 					"<li>Credit Card: *****" + account.acCard.substr(5,6) + "</li>" +
 					"<li> Rank: " + account.rank + "</li>");
@@ -38,7 +38,7 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	$("#upd-username").val(currentAccount.aUsername);
 	$("#upd-fname").val(currentAccount.afName);
 	$("#upd-lname").val(currentAccount.alName);
-	$("#upd-mailing").val(currentAccount.aMailing);
+	$("#upd-shipping").val(currentAccount.aShipping);
 	$("#upd-billing").val(currentAccount.aBilling);
 	$("#upd-creditCard").val("*****" + currentAccount.acCard.substr(5,6));
 	$("#upd-email").val(currentAccount.aEmail);
@@ -47,7 +47,7 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	$("#username").html("Username: " + currentAccount.aUsername);
 	$("#fname").html("First Name: " + currentAccount.afName);
 	$("#lname").html("Last Name: " + currentAccount.alName);
-	$("#mailingA").html("Mailing Address: " + currentAccount.aMailing);
+	$("#shippingA").html("Shipping Address: " + currentAccount.aShipping);
 	$("#billingA").html("Billing Address: " + currentAccount.aBilling);
 	$("#cCard").html("Credit Card Number: *****" + currentAccount.acCard.substr(5,6));
 	$("#email").html("Email: " + currentAccount.aEmail);

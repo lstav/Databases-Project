@@ -1,4 +1,4 @@
-function Account(afName, alName, aAccountNumber, aEmail, aPassword, aUsername, aMailing, aBilling, acCard, rank){
+function Account(afName, alName, aAccountNumber, aEmail, aPassword, aUsername, aShipping, aBilling, acCard, rank){
 	this.aid = "";
 	this.afName = afName;
 	this.alName = alName;
@@ -6,7 +6,7 @@ function Account(afName, alName, aAccountNumber, aEmail, aPassword, aUsername, a
 	this.aEmail = aEmail;
 	this.aPassword = aPassword;
 	this.aUsername = aUsername;
-	this.aMailing = aMailing;
+	this.aShipping = aShipping;
 	this.aBilling = aBilling;
 	this.acCard = acCard;
 	this.rank = rank;
