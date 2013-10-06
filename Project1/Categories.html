@@ -35,12 +35,12 @@
 				</div>
 			</div>
 
-			<div data-role="content">	
+			<div data-role="content" >	
 					<a data-role="button" data-icon="search" data-theme="b" href="advsearch.html">Advanced Search</a>
 
 					<div data-role="collapsible" data-theme="b" data-collapsed="false">
 						<h1>Books</h1>
-						<ul data-role="listview" data-inset="true">
+						<ul data-role="listview" data-inset="true" >
 						<li><a onClick= GetCategory("ArtBooks")>Arts & Photography</a></li>
 						<li><a onClick= GetCategory("ChildrenBooks")>Children's Books</a></li>
 						<li><a onClick= GetCategory("ComicBooks")>Comic & Graphic Novels</a></li>
@@ -143,8 +143,14 @@
 					</div>
 
 					<div data-role="content">
-					<ul id="product-list" data-role="listview"></ul>
+					
+					<div data-role="collapsible"  data-inset="true" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d" data-iconpos="right">
+						<h1>Sort by...</h1>
+						<ul id="sort-bylist" data-role= "listview" data-inset="true" data-icon="false" ></ul></div><br>
+
+					<ul id="product-list" data-role="listview" data-filter="true"></ul>
 					</div>
+					
 			</div>
 
 	</body>

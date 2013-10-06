@@ -76,7 +76,14 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 		var iname= $("#catName2");
 		iname.empty();
 		iname.append("<center>"+currentCategory.name+"</center>");
-
+		
+		var sort= $("#sort-bylist");
+		sort.empty();
+		sort.append("<li><a>Price: Best Sellers </a></li>");
+		sort.append("<li><a>Price: Low to High</a></li>");
+		sort.append("<li><a>Price: High to Low</a></li>");
+		sort.append("<li><a>Price: Avg. Customer Review</a></li>");
+		sort.listview("refresh");
 		},
 		
 		error: function(data, textStatus, jqXHR){
