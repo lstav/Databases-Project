@@ -13,24 +13,23 @@
 		</style>
 	</head>
 	<body>
-		<div id="login" data-role="page">
+		<div id="login" data-role="page" data-theme="b">
 			<!-- Home -->
     		<div data-theme="b" data-role="header">
         			<h3>
     	        		LHL Inc
 			        </h3>
-        		<div data-role="fieldcontain" align="center">
-            		<input name="" id="Username" placeholder="Username" value="" type="text" data-mini="true">
-        		</div>
-        		<div data-role="fieldcontain" align="center">
-	            	<input name="" id="Password" placeholder="Password" value="" type="text" data-mini="true">
-    	    	</div>
-    		</div>
-    <div data-role="content">
-        <a data-role="button" data-transition="slide" data-theme="b" href="index.html">
-            Login
-        </a>
-    </div>
+			</div>
+        		<form id="login-form" align="center">
+        			<fieldset data-role="controlgroup">
+            			<input name="" id="Username" placeholder="Username" value="" type="text" data-mini="true">
+	            		<input name="" id="Password" placeholder="Password" value="" type="text" data-mini="true">
+						
+						<a data-role="button" data-transition="slide" data-theme="b" href="index.html" onClick=GetAccount()>
+				            Login
+        				</a>	            		
+    	    		</fieldset>
+    			</form>
     <a style="color:black" href="signup.html" align="middle"><p>Sign Up for LHL Inc.</p></a>
     <p align="middle">or</p>
     <a style="color:black" href="index.html" align="middle"><p>Continue as Guest</p></a>
