@@ -22,7 +22,7 @@
 			}
 		</style>
 	</head>
-	<body onload="GetHistory(0)">		
+	<body onload="GetHistory(0)" onload="GetHistory(1)">		
 		<div id="history" data-role="page" data-theme="b">
 			<div data-role="panel" id="mypanel" data-theme="a" data-position="right" data-display="reveal">
         		<ul data-role="listview" data-theme="a">
@@ -37,7 +37,7 @@
         		<h1>Purchase History</h1>
     		</div><!-- /panel --> 
     		
-    		<div data-role="header" data-theme="b"> <h1>Purchase History</h1>
+    		<div data-role="header" data-theme="b"> <h1>History</h1>
 			
 				<a href="product.html" data-role="button" data-position="left" data-icon="arrow-l" data-iconpos="notext" data-rel="back">Back</a>
 				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
@@ -46,7 +46,11 @@
 				</div>
 			</div>
 			<form data-role="content">
+				<h2>Purchased</h2>
 				<ul id="purchase-list" data-role="listview" data-inset="true">
+				</ul>
+				<h2>Sales</h2>
+				<ul id="sale-list" data-role="listview" data-inset="true">
 				</ul>
 			</form>
 		</div>

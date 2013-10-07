@@ -163,7 +163,8 @@ var history= require("./history.js");
 var History= history.History;
 
 var historyList= new Array(
-	new History(0, [artsBooksList[0],kayakSportsList[1]])
+	new History(0, [artsBooksList[0],kayakSportsList[1]], 0),
+	new History(0, [artsBooksList[1],kayakSportsList[0]], 1)
 );
 
 var historyNextId = 0;
@@ -318,7 +319,7 @@ app.get('/Project1Srv/histories/:hid', function(req, res){
 	console.log("GET history: " + hid);
 	var target = -1;
 		for (var i=0; i < historyList.length; ++i){
-			if(historyList[0].productList[i].id == hid){
+			if(historyList[i].hid == hid){
 					target= i;
 					break;
 				}
@@ -328,7 +329,7 @@ app.get('/Project1Srv/histories/:hid', function(req, res){
 			res.send("Product not found.");
 		}
 		else {
-			var response = {"product" : historyList[0].productList[target]};
+			var response = {"product" : historyList[i].productList[target]};
   			res.json(response);	
   		}		
 });

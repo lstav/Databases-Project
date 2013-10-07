@@ -143,7 +143,7 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 			shoppingcart = shoppingcartList[0];
 			shoppingcartTotal=0;
 			for (var i=0; i < len; ++i){
-				shoppingcartTotal+= shoppingcart.productList[i].price;
+				shoppingcartTotal+= parseFloat(shoppingcart.productList[i].price);
 				list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + shoppingcart.productList[i].id + ")>"+ 
 				"<img src='"+ shoppingcart.productList[i].img+ "'/>" + shoppingcart.productList[i].itemName + 
 					"<h4> Price: $"+shoppingcart.productList[i].price+"<\h4></a></li>");
@@ -174,7 +174,7 @@ $(document).on('pagebeforeshow', "#history", function(event, ui) {
 			var history;
 			history = historyList[0];
 			for(var i=0; i<len; i++) {
-			list.append("<li><a onclick=GetProduct(" + history.productList[i].id + ")>" +
+				list.append("<li><a onclick=GetProduct(" + history.productList[i].id + ")>" +
 					"<h2>" + history.productList[i].itemName + "</h2>" + 
 					"<p><strong> Payment: " + history.productList[i].payment + "</strong></p>" + 
 					"<p>" + history.productList[i].description + "</p>" +
@@ -190,6 +190,33 @@ $(document).on('pagebeforeshow', "#history", function(event, ui) {
 	});
 });
 
+$(document).on('pagebeforeshow', "#history", function(event, ui) {
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/histories",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var historyList = data.histories;
+			var len = historyList[1].productList.length;
+			var list = $("#sale-list");
+			list.empty();
+			var history;
+			history = historyList[1];
+			for(var i=0; i<len; i++) {
+				list.append("<li><a onclick=GetProduct(" + history.productList[i].id + ")>" +
+					"<h2>" + history.productList[i].itemName + "</h2>" + 
+					"<p><strong> Payment: " + history.productList[i].payment + "</strong></p>" + 
+					"<p>" + history.productList[i].description + "</p>" +
+					"<p class=\"ui-li-aside\">$" + history.productList[i].price + "</p>" +
+					"</a></li>");
+			}
+			list.listview("refresh");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+});
 ////////// Message
 
 $(document).on('pagebeforeshow', "#inbox", function(event, ui) {
@@ -372,7 +399,7 @@ function GetCategory(id){
 			console.log("textStatus: " + textStatus);
 			$.mobile.loading("hide");
 			if (data.status == 404){
-				alert("Category error.");
+				alert("Category Empty!");
 			}
 			else {
 				alter("Internal Server Error.");
@@ -467,4 +494,16 @@ function GetMessage(mid){
 			}
 		}
 	});
+}
+
+////// Order
+
+function SaveOrder(){
+	alert("Order Processed!");
+}
+
+///// Bid
+
+function UpdateBid(){
+	alert("Bid submitted!");
 }
