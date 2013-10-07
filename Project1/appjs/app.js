@@ -122,7 +122,7 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 	
 	var info= $("#totalPurchase");
 	info.empty();
-	//info.append("Total: $     "+ shoppingCartTotal);
+	info.append("Total: $     "+ shoppingcartTotal);
 	
 });
 
