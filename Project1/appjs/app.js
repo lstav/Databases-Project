@@ -55,6 +55,9 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	
 });
 
+
+///// Category and product
+
 $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 	
 	$.ajax({
@@ -121,30 +124,42 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 	
 });
 
+////////// Shopping Cart
 
-var shoppingCartTotal=0;
+var shoppingcartTotal=0;
 
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
-	
-	var len =shoppingCart.length;
-	var list = $("#shopping-list");
-	list.empty();
-	var item;
-	shoppingCartTotal=0;
-	for (var i=0; i < len; ++i){
-	item =shoppingCart[i];
-	shoppingCartTotal+= parseFloat(shoppingCart[i].price);
-	list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart("+item.id+")> <img src='"+ item.img+ "'/>" + item.itemName + "<h4> Price: $"+item.price+"<\h4></a></li>");
-	}	
-	
-	if (len < 1){
-		list.append("<li data-icon='false'> <a No items in your shopping cart. </a> </li>");
-	}
-	
-	list.listview("refresh");
-
-	
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/shoppingcarts",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var shoppingcartList = data.shoppingcarts;
+			var len =shoppingcartList[0].productList.length;
+			var list = $("#shopping-list");
+			list.empty();
+			var shoppingcart;
+			shoppingcart = shoppingcartList[0];
+			shoppingcartTotal=0;
+			for (var i=0; i < len; ++i){
+				shoppingcartTotal+= shoppingcart.productList[i].price;
+				list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + shoppingcart.productList[i].id + ")>"+ 
+				"<img src='"+ shoppingcart.productList[i].img+ "'/>" + shoppingcart.productList[i].itemName + 
+					"<h4> Price: $"+shoppingcart.productList[i].price+"<\h4></a></li>");
+			}	
+			if (len < 1){
+				list.append("<li data-icon='false'> <a No items in your shopping cart. </a> </li>");
+			}
+			list.listview("refresh");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
 });
+
+//////// History
+
 $(document).on('pagebeforeshow', "#history", function(event, ui) {
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/histories",
@@ -172,6 +187,8 @@ $(document).on('pagebeforeshow', "#history", function(event, ui) {
 		}
 	});
 });
+
+////////// Message
 
 $(document).on('pagebeforeshow', "#inbox", function(event, ui) {
 	$.ajax({
@@ -246,10 +263,10 @@ function DeleteAccount(){
 	}
 }
 
-var currentProduct= {};
+////// Product
 
+var currentProduct= {};
 function GetProduct(id){
-	
 	$.mobile.loading("show");
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/products/"+ id,
@@ -261,7 +278,6 @@ function GetProduct(id){
 			$.mobile.loading("hide");	
 			$.mobile.changePage("item.html");
 			},
-			
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
 			$.mobile.loading("hide");
@@ -274,80 +290,21 @@ function GetProduct(id){
 		}
 	});}
 	
-var shoppingCart={};
+//////// Shopping Cart
 
-function AddShoppingCart(){
-	
+var currentShoppingCart = {};
+function GetShoppingCart(scid){
 	$.mobile.loading("show");
-
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/shoppingCartList/"+ currentProduct.id,
+		url : "http://localhost:3412/Project1Srv/shoppingcarts/"+ scid,
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			shoppingCart= data.productCart;
+			currentShoppingCart= data.shoppingcart;
 			$.mobile.loading("hide");
-			$.mobile.changePage("shopping.html");},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			if (data.status == 404){
-				alert("Product error.");
-			}
-			else {
-				alter("Internal Server Error.");
-			}
-		}
-	});}
-	
-var shoppingCart={};
-
-function AddShoppingCart(){
-	$.mobile.loading("show");
-
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/shoppingCartList/"+ currentProduct.id,
-		method: 'get',
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			shoppingCart= data.productCart;
-			$.mobile.loading("hide");
-			$.mobile.changePage("shopping.html");},
-			
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			if (data.status == 404){
-				alert("Shopping Cart error.");
-			}
-			else {
-				alter("Internal Server Error.");
-			}
-		}
-	});	
-}
-
-function DeleteShoppingCart(id){
-	var decision = confirm("Delete Product?");
-		if(decision == true) {
-			alert("Product Deleted");		
-		}
-}
-/**function DeleteShoppingCart(id){
-	
-	$.mobile.loading("show");
-
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/shoppingCartListDelete/"+id,
-		method: 'get',
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			shoppingCart= data.productCart2;
-			window.location.reload(true);},
-			
+			$.mobile.changePage("shopping.html");
+		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
 			$.mobile.loading("hide");
@@ -359,14 +316,24 @@ function DeleteShoppingCart(id){
 			}
 		}
 	});
+}
 	
-}**/
+function UpdateShoppingCart(){
+	alert("Account Saved!");
+}
+
+function DeleteShoppingCart(id){
+	var decision = confirm("Delete Product?");
+		if(decision == true) {
+			alert("Product Deleted");		
+		}
+}
+
+//////// Category
 
 var currentCategory = {};
-
 function GetCategory(id){
 	$.mobile.loading("show");
-
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/categories/"+ id,
 		method: 'get',
@@ -392,19 +359,18 @@ function GetCategory(id){
 	});
 }
 
-function checkOut(){
+/**function checkOut(){
 	$.mobile.loading("show");
-
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/shoppingCartList",
+		url : "http://localhost:3412/Project1Srv/shoppingcarts",
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			shoppingCart= data.shoppingList;
+			currentShoppingCart= data.shoppingCart;
 			$.mobile.loading("hide");
-			$.mobile.changePage("check.html");},
-			
+			$.mobile.changePage("check.html");
+			},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
 			$.mobile.loading("hide");
@@ -415,12 +381,11 @@ function checkOut(){
 				alter("Internal Server Error.");
 			}
 		}
-	});	
-}
+	});**/	
 
+/////////// History
 
 var currentHistory = {};
-
 function GetHistory(hid){
 	$.mobile.loading("show");
 	$.ajax({
@@ -434,7 +399,6 @@ function GetHistory(hid){
 			$.mobile.navigate("#history", {
 				info: hid,
 			});},
-			
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
 			$.mobile.loading("hide");
@@ -447,12 +411,14 @@ function GetHistory(hid){
 		}
 	});
 }
-var currentMessage = {};
 
+/////////// Message
+
+var currentMessage = {};
 function GetMessage(mid){
 	$.mobile.loading("show");
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/messagess/" + mid,
+		url : "http://localhost:3412/Project1Srv/messages/" + mid,
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",

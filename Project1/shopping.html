@@ -9,12 +9,13 @@
 		<script src="js/jquery-1.10.2.js"></script>
 		<script src="js/jquery.mobile-1.3.1.js"></script>
 		<script src="appjs/product.js"></script>
+		<script src="appjs/shoppingcart.js"></script>
 		<script src="appjs/app.js"></script>
 
 	</head>
 
-	<body>
-			<div id= "shopCartView" data-role="page">
+	<body onload="GetShoppingCart(0)">
+			<div id= "shopCartView" data-role="page" data-theme="b">
 					
 			<div data-role="panel" id="mypanel" data-theme="a" data-position="right" data-display="reveal">
         		<ul data-role="listview" data-theme="a">
@@ -34,12 +35,11 @@
 				</div>
 			</div>
 			
-			<div data-role="content">
-				
-				<ul id="shopping-list" data-role="listview" data-split-icon="delete"></ul>
+			<form data-role="content">
+				<ul id="shopping-list" data-role="listview" data-split-icon="delete">				
+				</ul>
 				<a data-role="button" onClick= checkOut() data-theme="b">Check out</a>
-
-			</div>
+			</form>
 			
 			</div>
 	</body>

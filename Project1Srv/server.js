@@ -145,7 +145,18 @@ for (var i=0; i < categoryList.length; ++i){
 }
 
 //Shopping cart
-var shoppingCart=new Array();
+var shoppingcart= require("./shoppingcart.js");
+var ShoppingCart = shoppingcart.ShoppingCart;
+
+var shoppingcartList= new Array(
+	new ShoppingCart(0, [artsBooksList[0],menPantsList[1]])
+);
+
+var shoppingcartNextId = 0;
+
+for (var i=0; i < shoppingcartList.length;++i){
+	shoppingcartList[i].scid = shoppingcartNextId++;
+}
 
 // History
 var history= require("./history.js");
@@ -216,60 +227,14 @@ app.get('/Project1Srv/messages', function(req, res) {
   	res.json(response);
 });
 
-app.get('/Project1Srv/shoppingCartList', function(req, res) {
+app.get('/Project1Srv/shoppingcarts', function(req, res) {
 	console.log("GET");
 
-	var response = {"shoppingList" : shoppingCart};
+	var response = {"shoppingcarts" : shoppingcartList};
   	res.json(response);
 });
 
-app.get('/Project1Srv/shoppingCartList/:id', function(req, res){
-
-	var id= req.params.id;
-
-	var target = -1;
-	var target2= -1;
-		for (var i=0; i < categoryList.length; ++i){
-			for(var j=0; j< categoryList[i].productList.length; ++j)
-			{
-				if(categoryList[i].productList[j].id== id){
-					target= i;
-					target2=j;
-					break;
-				}
-			}
-		}
-
-		if (target == -1 || target2 == -1){
-			res.statusCode = 404;
-			res.send("Product not found.");
-		}
-
-		else {
-			var product= categoryList[target].productList[target2];
-  			shoppingCart.push(product);
-			console.log("Adding "+product.itemName);	
-			var response = {"productCart": shoppingCart};
-			res.json(response);
-  		}		
-});
-
-app.get('/Project1Srv/shoppingCartListDelete/:id', function(req, res){
-	var id= req.params.id;	
-	var shoppingCart2=new Array(); 
-	var qty=0;
-		for (var i=0; i < shoppingCart.length; ++i){
-				if(shoppingCart[i].id != id && qty==0){
-					shoppingCart2.push(shoppingCart[i]);
-					++qty;
-					break;
-				}
-		}
-	shoppingCart= shoppingCart2;	
-	var response = {"productCart2": shoppingCart};
-	res.json(response);
-  			
-});
+//////// Category
 
 app.get('/Project1Srv/categories/:id', function(req, res){
 
@@ -291,6 +256,20 @@ app.get('/Project1Srv/categories/:id', function(req, res){
   			res.json(response);	
   		}		
 });
+
+app.put('/Project1Srv/categories/:id', function(req, res) {
+
+});
+
+app.del('/Project1Srv/categories/:id', function(req, res) {
+
+});
+
+app.post('/Project1Srv/categories', function(req, res) {
+
+});
+
+////////// Product
 
 app.get('/Project1Srv/products/:id', function(req, res){
 
@@ -319,30 +298,54 @@ app.get('/Project1Srv/products/:id', function(req, res){
   		}		
 });
 
+app.put('/Project1Srv/products/:id', function(req, res) {
+
+});
+
+app.del('/Project1Srv/products/:id', function(req, res) {
+
+});
+
+app.post('/Project1Srv/products', function(req, res) {
+
+});
+
+//////////// History
+
 app.get('/Project1Srv/histories/:hid', function(req, res){
 		
 	var hid = req.params.hid;
 	console.log("GET history: " + hid);
 	var target = -1;
 		for (var i=0; i < historyList.length; ++i){
-
 			if(historyList[0].productList[i].id == hid){
 					target= i;
 					break;
 				}
 		}
-
 		if (target == -1){
 			res.statusCode = 404;
 			res.send("Product not found.");
 		}
 		else {
-
 			var response = {"product" : historyList[0].productList[target]};
-
   			res.json(response);	
   		}		
 });
+
+app.put('/Project1Srv/histories/:hid', function(req, res) {
+
+});
+
+app.del('/Project1Srv/histories/:hid', function(req, res) {
+
+});
+
+app.post('/Project1Srv/histories', function(req, res) {
+
+});
+
+/////////// Messages
 
 app.get('/Project1Srv/messages/:mid', function(req, res) {
 	var mid = req.params.mid;
@@ -370,6 +373,57 @@ app.get('/Project1Srv/messages/:mid', function(req, res) {
   		}	
 	}
 });
+
+app.put('/Project1Srv/messages/:mid', function(req, res) {
+
+});
+
+app.del('/Project1Srv/messages/:mid', function(req, res) {
+
+});
+
+app.post('/Project1Srv/messages', function(req, res) {
+
+});
+
+
+////// Shopping Cart
+
+app.get('/Project1Srv/shoppingcarts/:scid', function(req, res){
+		
+	var scid = req.params.scid;
+	console.log("GET cart: " + scid);
+	var target = -1;
+		for (var i=0; i < shoppingcartList.length; ++i){
+			if(shoppingcartList[0].productList[i].id == scid){
+					target= i;
+					break;
+				}
+		}
+		if (target == -1){
+			res.statusCode = 404;
+			res.send("Product not found.");
+		}
+		else {
+			var response = {"product" : shoppingcartList[0].productList[target]};
+  			res.json(response);	
+  		}		
+});
+
+app.put('/Project1Srv/shoppingcarts/:scid', function(req, res) {
+
+});
+
+app.del('/Project1Srv/shoppingcarts/:scid', function(req, res) {
+
+});
+
+app.post('/Project1Srv/shoppingcarts', function(req, res) {
+
+});
+
+////// Account
+
 // REST Operation - HTTP GET to read a car based on its id
 app.get('/Project1Srv/accounts/:aid', function(req, res) {
 	var aid = req.params.aid;
@@ -398,17 +452,17 @@ app.get('/Project1Srv/accounts/:aid', function(req, res) {
 	}
 });
 
-// REST Operation - HTTP PUT to updated a car based on its id
+// REST Operation - HTTP PUT to updated an account based on its id
 app.put('/Project1Srv/accounts/:aid', function(req, res) {
 
 });
 
-// REST Operation - HTTP DELETE to delete a car based on its id
+// REST Operation - HTTP DELETE to delete an account based on its id
 app.del('/Project1Srv/accounts/:aid', function(req, res) {
 
 });
 
-// REST Operation - HTTP POST to add a new a car
+// REST Operation - HTTP POST to add a new a account
 app.post('/Project1Srv/accounts', function(req, res) {
 
 });
