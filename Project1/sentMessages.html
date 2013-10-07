@@ -9,8 +9,8 @@
 		<script src="appjs/account.js"></script>
 		<script src="appjs/app.js"></script>
 	</head>
-	<body onload="GetMessage(0)">		
-		<div id="accounts" data-role="page" data-theme="b">
+	<body onload="GetMessage(1)">		
+		<div id="sent" data-role="page" data-theme="b">
 			<div data-role="panel" id="mypanel" data-theme="a" data-position="right" data-display="reveal">
         		<ul data-role="listview" data-theme="a">
         			<li><a href="advsearch.html" >Search</a></li>
@@ -34,9 +34,9 @@
 				</div>
 			</div>
 		<div data-role="content">
-				<div id="sentMessages-list">
+				<ul data-role="listview" id="sentMessage-list">
 					
-				</div>
+				</ul>
 		</div>
 		</div>
 	</body>	

@@ -193,6 +193,26 @@ $(document).on('pagebeforeshow', "#inbox", function(event, ui) {
 		}
 	});
 });
+$(document).on('pagebeforeshow', "#sent", function(event, ui) {
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/messages",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var messageList = data.messages;
+			var len = messageList.length;
+			var list = $("#sentMessage-list");
+			list.empty();
+			var message;
+			message = messageList[1];
+			list.append("<li><h2>"+message.sName+ "</h2><p>" +message.mText+"</p></li>");
+			list.listview("refresh");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+});
 
 ///////////////////////////////
 function ConverToJSON(formData){
