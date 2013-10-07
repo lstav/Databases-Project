@@ -116,6 +116,8 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	pname.append("<center>"+currentProduct.itemName+"</center>");
 });
 
+////////// Checkout
+
 $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 	
 	var info= $("#totalPurchase");
@@ -367,7 +369,7 @@ function GetCategory(id){
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			currentShoppingCart= data.shoppingCart;
+			currentShoppingCart= data.shoppingcart;
 			$.mobile.loading("hide");
 			$.mobile.changePage("check.html");
 			},
