@@ -122,7 +122,7 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 	
 	var info= $("#totalPurchase");
 	info.empty();
-	info.append("Total: $     "+ shoppingCartTotal);
+	//info.append("Total: $     "+ shoppingCartTotal);
 	
 });
 
@@ -387,14 +387,14 @@ function GetCategory(id){
 function checkOut(scid){
 	$.mobile.loading("show");
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/shoppingcarts"/+scid,
+		url : "http://localhost:3412/Project1Srv/shoppingcarts/"+scid,
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 			currentShoppingCart= data.shoppingcart;
 			$.mobile.loading("hide");
-			$.mobile.changePage("check.html");
+			$.mobile.navigate("check.html");
 			},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
