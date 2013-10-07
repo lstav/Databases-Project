@@ -281,7 +281,8 @@ function UpdateAccount(){
 function DeleteAccount(){
 	var decision = confirm("Delete Account?");
 	if(decision == true) {
-		alert("Account Deleted");		
+		alert("Account Deleted");
+		$.mobile.navigate("back");	
 	}
 }
 
@@ -383,10 +384,10 @@ function GetCategory(id){
 
 ////// Check out
 
-function checkOut(){
+function checkOut(scid){
 	$.mobile.loading("show");
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/shoppingcarts",
+		url : "http://localhost:3412/Project1Srv/shoppingcarts"/+scid,
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
@@ -407,6 +408,7 @@ function checkOut(){
 		}
 	});	
 }
+
 /////////// History
 
 var currentHistory = {};
