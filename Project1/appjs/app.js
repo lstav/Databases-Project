@@ -361,7 +361,9 @@ function GetCategory(id){
 	});
 }
 
-/**function checkOut(){
+////// Check out
+
+function checkOut(){
 	$.mobile.loading("show");
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/shoppingcarts",
@@ -383,8 +385,8 @@ function GetCategory(id){
 				alter("Internal Server Error.");
 			}
 		}
-	});**/	
-
+	});	
+}
 /////////// History
 
 var currentHistory = {};
