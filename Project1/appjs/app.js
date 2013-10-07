@@ -468,3 +468,7 @@ function GetMessage(mid){
 		}
 	});
 }
+function submitMessage(){
+	alert("Message have been sent");
+	location.href="message.html";
+}
