@@ -1,6 +1,6 @@
 <h1>Databases-Project</h1>
 This project shows a simple jQuery Mobile App that interects with  
-a server. The content of the list of cars is read from a Node.js server
+a server. The contents are read from a Node.js server
 using REST operations. The contents taken from the Project1Srv are static. <br/>
 
 The structure of the project is: <br/>
