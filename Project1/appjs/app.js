@@ -168,20 +168,40 @@ $(document).on('pagebeforeshow', "#history", function(event, ui) {
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 			var historyList = data.histories;
-			var len = historyList[0].productList.length;
-			var list = $("#purchase-list");
-			list.empty();
-			var history;
-			history = historyList[0];
-			for(var i=0; i<len; i++) {
-				list.append("<li><a onclick=GetProduct(" + history.productList[i].id + ")>" +
-					"<h2>" + history.productList[i].itemName + "</h2>" + 
-					"<p><strong> Payment: " + history.productList[i].payment + "</strong></p>" + 
-					"<p>" + history.productList[i].description + "</p>" +
-					"<p class=\"ui-li-aside\">$" + history.productList[i].price + "</p>" +
-					"</a></li>");
+			var hlen = historyList.length;
+			for (var j=0; j<hlen; j++) {
+				if (historyList[j].purchased == 0) {		
+					var len = historyList[j].productList.length;
+					var list = $("#purchase-list");
+					list.empty();
+					var history;
+					history = historyList[j];
+					for(var i=0; i<len; i++) {
+						list.append("<li><a onclick=GetProduct(" + history.productList[i].id + ")>" +
+							"<h2>" + history.productList[i].itemName + "</h2>" + 
+							"<p><strong> Payment: " + history.productList[i].payment + "</strong></p>" + 
+							"<p>" + history.productList[i].description + "</p>" +
+							"<p class=\"ui-li-aside\">$" + history.productList[i].price + "</p>" +
+							"</a></li>");
+					}
+					list.listview("refresh");
+				} else if (historyList[j].purchased == 1) {
+					var len = historyList[j].productList.length;
+					var list = $("#sale-list");
+					list.empty();
+					var history;
+					history = historyList[j];
+					for(var i=0; i<len; i++) {
+						list.append("<li><a onclick=GetProduct(" + history.productList[i].id + ")>" +
+							"<h2>" + history.productList[i].itemName + "</h2>" + 
+							"<p><strong> Payment: " + history.productList[i].payment + "</strong></p>" + 
+							"<p>" + history.productList[i].description + "</p>" +
+							"<p class=\"ui-li-aside\">$" + history.productList[i].price + "</p>" +
+							"</a></li>");
+					}
+					list.listview("refresh");
+				}
 			}
-			list.listview("refresh");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -190,33 +210,7 @@ $(document).on('pagebeforeshow', "#history", function(event, ui) {
 	});
 });
 
-$(document).on('pagebeforeshow', "#history", function(event, ui) {
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/histories",
-		contentType: "application/json",
-		success : function(data, textStatus, jqXHR){
-			var historyList = data.histories;
-			var len = historyList[1].productList.length;
-			var list = $("#sale-list");
-			list.empty();
-			var history;
-			history = historyList[1];
-			for(var i=0; i<len; i++) {
-				list.append("<li><a onclick=GetProduct(" + history.productList[i].id + ")>" +
-					"<h2>" + history.productList[i].itemName + "</h2>" + 
-					"<p><strong> Payment: " + history.productList[i].payment + "</strong></p>" + 
-					"<p>" + history.productList[i].description + "</p>" +
-					"<p class=\"ui-li-aside\">$" + history.productList[i].price + "</p>" +
-					"</a></li>");
-			}
-			list.listview("refresh");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			alert("Data not found!");
-		}
-	});
-});
+
 ////////// Message
 
 $(document).on('pagebeforeshow', "#inbox", function(event, ui) {
@@ -309,7 +303,6 @@ function DeleteAccount(){
 	var decision = confirm("Delete Account?");
 	if(decision == true) {
 		alert("Account Deleted");
-		$.mobile.navigate("back");	
 	}
 }
 

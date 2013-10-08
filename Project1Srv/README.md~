@@ -1,5 +1,5 @@
-<h1>Class Demo1</h1>
-This project shows a simple jQuery Mobile App. All the contents is static. 
+<h1>Databases Project</h1>
+This project shows a jQuery Mobile App. All the contents is static. 
 The structures of the project is: <br/>
 a) index.html - the HMTL5 file with the pages that make up the app.<br/>
 b) js - directory with the jQuery and jQuery mobile libraries.<br/>
@@ -19,6 +19,6 @@ a) Mac OS - /Users/username/Site (username will be your user name on the Mac.<br
 b) Ubuntu Linux - /var/www  (You will need to become superuser to add files)<br/>
 
 Once setup for running, access the project with its URL. For example:<br/>
-http://localhost/~manuel/ClassDemo1  (Mac Setup) <br/>
+http://localhost/Project1  (Mac Setup) <br/>
 <br/>
-http://localhost/ClassDemo1 (Ubuntu Linux Setup)
+http://localhost/Project1 (Ubuntu Linux Setup)
