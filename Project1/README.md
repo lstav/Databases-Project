@@ -1,6 +1,6 @@
 <h1>Databases-Project</h1>
 This project shows a simple jQuery Mobile App that interects with  
-a server. The content of the list of cars is read from a Node.js server
+a server. The contents are read from a Ncode.js server
 using REST operations. The contents taken from the Project1Srv are static. <br/>
 
 The structure of the project is: <br/>
@@ -16,10 +16,10 @@ use the File->Import->General->Existing Projects into Workspace
 and provide the location of the directory for the project.
 
 <h2>Running:</h2>
-ClassDemo3 is a mobile web app, hence you need a web server to serve the files.
+Project1 is a mobile web app, hence you need a web server to serve the files.
 You will also need to run the server located in <strong>Project1Srv</strong>.
 
-You can use Apache2 to run ClassDemo3. Check the web for instuctions on how to set it up on your platform. 
+You can use Apache2 to run Project1. Check the web for instuctions on how to set it up on your platform. 
 You will need to put the project directory into the www directory 
 of the web server you are running. For example:<br/>
 a) Mac OS - /Users/username/Site (username will be your user name on the Mac.<br/>
