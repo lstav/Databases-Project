@@ -12,12 +12,10 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 			
 				account = accountList[0];
 				list.append("<li>" + account.afName + " " +	account.alName + "</li>" + 
-					"<li>Number: " + account.aAccountNumber +  "</li>" + 
 					"<li>Shipping Address: " + account.aShipping + "</li>" + 
 					"<li>Billing Address: " + account.aBilling + "</li>" +
-					"<li>Credit Card: *****" + account.acCard.substr(5,6) + "</li>" +
-					"<li> Rank: " + account.rank + "</li>");
-			
+					//"<li>Credit Card: *****" + account.acCard.substr(5,6) + "</li>" +
+					"<li> Rank: " + account.rank + "</li>");			
 			list.listview("refresh");
 		},
 		error: function(data, textStatus, jqXHR){
@@ -295,7 +293,7 @@ function GetAccount(aid){
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			currentAccount = data.account;
+			currentAccount = convert(data.account);
 			$.mobile.loading("hide");
 			$.mobile.navigate("#accounts");
 		},
