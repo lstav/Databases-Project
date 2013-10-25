@@ -264,6 +264,23 @@ function ConverToJSON(formData){
 	return result;
 }
 
+function convert(dbModel){
+	var aliModel = {};
+	
+	aliModel.aid = dbModel.aid;
+	aliModel.afName = dbModel.afName;
+	aliModel.alName = dbModel.alName;
+	aliModel.aEmail = dbModel.aEmail;
+	aliModel.aUsername = dbModel.aUsername;
+	aliModel.aPassword = dbModel.aPassword;
+	aliModel.aShipping = dbModel.aShippingid;
+	aliModel.aBilling = dbModel.aBillingid;
+	aliModel.acCard = dbModel.acCard;
+	aliModel.rank = dbModel.rank;
+	
+	return aliModel;
+}
+
 function SaveAccount(){
 	alert("Account Created!");
 }
