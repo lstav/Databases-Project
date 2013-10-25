@@ -1,5 +1,7 @@
 // Express is the web framework 
 var express = require('express');
+var pg = require('pg');
+
 var app = express();
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -188,6 +190,8 @@ for (var i=0; i < messageList.length;++i){
 	messageList[i].mid = messageNextId++;
 }
 
+// Database connection string: pg://<username>:<password>@host:port/dbname 
+var conString = "pg://course:course@localhost:5432/projectdb";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -202,9 +206,20 @@ for (var i=0; i < messageList.length;++i){
 // REST Operation - HTTP GET 
 app.get('/Project1Srv/accounts', function(req, res) {
 	console.log("GET");
+	
+	var client = new pg.Client(conString);
+	client.connect();
 
-	var response = {"accounts" : accountList};
-  	res.json(response);
+	var query = client.query("SELECT * from account");
+	
+	query.on("row", function (row, result) {
+    	result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accounts" : result.rows};
+		client.end();
+  		res.json(response);
+ 	});
 });
 
 app.get('/Project1Srv/categories', function(req, res){
@@ -429,29 +444,28 @@ app.post('/Project1Srv/shoppingcarts', function(req, res) {
 app.get('/Project1Srv/accounts/:aid', function(req, res) {
 	var aid = req.params.aid;
 		console.log("GET account: " + aid);
-	if ((aid < 0) || (aid >= accountNextId)){
-		// not found
-		res.statusCode = 404;
-		res.send("Account not found.");
-	}
-	else {
-		var target = -1;
-		for (var i=0; i < accountList.length; ++i){
-			if (accountList[i].aid == aid){
-				target = i;
-				break;	
-			}
-		}
-		if (target == -1){
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT * from account where aid = $1", [aid]);
+	
+	query.on("row", function (row, result) {
+    	result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var len = result.rows.length;
+		if (len == 0){
 			res.statusCode = 404;
 			res.send("Account not found.");
 		}
-		else {
-			var response = {"account" : accountList[target]};
-  			res.json(response);	
-  		}	
-	}
+		else {	
+  			var response = {"account" : result.rows[0]};
+			client.end();
+  			res.json(response);
+  		}
+ 	});
 });
+
 
 // REST Operation - HTTP PUT to updated an account based on its id
 app.put('/Project1Srv/accounts/:aid', function(req, res) {
