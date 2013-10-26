@@ -210,7 +210,7 @@ app.get('/Project1Srv/accounts', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT * from account");
+	var query = client.query("SELECT * from accounts");
 	
 	query.on("row", function (row, result) {
     	result.addRow(row);
@@ -447,7 +447,7 @@ app.get('/Project1Srv/accounts/:aid', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT * from account where aid = $1", [aid]);
+	var query = client.query("SELECT * from accounts where aid = $1", [aid]);
 	
 	query.on("row", function (row, result) {
     	result.addRow(row);

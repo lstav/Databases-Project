@@ -8,13 +8,12 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 			var len = accountList.length;
 			var list = $("#account-list");
 			list.empty();
-			var account;
-			
+			var account;			
 				account = accountList[0];
-				list.append("<li>" + account.afName + " " +	account.alName + "</li>" + 
-					"<li>Shipping Address: " + account.aShipping + "</li>" + 
-					"<li>Billing Address: " + account.aBilling + "</li>" +
-					//"<li>Credit Card: *****" + account.acCard.substr(5,6) + "</li>" +
+				list.append("<li>" + account.afname + " " +	account.alname + "</li>" + 
+					"<li>Shipping Address: " + account.ashippingid + "</li>" + 
+					"<li>Billing Address: " + account.abillingid + "</li>" +
+					"<li>Credit Card: *****" + account.accard.substr(5,6) + "</li>" +
 					"<li> Rank: " + account.rank + "</li>");			
 			list.listview("refresh");
 		},
@@ -266,14 +265,14 @@ function convert(dbModel){
 	var aliModel = {};
 	
 	aliModel.aid = dbModel.aid;
-	aliModel.afName = dbModel.afName;
-	aliModel.alName = dbModel.alName;
-	aliModel.aEmail = dbModel.aEmail;
-	aliModel.aUsername = dbModel.aUsername;
-	aliModel.aPassword = dbModel.aPassword;
-	aliModel.aShipping = dbModel.aShippingid;
-	aliModel.aBilling = dbModel.aBillingid;
-	aliModel.acCard = dbModel.acCard;
+	aliModel.afName = dbModel.afname;
+	aliModel.alName = dbModel.alname;
+	aliModel.aEmail = dbModel.aemail;
+	aliModel.aUsername = dbModel.ausername;
+	aliModel.aPassword = dbModel.apassword;
+	aliModel.aShipping = dbModel.ashippingid;
+	aliModel.aBilling = dbModel.abillingid;
+	aliModel.acCard = dbModel.accard;
 	aliModel.rank = dbModel.rank;
 	
 	return aliModel;

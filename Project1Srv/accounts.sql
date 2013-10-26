@@ -1,4 +1,4 @@
-﻿CREATE TABLE account
+﻿CREATE TABLE accounts
 (
   aid bigserial,
   aUsername varchar(30) NOT NULL,
