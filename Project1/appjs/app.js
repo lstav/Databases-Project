@@ -11,7 +11,7 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 			var account;			
 				account = accountList[0];
 				list.append("<li>" + account.afname + " " +	account.alname + "</li>" + 
-					"<li>Shipping Address: " + account.ashippingid + "</li>" + 
+					"<li GetAddress(" + account.ashippingid +")>Shipping Address: </li>" + 
 					"<li>Billing Address: " + account.abillingid + "</li>" +
 					"<li>Credit Card: *****" + account.accard.substr(5,6) + "</li>" +
 					"<li> Rank: " + account.rank + "</li>");			
@@ -261,7 +261,7 @@ function ConverToJSON(formData){
 	return result;
 }
 
-function convert(dbModel){
+function aconvert(dbModel){
 	var aliModel = {};
 	
 	aliModel.aid = dbModel.aid;
@@ -292,7 +292,7 @@ function GetAccount(aid){
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			currentAccount = convert(data.account);
+			currentAccount = aconvert(data.account);
 			$.mobile.loading("hide");
 			$.mobile.navigate("#accounts");
 		},
@@ -301,6 +301,41 @@ function GetAccount(aid){
 			$.mobile.loading("hide");
 			if (data.status == 404){
 				alert("Account not found.");
+			}
+			else {
+				alert("Internal Server Error.");
+			}
+		}
+	});
+}
+
+function adconvert(dbModel){
+	var adliModel = {};
+	
+	adliModel.addressid = dbModel.addressid;
+	adliModel.address = dbModel.address;
+	
+	return adliModel;
+}
+
+var currentAddress = {};
+
+function GetAddress(addressid){
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/address/" + addressid,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			currentAddress = adconvert(data.address);
+			$.mobile.loading("hide");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Address not found.");
 			}
 			else {
 				alert("Internal Server Error.");

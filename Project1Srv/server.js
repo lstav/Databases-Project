@@ -29,6 +29,9 @@ app.use(express.bodyParser());
 var account = require("./account.js");
 var Account = account.Account;
 
+var address = require("./address.js");
+var Address = address.address;
+
 var accountList = new Array(
 	new Account("Luis", "Tavarez", "123", "lt@example.com", "123456", "luistavarez", "Example Example Puerto Rico", "Example Example Puerto Rico", "987654321", "****"),
 	new Account("Heidi", "Negron", "323", "lt@example.com", "321456", "heidinegron", "Example Example Puerto Rico", "Example Example Puerto Rico", "123456789", "****"),
@@ -217,6 +220,24 @@ app.get('/Project1Srv/accounts', function(req, res) {
 	});
 	query.on("end", function (result) {
 		var response = {"accounts" : result.rows};
+		client.end();
+  		res.json(response);
+ 	});
+});
+
+app.get('/Project1Srv/address', function(req, res) {
+	console.log("GET");
+	
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT * from address");
+	
+	query.on("row", function (row, result) {
+    	result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"address" : result.rows};
 		client.end();
   		res.json(response);
  	});
@@ -460,6 +481,31 @@ app.get('/Project1Srv/accounts/:aid', function(req, res) {
 		}
 		else {	
   			var response = {"account" : result.rows[0]};
+			client.end();
+  			res.json(response);
+  		}
+ 	});
+});
+
+app.get('/Project1Srv/address/:addressid', function(req, res) {
+	var addressid = req.params.addressid;
+		console.log("GET address: " + addressid);
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT * from address where addressid = $1", [addressid]);
+	
+	query.on("row", function (row, result) {
+    	result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var len = result.rows.length;
+		if (len == 0){
+			res.statusCode = 404;
+			res.send("Address not found.");
+		}
+		else {	
+  			var response = {"address" : result.rows[0]};
 			client.end();
   			res.json(response);
   		}
