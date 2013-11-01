@@ -1,0 +1,568 @@
+--
+-- PostgreSQL database cluster dump
+--
+
+-- Started on 2013-11-01 18:38:18
+
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+
+--
+-- Roles
+--
+
+CREATE ROLE postgres;
+ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION PASSWORD 'md5409300fabb1adb3737c71bccbfbe3fd6';
+
+
+
+
+
+
+--
+-- Database creation
+--
+
+CREATE DATABASE projectdb WITH TEMPLATE = template0 OWNER = postgres;
+REVOKE ALL ON DATABASE template1 FROM PUBLIC;
+REVOKE ALL ON DATABASE template1 FROM postgres;
+GRANT ALL ON DATABASE template1 TO postgres;
+GRANT CONNECT ON DATABASE template1 TO PUBLIC;
+
+
+\connect postgres
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.3.1
+-- Dumped by pg_dump version 9.3.1
+-- Started on 2013-11-01 18:38:18
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 1930 (class 1262 OID 12029)
+-- Dependencies: 1929
+-- Name: postgres; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON DATABASE postgres IS 'default administrative connection database';
+
+
+--
+-- TOC entry 171 (class 3079 OID 11750)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 1933 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- TOC entry 170 (class 3079 OID 16384)
+-- Name: adminpack; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS adminpack WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 1934 (class 0 OID 0)
+-- Dependencies: 170
+-- Name: EXTENSION adminpack; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION adminpack IS 'administrative functions for PostgreSQL';
+
+
+--
+-- TOC entry 1932 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2013-11-01 18:38:18
+
+--
+-- PostgreSQL database dump complete
+--
+
+\connect projectdb
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.3.1
+-- Dumped by pg_dump version 9.3.1
+-- Started on 2013-11-01 18:38:18
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 176 (class 3079 OID 11750)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 1972 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 170 (class 1259 OID 16394)
+-- Name: accounts; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE accounts (
+    aid bigint NOT NULL,
+    ausername character varying(30) NOT NULL,
+    afname character varying(30) NOT NULL,
+    alname character varying(30) NOT NULL,
+    aemail character varying(60) NOT NULL,
+    apassword character varying(100) NOT NULL,
+    rank character varying(4),
+    ashippingid bigint NOT NULL,
+    abillingid bigint NOT NULL,
+    adepositid bigint NOT NULL,
+    accard character varying(20) NOT NULL,
+    isadmin boolean NOT NULL
+);
+
+
+ALTER TABLE public.accounts OWNER TO postgres;
+
+--
+-- TOC entry 171 (class 1259 OID 16397)
+-- Name: accounts_aid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE accounts_aid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.accounts_aid_seq OWNER TO postgres;
+
+--
+-- TOC entry 1973 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: accounts_aid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE accounts_aid_seq OWNED BY accounts.aid;
+
+
+--
+-- TOC entry 173 (class 1259 OID 16416)
+-- Name: belongsin; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE belongsin (
+    pid bigint NOT NULL,
+    cid character varying NOT NULL
+);
+
+
+ALTER TABLE public.belongsin OWNER TO postgres;
+
+--
+-- TOC entry 172 (class 1259 OID 16403)
+-- Name: category; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE category (
+    id character varying NOT NULL,
+    name character varying
+);
+
+
+ALTER TABLE public.category OWNER TO postgres;
+
+--
+-- TOC entry 175 (class 1259 OID 16503)
+-- Name: product; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE product (
+    id bigint NOT NULL,
+    itemname character varying,
+    price numeric,
+    quantity numeric,
+    condition character varying,
+    location character varying,
+    shipping character varying,
+    payment character varying,
+    description character varying,
+    img character varying
+);
+
+
+ALTER TABLE public.product OWNER TO postgres;
+
+--
+-- TOC entry 174 (class 1259 OID 16501)
+-- Name: product_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE product_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.product_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 1974 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: product_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE product_id_seq OWNED BY product.id;
+
+
+--
+-- TOC entry 1840 (class 2604 OID 16402)
+-- Name: aid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY accounts ALTER COLUMN aid SET DEFAULT nextval('accounts_aid_seq'::regclass);
+
+
+--
+-- TOC entry 1841 (class 2604 OID 16506)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY product ALTER COLUMN id SET DEFAULT nextval('product_id_seq'::regclass);
+
+
+--
+-- TOC entry 1959 (class 0 OID 16394)
+-- Dependencies: 170
+-- Data for Name: accounts; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY accounts (aid, ausername, afname, alname, aemail, apassword, rank, ashippingid, abillingid, adepositid, accard, isadmin) FROM stdin;
+1	luis.tavarez	Luis	Tavarez	luis.tavarez@upr.edu	123456789	****	1	1	1	123456789	f
+\.
+
+
+--
+-- TOC entry 1975 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: accounts_aid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('accounts_aid_seq', 2, true);
+
+
+--
+-- TOC entry 1962 (class 0 OID 16416)
+-- Dependencies: 173
+-- Data for Name: belongsin; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY belongsin (pid, cid) FROM stdin;
+1	ArtBooks
+2	ArtBooks
+3	ComicBooks
+4	ComicBooks
+5	MysteryBooks
+6	MysteryBooks
+7	RomanceBooks
+8	RomanceBooks
+9	ScienceFictionBooks
+10	ScienceFictionBooks
+11	PhonesElectronics
+12	PhonesElectronics
+13	CamerasElectronics
+14	CamerasElectronics
+15	LaptopsComp
+16	LaptopsComp
+17	TabletsComp
+18	TabletsComp
+19	MenShirts
+20	MenShirts
+21	MenPants
+22	MenPants
+23	WomenDresses
+24	WomenDresses
+25	BicycleSports
+26	BicycleSports
+27	KayakSports
+28	KayakSports
+\.
+
+
+--
+-- TOC entry 1961 (class 0 OID 16403)
+-- Dependencies: 172
+-- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY category (id, name) FROM stdin;
+ArtBooks	Arts & Photography
+ComicBooks	Comic & Graphic Novels
+MysteryBooks	Mystery, Thriller & Suspense
+RomanceBooks	Romance
+ScienceFictionBooks	Science Fiction & Fantasy
+EntertainmentMagazine	Entertainment
+FashionMagazine	Fashion & Style
+MoviesMagazine	Movies & Music
+ScienceMagazine	Science
+TvElectronics	TV
+AudioElectronics	Audio
+PhonesElectronics	Phones
+CamerasElectronics	Cameras
+VideoElectronics	Video
+LaptopsComp	Laptops
+TabletsComp	Tablets
+PrintersComp	Printers
+ChildrenClothes	Children
+MenShirts	Shirts
+MenPants	Pants
+WomenShirts	Shirts
+WomenPants	Pants
+WomenDresses	Dresses
+ChildrenShoes	Children
+MenShoes	Men
+WomenShoes	Women
+BicycleSports	Bicycles
+KayakSports	Kayaks
+GolfSports	Golf
+FishingSports	Fishing
+\.
+
+
+--
+-- TOC entry 1964 (class 0 OID 16503)
+-- Dependencies: 175
+-- Data for Name: product; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY product (id, itemname, price, quantity, condition, location, shipping, payment, description, img) FROM stdin;
+1	Women Artists: An Illustrated History	27.55	12	New	California	Standard	Visa, Paypal	Authors: Nancy G. Heller & Ovidio Guaita	http://img689.imageshack.us/img689/9591/q9en.jpg
+2	The Bay Area School	52.43	2	New	Florida	Standard	Paypal	Authors: Thomas Williams & Michael Peppiatt	http://img15.imageshack.us/img15/9931/aaku.jpg
+3	The Walking Dead Volume 19 TP: March to War	9.07	12	New	California	Standard	Visa, Paypal	Authors: Robert Kirkman & Charlie Adlard	http://img703.imageshack.us/img703/8320/ca18.jpg
+4	Justice League, Vol.3: Throne of Atlantis (The New 52)	16.98	2	New	Florida	Standard	Paypal	Authors: Geoff Johns & Ivan Reis	http://img203.imageshack.us/img203/7104/s6hg.jpg
+5	Istanbul Passage: A Novel	10.38	12	New	California	Standard	Visa, Paypal	Author: Joseph Kanon	http://img23.imageshack.us/img23/4227/kfh2.jpg
+6	Doctor Sleep: A Novel	10.99	2	New	Florida	Standard	Paypal	Author: Stephen King	http://img703.imageshack.us/img703/2497/yyvw.jpg
+7	Beautiful Disaster: A Novel	11.20	12	New	California	Standard	Visa, Paypal	Author: Jamie McGuire	http://img17.imageshack.us/img17/8192/cdt8.jpg
+8	Fifty Shades of Grey	10.04	2	New	Florida	Standard	Paypal	Author: E L James	http://img694.imageshack.us/img694/8062/osbz.jpg
+9	A Dance with Dragons ( A Song of Ice and Fire, Book 5)	19.97	5	New	Puerto Rico	Standard	Paypal	Author: George R.R. Martin	http://img89.imageshack.us/img89/7601/abe.jpg
+10	Eragon	7.56	5	New	Puerto Rico	Standard	Paypal	Author: Christopher Paolini	http://img191.imageshack.us/img191/7442/t8q7.png
+11	Samsung Galaxy S4	699.99	12	New	California	Standard	Visa, Paypal	White, (AT&T)	http://img24.imageshack.us/img24/4017/6doj.jpg
+12	Motorola DROID MINI	599.99	2	New	Florida	Standard	Paypal	Verizon Wireless	http://img844.imageshack.us/img844/392/nrmr.jpg
+13	Nikon COOLPIX L820	200.00	12	New	California	Standard	Visa, Paypal	Specs: 16 MP CMOS Digital Camera with 30x Zoom Lens and Full HD 1080P Video	http://img571.imageshack.us/img571/3025/ipxs.jpg
+14	Canon PowerShot A2300	99.00	2	New	Florida	Standard	Paypal	Specs: 16.0 MP Digital Camer with 5x Digital Image Stabilized Zoom 28mm Wide-Angle Lens with 720p HD Video Recording	http://img692.imageshack.us/img692/2051/wum4.jpg
+15	Dell Inspiron 15 i15RV-6190BLK	369.98	12	New	California	Standard	Visa, Paypal	15.6-Inch Laptop (Black Matte with Textured Finish)	http://img545.imageshack.us/img545/5389/w3qm.jpg
+16	Samsung Chromebook	248.00	2	New	Florida	Standard	Paypal	Wi-Fi, 11.6-Inch	http://img593.imageshack.us/img593/2941/ym85.jpg
+17	Google Nexus 7 Tablet	229.00	12	New	California	Standard	Visa, Paypal	7-Inch, 16GB, Black by ASUS	http://img545.imageshack.us/img545/7964/guud.jpg
+18	Acer Iconia A1-810- L416	100.00	2	New	Florida	Standard	Paypal	7.9-Inch 16 GB Table (Pure White)	http://img689.imageshack.us/img689/8669/k5sk.jpg
+19	Delhi Shirt	32.00	12	New	California	Standard	Visa, Paypal	Blue	http://img401.imageshack.us/img401/4610/o3xu.jpg
+20	Plus Long Sleeve Shirt	64.00	2	New	Florida	Standard	Paypal	Black	http://img580.imageshack.us/img580/3644/2ug0.jpg
+21	Kenneth Cole Reaction Mens Sharkskin	80.00	12	New	California	Standard	Visa, Paypal	Slim Fit Flat Front Pant	http://img6.imageshack.us/img6/5410/a6ih.jpg
+22	Savane Mens Travel Intelligence	62.00	2	New	Florida	Standard	Paypal	Gab-slim Fit Pant	http://img27.imageshack.us/img27/3130/87k2.jpg
+23	Anne Klein Womens Dress	89.98	12	New	California	Standard	Visa, Paypal	Jersey Swing Dress	http://img46.imageshack.us/img46/6762/a3co.jpg
+24	Sandra Darren Dress	63.00	2	New	Florida	Standard	Paypal	Womens Fit and Flare Lace and Mesh Dress	http://img34.imageshack.us/img34/6810/7ugz.png
+25	GMC Denali Road Bike	347.06	12	New	California	Standard	Visa, Paypal	21-speed road bike features	http://img20.imageshack.us/img20/9927/u8vn.jpg
+26	Huffy Womens Deluxe Cruiser Bike	139.99	2	New	Florida	Standard	Paypal	Mint Green, 26-Inch/Medium	http://img266.imageshack.us/img266/65/sjau.jpg
+27	Intex Challenger K1 Kayak	76.47	12	New	California	Standard	Visa, Paypal	For lake or slow-moving river.	http://img820.imageshack.us/img820/1607/a4gd.jpg
+28	Sevylor Fiji Travel Pack Kayak	106.99	2	New	Florida	Standard	Paypal	Blue, 2-Person	http://img853.imageshack.us/img853/6994/s5je.jpg
+\.
+
+
+--
+-- TOC entry 1976 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('product_id_seq', 28, true);
+
+
+--
+-- TOC entry 1843 (class 2606 OID 16401)
+-- Name: accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY accounts
+    ADD CONSTRAINT accounts_pkey PRIMARY KEY (aid);
+
+
+--
+-- TOC entry 1847 (class 2606 OID 16457)
+-- Name: pbelongsin; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY belongsin
+    ADD CONSTRAINT pbelongsin PRIMARY KEY (pid, cid);
+
+
+--
+-- TOC entry 1849 (class 2606 OID 16511)
+-- Name: pprimary; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY product
+    ADD CONSTRAINT pprimary PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1845 (class 2606 OID 16412)
+-- Name: primary; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY category
+    ADD CONSTRAINT "primary" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1850 (class 2606 OID 16463)
+-- Name: category_belongsin; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY belongsin
+    ADD CONSTRAINT category_belongsin FOREIGN KEY (cid) REFERENCES category(id);
+
+
+--
+-- TOC entry 1851 (class 2606 OID 16512)
+-- Name: product_belongsin; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY belongsin
+    ADD CONSTRAINT product_belongsin FOREIGN KEY (pid) REFERENCES product(id);
+
+
+--
+-- TOC entry 1971 (class 0 OID 0)
+-- Dependencies: 6
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2013-11-01 18:38:18
+
+--
+-- PostgreSQL database dump complete
+--
+
+\connect template1
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.3.1
+-- Dumped by pg_dump version 9.3.1
+-- Started on 2013-11-01 18:38:18
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 1929 (class 1262 OID 1)
+-- Dependencies: 1928
+-- Name: template1; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON DATABASE template1 IS 'default template for new databases';
+
+
+--
+-- TOC entry 170 (class 3079 OID 11750)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 1932 (class 0 OID 0)
+-- Dependencies: 170
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- TOC entry 1931 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2013-11-01 18:38:18
+
+--
+-- PostgreSQL database dump complete
+--
+
+-- Completed on 2013-11-01 18:38:18
+
+--
+-- PostgreSQL database cluster dump complete
+--
+

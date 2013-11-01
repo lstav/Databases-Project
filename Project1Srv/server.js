@@ -194,7 +194,7 @@ for (var i=0; i < messageList.length;++i){
 }
 
 // Database connection string: pg://<username>:<password>@host:port/dbname 
-var conString = "pg://course:course@localhost:5432/projectdb";
+var conString = "pg://postgres:course@localhost:5432/projectdb";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -243,14 +243,6 @@ app.get('/Project1Srv/address', function(req, res) {
  	});
 });
 
-app.get('/Project1Srv/categories', function(req, res){
-
-	console.log("GET");
-	var response = {"categories": categoryList};
-	res.json(response);
-
-});
-
 app.get('/Project1Srv/histories', function(req, res) {
 	console.log("GET");
 	var response = {"histories" : historyList};
@@ -273,25 +265,65 @@ app.get('/Project1Srv/shoppingcarts', function(req, res) {
 
 //////// Category
 
-app.get('/Project1Srv/categories/:id', function(req, res){
+app.get('/Project1Srv/categories', function(req, res){
 
+	console.log("GET");
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT * from category");
+	
+	query.on("row", function (row, result) {
+    	result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"categories" : result.rows};
+		client.end();
+  		res.json(response);
+ 	});
+});
+
+app.get('/Project1Srv/category/:id', function(req, res){
+	
 	var id = req.params.id;
 	console.log("GET category:"+ id);
-	var target = -1;
-		for (var i=0; i < categoryList.length; ++i){
-			if (categoryList[i].id == id){
-				target = i;
-				break;	
-			}
-		}
-		if (target == -1){
-			res.statusCode = 404;
-			res.send("Category not found.");
-		}
-		else {
-			var response = {"category" : categoryList[target]};
-  			res.json(response);	
-  		}		
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT name FROM category WHERE id='"+id+"'");
+	
+	query.on("row", function (row, result) {
+    	result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"categoryName" : result.rows};
+		client.end();
+  		res.json(response);
+ 	});
+});
+
+app.get('/Project1Srv/categoryProducts/:id', function(req, res){
+
+	var id = req.params.id;
+    
+    console.log("GET products in category:"+ id);
+	
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT * FROM belongsin, product, category WHERE belongsin.cid = category.id AND product.id = belongsin.pid AND category.id='"+id+"'");
+	
+	console.log(query);
+	
+	query.on("row", function (row, result) {
+    	result.addRow(row);
+	});
+	
+	query.on("end", function (result) {
+		var response = {"productsIncategory" : result.rows};
+		client.end();
+  		res.json(response);
+ 	});	
 });
 
 app.put('/Project1Srv/categories/:id', function(req, res) {
@@ -311,28 +343,20 @@ app.post('/Project1Srv/categories', function(req, res) {
 app.get('/Project1Srv/products/:id', function(req, res){
 
 	var id = req.params.id;
+	console.log("GET category:"+ id);
+	var client = new pg.Client(conString);
+	client.connect();
 
-	var target = -1;
-	var target2= -1;
-		for (var i=0; i < categoryList.length; ++i){
-			for(var j=0; j< categoryList[i].productList.length; ++j)
-			{
-				if(categoryList[i].productList[j].id== id){
-					target= i;
-					target2=j;
-					break;
-				}
-			}
-		}
-
-		if (target == -1 || target2 == -1){
-			res.statusCode = 404;
-			res.send("Product not found.");
-		}
-		else {
-			var response = {"product" : categoryList[target].productList[target2]};
-  			res.json(response);	
-  		}		
+	var query = client.query("SELECT * FROM product WHERE id="+id);
+	
+	query.on("row", function (row, result) {
+    	result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"product" : result.rows};
+		client.end();
+  		res.json(response);
+ 	});
 });
 
 app.put('/Project1Srv/products/:id', function(req, res) {
