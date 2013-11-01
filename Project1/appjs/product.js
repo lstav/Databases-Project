@@ -1,6 +1,6 @@
-function Product(itemName, price, quantity, condition, location, shipping, payment, description, img){
+function Product(itemname, price, quantity, condition, location, shipping, payment, description, img){
 	this.id="";
-	this.itemName = itemName;
+	this.itemname = itemname;
 	this.price = price;
 	this.quantity = quantity;
 	this.condition = condition;

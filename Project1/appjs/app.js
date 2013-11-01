@@ -62,20 +62,20 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 
-		var productCat = currentCategory.productList;
+		var productCat = currentCategoryProducts;
 		var len =productCat.length;
 		var list = $("#product-list");
 		list.empty();
 		var item;
 		for (var i=0; i < len; ++i){
 		item =productCat[i];
-		list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/>" + item.itemName + "<h4> Price: $"+item.price+"<\h4></a></li>");
+		list.append("<li><a onClick=GetProduct("+item.pid+")> <img src='"+ item.img+ "'/>" + item.itemname + "<h4> Price: $"+item.price+"<\h4></a></li>");
 		}
 		list.listview("refresh");
 		
 		var iname= $("#catName2");
 		iname.empty();
-		iname.append("<center>"+currentCategory.name+"</center>");
+		iname.append("<center>"+currentCategory+"</center>");
 		
 		var sort= $("#sort-bylist");
 		sort.empty();
@@ -110,7 +110,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	
 	var pname= $("#productName2");
 	pname.empty();
-	pname.append("<center>"+currentProduct.itemName+"</center>");
+	pname.append("<center>"+currentProduct.itemname+"</center>");
 });
 
 ////////// Checkout
@@ -366,7 +366,7 @@ function GetProduct(id){
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			currentProduct= data.product;
+			currentProduct= data.product[0];
 			$.mobile.loading("hide");	
 			$.mobile.changePage("item.html");
 			},
@@ -423,16 +423,41 @@ function DeleteShoppingCart(id){
 
 //////// Category
 
-var currentCategory = {};
+var currentCategory= {};
 function GetCategory(id){
 	$.mobile.loading("show");
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/categories/"+ id,
+		url : "http://localhost:3412/Project1Srv/category/"+ id,
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			currentCategory= data.category;
+			currentCategory= data.categoryName[0].name;},			
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Category does not exist!");
+			}
+			else {
+				alter("Internal Server Error.");
+			}
+		}
+
+	});
+}
+
+var currentCategoryProducts = {};
+function GetCategoryProducts(id){
+	GetCategory(id);
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/categoryProducts/"+ id,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			currentCategoryProducts= data.productsIncategory;
 			$.mobile.loading("hide");
 			$.mobile.navigate("#catProductView", {
 				info: id,
