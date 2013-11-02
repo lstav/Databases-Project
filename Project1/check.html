@@ -11,7 +11,26 @@
 		<script src="appjs/product.js"></script>
 		<script src="appjs/shoppingcart.js"></script>
 		<script src="appjs/app.js"></script>
-
+		
+		<style type="text/css">
+		.ui-mobile-viewport{
+    	background: url("http://img845.imageshack.us/img845/7337/8pxa.jpg") repeat;
+    	background-size: 100% 100% !important;
+		}
+		.ui-page{
+    	background:none;
+		}
+		.ui-overlay-a{
+    	background:#222 !important;
+		}
+		.ui-panel-content-wrap{
+    	background: none;
+		}
+		.ui-panel-content-wrap-closed{
+    	background: none;
+		}
+		</style> 
+		
 	</head>
 
 	<body>
@@ -29,7 +48,7 @@
     			
     			<div data-role="header">
 				<h1>Shipping & Payment</h1>
-					<a href="shopping.html" data-role="button" data-position="left" data-icon="arrow-l" data-rel="back">Back</a>
+					<a data-role="button" data-position="left" data-icon="back" data-iconpos="notext" data-rel="back">Back</a>
 					<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
 						<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
 						<a href="#mypanel" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>

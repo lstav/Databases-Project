@@ -14,7 +14,11 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 					"<li GetAddress(" + account.ashippingid +")>Shipping Address: </li>" + 
 					"<li>Billing Address: " + account.abillingid + "</li>" +
 					"<li>Credit Card: *****" + account.accard.substr(5,6) + "</li>" +
-					"<li> Rank: " + account.rank + "</li>");			
+					"<li> Rank: " + account.rank + "</li>");	
+					
+			var aname= $("#accountName");
+			aname.empty();
+			aname.append("Personal Information:");		
 			list.listview("refresh");
 		},
 		error: function(data, textStatus, jqXHR){
@@ -96,21 +100,32 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 
 $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	
-    var table1= $("#my-table");
-	table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Price:	</b> $"+currentProduct.price  +"</td>");
-	table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Quantity Available:	</b> "+currentProduct.quantity  +"</td>");
-	table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Condition:	</b> "+currentProduct.condition  +"</td>");
-	table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Shipping:	</b> "+currentProduct.shipping  +"</td>");
-	table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Payments:	</b> "+currentProduct.payment  +"</td>");
+    //var table1= $("#my-table");
+	//table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Price:	</b> $"+currentProduct.price  +"</td>");
+	//table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Quantity:	</b> "+currentProduct.quantity  +"</td>");
+	//table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Condition:	</b> "+currentProduct.condition  +"</td>");
+	//table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Shipping:	</b> "+currentProduct.shipping  +"</td>");
+	//table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Payments:	</b> "+currentProduct.payment  +"</td>");
+	
+	var list= $("#item-info");
+	list.empty();
+	list.append("<li><a <h4> Price:	 $"+currentProduct.price  +"</h4></a> </li>");
+	list.append("<li><a <h4>Quantity: "+currentProduct.quantity  +"</h4></a> </li>");
+	list.append("<li><a <h4>Condition:"+currentProduct.condition  +"</h4></a> </li>");
+	list.append("<li><a <h4>Shipping: "+currentProduct.shipping  +"</h4></a> </li>");
+	list.append("<li><a <h4>Payments: "+currentProduct.payment  +"</h4></a> </li>");
 
 	var idescription= $("#description");
 	idescription.append("<p>"+currentProduct.description+"</p>");
 	$('#item-image').prepend('<center><img id="theImg" src="' + currentProduct.img+'"/></center>');
-	table1.table("refresh"); 
+	//table1.table("refresh"); 
 	
 	var pname= $("#productName2");
 	pname.empty();
 	pname.append("<center>"+currentProduct.itemname+"</center>");
+	
+	list.listview("refresh");
+
 });
 
 ////////// Checkout
