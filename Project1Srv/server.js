@@ -194,7 +194,7 @@ for (var i=0; i < messageList.length;++i){
 }
 
 // Database connection string: pg://<username>:<password>@host:port/dbname 
-var conString = "pg://course:course@localhost:5432/projectdb";
+var conString = "pg://postgres:course@localhost:5432/projectdb";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -264,6 +264,7 @@ app.get('/Project1Srv/shoppingcarts', function(req, res) {
 });
 
 //////// Category
+var currentCategory= {};
 
 app.get('/Project1Srv/categories', function(req, res){
 
@@ -313,6 +314,40 @@ app.get('/Project1Srv/categoryProducts/:id', function(req, res){
 
 	var query = client.query("SELECT * FROM belongsin, product, category WHERE belongsin.cid = category.id AND product.id = belongsin.pid AND category.id='"+id+"'");
 	
+	console.log(query);
+	
+	query.on("row", function (row, result) {
+    	result.addRow(row);
+	});
+	
+	query.on("end", function (result) {
+		var response = {"productsIncategory" : result.rows};
+		currentCategory= id;
+		client.end();
+  		res.json(response);
+ 	});	
+});
+
+app.get('/Project1Srv/sortProducts/:id', function(req, res){
+
+	var id = req.params.id;
+    
+    console.log("Sort by:"+ id);
+	
+	var client = new pg.Client(conString);
+	client.connect();
+
+	if (id== "PriceLow"){
+		var query = client.query("SELECT * FROM belongsin, product, category WHERE belongsin.cid = category.id AND product.id = belongsin.pid AND category.id='"+currentCategory+"' ORDER BY product.price");
+	}
+	
+	else if (id== "PriceHigh"){
+		var query = client.query("SELECT * FROM belongsin, product, category WHERE belongsin.cid = category.id AND product.id = belongsin.pid AND category.id='"+currentCategory+"' ORDER BY product.price desc");
+	}
+	
+	else if(id=="Name"){
+		var query = client.query("SELECT * FROM belongsin, product, category WHERE belongsin.cid = category.id AND product.id = belongsin.pid AND category.id='"+currentCategory+"' ORDER BY product.itemname");
+	}
 	console.log(query);
 	
 	query.on("row", function (row, result) {

@@ -33,9 +33,9 @@
         		</ul>
     		</div><!-- /panel -->
     		
-			<div data-role="header" data-theme="a">
+			<div data-role="header" data-theme="a"> 
+				<h1>Summary</h1>
 				
-				<h1 id= "productName2" ></h1>
 				<a data-role="button" data-position="left" data-icon="back" data-iconpos="notext" data-rel="back">Back</a>
 				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
 					<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
@@ -47,8 +47,14 @@
 			<div data-role="content" class="center-wrapper">
 				
 				<div id= "item-image"></div><br> 
-				
+				<h2 id= "productName2" ></h2>
 				<!--<table data-role="table" id="my-table" data-mode="reflow"></table>	<br> -->
+				<div class="ui-grid-c">
+						<div class= "ui-block-a"> </div><div class= "ui-block-b"> </div><div class= "ui-block-c"> </div>
+						<div class="ui-block-d">
+							<h4 id="productid"></h4>						
+						</div>
+				</div>
 				
 				<ul data-role="listview" data-icon= "false" id="item-info" ></ul>	<br> 
 
@@ -61,6 +67,7 @@
 	
 				<div data-role="collapsible" data-collapsed-icon= "arrow-r" data-expanded-icon= "arrow-d">
 					<h3>Seller</h3>
+					<a id= sellerInfo></a>
 					<p>Rank and other products</p>
 					</div>
 			

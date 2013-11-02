@@ -81,13 +81,6 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 		iname.empty();
 		iname.append("<center>"+currentCategory+"</center>");
 		
-		var sort= $("#sort-bylist");
-		sort.empty();
-		sort.append("<li><a>Best Sellers </a></li>");
-		sort.append("<li><a>Price: Low to High</a></li>");
-		sort.append("<li><a>Price: High to Low</a></li>");
-		sort.append("<li><a>Avg. Customer Review</a></li>");
-		sort.listview("refresh");
 		},
 		
 		error: function(data, textStatus, jqXHR){
@@ -109,12 +102,15 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	
 	var list= $("#item-info");
 	list.empty();
-	list.append("<li><a <h4> Price:	 $"+currentProduct.price  +"</h4></a> </li>");
+	list.append("<li><a <h4>Price:	 $"+currentProduct.price  +"</h4></a> </li>");
 	list.append("<li><a <h4>Quantity: "+currentProduct.quantity  +"</h4></a> </li>");
 	list.append("<li><a <h4>Condition:"+currentProduct.condition  +"</h4></a> </li>");
 	list.append("<li><a <h4>Shipping: "+currentProduct.shipping  +"</h4></a> </li>");
 	list.append("<li><a <h4>Payments: "+currentProduct.payment  +"</h4></a> </li>");
 
+	var pid= $("#productid");
+	pid.append("ID:"+currentProduct.id);
+	
 	var idescription= $("#description");
 	idescription.append("<p>"+currentProduct.description+"</p>");
 	$('#item-image').prepend('<center><img id="theImg" src="' + currentProduct.img+'"/></center>');
@@ -123,6 +119,10 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	var pname= $("#productName2");
 	pname.empty();
 	pname.append("<center>"+currentProduct.itemname+"</center>");
+		
+	var pname= $("#sellerInfo");
+	pname.empty();
+	pname.append("<h5>"+currentProduct.seller+"Informacion</h5>");
 	
 	list.listview("refresh");
 
@@ -425,6 +425,31 @@ function GetShoppingCart(scid){
 	});
 }
 	
+function Sortby(id){
+
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/sortProducts/"+ id,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			currentCategoryProducts= data.productsIncategory;		
+			window.location.reload(true);
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Product loading error.");
+			}
+			else {
+				alter("Internal Server Error.");
+			}
+		}
+	});
+	
+}
+
 function UpdateShoppingCart(){
 	alert("Account Saved!");
 }
