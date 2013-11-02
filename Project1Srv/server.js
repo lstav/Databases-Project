@@ -194,7 +194,7 @@ for (var i=0; i < messageList.length;++i){
 }
 
 // Database connection string: pg://<username>:<password>@host:port/dbname 
-var conString = "pg://postgres:course@localhost:5432/projectdb";
+var conString = "pg://course:course@localhost:5432/projectdb";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
