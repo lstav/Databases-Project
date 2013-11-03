@@ -1,3 +1,4 @@
+
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 	console.log("Luis");
 	$.ajax({
