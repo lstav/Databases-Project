@@ -243,6 +243,66 @@ app.get('/Project1Srv/address', function(req, res) {
  	});
 });
 
+app.get('/Project1Srv/profiles/:id', function(req, res) {
+	
+	var id = req.params.id;
+	console.log("GET profile:"+ id);
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT * from accounts WHERE ausername='"+id+"'");
+	
+	query.on("row", function (row, result) {
+    	result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"profile" : result.rows};
+		client.end();
+  		res.json(response);
+ 	});
+});
+
+app.get('/Project1Srv/sales/:id', function(req, res) {
+	
+	var id = req.params.id;
+	console.log("GET sales of user:"+ id);
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT itemname, price, pid, price, img FROM accounts, sales, product WHERE accounts.ausername =" +
+	"sales.seller AND accounts.aid = sales.aid AND sales.pid = product.id AND sales.seller='"+id+"'");
+	
+	query.on("row", function (row, result) {
+    	result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"userSales" : result.rows};
+		client.end();
+  		res.json(response);
+ 	});
+});
+
+app.get('/Project1Srv/auctions/:id', function(req, res) {
+	
+	var id = req.params.id;
+	console.log("GET auctions of user:"+ id);
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT itemname, price, pid, price, img FROM auctions, accounts, product WHERE accounts.ausername =" +
+	"auctions.seller AND auctions.pid = product.id AND accounts.aid = auctions.aid AND auctions.seller='"+id+"'");
+	
+	query.on("row", function (row, result) {
+    	result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"userAuctions" : result.rows};
+		client.end();
+  		res.json(response);
+ 	});
+ 	
+});
+
 app.get('/Project1Srv/histories', function(req, res) {
 	console.log("GET");
 	var response = {"histories" : historyList};
@@ -378,11 +438,11 @@ app.post('/Project1Srv/categories', function(req, res) {
 app.get('/Project1Srv/products/:id', function(req, res){
 
 	var id = req.params.id;
-	console.log("GET category:"+ id);
+	console.log("GET product:"+ id);
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT * FROM product WHERE id="+id);
+	var query = client.query("SELECT * FROM product FULL OUTER JOIN sales ON sales.pid = product.id WHERE product.id="+id);
 	
 	query.on("row", function (row, result) {
     	result.addRow(row);

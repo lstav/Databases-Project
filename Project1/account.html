@@ -54,10 +54,6 @@
         		</ul>
    			</div><!-- /panel -->
     		
-    		<div data-role="panel" id="description" data-position="right" data-display="reveal">
-        		<h1>Account</h1>
-    		</div><!-- /panel --> 
-    		
     		<div data-role="header" data-theme="a"> 
     			<h1><img src= 'http://img30.imageshack.us/img30/7994/r7b.gif' /></h1>			
 				<a data-role="button" data-position="left" data-icon="back" data-iconpos="notext" data-rel="back">Back</a>
@@ -67,20 +63,22 @@
 				</div>
 			</div>
 			<form data-role="content">
+				
+				<div id= "user-image"></div><br>
 				<div class="ui-grid-c">
 				<div class="ui-block-a">
-				<a href= "index.html" data-role="button" data-theme="a" data-corners="false" rel="external">
+				<a onClick=GetSales() data-role="button" data-theme="a" data-corners="false" rel="external">
             			Items for Sale
       				</a>
 				</div>
 				<div class="ui-block-b">
-				<a href= "Categories.html" data-role="button" data-theme="a" data-corners="false" rel="external">
-            			Feedback
+				<a onClick=GetAuctions() data-role="button"  data-theme="a" data-corners="false" rel="external">
+            			Items bidding
         			</a>
 				</div>
 				<div class="ui-block-c">
-				<a href= "login.html" data-role="button"  data-theme="a" data-corners="false" rel="external">
-            			Items bidding
+				<a href= "Categories.html" data-role="button" data-theme="a" data-corners="false" rel="external">
+            			Feedback
         			</a>
 				</div>
 				<div class="ui-block-d">
@@ -89,7 +87,7 @@
         			</a>
 				</div>
 			</div>
-				<h4 id= "accountName" ></h4>
+				<h4>Personal Information:</h4>
 				<ul id="account-list" data-role="listview" data-inset="true">
 				</ul>
 				
