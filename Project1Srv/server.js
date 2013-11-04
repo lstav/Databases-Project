@@ -194,8 +194,12 @@ for (var i=0; i < messageList.length;++i){
 }
 
 // Database connection string: pg://<username>:<password>@host:port/dbname 
+<<<<<<< HEAD
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
 var conString = "pg://postgres:course@localhost:5432/projectdb";
+=======
+var conString = "pg://course:course@localhost:5432/projectdb";
+>>>>>>> 56b0d72093a10c16608efa2ba9f236cd1b3f16b8
 
 
 // REST Operations

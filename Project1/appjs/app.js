@@ -1,3 +1,4 @@
+
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 	console.log("Luis");
 	$.ajax({
@@ -365,6 +366,32 @@ $(document).on('pagebeforeshow', "#sent", function(event, ui) {
 			var message;
 			message = messageList[1];
 			list.append("<li><h2>"+message.sName+ "</h2><p>" +message.mText+"</p></li>");
+			list.listview("refresh");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+});
+
+////////// Total Categories ////////////////
+
+$(document).on('pagebeforeshow', "#Admin", function(event, ui) {
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/categories",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var categoriesList = data.categories;
+			var len =categoriesList[0].categoriesList.length;
+			var list = $("#categories-list");
+			list.empty();
+			var categories;
+			categories = categoriesList[0];
+			for (var i=0; i < len; ++i){
+				list.append("<li data-icon='delete' ><a onClick=DeleteCategory(" + categoriesList[i].id + ")>"+ 
+				categoriesList[i].name + "</li>");
+			}	
 			list.listview("refresh");
 		},
 		error: function(data, textStatus, jqXHR){
