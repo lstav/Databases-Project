@@ -375,6 +375,32 @@ $(document).on('pagebeforeshow', "#sent", function(event, ui) {
 	});
 });
 
+////////// Total Categories ////////////////
+
+$(document).on('pagebeforeshow', "#Admin", function(event, ui) {
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/categories",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var categoriesList = data.categories;
+			var len =categoriesList[0].categoriesList.length;
+			var list = $("#categories-list");
+			list.empty();
+			var categories;
+			categories = categoriesList[0];
+			for (var i=0; i < len; ++i){
+				list.append("<li data-icon='delete' ><a onClick=DeleteCategory(" + categoriesList[i].id + ")>"+ 
+				categoriesList[i].name + "</li>");
+			}	
+			list.listview("refresh");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+});
+
 ///////////////////////////////
 function ConverToJSON(formData){
 	var result = {};
