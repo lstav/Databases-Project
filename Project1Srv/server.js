@@ -194,13 +194,9 @@ for (var i=0; i < messageList.length;++i){
 }
 
 // Database connection string: pg://<username>:<password>@host:port/dbname 
-<<<<<<< HEAD
+
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
 var conString = "pg://postgres:course@localhost:5432/projectdb";
-=======
-var conString = "pg://course:course@localhost:5432/projectdb";
->>>>>>> 56b0d72093a10c16608efa2ba9f236cd1b3f16b8
-
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -230,6 +226,28 @@ app.get('/Project1Srv/accounts', function(req, res) {
   		res.json(response);
  	});
 });
+
+app.get('/Project1Srv/login/:username/:password', function(req, res) {
+	
+	var username = req.params.username;
+	var password = req.params.password;
+	console.log("Username:"+ username+ " and password:"+password);
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT ausername, apassword, aid FROM accounts WHERE ausername='"+username+"'");
+	
+	query.on("row", function (row, result) {
+		if(row.apassword == password){
+    	result.addRow(row);}
+	});
+	query.on("end", function (result) {
+		var response = {"accountLogin" : result.rows};
+		client.end();
+  		res.json(response);
+ 	});
+});
+
 
 app.get('/Project1Srv/address', function(req, res) {
 	console.log("GET");
@@ -593,7 +611,7 @@ app.get('/Project1Srv/accounts/:aid', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT * from accounts where aid = $1", [aid]);
+	var query = client.query("SELECT * from accounts where aid ="+aid);
 	
 	query.on("row", function (row, result) {
     	result.addRow(row);

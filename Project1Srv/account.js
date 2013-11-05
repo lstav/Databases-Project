@@ -1,15 +1,15 @@
 module.exports =  { 
-	Account : function (afName, alName, aAccountNumber, aEmail, aPassword, aUsername, aShipping, aBilling, acCard, rank){
-		this.aid = "";
-		this.afName = afName;
-		this.alName = alName;
-		this.aAccountNumber = aAccountNumber;
-		this.aEmail = aEmail;
-		this.aUsername = aUsername;
-		this.aPassword = aPassword;
-		this.aShipping = aShipping;
-		this.aBilling = aBilling;
-		this.acCard = acCard;
-		this.rank = rank;
+	Account : function (afname, alname, aaccountnumber, aemail, apassword, ausername, ashipping, abilling, accard, rank){
+	this.aid = "";
+	this.afname = afname;
+	this.alname = alname;
+	this.aaccountnumber = aaccountnumber;
+	this.aemail = aemail;
+	this.apassword = apassword;
+	this.ausername = ausername;
+	this.ashipping = ashipping;
+	this.abilling = abilling;
+	this.accard = accard;
+	this.rank = rank;
 	}
 }

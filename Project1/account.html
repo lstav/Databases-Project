@@ -25,7 +25,7 @@
 		
 		<style type="text/css">
 		.ui-mobile-viewport{
-    	background: url("http://img845.imageshack.us/img845/7337/8pxa.jpg") repeat;
+    	background: url("http://img39.imageshack.us/img39/2575/b83n.jpg") repeat;
     	background-size: 100% 100% !important;
 		}
 		.ui-page{
@@ -40,17 +40,18 @@
 		.ui-panel-content-wrap-closed{
     	background: none;
 		}
-		</style> 
+		</style>
 		
 	</head>
-	<body onload="GetAccount(1)">
-		<div id="accounts" data-role="page" >
+	<body>
+		<div id="accounts" data-role="page" style= "background: url('http://img39.imageshack.us/img39/2575/b83n.jpg') repeat;
+    	background-size: 100% 100% !important;">
 			<div data-role="panel" id="mypanel" data-position="right" data-display="reveal">
         		<ul data-role="listview" data-theme="a">
-        			<li><a href="Categories.html" >Search</a></li>
-        			<li><a href="account.html" >Account</a></li>  
-					<li><a href="message.html" >Messages</a></li>  
-					<li><a href="login.html" >Log Out</a></li>      		      		
+        			<li><a href="Categories.html" rel="external">Search</a></li>
+        			<li><a href="account.html" rel="external">Account</a></li>  
+					<li><a href="message.html" rel="external">Messages</a></li>  
+					<li><a href="login.html" rel="external">Log Out</a></li>      		      		
         		</ul>
    			</div><!-- /panel -->
     		
@@ -62,38 +63,45 @@
 					<a href="#mypanel" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
 				</div>
 			</div>
-			<form data-role="content">
+			<div data-role="content">
 				
-				<div id= "user-image"></div><br>
-				<div class="ui-grid-c">
+				<div id= "user-image"></div>
+				
+				<div class="ui-grid-b">
+					<div class= "ui-block-a"> </div>
+					<div id= "username2" class= "ui-block-b"></div>
+					<div class= "ui-block-c"> </div>
+				</div>
+				
+			<div class="ui-grid-c">
 				<div class="ui-block-a">
-				<a onClick=GetSales() data-role="button" data-theme="a" data-corners="false" rel="external">
+				<a onClick=GetSales() data-role="button" data-theme="a" data-corners="false" >
             			Items for Sale
       				</a>
 				</div>
 				<div class="ui-block-b">
-				<a onClick=GetAuctions() data-role="button"  data-theme="a" data-corners="false" rel="external">
+				<a onClick=GetAuctions() data-role="button"  data-theme="a" data-corners="false" >
             			Items bidding
         			</a>
 				</div>
 				<div class="ui-block-c">
-				<a href= "Categories.html" data-role="button" data-theme="a" data-corners="false" rel="external">
+				<a href= "Categories.html" data-role="button" data-theme="a" data-corners="false" >
             			Feedback
         			</a>
 				</div>
 				<div class="ui-block-d">
-				<a href= "history.html" data-role="button" data-theme="a" data-corners="false" rel="external">
+				<a href= "history.html" data-role="button" data-theme="a" data-corners="false" >
             			Recent activity
         			</a>
 				</div>
 			</div>
 				<h4>Personal Information:</h4>
-				<ul id="account-list" data-role="listview" data-inset="true">
-				</ul>
+				<ul id="account-list" data-role="listview" data-inset="true"></ul>
 				
 				<a data-role="button" href="#account-view" rel="external" data-theme="a">Edit</a>
-			</form>
+			</div>
 		</div>
+		
 		<div id="account-view" data-role="page" data-theme"b">
 			<div data-role="header" data-position="fixed">
 				<a data-role="button" data-rel="back" href="#accounts">Cancel</a>
@@ -104,7 +112,7 @@
 				<h2>Edit Account Info</h2>
 			</center>
 			<form id="account-view-form" data-role="content" class="center-wrapper">
- 				<!--<fieldset data-role="controlgroup">-->
+ 				<!--<fieldset data-role="controlgroup"> -->
  				<ul data-role="listview" data-icon="false">
  					<li>
 						<a href="#popupUsername" data-rel="popup" data-position-to="window" id="username"></a>
@@ -182,6 +190,6 @@
 			<!--</fieldset>-->
 			</form>
 			<a  data-role="button" onclick=DeleteAccount() data-rel="back">Delete</a>
-		</div>
+		</div> 
 	</body>
 </html>

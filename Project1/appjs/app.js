@@ -1,63 +1,106 @@
+$(document).on('pagebeforeshow', '#login', function(){  
+        $(document).on('click', '#submit', function() { 
+        
+        var username= $('#username').val();
+        var password= $('#password').val();
+        
+        if(username.length > 0 && password.length > 0){
+           
+           AccountLogin(username, password);
+           
+        } 
+        
+        else {
+            alert('Please fill all fields');
+        }           
+            return false; 
+        });    
+});
+
+$(document).on('pagebeforeshow', '#sign-up', function(){  
+    
+        $(document).on('click', '#submit', function() { 
+        
+        var username= $('#username').val();
+        var password= $('#password').val();
+        var first= $('#firstname').val();
+        var last= $('#lastname').val();
+        var email= $('#email').val();
+        var address= $('#address').val();
+        var creditcard=$('#creditcard').val();
+        var billingaddress= $('#billingaddress').val();
+        
+        if(username.length > 0 && password.length > 0 && first.length > 0 && last.length > 0 && email.length > 0 && address.length > 0 && creditcard.length >0 && billingaddress.length > 0){
+           
+           alert("Account created");
+           
+        } 
+        
+        else {
+            alert('Please fill all fields');
+        }           
+            
+        });    
+});
+
+$(document).on('pagebeforeshow', '#homepage-account', function(){  
+        $(document).on('click', '#profile-account', function() { 
+			GetAccount(loginAccount.aid);
+        });    
+        
+        var iname= $("#welcome");
+		iname.empty();
+		iname.append("<center><h3>hello "+loginAccount.ausername+"!</h3></center>");
+});
 
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
-	console.log("Luis");
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts",
-		contentType: "application/json",
-		success : function(data, textStatus, jqXHR){
-			var accountList = data.accounts;
-			var len = accountList.length;
+			
 			var list = $("#account-list");
 			list.empty();
-			var account;			
-				account = accountList[0];
-				list.append("<li>" + account.afname + " " +	account.alname + "</li>" + 
-					"<li GetAddress(" + account.ashippingid +")>Shipping Address: </li>" + 
-					"<li>Billing Address: " + account.abillingid + "</li>" +
+			var account = currentAccount;
+			
+			list.append("<li>" + account.afname + " " +	account.alname + "</li>" + 
+					"<li GetAddress(" + account.ashipping +")>Shipping Address: </li>" + 
+					"<li>Billing Address: " + account.abilling + "</li>" +
 					"<li>Credit Card: *****" + account.accard.substr(5,6) + "</li>" +
 					"<li> Rank: " + account.rank + "</li>");	
-						
+			
+			var iname= $("#username2");
+			var msg= '<a data-role= "button" data-mini= "true" data-corners="false" style= "color: DarkRed"><center><h2>'+account.ausername+'</h2></center></a>';
+			iname.empty();
+			iname.append(msg).trigger('create');
+			
 			var img= $("#user-image");
 			img.empty();
 			img.append("<p> <center> <img src='http://img707.imageshack.us/img707/9563/i5n.gif'/> </center> </p>");
-			
-			var iname= $("#username");
-			iname.empty();
-			iname.append("<center>"+currentAccount.ausername+"</center>");
 			list.listview("refresh");
-	
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			alert("Data not found!");
-		}
-	});
+
 });
 
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	// currentAccount has been set at this point
-	var len = currentAccount.aPassword.length;
+	var len = currentAccount.apassword.length;
 	var pass = "";
 	for (var i=0; i < len; ++i){
 		pass = pass + "*";
 	}
 	
-	$("#upd-username").val(currentAccount.aUsername);
-	$("#upd-fname").val(currentAccount.afName);
-	$("#upd-lname").val(currentAccount.alName);
-	$("#upd-shipping").val(currentAccount.aShipping);
-	$("#upd-billing").val(currentAccount.aBilling);
-	$("#upd-creditCard").val("*****" + currentAccount.acCard.substr(5,6));
-	$("#upd-email").val(currentAccount.aEmail);
+	$("#upd-username").val(currentAccount.ausername);
+	$("#upd-fname").val(currentAccount.afname);
+	$("#upd-lname").val(currentAccount.alname);
+	$("#upd-shipping").val(currentAccount.ashipping);
+	$("#upd-billing").val(currentAccount.abilling);
+	$("#upd-creditCard").val("*****" + currentAccount.accard.substr(5,6));
+	$("#upd-email").val(currentAccount.aemail);
 	$("#upd-password").val(pass);
 	
-	$("#username").html("Username: " + currentAccount.aUsername);
-	$("#fname").html("First Name: " + currentAccount.afName);
-	$("#lname").html("Last Name: " + currentAccount.alName);
-	$("#shippingA").html("Shipping Address: " + currentAccount.aShipping);
-	$("#billingA").html("Billing Address: " + currentAccount.aBilling);
-	$("#cCard").html("Credit Card Number: *****" + currentAccount.acCard.substr(5,6));
-	$("#email").html("Email: " + currentAccount.aEmail);
+	$("#username").html("Username: " + currentAccount.ausername);
+	$("#fname").html("First Name: " + currentAccount.afname);
+	$("#lname").html("Last Name: " + currentAccount.alname);
+	$("#shippingA").html("Shipping Address: " + currentAccount.ashipping);
+	$("#billingA").html("Billing Address: " + currentAccount.abilling);
+	$("#cCard").html("Credit Card Number: *****" + currentAccount.accard.substr(5,6));
+	$("#email").html("Email: " + currentAccount.aemail);
 	$("#password").html("Password: " + pass);
 	
 });
@@ -83,27 +126,23 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 
 $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
 	
-	var iname= $("#message");
-	iname.empty();
-	iname.append("<center>No sales to display.</center>");
-	
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/categories",
-		contentType: "application/json",
-		success : function(data, textStatus, jqXHR){
-
 		var productCat = currentSalesList;
 		var len =productCat.length;
 		
 		if(len==0){
 			var iname= $("#message");
+			var msg= '<br><a data-role= "button" data-mini= "true" data-rel="back"><center><h2>No sales to display.</h2></center></a>';
 			iname.empty();
-			iname.append("<center>No sales to display.</center>");
+			iname.append(msg).trigger('create');
 			
-			if(profile.ausername== currentAccount.ausername){
+			var order= $("#order-list");
+			order.empty();
+			
+			if(profile.ausername== loginAccount.ausername){
 			var sell= $("#sell-button");
+			var msg2= '<br><a data-role= "button" data-mini= "true" data-rel="back"><center><h2>Sell an item</h2></center></a>';
 			sell.empty();
-			sell.append("<h4>Sell an item</h4>");
+			sell.append(msg2).trigger('create');
 			}
 		}
 		else{
@@ -114,35 +153,28 @@ $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
 		item =productCat[i];
 		list.append("<li><a onClick=GetProduct("+item.pid+")> <img src='"+ item.img+ "'/>" + item.itemname + "<h4> Price: $"+item.price+"<\h4></a></li>");
 		}
-		list.listview("refresh");}},
-		
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			alert("Data item not found!");
-		}
-	});
-
+		list.listview("refresh");}
 });
 
 $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
-
-$.ajax({
-		url : "http://localhost:3412/Project1Srv/categories",
-		contentType: "application/json",
-		success : function(data, textStatus, jqXHR){
 
 		var productCat = currentAuctionList;
 		var len =productCat.length;
 		
 		if(len==0){
 			var iname= $("#message");
+			var msg= '<br><a data-role= "button" data-mini= "true" data-rel="back"><center><h2>No auctions to display.</h2></center></a>';
 			iname.empty();
-			iname.append("<center>No auctions to display.</center>");
+			iname.append(msg).trigger('create');
+			
+			var order= $("#order-list");
+			order.empty();
 			
 			if(profile.ausername== currentAccount.ausername){
 			var sell= $("#sell-button");
+			var msg2= '<br><a data-role= "button" data-mini= "true" data-rel="back"><center><h2>Auction an item</h2></center></a>';
 			sell.empty();
-			sell.append("<h4>Sell an item</h4>");
+			sell.append(msg2).trigger('create');
 			}
 		}
 		else{
@@ -154,25 +186,12 @@ $.ajax({
 		list.append("<li><a onClick=GetProduct("+item.pid+")> <img src='"+ item.img+ "'/>" + item.itemname + "<h4> Price: $"+item.price+"<\h4></a></li>");
 		}
 		list.listview("refresh");}
-		
-		},
-		
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			alert("Data item not found!");
-		}
-	});
 
 });
 
 ///// Category and product
 
 $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
-	
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/categories",
-		contentType: "application/json",
-		success : function(data, textStatus, jqXHR){
 
 		var productCat = currentCategoryProducts;
 		var len =productCat.length;
@@ -188,14 +207,6 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 		var iname= $("#catName2");
 		iname.empty();
 		iname.append("<center>"+currentCategory+"</center>");
-		
-		},
-		
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			alert("Data item not found!");
-		}
-	});
 	
 });
 
@@ -443,10 +454,10 @@ function GetAccount(aid){
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			currentAccount = aconvert(data.account);
-			profile= aconvert(data.account);
+			currentAccount = data.account;
+			profile= data.account;
 			$.mobile.loading("hide");
-			$.mobile.navigate("#accounts");
+			$.mobile.changePage("account.html");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -507,6 +518,44 @@ function DeleteAccount(){
 	}
 }
 
+var loginAccount={};
+function AccountLogin(username, password){
+	
+	console.log("confirming login information");
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/login/"+username+"/"+password,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			
+			var login= data.accountLogin;
+			var len= login.length;
+			$.mobile.loading("hide");
+			if(len !=0){	
+				loginAccount= data.accountLogin[0];
+				$.mobile.changePage("homepage.html");
+			}
+			else{
+				alert("Invalid login information. Try again.");
+			}
+				
+			},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Login error.");
+			}
+			else {
+				alert("Internal Server Error.");
+			}
+		}
+	});	
+	
+}
+
 function GoProfile(id){
 	console.log("getting profile");
 	$.mobile.loading("show");
@@ -527,7 +576,7 @@ function GoProfile(id){
 				alert("Profile loading error.");
 			}
 			else {
-				alter("Internal Server Error.");
+				alert("Internal Server Error.");
 			}
 		}
 	});	
@@ -555,7 +604,7 @@ function GetProduct(id){
 				alert("Product error.");
 			}
 			else {
-				alter("Internal Server Error.");
+				alert("Internal Server Error.");
 			}
 		}
 	});}
@@ -582,7 +631,7 @@ function GetShoppingCart(scid){
 				alert("Shopping Cart error.");
 			}
 			else {
-				alter("Internal Server Error.");
+				alert("Internal Server Error.");
 			}
 		}
 	});
@@ -607,7 +656,7 @@ function Sortby(id){
 				alert("Product loading error.");
 			}
 			else {
-				alter("Internal Server Error.");
+				alert("Internal Server Error.");
 			}
 		}
 	});
@@ -644,7 +693,7 @@ function GetCategory(id){
 				alert("Category does not exist!");
 			}
 			else {
-				alter("Internal Server Error.");
+				alert("Internal Server Error.");
 			}
 		}
 
@@ -673,7 +722,7 @@ function GetCategoryProducts(id){
 				alert("Category Empty!");
 			}
 			else {
-				alter("Internal Server Error.");
+				alert("Internal Server Error.");
 			}
 		}
 
@@ -702,7 +751,7 @@ function GetAuctions(){
 				alert("Sales Empty!");
 			}
 			else {
-				alter("Internal Server Error.");
+				alert("Internal Server Error.");
 			}
 		}
 
@@ -728,10 +777,10 @@ function GetSales(){
 			console.log("textStatus: " + textStatus);
 			$.mobile.loading("hide");
 			if (data.status == 404){
-				alert("Sales Empty!");
+				alert("Sales Error!");
 			}
 			else {
-				alter("Internal Server Error.");
+				alert("Internal Server Error.");
 			}
 		}
 
@@ -759,7 +808,7 @@ function checkOut(scid){
 				alert("Check out error.");
 			}
 			else {
-				alter("Internal Server Error.");
+				alert("Internal Server Error.");
 			}
 		}
 	});	
@@ -788,7 +837,7 @@ function GetHistory(hid){
 				alert("History error.");
 			}
 			else {
-				alter("Internal Server Error.");
+				alert("Internal Server Error.");
 			}
 		}
 	});

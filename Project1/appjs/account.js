@@ -1,14 +1,14 @@
-function Account(afName, alName, aAccountNumber, aEmail, aPassword, aUsername, aShipping, aBilling, acCard, rank){
+function Account(afname, alname, aaccountnumber, aemail, apassword, ausername, ashipping, abilling, accard, rank){
 	this.aid = "";
-	this.afName = afName;
-	this.alName = alName;
-	this.aAccountNumber = aAccountNumber;
-	this.aEmail = aEmail;
-	this.aPassword = aPassword;
-	this.aUsername = aUsername;
-	this.aShipping = aShipping;
-	this.aBilling = aBilling;
-	this.acCard = acCard;
+	this.afname = afname;
+	this.alname = alname;
+	this.aaccountnumber = aaccountnumber;
+	this.aemail = aemail;
+	this.apassword = apassword;
+	this.ausername = ausername;
+	this.ashipping = ashipping;
+	this.abilling = abilling;
+	this.accard = accard;
 	this.rank = rank;
 	this.toJSON = toJSON;
 }
