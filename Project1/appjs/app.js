@@ -12,8 +12,8 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 			var account;			
 				account = accountList[0];
 				list.append("<li>" + account.afname + " " +	account.alname + "</li>" + 
-					"<li GetAddress(" + account.ashippingid +")>Shipping Address: </li>" + 
-					"<li>Billing Address: " + account.abillingid + "</li>" +
+					"<li>Shipping Address: " + account.aShipping +"</li>" + 
+					"<li>Billing Address: " + account.aBilling + "</li>" +
 					"<li>Credit Card: *****" + account.accard.substr(5,6) + "</li>" +
 					"<li> Rank: " + account.rank + "</li>");	
 						
@@ -420,8 +420,8 @@ function aconvert(dbModel){
 	aliModel.aEmail = dbModel.aemail;
 	aliModel.aUsername = dbModel.ausername;
 	aliModel.aPassword = dbModel.apassword;
-	aliModel.aShipping = dbModel.ashippingid;
-	aliModel.aBilling = dbModel.abillingid;
+	aliModel.aShipping = dbModel.shipping;
+	aliModel.aBilling = dbModel.billing;
 	aliModel.acCard = dbModel.accard;
 	aliModel.rank = dbModel.rank;
 	
