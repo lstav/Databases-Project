@@ -54,7 +54,13 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 });
 
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
-			
+			console.log("Luis");
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accounts",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var accountList = data.accounts;
+			var len = accountList.length;
 			var list = $("#account-list");
 			list.empty();
 			var account;			
@@ -74,7 +80,12 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 			img.empty();
 			img.append("<p> <center> <img src='http://img707.imageshack.us/img707/9563/i5n.gif'/> </center> </p>");
 			list.listview("refresh");
-
+			},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+});
 });
 
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
@@ -428,12 +439,12 @@ function aconvert(dbModel){
 	aliModel.aid = dbModel.aid;
 	aliModel.afName = dbModel.afname;
 	aliModel.alName = dbModel.alname;
-	aliModel.aEmail = dbModel.aemail;
-	aliModel.aUsername = dbModel.ausername;
-	aliModel.aPassword = dbModel.apassword;
-	aliModel.aShipping = dbModel.shipping;
-	aliModel.aBilling = dbModel.billing;
-	aliModel.acCard = dbModel.accard;
+	aliModel.aemail = dbModel.aemail;
+	aliModel.ausername = dbModel.ausername;
+	aliModel.apassword = dbModel.apassword;
+	aliModel.ashipping = dbModel.shipping;
+	aliModel.abilling = dbModel.billing;
+	aliModel.accard = dbModel.accard;
 	aliModel.rank = dbModel.rank;
 	
 	return aliModel;
@@ -454,10 +465,10 @@ function GetAccount(aid){
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			currentAccount = data.account;
+			currentAccount = aconvert(data.account);
 			profile= data.account;
 			$.mobile.loading("hide");
-			$.mobile.changePage("account.html");
+			$.mobile.navigate("#accounts");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
