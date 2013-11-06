@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 
-		<title>Index</title>
+		<title>Home</title>
 		<meta charset="utf-8" />
   		<meta name="viewport" content="width=device-width, initial-scale=1">
   		<link rel="stylesheet" href="css/gt.css" />
@@ -10,41 +10,24 @@
  		<script src="js/jquery-1.9.1.min.js"></script>
   		<script src="js/jquery.mobile-1.3.2.min.js"></script> 
   		<script src="appjs/account.js"></script>
-  		<script src="appjs/app.js"></script>
-
-  		
-  		<style type="text/css">
-		.ui-mobile-viewport{
-    	background: url("http://img39.imageshack.us/img39/2575/b83n.jpg") repeat;
-    	background-size: 100% 100% !important;
-		}
-		.ui-page{
-    	background:none;
-		}
-		.ui-overlay-a{
-    	background:#222 !important;
-		}
-		.ui-panel-content-wrap{
-    	background: none;
-		}
-		.ui-panel-content-wrap-closed{
-    	background: none;
-		}
-		</style>
+  		<script src="appjs/app.js"></script>		
 	</head>
 	<body>
 		
-		<div id="LHL" data-role="page" data-theme="a">
-		<br>
+			<div id="homepage-account" data-role="page" data-theme="a" style= "background: url('http://img39.imageshack.us/img39/2575/b83n.jpg') repeat;
+    	background-size: 100% 100% !important;">
+			
+			<div id= "welcome" style= "color: white"></div> 
+			
 			<div class="ui-grid-a">
 				<div class="ui-block-a">
-				<a href= "login.html" data-role="button" data-corners="false" rel="external">
-            			Sign in
+				<a id= "profile-account" data-role="button" data-corners="false" rel="external"  href= "account.html">
+            			My Profile
       				</a>
 				</div>
 				<div class="ui-block-b">
-				<a href= "signup.html" data-role="button" data-corners="false" rel="external">
-            			Sign up
+				<a href= "#" data-role="button" data-corners="false" rel="external">
+            			Watch List
         			</a>
 				</div>
 			</div>
@@ -57,8 +40,8 @@
 			<div data-role="content">
 			<div class="ui-grid-c">
 				<div class="ui-block-a">
-				<a href= "index.html" data-role="button" data-icon="home" data-corners="false" data-theme="a">
-            			Home
+				<a href= "messageView.html" data-role="button" data-corners="false" data-theme="a">
+            			Messages
       				</a>
 				</div>
 				<div class="ui-block-b">
