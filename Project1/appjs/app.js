@@ -114,7 +114,6 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 });
 
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
-<<<<<<< HEAD
 	
 		 alert(loginAccount.ausername);
 		 if(loginAccount.ausername!= undefined){
@@ -147,40 +146,6 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
            		$.mobile.changePage("login.html");
            }
 
-=======
-			console.log("Luis");
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts",
-		contentType: "application/json",
-		success : function(data, textStatus, jqXHR){
-			var accountList = data.accounts;
-			var len = accountList.length;
-			var list = $("#account-list");
-			list.empty();
-			var account;			
-				account = accountList[0];
-				list.append("<li>" + account.afname + " " +	account.alname + "</li>" + 
-					"<li>Shipping Address: " + account.ashipping +"</li>" + 
-					"<li>Billing Address: " + account.abilling + "</li>" +
-					"<li>Credit Card: *****" + account.accard.substr(5,6) + "</li>" +
-					"<li> Rank: " + account.rank + "</li>");	
-			
-			var iname= $("#username2");
-			var msg= '<a data-role= "button" data-mini= "true" data-corners="false" style= "color: DarkRed"><center><h2>'+account.ausername+'</h2></center></a>';
-			iname.empty();
-			iname.append(msg).trigger('create');
-			
-			var img= $("#user-image");
-			img.empty();
-			img.append("<p> <center> <img src='http://img707.imageshack.us/img707/9563/i5n.gif'/> </center> </p>");
-			list.listview("refresh");
-			},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			alert("Data not found!");
-		}
-});
->>>>>>> 0886005b60d6988250e5d8ee4bf8e7ce182a3a4c
 });
 
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
@@ -645,7 +610,6 @@ function SaveAccount(){
 
 /*
 function GetAccount(aid){
-<<<<<<< HEAD
         $.mobile.loading("show");
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/accounts/" + aid,
@@ -672,33 +636,6 @@ function GetAccount(aid){
                 }
         });
 }*/
-=======
-	$.mobile.loading("show");
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts/" + aid,
-		method: 'get',
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			currentAccount = aconvert(data.account);
-			profile= aconvert(data.account);
-			$.mobile.loading("hide");
-			$.mobile.changePage("account.html");
-			//$.mobile.navigate("#accounts");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			if (data.status == 404){
-				alert("Account not found.");
-			}
-			else {
-				alert("Internal Server Error.");
-			}
-		}
-	});
-}
->>>>>>> 0886005b60d6988250e5d8ee4bf8e7ce182a3a4c
 
 function adconvert(dbModel){
         var adliModel = {};
