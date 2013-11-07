@@ -115,7 +115,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 	
-		 alert(loginAccount.ausername);
+		 //alert(loginAccount.ausername);
 		 if(loginAccount.ausername!= undefined){
 
 		 $(document).on('click', '#edit-account', function() { 
@@ -155,7 +155,7 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
         for (var i=0; i < len; ++i){
                 pass = pass + "*";
         }*/
-        alert(loginAccount.ausername);
+        //alert(loginAccount.ausername);
         $('#upd-username').val(loginAccount.ausername); 
         $('#upd-fname').val(loginAccount.afname);
         $('#upd-lname').val(loginAccount.alname);
@@ -178,7 +178,7 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 
 $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 	 
-	 	alert(loginAccount.ausername);
+	 	//alert(loginAccount.ausername);
         var list= $("#profile-info");
         list.empty();
         list.append("<li><a <h4>Name: "+profile.afname +" "+ profile.alname+"</h4></a> </li>");
@@ -203,11 +203,11 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 
 $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
         
-        		alert(loginAccount.ausername);
+        		//alert(loginAccount.ausername);
                 var productCat = currentSalesList;
                 var len =productCat.length;
                 
-                alert(profile.ausername + " "+ loginAccount.ausername);
+                //alert(profile.ausername + " "+ loginAccount.ausername);
                 
                 if(len==0){
                         var iname= $("#message");
@@ -239,7 +239,7 @@ $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
 
 $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
 	
-			 	alert(loginAccount.ausername);
+			 	//alert(loginAccount.ausername);
                 var productCat = currentAuctionList;
                 var len =productCat.length;
 
@@ -280,7 +280,7 @@ $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
 
 $(document).on('pagebeforeshow', '#create-auction', function(){  
 	
-	   alert(loginAccount.ausername);
+	   //alert(loginAccount.ausername);
        $(document).on('click', '#submit-auction', function() { 
               alert("You have created an auction!");
         });    
@@ -288,7 +288,7 @@ $(document).on('pagebeforeshow', '#create-auction', function(){
 
 $(document).on('pagebeforeshow', '#create-sale', function(){  
 
-		alert(loginAccount.ausername);
+		//alert(loginAccount.ausername);
        $(document).on('click', '#submit-sale', function() { 
               alert("Your product is on sale!");
         });  
@@ -298,11 +298,11 @@ $(document).on('pagebeforeshow', '#create-sale', function(){
 ///// Category and product
 
 $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
-				alert(loginAccount.ausername);        
+				//alert(loginAccount.ausername);        
 });
 
 $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
-				alert(loginAccount.ausername);
+				//alert(loginAccount.ausername);
                 var productCat = currentCategoryProducts;
                 var len =productCat.length;
                 var list = $("#product-list");
@@ -321,8 +321,8 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 });
 
 $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
-         alert(loginAccount.ausername);
-    //var table1= $("#my-table");
+        //alert(loginAccount.ausername);
+        //var table1= $("#my-table");
         //table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Price:        </b> $"+currentProduct.price  +"</td>");
         //table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Quantity:        </b> "+currentProduct.quantity  +"</td>");
         //table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Condition:        </b> "+currentProduct.condition  +"</td>");
@@ -421,7 +421,7 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 var shoppingcartTotal=0;
 
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
-		alert(loginAccount.ausername);
+		//alert(loginAccount.ausername);
 		var id= loginAccount.aid();
 		
         $.ajax({
