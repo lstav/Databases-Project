@@ -46,7 +46,7 @@ $(document).on('pagebeforeshow', '#sign-up', function(){
 
 $(document).on('pagebeforeshow', '#homepage-account', function(){  
 		
-       if(loginAccount.ausername!= undefined)	{
+       if(loginAccount.username!= undefined)	{
       
         $(document).on('click', '#profile-account', function() { 
         	  profile= loginAccount;
@@ -55,7 +55,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              
         var iname= $("#welcome");
         iname.empty();
-        iname.append("<center><h3>hello "+loginAccount.ausername+"!</h3></center>");
+        iname.append("<center><h3>hello "+loginAccount.username+"!</h3></center>");
         
          if(loginAccount.isadmin){
            var admin= $("#administrator-tools");
@@ -114,8 +114,11 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 });
 
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
-	
 		 //alert(loginAccount.ausername);
+	/*	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accounts",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){*/
 		 if(loginAccount.ausername!= undefined){
 
 		 $(document).on('click', '#edit-account', function() { 
@@ -127,9 +130,9 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
           var account = loginAccount;
                
           list.append("<li>" + account.afname + " " +        account.alname + "</li>" + 
-              "<li GetAddress(" + account.ashipping +")>Shipping Address: </li>" + 
-              "<li>Billing Address: " + account.afname + "</li>" +
-              "<li>Credit Card: *****" + account.accard.substr(5,6) + "</li>" +
+              //"<li GetAddress(" + account.shippingid +")>Shipping Address: </li>" + 
+              //"<li>Billing Address: " + account.fname + "</li>" +
+              //"<li>Credit Card: *****" + account.accard.substr(5,6) + "</li>" +
               "<li> Rank: " + account.rank + "</li>");        
                       
                         var iname= $("#username2");
@@ -140,12 +143,17 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
                         var img= $("#user-image");
                         img.empty();
                         img.append("<p> <center> <img src='http://img707.imageshack.us/img707/9563/i5n.gif'/> </center> </p>");
-                        list.listview("refresh");}
-                        
+                        list.listview("refresh");
+               }
            else{
            		$.mobile.changePage("login.html");
            }
-
+        /* },
+           error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+});*/
 });
 
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
@@ -590,15 +598,14 @@ function ConverToJSON(formData){
 function aconvert(dbModel){
         var aliModel = {};
         
-        aliModel.aid = dbModel.aid;
-        aliModel.afName = dbModel.afname;
-        aliModel.alName = dbModel.alname;
-        aliModel.aEmail = dbModel.aemail;
-        aliModel.aUsername = dbModel.ausername;
+        aliModel.aid = dbModel.accountid;
+        aliModel.afName = dbModel.fname;
+        aliModel.alName = dbModel.lname;
+        aliModel.aEmail = dbModel.email;
+        aliModel.aUsername = dbModel.username;
         aliModel.aPassword = dbModel.apassword;
-        aliModel.aShipping = dbModel.ashippingid;
-        aliModel.aBilling = dbModel.abillingid;
-        aliModel.acCard = dbModel.accard;
+        aliModel.aShipping = dbModel.shippingid;
+        aliModel.aBilling = dbModel.billingid;
         aliModel.rank = dbModel.rank;
         
         return aliModel;
@@ -607,7 +614,6 @@ function aconvert(dbModel){
 function SaveAccount(){
         alert("Account Created!");
 }
-
 /*
 function GetAccount(aid){
         $.mobile.loading("show");
@@ -635,8 +641,8 @@ function GetAccount(aid){
                         }
                 }
         });
-}*/
-
+}
+*/
 function adconvert(dbModel){
         var adliModel = {};
         
@@ -695,8 +701,9 @@ function AccountLogin(username, password){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         
-                        var login= data.accountLogin;
+                        var login= aconvert(data.accountLogin);
                         var len= login.length;
+                        
                         $.mobile.loading("hide");
                         if(len !=0){        
                                 loginAccount= data.accountLogin[0];

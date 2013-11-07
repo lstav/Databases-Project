@@ -196,7 +196,7 @@ for (var i=0; i < messageList.length;++i){
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
-var conString = "pg://postgres:course@localhost:5432/projectdb";
+var conString = "pg://course:course@localhost:5432/projectdb";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -215,7 +215,7 @@ app.get('/Project1Srv/accounts', function(req, res) {
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM accounts");
+        var query = client.query("SELECT * FROM account");
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -235,7 +235,7 @@ app.get('/Project1Srv/login/:username/:password', function(req, res) {
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM accounts WHERE ausername='"+username+"'");
+        var query = client.query("SELECT * FROM account WHERE username='"+username+"'");
         
         query.on("row", function (row, result) {
                 if(row.apassword == password){
@@ -274,7 +274,7 @@ app.get('/Project1Srv/profiles/:id', function(req, res) {
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * from accounts WHERE ausername='"+id+"'");
+        var query = client.query("SELECT * from account WHERE username='"+id+"'");
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -293,8 +293,8 @@ app.get('/Project1Srv/sales/:id', function(req, res) {
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT itemname, price, pid, price, img FROM accounts, sales, product WHERE accounts.ausername =" +
-        "sales.seller AND accounts.aid = sales.aid AND sales.pid = product.id AND sales.seller='"+id+"'");
+        var query = client.query("SELECT prodname, price, productid, price, imagelink FROM account, sale, product WHERE account.username =" +
+        "accounts.accountid = sale.accountid AND sale.prodid = product.productid AND sale.accountid='"+id+"'");
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -313,8 +313,8 @@ app.get('/Project1Srv/auctions/:id', function(req, res) {
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT itemname, price, pid, price, img FROM auctions, accounts, product WHERE accounts.ausername =" +
-        "auctions.seller AND auctions.pid = product.id AND accounts.aid = auctions.aid AND auctions.seller='"+id+"'");
+        var query = client.query("SELECT itemname, price, pid, price, img FROM auction, account, product WHERE account.username =" +
+        "auction.prodid = product.productid AND account.accountid = auction.accountid AND auction.accountid='"+id+"'");
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -375,7 +375,7 @@ app.get('/Project1Srv/category/:id', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT name FROM category WHERE id='"+id+"'");
+        var query = client.query("SELECT catname FROM category WHERE catid='"+id+"'");
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -396,7 +396,7 @@ app.get('/Project1Srv/categoryProducts/:id', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM belongsin, product, category WHERE belongsin.cid = category.id AND product.id = belongsin.pid AND category.id='"+id+"'");
+        var query = client.query("SELECT * FROM belongsin, product, category WHERE belongsin.cid = category.catid AND product.productid = belongsin.pid AND category.id='"+id+"'");
         
         console.log(query);
         
@@ -422,7 +422,7 @@ app.get('/Project1Srv/sortProducts/:id', function(req, res){
         client.connect();
 
         if (id== "PriceLow"){
-                var query = client.query("SELECT * FROM belongsin, product, category WHERE belongsin.cid = category.id AND product.id = belongsin.pid AND category.id='"+currentCategory+"' ORDER BY product.price");
+                var query = client.query("SELECT * FROM belongsin, product, category WHERE belongsin.cid = category.catid AND product.productid = belongsin.pid AND category.catid='"+currentCategory+"' ORDER BY product.price");
         }
         
         else if (id== "PriceHigh"){
@@ -466,7 +466,7 @@ app.get('/Project1Srv/products/:id', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM product FULL OUTER JOIN sales ON sales.pid = product.id WHERE product.id="+id);
+        var query = client.query("SELECT * FROM product FULL OUTER JOIN sale ON sales.prodid = product.productid WHERE product.productid="+id);
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -611,7 +611,7 @@ app.get('/Project1Srv/accounts/:aid', function(req, res) {
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * from accounts where aid ="+aid);
+        var query = client.query("SELECT * from account where accountid ="+aid);
         
         query.on("row", function (row, result) {
             result.addRow(row);
