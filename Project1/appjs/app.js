@@ -66,8 +66,8 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 			var account;			
 				account = accountList[0];
 				list.append("<li>" + account.afname + " " +	account.alname + "</li>" + 
-					"<li>Shipping Address: " + account.aShipping +"</li>" + 
-					"<li>Billing Address: " + account.aBilling + "</li>" +
+					"<li>Shipping Address: " + account.ashipping +"</li>" + 
+					"<li>Billing Address: " + account.abilling + "</li>" +
 					"<li>Credit Card: *****" + account.accard.substr(5,6) + "</li>" +
 					"<li> Rank: " + account.rank + "</li>");	
 			
@@ -466,9 +466,10 @@ function GetAccount(aid){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 			currentAccount = aconvert(data.account);
-			profile= data.account;
+			profile= aconvert(data.account);
 			$.mobile.loading("hide");
-			$.mobile.navigate("#accounts");
+			$.mobile.changePage("account.html");
+			//$.mobile.navigate("#accounts");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
