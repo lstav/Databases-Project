@@ -14,7 +14,7 @@
 		
 		<style type="text/css">
 		.ui-mobile-viewport{
-    	background: url("http://img822.imageshack.us/img822/5342/z66r.jpg") repeat;
+    	background: url("http://img39.imageshack.us/img39/2575/b83n.jpg") repeat;
     	background-size: 100% 100% !important;
 		}
 		.ui-page{
@@ -33,7 +33,7 @@
 
 	</head>
 
-	<body onload="GetShoppingCart(0)">
+	<body>
 			<div id= "shopCartView" data-role="page" data-theme="b">
 					
 			<div data-role="panel" id="mypanel" data-theme="a" data-position="right" data-display="reveal">
@@ -45,19 +45,26 @@
         		</ul>
     		</div><!-- /panel -->
     		
-			<div data-role="header" data-theme="b">
-				<h1>ShoppingCart</h1>
+			<div data-role="header" data-theme="a">
+				<h1>Shopping Cart</h1>
 				<a data-role="button" data-position="left" data-icon="back" data-iconpos="notext" data-rel="back">Back</a>
 				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
-					<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
+					<a data-role="button"  data-icon="home" data-iconpos="notext" href="homepage.html"> Home</a>
 					<a href="#mypanel" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
 				</div>
 			</div>
 			
 			<form data-role="content">
-				<ul id="shopping-list" data-role="listview" data-split-icon="delete">				
-				</ul><br>
-				<a data-role="button" onClick= checkOut(0) data-theme="b">Check out</a>
+				
+				<div class="ui-grid-b">
+					<div class="ui-block-a"></div>
+					<div id= "message" class="ui-block-b" style= "color: DarkRed"></div>
+					<div id= "order-list" class="ui-block-c" > </div>
+				</div>
+				
+				<ul id="shopping-list" data-role="listview" data-split-icon="delete"></ul><br>
+				
+				<a data-role="button" onClick= checkOut(0) data-theme="a">Check out</a>
 			</form>
 			
 			</div>

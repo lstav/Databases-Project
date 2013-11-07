@@ -20,25 +20,45 @@
 		}	
 		</style>
 		
+		<style type="text/css">
+		.ui-mobile-viewport{
+    	background: url("http://img39.imageshack.us/img39/2575/b83n.jpg") repeat;
+    	background-size: 100% 100% !important;
+		}
+		.ui-page{
+    	background:none;
+		}
+		.ui-overlay-a{
+    	background:#222 !important;
+		}
+		.ui-panel-content-wrap{
+    	background: none;
+		}
+		.ui-panel-content-wrap-closed{
+    	background: none;
+		}
+		</style> 
+		
 	</head>
 	<body>
 		
-		<div id="productPage" data-role="page" data-theme="a" style="background-image:url('http://img36.imageshack.us/img36/8834/grxu.jpg'); background-size: 100% 100% !important;">
+		<div id="productPage" data-role="page" data-theme="a" style= "background: url('http://img39.imageshack.us/img39/2575/b83n.jpg') repeat;
+    	background-size: 100% 100% !important;">
 			<div data-role="panel" id="mypanel" data-theme="a" data-position="right" data-display="reveal">
         		<ul data-role="listview" data-theme="a">
-        			<li><a href="Categories.html" rel="external">Search</a></li>
-        			<li><a href="account.html" rel="external">Account</a></li>  
-					<li><a href="message.html" rel="external">Messages</a></li>  
-					<li><a href="login.html" rel="external">Log Out</a></li>      		      		
+        			<li><a href="Categories.html" >Search</a></li>
+        			<li><a onClick=GoAccount() >Account</a></li>  
+					<li><a href="message.html" >Messages</a></li>  
+					<li><a href="login.html" >Log Out</a></li>      		      		
         		</ul>
     		</div><!-- /panel -->
     		
 			<div data-role="header" data-theme="a"> 
-				<h1>Summary</h1>
+				<h1>Item</h1>
 				
 				<a data-role="button" data-position="left" data-icon="back" data-iconpos="notext" data-rel="back">Back</a>
 				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
-					<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
+					<a data-role="button"  data-icon="home" data-iconpos="notext" href="homepage.html"> Home</a>
 					<a href="#mypanel" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
 				</div>
 
@@ -46,44 +66,57 @@
 			
 			<div data-role="content" class="center-wrapper">
 				
-				<div id= "item-image"></div><br> 
-				<h2 id= "productName2" ></h2>
+				<div id= "item-image" ></div><br>
+				 
+				<h2 id= "productName2"  style= "background-color: WhiteSmoke" ></h2>
+				
 				<!--<table data-role="table" id="my-table" data-mode="reflow"></table>	<br> -->
-				<div class="ui-grid-c">
-						<div class= "ui-block-a"> </div><div class= "ui-block-b"> </div><div class= "ui-block-c"> </div>
-						<div class="ui-block-d">
-							<h4 id="productid"></h4>						
-						</div>
+				
+				<div data-role= "collapsible" data-collapsed="false" data-collapsed-icon= "false">
+				<h1>Summary</h1>
+
+				<ul data-role="listview" data-icon= "false" id="item-info" data-corners= "true" ></ul>	<br> 
+				
 				</div>
 				
-				<ul data-role="listview" data-icon= "false" id="item-info" ></ul>	<br> 
+				<div data-role= "collapsible" data-collapsed="false" data-collapsed-icon= "false">
+				<h1>Seller</h1>
 
+				<ul data-role="listview" data-icon= "arrow-r" id="seller-info" data-corners= "true" ></ul><br> 
+				
+				</div>
+				
 				<div data-role="collapsible-set">
 
-				<div data-role="collapsible" data-collapsed-icon= "arrow-r" data-expanded-icon= "arrow-d">
+				<div data-role="collapsible" data-collapsed-icon= "arrow-r" data-expanded-icon= "arrow-d" data-iconpos="right" style= "background-color: white">
 					<h3>Description</h3>
-					<div id= "description" data-role="content"></div>
+					<div id= "description" data-role="content" style= "background-color: white"></div>
 					</div>
+					
+				<div data-role="collapsible" data-collapsed-icon= "arrow-r" data-iconpos="right" data-expanded-icon= "arrow-d" style= "background-color: white">
+					<h3 >Payments</h3>
+					<div id= "payments"></div>
+				</div>
 	
-				<div data-role="collapsible" data-collapsed-icon= "arrow-r" data-expanded-icon= "arrow-d">
-					<h3>Seller</h3>
-					<div id= sellerInfo></div>
-					</div>
-			
-				<div data-role="collapsible" data-collapsed-icon= "arrow-r" data-expanded-icon= "arrow-d">
+				<div data-role="collapsible" data-collapsed-icon= "arrow-r" data-iconpos="right" data-expanded-icon= "arrow-d" style= "background-color: white">
 					<h3>Shipings & Returns</h3>
-					<p>Some description</p>
+					<div id= "shipping"></div>
 					</div>
-			</div>
-	
+				</div>
+			
 			 <div class="ui-grid-a">
+          	 
           	 <div class="ui-block-a">
-             <input type="text" id="bid" value= "Make a bid" data-mini="true"/></div>
-             <div class="ui-block-b">
-                <input type="submit" id= "submitBid" onClick=UpdateBid() value="Submit" data-theme="a"  data-mini="true"/></div>
-             	</div>
+             
+             	<a id= "bid-name"></a></div>
             
-     		 <a data-role="button" onClick= GetShoppingCart(0) data-theme="b">Buy it Now</a>
+             <div class="ui-block-b">
+               
+               <a id= "bid-offer"></a></div>
+             
+             </div>
+            
+     		 <a id= "buy-now" data-theme="a"></a>
 			
 			</div>
 			

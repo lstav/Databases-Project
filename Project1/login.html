@@ -10,34 +10,69 @@
   		<script src="appjs/account.js"></script>
   		<script src="appjs/app.js"></script>
 		
+		<style type="text/css">
+		.ui-mobile-viewport{
+    	background: url("http://img39.imageshack.us/img39/2575/b83n.jpg") repeat;
+    	background-size: 100% 100% !important;
+		}
+		.ui-page{
+    	background:none;
+		}
+		.ui-overlay-a{
+    	background:#222 !important;
+		}
+		.ui-panel-content-wrap{
+    	background: none;
+		}
+		.ui-panel-content-wrap-closed{
+    	background: none;
+		}
+		</style> 
+		
 	</head>
 	<body>
-		<div id="login" data-role="page" data-theme="a">
+		<div id="login" data-role="page">
 			<!-- Home -->
-    		<div data-theme="a" data-role="header">
+    		<div data-role="header">
         			<h1><img src= 'http://img30.imageshack.us/img30/7994/r7b.gif' /></h1>		
 			</div><br>
+			
+			<div class="ui-grid-a" style="height:120px">
+					<div class="ui-block-a"><a><img src= "http://img266.imageshack.us/img266/6557/hjdi.jpg" width="100%"/></a></div>
+		
+					<div class="ui-block-b"><a><img src= "http://img266.imageshack.us/img266/6557/hjdi.jpg" width="100%"/></a></div>
+
+			</div><br>
+				
+				
         		<form id="login-form" align="center" data-ajax="false">
         			<fieldset data-role="controlgroup">
             			<input name="" id="username" placeholder="Username" value="" type="text" >
-	            		<input name="" id="password" placeholder="Password" value="" type="password" >
-						
-						<a data-role="button" id= "submit" data-transition="slide" data-theme="a" href="#" data-corners="false">
-				            Login
-        				</a>	            		
+	            		<input name="" id="password" placeholder="Password" value="" type="password"><br>
+
+        			 <div class="ui-grid-b">
+					<div class="ui-block-a"></div>
+					<div class="ui-block-b">
+						<a data-role="button" id= "submit" data-transition="slide" data-theme="a" data-corners="false">
+				            Sign in
+        				</a>	
+					</div>
+					<div class="ui-block-b"></div>
+					</div>           		
     	    		</fieldset>
-    			</form>	  
-   			  <h1 style="text-align: center;"><img src="http://img132.imageshack.us/img132/8476/fnvp.gif" /></h1>
-  			  <div class="ui-grid-b">
+    			</form><br>
+   			 
+   			    			 
+   			 <ul data-role="listview" data-inset="true" data-corners="false">
+   			 	<li> <h1 style="text-align: center;"><img src="http://img132.imageshack.us/img132/8476/fnvp.gif" /></h1></li>
+   			 </ul> <br>
+			
+  			  <div class="ui-grid-a" style="height:120px">
 				<div class="ui-block-a">
-				 	<a data-role="button" href="index.html" data-corners="false" ><p>Home</p></a>
+				 	<a data-role="button" href="homepage.html" data-corners="false" ><p>Home</p></a>
 				</div>
 				<div class="ui-block-b">
 					<a data-role="button" href="signup.html" data-corners="false"><p>Sign Up</p></a>
-				</div>
-				<div class="ui-block-b">
-					<a data-role="button" href="adminlog.html" data-corners="false"><p>Administrator</p></a>
-
 				</div>
 			</div>
 </div>		

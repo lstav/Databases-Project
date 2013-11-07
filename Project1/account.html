@@ -9,20 +9,7 @@
   		<script src="js/jquery.mobile-1.3.2.min.js"></script> 
 		<script src="appjs/account.js"></script>
 		<script src="appjs/app.js"></script>
-		<style>
-			.center-wrapper{
-  				text-align: center;
-			}
-			.center-wrapper * {
- 			 	margin: 0 auto;
-			}	
-		
-			#popupName
-			{
-				background-color: red
-			}
-		</style>
-		
+			
 		<style type="text/css">
 		.ui-mobile-viewport{
     	background: url("http://img39.imageshack.us/img39/2575/b83n.jpg") repeat;
@@ -40,7 +27,7 @@
 		.ui-panel-content-wrap-closed{
     	background: none;
 		}
-		</style>
+		</style> 
 		
 	</head>
 	<body>
@@ -48,10 +35,10 @@
     	background-size: 100% 100% !important;">
 			<div data-role="panel" id="mypanel" data-position="right" data-display="reveal">
         		<ul data-role="listview" data-theme="a">
-        			<li><a href="Categories.html" rel="external">Search</a></li>
-        			<li><a href="account.html" rel="external">Account</a></li>  
-					<li><a href="message.html" rel="external">Messages</a></li>  
-					<li><a href="login.html" rel="external">Log Out</a></li>      		      		
+        			<li><a href="Categories.html" >Search</a></li>
+        			<li><a href="account.html" >Account</a></li>  
+					<li><a href="message.html" >Messages</a></li>  
+					<li><a href="login.html" >Log Out</a></li>      		      		
         		</ul>
    			</div><!-- /panel -->
     		
@@ -59,7 +46,7 @@
     			<h1><img src= 'http://img30.imageshack.us/img30/7994/r7b.gif' /></h1>			
 				<a data-role="button" data-position="left" data-icon="back" data-iconpos="notext" data-rel="back">Back</a>
 				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
-					<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
+					<a data-role="button"  data-icon="home" data-iconpos="notext" href="homepage.html"> Home</a>
 					<a href="#mypanel" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
 				</div>
 			</div>
@@ -73,123 +60,39 @@
 					<div class= "ui-block-c"> </div>
 				</div>
 				
-			<div class="ui-grid-c">
+			<div class="ui-grid-a">
 				<div class="ui-block-a">
 				<a onClick=GetSales() data-role="button" data-theme="a" data-corners="false" >
             			Items for Sale
       				</a>
 				</div>
+				
 				<div class="ui-block-b">
-				<a onClick=GetAuctions() data-role="button"  data-theme="a" data-corners="false" >
+				<a onClick=GetAuctions() data-role="button"  data-theme="a" data-corners="false">
             			Items bidding
         			</a>
-				</div>
-				<div class="ui-block-c">
+				</div> </div>
+				
+				
+				<div class="ui-grid-a">
+				<div class="ui-block-a">
 				<a href= "Categories.html" data-role="button" data-theme="a" data-corners="false" >
             			Feedback
         			</a>
 				</div>
-				<div class="ui-block-d">
+				<div class="ui-block-b">
 				<a href= "history.html" data-role="button" data-theme="a" data-corners="false" >
             			Recent activity
         			</a>
 				</div>
 			</div>
-				<h4>Personal Information:</h4>
+			
+			
+				<h4 style= "color: white">Personal Information:</h4>
 				<ul id="account-list" data-role="listview" data-inset="true"></ul>
 				
-				<a data-role="button" href="#account-view" rel="external" data-theme="a">Edit</a>
+				<a data-role="button" id="edit-account" href= "#account-view" data-theme="a">Edit</a>
 			</div>
 		</div>
-		
-		<div id="account-view" data-role="page" data-theme"b">
-			<div data-role="header" data-position="fixed">
-				<a data-role="button" data-rel="back" href="#accounts">Cancel</a>
-				<h1>Account Info</h1>
-				<a data-role="button" data-rel="back" onclick=UpdateAccount()>Save</a>
-			</div>
-			<center>
-				<h2>Edit Account Info</h2>
-			</center>
-			<form id="account-view-form" data-role="content" class="center-wrapper">
- 				<!--<fieldset data-role="controlgroup"> -->
- 				<ul data-role="listview" data-icon="false">
- 					<li>
-						<a href="#popupUsername" data-rel="popup" data-position-to="window" id="username"></a>
- 						<div data-role="popup" id="popupUsername">
- 			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 			 				<h1>First Name:</h1>
-        	 				<input id="upd-username" name="name" type="text">
-        	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
- 			 			</div>
-					</li>
- 					<li>
-						<a href="#popupfName" data-rel="popup" data-position-to="window" id="fname"></a>
- 						<div data-role="popup" id="popupfName">
- 			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 			 				<h1>First Name:</h1>
-        	 				<input id="upd-fname" name="name" type="text">
-        	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
- 			 			</div>
-					</li>
-					<li>
-						<a href="#popuplName" data-rel="popup" data-position-to="window" id="lname"></a>
- 						<div data-role="popup" id="popuplName">
- 			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 			 				<h1>Last Name:</h1>
-        	 				<input id="upd-lname" name="name" type="text">
-        	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
- 			 			</div>
-					</li>
-					<li>
-						<a href="#popupShippingA" data-rel="popup" data-position-to="window" id="shippingA"></a>
- 						<div data-role="popup" id="popupShippingA">
- 			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 			 				<h1>Shipping Address: </h1>
-        	 				<input id="upd-shipping" name="name" type="text">
-        	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
- 			 			</div>
-					</li>
-					<li>
-						<a href="#popupBillingA" data-rel="popup" data-position-to="window" id="billingA"></a>
- 						<div data-role="popup" id="popupBillingA">
- 			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 			 				<h1>Billing Address: </h1>
-        	 				<input id="upd-billing" name="name" type="text">
-        	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
- 			 			</div>
-					</li>
-					<li>
-						<a href="#popupcCard" data-rel="popup" data-position-to="window" id="cCard"></a>
- 						<div data-role="popup" id="popupcCard">
- 			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 			 				<h1>Credit Card Number: </h1>
-        	 				<input id="upd-creditCard" name="name" type="text">
-        	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
- 			 			</div>
-					</li>
-					<li>
-						<a href="#popupEmail" data-rel="popup" data-position-to="window" id="email"></a>
- 						<div data-role="popup" id="popupEmail">
- 			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 			 				<h1>Email: </h1>
-        	 				<input id="upd-email" name="name" type="text">
-        	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
- 			 			</div>
-					</li>
-					<li>
-						<a href="#popupPassword" data-rel="popup" data-position-to="window" id="password"></a>
- 						<div data-role="popup" id="popupPassword">
- 			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
- 			 				<h1>Password: </h1>
-        	 				<input id="upd-password" name="name" type="text">
-        	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
- 			 			</div>
-					</li>
-  			 	</ul>
-			<!--</fieldset>-->
-			</form>
-			<a  data-role="button" onclick=DeleteAccount() data-rel="back">Delete</a>
-		</div> 
 	</body>
 </html>

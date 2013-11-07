@@ -196,7 +196,7 @@ for (var i=0; i < messageList.length;++i){
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
-var conString = "pg://course:course@localhost:5432/projectdb";
+var conString = "pg://postgres:course@localhost:5432/projectdb";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -215,7 +215,7 @@ app.get('/Project1Srv/accounts', function(req, res) {
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT *, s.address as shipping, b.address as billing from accounts as a, address as s, address as b where a.ashippingid = s.addressid and a.abillingid = b.addressid");
+        var query = client.query("SELECT * FROM accounts");
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -235,7 +235,7 @@ app.get('/Project1Srv/login/:username/:password', function(req, res) {
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT ausername, apassword, aid FROM accounts WHERE ausername='"+username+"'");
+        var query = client.query("SELECT * FROM accounts WHERE ausername='"+username+"'");
         
         query.on("row", function (row, result) {
                 if(row.apassword == password){
