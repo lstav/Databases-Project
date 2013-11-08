@@ -6,7 +6,7 @@ $(document).on('pagebeforeshow', '#login', function(){
         var password= $('#password').val();
         
         if(username.length > 0 && password.length > 0){
-        	alert(username+ password);
+        	//alert(username+ password);
            AccountLogin(username, password);           
         } 
         
@@ -145,16 +145,21 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 		 $(document).on('click', '#edit-account', function() { 
             $.mobile.changePage("settings.html");
         });  
+        var stars = "";
+        
+        for(var i=0; i<loginAccount.rank; i++) {
+    	   	stars = stars + "*";
+       }
         
           var list = $("#account-list");
           list.empty();
           var account = loginAccount;
                
-          list.append("<li>" + account.fname + " " +        account.sname + "</li>" + 
-              "<li >Shipping Address: </li>" + 
-              "<li>Billing Address: </li>" +
-              "<li>Credit Card: *****</li>" +
-              "<li> Rank: " + account.rank + "</li>");        
+          list.append("<li>" + account.fname + " " +        account.lname + "</li>" + 
+              "<li >Shipping Address: " + " " + account.shipping + "</li>" + 
+              "<li>Billing Address: " + " " + account.billing + "</li>" +
+             // "<li>Credit Card: *****</li>" +
+              "<li> Rank: " + stars + "</li>");        
                       
                         var iname= $("#username2");
                         var msg= '<a data-role= "button" data-mini= "true" data-corners="false" style= "color: DarkRed"><center><h2>'+account.username+'</h2></center></a>';
@@ -182,19 +187,19 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
         //alert(loginAccount.username);
         $('#upd-username').val(loginAccount.username); 
         $('#upd-fname').val(loginAccount.fname);
-        $('#upd-lname').val(loginAccount.sname);
-        //$("#upd-shipping").val(loginAccount.ashipping);
-        //$("#upd-billing").val(loginAccount.abilling);
+        $('#upd-lname').val(loginAccount.lname);
+        $("#upd-shipping").val(loginAccount.shipping);
+        $("#upd-billing").val(loginAccount.billing);
         //$('#upd-creditCard').val("*****" + loginAccount.accard.substr(5,6));
         $('#upd-email').val(loginAccount.email);
         //$('#upd-password').val(pass);
         
         $('#username').html("Username: " + loginAccount.username);
         $('#fname').html("First Name: " + loginAccount.fname);
-        $('#lname').html("Last Name: " + loginAccount.sname);
-        //$("#shippingA").html("Shipping Address: " + loginAccount.ashipping);
-        //$("#billingA").html("Billing Address: " + loginAccount.abilling);
-        //$('#cCard').html("Credit Card Number: *****" + loginAccount.accard.substr(5,6));
+        $('#lname').html("Last Name: " + loginAccount.lname);
+        $("#shippingA").html("Shipping Address: " + loginAccount.shipping);
+        $("#billingA").html("Billing Address: " + loginAccount.billing);
+       // $('#cCard').html("Credit Card Number: *****" + loginAccount.accard.substr(5,6));
         $('#email').html("Email: " + loginAccount.email);
         //$('#password').html("Password: " + pass); 
         
@@ -717,6 +722,22 @@ function DeleteAccount(){
         if(decision == true) {
                 alert("Account Deleted");
         }
+}
+
+function aconvert(dbModel){
+        var aliModel = {};
+        
+        aliModel.aid = dbModel.accountid;
+        aliModel.afName = dbModel.fname;
+        aliModel.alName = dbModel.lname;
+        aliModel.aEmail = dbModel.email;
+        aliModel.aUsername = dbModel.username;
+        aliModel.aPassword = dbModel.apassword;
+       	aliModel.aShipping = dbModel.shipping;
+        aliModel.aBilling = dbModel.billing;
+        aliModel.rank = dbModel.rank;
+        
+        return aliModel;
 }
 
 var loginAccount={};
