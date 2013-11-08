@@ -1,9 +1,8 @@
 module.exports =  { 
-	Message : function(sid,rid, sName, mText){
+	Message : function(sid,rid,sName,rName, mText){
 	this.mid = "";
 	this.sid = sid;
 	this.rid = rid;
-	this.sName = sName;
 	this.mText = mText;
 }
 }
