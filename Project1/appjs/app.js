@@ -145,6 +145,11 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 		 $(document).on('click', '#edit-account', function() { 
             $.mobile.changePage("settings.html");
         });  
+        var stars = "";
+        
+        for(var i=0; i<loginAccount.rank; i++) {
+    	   	stars = stars + "*";
+       }
         
           var list = $("#account-list");
           list.empty();
@@ -154,7 +159,7 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
               "<li >Shipping Address: " + " " + account.shipping + "</li>" + 
               "<li>Billing Address: " + " " + account.billing + "</li>" +
              // "<li>Credit Card: *****</li>" +
-              "<li> Rank: " + account.rank + "</li>");        
+              "<li> Rank: " + stars + "</li>");        
                       
                         var iname= $("#username2");
                         var msg= '<a data-role= "button" data-mini= "true" data-corners="false" style= "color: DarkRed"><center><h2>'+account.username+'</h2></center></a>';
