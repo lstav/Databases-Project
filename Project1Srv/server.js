@@ -350,7 +350,7 @@ app.get('/Project1Srv/shoppingcarts', function(req, res) {
 //////// Category
 var currentCategory= {};
 
-app.get('/Project1Srv/categories', function(req, res){
+app.get('/Project1Srv/category', function(req, res){
 
         console.log("GET");
         var client = new pg.Client(conString);
@@ -375,7 +375,7 @@ app.get('/Project1Srv/category/:id', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT catname FROM category WHERE catid='"+id+"'");
+        var query = client.query("SELECT * FROM category WHERE catid='"+id+"'");
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -396,7 +396,7 @@ app.get('/Project1Srv/categoryProducts/:id', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM belongsin, product, category WHERE belongsin.cid = category.catid AND product.productid = belongsin.pid AND category.id='"+id+"'");
+        var query = client.query("SELECT * FROM product, category WHERE product.catid = category."+id);
         
         console.log(query);
         
@@ -466,7 +466,7 @@ app.get('/Project1Srv/products/:id', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM product FULL OUTER JOIN sale ON sales.prodid = product.productid WHERE product.productid="+id);
+        var query = client.query("SELECT * FROM product FULL OUTER JOIN sale ON sale.prodid = product.productid WHERE product.productid="+id);
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -611,7 +611,7 @@ app.get('/Project1Srv/accounts/:aid', function(req, res) {
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * from account where accountid ="+aid);
+        var query = client.query("SELECT * from account where accountid = $1" + [aid]);
         
         query.on("row", function (row, result) {
             result.addRow(row);

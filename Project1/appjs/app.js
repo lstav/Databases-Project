@@ -18,6 +18,39 @@ $(document).on('pagebeforeshow', '#login', function(){
         });    
 });
 
+function setCookie(c_name,value,exdays)
+{
+	var exdate=new Date();
+	exdate.setDate(exdate.getDate() + exdays);
+	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+document.cookie=c_name + "=" + c_value;
+}
+
+function getCookie(c_name)
+{
+	var c_value = document.cookie;
+	var c_start = c_value.indexOf(" " + c_name + "=");
+	if (c_start == -1)
+  	{
+  		c_start = c_value.indexOf(c_name + "=");
+  	}
+	if (c_start == -1)
+  	{
+  		c_value = undefined;
+  	}
+	else
+  	{
+	  	c_start = c_value.indexOf("=", c_start) + 1;
+  		var c_end = c_value.indexOf(";", c_start);
+  		if (c_end == -1)
+	  {
+		c_end = c_value.length;
+	}
+	c_value = unescape(c_value.substring(c_start,c_end));
+	}
+	return c_value;
+}
+
 $(document).on('pagebeforeshow', '#sign-up', function(){  
     
         $(document).on('click', '#submit', function() { 
@@ -45,8 +78,8 @@ $(document).on('pagebeforeshow', '#sign-up', function(){
 });
 
 $(document).on('pagebeforeshow', '#homepage-account', function(){  
-		
-       if(loginAccount.username!= undefined)	{
+		loginAccount.username = getCookie("username");	
+       	if(loginAccount.username!= undefined)	{
       
         $(document).on('click', '#profile-account', function() { 
         	  profile= loginAccount;
@@ -115,6 +148,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 		 //alert(loginAccount.ausername);
+		 loginAccount.ausername = getCookie("username");
 		 if(loginAccount.ausername!= undefined){
 
 		 $(document).on('click', '#edit-account', function() { 
@@ -698,6 +732,7 @@ function AccountLogin(username, password){
                         if(len !=0){        
                                 loginAccount= data.accountLogin[0];
                                 $.mobile.changePage("homepage.html");
+                                setCookie("username",username,14);
                         }
                         else{
                                 alert("Invalid login information. Try again.");
