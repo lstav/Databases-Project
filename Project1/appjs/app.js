@@ -115,15 +115,11 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 		 //alert(loginAccount.ausername);
-	/*	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts",
-		contentType: "application/json",
-		success : function(data, textStatus, jqXHR){*/
 		 if(loginAccount.ausername!= undefined){
 
 		 $(document).on('click', '#edit-account', function() { 
-            $.mobile.changePage("settings.html");
-        });  
+         $.mobile.changePage("settings.html");
+    	   });  
         
           var list = $("#account-list");
           list.empty();
@@ -145,15 +141,9 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
                         img.append("<p> <center> <img src='http://img707.imageshack.us/img707/9563/i5n.gif'/> </center> </p>");
                         list.listview("refresh");
                }
-           else{
-           		$.mobile.changePage("login.html");
+         else{
+          		$.mobile.changePage("login.html");
            }
-        /* },
-           error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			alert("Data not found!");
-		}
-});*/
 });
 
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
