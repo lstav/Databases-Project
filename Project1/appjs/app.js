@@ -6,9 +6,8 @@ $(document).on('pagebeforeshow', '#login', function(){
         var password= $('#password').val();
         
         if(username.length > 0 && password.length > 0){
-           
-           AccountLogin(username, password);
-           
+        	alert(username+ password);
+           AccountLogin(username, password);           
         } 
         
         else {
@@ -17,39 +16,6 @@ $(document).on('pagebeforeshow', '#login', function(){
             return false; 
         });    
 });
-
-function setCookie(c_name,value,exdays)
-{
-	var exdate=new Date();
-	exdate.setDate(exdate.getDate() + exdays);
-	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-document.cookie=c_name + "=" + c_value;
-}
-
-function getCookie(c_name)
-{
-	var c_value = document.cookie;
-	var c_start = c_value.indexOf(" " + c_name + "=");
-	if (c_start == -1)
-  	{
-  		c_start = c_value.indexOf(c_name + "=");
-  	}
-	if (c_start == -1)
-  	{
-  		c_value = undefined;
-  	}
-	else
-  	{
-	  	c_start = c_value.indexOf("=", c_start) + 1;
-  		var c_end = c_value.indexOf(";", c_start);
-  		if (c_end == -1)
-	  {
-		c_end = c_value.length;
-	}
-	c_value = unescape(c_value.substring(c_start,c_end));
-	}
-	return c_value;
-}
 
 $(document).on('pagebeforeshow', '#sign-up', function(){  
     
@@ -77,9 +43,18 @@ $(document).on('pagebeforeshow', '#sign-up', function(){
         });    
 });
 
-$(document).on('pagebeforeshow', '#homepage-account', function(){  
-		loginAccount.username = getCookie("username");	
-       	if(loginAccount.username!= undefined)	{
+
+$(document).on('pagebeforeshow', '#homepage-account', function(){
+		
+	   var sessionId= GetSession();
+	   if(loginAccount.username == undefined && sessionId[1] != undefined){
+	   	
+	   		loginAccount.username= sessionId[1];
+	   		loginAccount.isadmin= sessionId[2];
+	   		loginAccount.accountid= GetSession()[0];
+	   }
+
+       if(loginAccount.username!= undefined)	{
       
         $(document).on('click', '#profile-account', function() { 
         	  profile= loginAccount;
@@ -115,6 +90,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
        }
        
 		else{
+			
       		//Guest
        		 var block1= $("#block1");
              var msg= '<a  href= "login.html" data-role="button" data-corners="false">Sign in</a>';
@@ -129,12 +105,14 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              var block3= $("#block3");
              var msg3= '<a  href= "index.html" data-role="button" data-icon="home" data-corners="false" data-theme="a">Home</a>';
              block3.empty();
-             block3.append(msg3).trigger('create');    	
+             block3.append(msg3).trigger('create');  
        	
        }
        
         $(document).on('click', '#sell-button', function() { 
-              if(loginAccount.ausername!= undefined)
+        	
+        	alert(loginAccount.username);
+              if(loginAccount.username!= undefined)
               {
               	 $.mobile.changePage("create-sale.html");
               }
@@ -146,79 +124,93 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 	       
 });
 
+ $(document).on('click', '#logout', function() { 
+        	sessionStorage.clear();
+            $.mobile.changePage("login.html");
+
+ });  
+        
+
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
-		 //alert(loginAccount.ausername);
-		 loginAccount.ausername = getCookie("username");
-		 if(loginAccount.ausername!= undefined){
+	
+		 var sessionId= GetSession();
+	  	 if(loginAccount.username == undefined && sessionId[1] != undefined){
+	   		loginAccount.accountid= GetSession()[0];
+	   		loginAccount.username= sessionId[1];
+	   		loginAccount.isadmin= sessionId[2];	}
+
+		 //alert(loginAccount.username);
+		 if(loginAccount.username!= undefined){
 
 		 $(document).on('click', '#edit-account', function() { 
-         $.mobile.changePage("settings.html");
-    	   });  
+            $.mobile.changePage("settings.html");
+        });  
         
           var list = $("#account-list");
           list.empty();
           var account = loginAccount;
                
-          list.append("<li>" + account.afname + " " +        account.alname + "</li>" + 
-              //"<li GetAddress(" + account.shippingid +")>Shipping Address: </li>" + 
-              //"<li>Billing Address: " + account.fname + "</li>" +
-              //"<li>Credit Card: *****" + account.accard.substr(5,6) + "</li>" +
+          list.append("<li>" + account.fname + " " +        account.sname + "</li>" + 
+              "<li >Shipping Address: </li>" + 
+              "<li>Billing Address: </li>" +
+              "<li>Credit Card: *****</li>" +
               "<li> Rank: " + account.rank + "</li>");        
                       
                         var iname= $("#username2");
-                        var msg= '<a data-role= "button" data-mini= "true" data-corners="false" style= "color: DarkRed"><center><h2>'+account.ausername+'</h2></center></a>';
+                        var msg= '<a data-role= "button" data-mini= "true" data-corners="false" style= "color: DarkRed"><center><h2>'+account.username+'</h2></center></a>';
                         iname.empty();
                         iname.append(msg).trigger('create');
                         
                         var img= $("#user-image");
                         img.empty();
                         img.append("<p> <center> <img src='http://img707.imageshack.us/img707/9563/i5n.gif'/> </center> </p>");
-                        list.listview("refresh");
-               }
-         else{
-          		$.mobile.changePage("login.html");
+                        list.listview("refresh");}
+                        
+           else{
+           		$.mobile.changePage("login.html");
            }
+
 });
 
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
         // loginAccount has been set at this point
-        /* var len = loginAccount.apassword.length;
+        /* var len = loginAccount.password.length;
         var pass = "";
         for (var i=0; i < len; ++i){
                 pass = pass + "*";
         }*/
-        //alert(loginAccount.ausername);
-        $('#upd-username').val(loginAccount.ausername); 
-        $('#upd-fname').val(loginAccount.afname);
-        $('#upd-lname').val(loginAccount.alname);
+        //alert(loginAccount.username);
+        $('#upd-username').val(loginAccount.username); 
+        $('#upd-fname').val(loginAccount.fname);
+        $('#upd-lname').val(loginAccount.sname);
         //$("#upd-shipping").val(loginAccount.ashipping);
         //$("#upd-billing").val(loginAccount.abilling);
-        $('#upd-creditCard').val("*****" + loginAccount.accard.substr(5,6));
-        $('#upd-email').val(loginAccount.aemail);
+        //$('#upd-creditCard').val("*****" + loginAccount.accard.substr(5,6));
+        $('#upd-email').val(loginAccount.email);
         //$('#upd-password').val(pass);
         
-        $('#username').html("Username: " + loginAccount.ausername);
-        $('#fname').html("First Name: " + loginAccount.afname);
-        $('#lname').html("Last Name: " + loginAccount.alname);
+        $('#username').html("Username: " + loginAccount.username);
+        $('#fname').html("First Name: " + loginAccount.fname);
+        $('#lname').html("Last Name: " + loginAccount.sname);
         //$("#shippingA").html("Shipping Address: " + loginAccount.ashipping);
         //$("#billingA").html("Billing Address: " + loginAccount.abilling);
-        $('#cCard').html("Credit Card Number: *****" + loginAccount.accard.substr(5,6));
-        $('#email').html("Email: " + loginAccount.aemail);
+        //$('#cCard').html("Credit Card Number: *****" + loginAccount.accard.substr(5,6));
+        $('#email').html("Email: " + loginAccount.email);
         //$('#password').html("Password: " + pass); 
         
 });
 
 $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 	 
-	 	//alert(loginAccount.ausername);
+	 	//alert(loginAccount.username);
         var list= $("#profile-info");
         list.empty();
-        list.append("<li><a <h4>Name: "+profile.afname +" "+ profile.alname+"</h4></a> </li>");
+        list.append("<li><a <h4>Name: "+profile.fname +" "+ profile.sname+"</h4></a> </li>");
         list.append("<li><a <h4>Rank: "+ profile.rank  +"</h4></a> </li>");
         //list.append("<li><a <h4>Location:"+profile.location  +"</h4></a> </li>");
         
         var uname= $("#username");
-        var msg= '<a style= "color: DarkRed"><center><h2>'+profile.ausername+'</h2></center></a>';
+        var msg= '<a style= "color: DarkRed"><center><h2>'+profile.username+'</h2></center></a>';
         uname.empty();
         uname.append(msg).trigger('create');
         
@@ -229,17 +221,17 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
         
         var pname= $("#name");
         pname.empty();
-        pname.append("<center>"+profile.ausername+"</center>");
+        pname.append("<center>"+profile.username+"</center>");
 
 });
 
 $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
         
-        		//alert(loginAccount.ausername);
+        		//alert(loginAccount.username);
                 var productCat = currentSalesList;
                 var len =productCat.length;
                 
-                //alert(profile.ausername + " "+ loginAccount.ausername);
+                //alert(profile.username + " "+ loginAccount.username);
                 
                 if(len==0){
                         var iname= $("#message");
@@ -251,9 +243,9 @@ $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
                         order.empty();
                         
                        
-                        if(profile.ausername== loginAccount.ausername){
+                        if(profile.username== loginAccount.username){
                         var sell= $("#sell-button");
-                        var msg2= '<br><a data-role= "button" data-mini= "true" href= "sales.html"><center><h2>Sale an item</h2></center></a>';
+                        var msg2= '<br><a data-role= "button" data-mini= "true"><center><h2>Sale an item</h2></center></a>';
                         sell.empty();
                         sell.append(msg2).trigger('create');
                         }
@@ -264,14 +256,14 @@ $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
                 var item;
                 for (var i=0; i < len; ++i){
                 item =productCat[i];
-                list.append("<li><a onClick=GetProduct("+item.pid+")> <img src='"+ item.img+ "'/>" + item.itemname + "<h4> Price: $"+item.price+"<\h4></a></li>");
+                list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/>" + item.prodname + "<h4> Price:"+item.price+"<\h4></a></li>");
                 }
                 list.listview("refresh");}
 });
 
 $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
 	
-			 	//alert(loginAccount.ausername);
+			 	//alert(loginAccount.username);
                 var productCat = currentAuctionList;
                 var len =productCat.length;
 
@@ -284,9 +276,9 @@ $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
                         var order= $("#order-list");
                         order.empty();
                         
-                        if(profile.ausername== loginAccount.ausername){
+                        if(profile.username== loginAccount.username){
                         var sell= $("#sell-button");
-                        var msg2= '<br><a data-role= "button" data-mini= "true" href= "auctions.html"><center><h2>Auction an item</h2></center></a>';
+                        var msg2= '<br><a data-role= "button" data-mini= "true"><center><h2>Auction an item</h2></center></a>';
                         sell.empty();
                         sell.append(msg2).trigger('create');
                         }
@@ -298,7 +290,7 @@ $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
                 for (var i=0; i < len; ++i){
                 item =productCat[i];
                 var element='<a id="bid-icon" data-role="button" data-icon= "grid" data-mini="true" style="color: MidnightBlue " >Bid History</a>';
-                list.append("<li><a onClick=GetProduct("+item.pid+")> <img src='"+ item.img+ "'/>" + item.itemname + "<h4>Price: $"+item.price+"</h4></a>"+ element+"</li>");
+                list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/>" + item.prodname + "<h4>Price:"+item.price+"</h4></a>"+ element+"</li>");
                 }
                 list.listview("refresh");
                 
@@ -312,7 +304,7 @@ $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
 
 $(document).on('pagebeforeshow', '#create-auction', function(){  
 	
-	   //alert(loginAccount.ausername);
+	   //alert(loginAccount.username);
        $(document).on('click', '#submit-auction', function() { 
               alert("You have created an auction!");
         });    
@@ -320,7 +312,7 @@ $(document).on('pagebeforeshow', '#create-auction', function(){
 
 $(document).on('pagebeforeshow', '#create-sale', function(){  
 
-		//alert(loginAccount.ausername);
+		//alert(loginAccount.username);
        $(document).on('click', '#submit-sale', function() { 
               alert("Your product is on sale!");
         });  
@@ -328,13 +320,31 @@ $(document).on('pagebeforeshow', '#create-sale', function(){
 
 
 ///// Category and product
+/*
+$(document).on('click', '#search-button', function() { 
+              GetCategories();
+}); 
+
+
+$(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
+				
+				var category= currentCategories;
+				var len= category.length;
+				var list=$("#showCategories");
+				list.empty();
+
+                for (var i=0; i < len; ++i){
+                var cname =category[i];
+                var cat= '<div data-role="collapsible" data-collapsed="false"> <h1>' + cname + '</h1>' ;
+                var clist='<ul data-role="listview" data-inset="true"></u>';
+                list.append(cat+clist+"</div>");
+                }
+                list.listview("refresh");
+				 
+});*/
 
 $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
-				//alert(loginAccount.ausername);        
-});
-
-$(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
-				//alert(loginAccount.ausername);
+				//alert(loginAccount.username);
                 var productCat = currentCategoryProducts;
                 var len =productCat.length;
                 var list = $("#product-list");
@@ -342,7 +352,7 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
                 var item;
                 for (var i=0; i < len; ++i){
                 item =productCat[i];
-                list.append("<li><a onClick=GetProduct("+item.pid+")> <img src='"+ item.img+ "'/>" + item.itemname + "<h4> Price: $"+item.price+"<\h4></a></li>");
+                list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/>" + item.prodname + "<h4> Price: "+item.price+"<\h4></a></li>");
                 }
                 list.listview("refresh");
                 
@@ -353,7 +363,7 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 });
 
 $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
-        //alert(loginAccount.ausername);
+        //alert(loginAccount.username);
         //var table1= $("#my-table");
         //table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Price:        </b> $"+currentProduct.price  +"</td>");
         //table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Quantity:        </b> "+currentProduct.quantity  +"</td>");
@@ -363,15 +373,15 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         
         var list= $("#item-info");
         list.empty();
-        list.append("<li><a> <strong>Price:</strong><kbd> $"+currentProduct.price  +"</kbd></a> </li>");
-        list.append("<li><a> <strong>Quantity:</strong><kbd> "+currentProduct.quantity  +"</kbd></a> </li>");
+        list.append("<li><a> <strong>Price:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");
+        list.append("<li><a> <strong>Quantity:</strong><kbd> Unavailable </kbd></a> </li>");
         list.append("<li><a> <strong>Condition: </strong><kbd>"+currentProduct.condition  +"</kbd></a> </li>");
-        list.append("<li><a> <strong>Location: </strong><kbd>"+currentProduct.location  +"</kbd></a> </li>");
+        list.append("<li><a> <strong>Location: </strong><kbd>Unavailable</kbd></a> </li>");
         list.append("<li><a><strong> Item ID: </strong><kbd>"+currentProduct.id+"</kbd></a> </li>");
         
         var sell= $("#seller-info");
         sell.empty();
-        sell.append("<li><a  onClick= GoProfile('"+currentProduct.seller+"')>"+currentProduct.seller+"</a></li>");
+        sell.append("<li><a  onClick= GoProfile('"+currentProduct.aid+"')>"+currentProduct.seller+"</a></li>");
 
         var idescription= $("#description");
         idescription.append("<p>"+currentProduct.description+"</p>");
@@ -383,16 +393,16 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         
                
         var shipping= $("#shipping");
-        shipping.append("<p>"+currentProduct.shipping+"</p>");
+        shipping.append("<p>Unavailable/p>");
         
         var pname= $("#productName2");
         pname.empty();
-        pname.append("<center>"+currentProduct.itemname+"</center>");
+        pname.append("<center>"+currentProduct.prodname+"</center>");
         
         list.listview("refresh");
         sell.listview("refresh");
         
-        if(loginAccount.ausername == currentProduct.seller){
+        if(loginAccount.username == currentProduct.seller){
         	 var bid= $("#bid-name");
              var msg= '<input type="button" value= "List of Bids" onClick=GetBids()" data-mini="true"/>';
              bid.empty();
@@ -453,8 +463,8 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 var shoppingcartTotal=0;
 
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
-		//alert(loginAccount.ausername);
-		var id= loginAccount.aid();
+		//alert(loginAccount.username);
+		var id= loginAccount.accountid();
 		
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/shoppingcarts",
@@ -470,7 +480,7 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
                         for (var i=0; i < len; ++i){
                                 shoppingcartTotal+= parseFloat(shoppingcart.productList[i].price);
                                 list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + shoppingcart.productList[i].id + ")>"+ 
-                                "<img src='"+ shoppingcart.productList[i].img+ "'/>" + shoppingcart.productList[i].itemName + 
+                                "<img src='"+ shoppingcart.productList[i].img+ "'/>" + shoppingcart.productList[i].prodname + 
                                         "<h4> Price: $"+shoppingcart.productList[i].price+"<\h4></a></li>");
                         }        
                         if (len < 1){
@@ -507,7 +517,7 @@ $(document).on('pagebeforeshow', "#history", function(event, ui) {
                                         history = historyList[j];
                                         for(var i=0; i<len; i++) {
                                                 list.append("<li><a onclick=GetProduct(" + history.productList[i].id + ")>" +
-                                                        "<h2>" + history.productList[i].itemName + "</h2>" + 
+                                                        "<h2>" + history.productList[i].prodname + "</h2>" + 
                                                         "<p><strong> Payment: " + history.productList[i].payment + "</strong></p>" + 
                                                         "<p>" + history.productList[i].description + "</p>" +
                                                         "<p class=\"ui-li-aside\">$" + history.productList[i].price + "</p>" +
@@ -522,7 +532,7 @@ $(document).on('pagebeforeshow', "#history", function(event, ui) {
                                         history = historyList[j];
                                         for(var i=0; i<len; i++) {
                                                 list.append("<li><a onclick=GetProduct(" + history.productList[i].id + ")>" +
-                                                        "<h2>" + history.productList[i].itemName + "</h2>" + 
+                                                        "<h2>" + history.productList[i].prodname + "</h2>" + 
                                                         "<p><strong> Payment: " + history.productList[i].payment + "</strong></p>" + 
                                                         "<p>" + history.productList[i].description + "</p>" +
                                                         "<p class=\"ui-li-aside\">$" + history.productList[i].price + "</p>" +
@@ -619,40 +629,36 @@ function ConverToJSON(formData){
         return result;
 }
 
-function aconvert(dbModel){
-        var aliModel = {};
-        
-        aliModel.aid = dbModel.accountid;
-        aliModel.afName = dbModel.fname;
-        aliModel.alName = dbModel.lname;
-        aliModel.aEmail = dbModel.email;
-        aliModel.aUsername = dbModel.username;
-        aliModel.aPassword = dbModel.apassword;
-        aliModel.aShipping = dbModel.shippingid;
-        aliModel.aBilling = dbModel.billingid;
-        aliModel.rank = dbModel.rank;
-        
-        return aliModel;
+function SaveSession(account){
+
+    	sessionStorage.setItem("fname", account.fname);
+    	sessionStorage.setItem("sname", account.sname);
+    	//sessionStorage.setItem("aaccountnumber", account.aaccountnumber);
+    	sessionStorage.setItem("email", account.email);
+        sessionStorage.setItem("username", account.username);
+        sessionStorage.setItem("accountid", account.accountid);
+        sessionStorage.setItem("isadmin", account.isadmin);
+}
+
+function GetSession(){
+		var session= new Array(sessionStorage.getItem("accountid"), sessionStorage.getItem("username"));
+        return session; 
 }
 
 function SaveAccount(){
         alert("Account Created!");
 }
-/*
-function GetAccount(aid){
+
+/*var currentAccount= {};
+function GetAccount(accountid){
         $.mobile.loading("show");
         $.ajax({
-                url : "http://localhost:3412/Project1Srv/accounts/" + aid,
+                url : "http://localhost:3412/Project1Srv/accounts/" + accountid,
                 method: 'get',
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentAccount = data.account;
-                        profile= data.account;
-                        $.mobile.loading("hide");
-                        //window.location.href="account.html";
-                        $.mobile.changePage("account.html");
-
                 },
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
@@ -663,18 +669,11 @@ function GetAccount(aid){
                         else {
                                 alert("Internal Server Error.");
                         }
+                        
+                    return false; 
                 }
         });
-}
-*/
-function adconvert(dbModel){
-        var adliModel = {};
-        
-        adliModel.addressid = dbModel.addressid;
-        adliModel.address = dbModel.address;
-        
-        return adliModel;
-}
+}*/
 
 var currentAddress = {};
 
@@ -686,7 +685,7 @@ function GetAddress(addressid){
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                        currentAddress = adconvert(data.address);
+                        currentAddress = data.address;
                         $.mobile.loading("hide");
                 },
                 error: function(data, textStatus, jqXHR){
@@ -725,14 +724,13 @@ function AccountLogin(username, password){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         
-                        var login= aconvert(data.accountLogin);
+                        var login= data.accountLogin;
                         var len= login.length;
-                        
                         $.mobile.loading("hide");
                         if(len !=0){        
                                 loginAccount= data.accountLogin[0];
+                                SaveSession(loginAccount);
                                 $.mobile.changePage("homepage.html");
-                                setCookie("username",username,14);
                         }
                         else{
                                 alert("Invalid login information. Try again.");
@@ -746,11 +744,10 @@ function AccountLogin(username, password){
                                 alert("Login error.");
                         }
                         else {
-                                alert("Internal Server Error.");
+                                alert("Internal Server Error. Page: Login");
                         }
                 }
         });        
-        
 }
 
 var profile={};
@@ -782,7 +779,7 @@ function GoProfile(id){
 
 function GoAccount(){
         
-         if(loginAccount.ausername!= undefined){
+         if(loginAccount.username!= undefined){
          	
          	   $.mobile.changePage("account.html");
 
@@ -928,7 +925,7 @@ function GetCategory(id){
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                        currentCategory= data.categoryName[0].name;},                        
+                        currentCategory= data.categoryName[0].catname;},                        
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
                         $.mobile.loading("hide");
@@ -942,6 +939,33 @@ function GetCategory(id){
 
         });
 }
+
+/*var currentCategories = {};
+function GetCategories(){
+     
+        $.mobile.loading("show");
+        $.ajax({
+               url : "http://localhost:3412/Project1Srv/category,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                       
+                        },                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Category Empty!");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });
+}*/
+
 
 var currentCategoryProducts = {};
 function GetCategoryProducts(id){
@@ -974,7 +998,7 @@ function GetCategoryProducts(id){
 
 var currentAuctionList = {};
 function GetAuctions(){
-        id= profile.ausername;
+        id= profile.accountid;
         $.mobile.loading("show");
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/auctions/"+ id,
@@ -1003,8 +1027,8 @@ function GetAuctions(){
 
 var currentSalesList = {};
 function GetSales(){
-        id= profile.ausername;
-        alert(profile.ausername);
+        id= profile.accountid;
+        //alert(profile.accountid);
         $.mobile.loading("show");
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/sales/"+ id,

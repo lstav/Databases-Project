@@ -39,7 +39,7 @@
         			<li><a href="Categories.html" >Search</a></li>
         			<li><a onClick=GoAccount() >Account</a></li>  
 					<li><a href="message.html" >Messages</a></li>  
-					<li><a href="login.html" >Log Out</a></li>      		      		
+					<li><a id= "logout" >Log Out</a></li>      		      		
         		</ul>
     		</div><!-- /panel -->
     		
@@ -52,24 +52,24 @@
 				</div>
 			</div>
 			
-			<div id= "categoriesShow" data-role="content">	
+			<div id= "showCategories" data-role="content">	
 					<div data-role="collapsible" data-collapsed="false">
 						<h1>Books</h1>
 						<ul data-role="listview" data-inset="true">
-						<li><a onClick= GetCategoryProducts("ArtBooks")>Arts & Photography</a></li>
-						<li><a onClick= GetCategoryProducts("ComicBooks")>Comic & Graphic Novels</a></li>
-						<li><a onClick= GetCategoryProducts("MysteryBooks")>Mystery, Thriller & Suspense</a></li>
-						<li><a onClick= GetCategoryProducts("RomanceBooks")>Romance</a></li>
-						<li><a onClick= GetCategoryProducts("ScienceFictionBooks")>Science Fiction & Fantasy</a></li></ul></div>						
+						<li><a onClick= GetCategoryProducts(1)>Arts & Photography</a></li>
+						<li><a onClick= GetCategoryProducts(1)>Comic & Graphic Novels</a></li>
+						<li><a onClick= GetCategoryProducts(1)>Mystery, Thriller & Suspense</a></li>
+						<li><a onClick= GetCategoryProducts(1)>Romance</a></li>
+						<li><a onClick= GetCategoryProducts(1)>Science Fiction & Fantasy</a></li></ul></div>						
 						
 					<div data-role="collapsible" data-collapsed="false">
 						<h1>Magazines</h1>
 						<ul data-role="listview" data-inset="true">
-						<li><a onClick= GetCategoryProducts("EntertainmentMagazine")>Entertainment</a></li>
-						<li><a onClick= GetCategoryProducts("FashionMagazine")>Fashion & Style</a></li>
-						<li><a onClick= GetCategoryProducts("MoviesMagazine")>Movies & Music</a></li>	
-						<li><a onClick= GetCategoryProducts("NewsMagazine")>News & Politics</a></li>
-						<li><a onClick= GetCategoryProducts("ScienceMagazine")>Science</a></li></ul></div>
+						<li><a onClick= GetCategoryProducts(2)>Entertainment</a></li>
+						<li><a onClick= GetCategoryProducts(2)>Fashion & Style</a></li>
+						<li><a onClick= GetCategoryProducts(2)>Movies & Music</a></li>	
+						<li><a onClick= GetCategoryProducts(2)>News & Politics</a></li>
+						<li><a onClick= GetCategoryProducts(2)>Science</a></li></ul></div>
 					
 					<div data-role="collapsible" data-collapsed="false">
 						<h1>Electronics</h1>
@@ -118,7 +118,7 @@
 						<li><a onClick= GetCategoryProducts("BicycleSports")>Bicycles</a></li>
 						<li><a onClick= GetCategoryProducts("KayakSports")>Kayaks</a></li>
 						<li><a onClick= GetCategoryProducts("GolfSports")>Golf</a></li>
-						<li><a onClick= GetCategoryProducts("FishingSports")>Fishing</a></li></ul></div>
-						</div></div>
+						<li><a onClick= GetCategoryProducts("FishingSports")>Fishing</a></li></ul></div> 
+			</div></div>
 	</body>
 </html>
