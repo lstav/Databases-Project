@@ -196,7 +196,7 @@ for (var i=0; i < messageList.length;++i){
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
-var conString = "pg://postgres:course@localhost:5432/db2";
+var conString = "pg://course:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -235,10 +235,13 @@ app.get('/Project1Srv/login/:username/:password', function(req, res) {
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM account WHERE username='"+username+"'");
+        var query = client.query("select * from account natural join (select address as shipping, addressid as shippingid " + 
+			"from account, address where account.shippingid = address.addressid) as s natural join" +
+			"(select address as billing, addressid as billingid from account, address " +
+			"where account.billingid = address.addressid) as b where account.username = '" + username + "'");
         
         query.on("row", function (row, result) {
-                if(row.password == password){
+                if(row.apassword == password){
             result.addRow(row);}
         });
         query.on("end", function (result) {
