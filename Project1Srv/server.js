@@ -274,7 +274,7 @@ app.get('/Project1Srv/profiles/:id', function(req, res) {
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * from account WHERE username='"+id+"'");
+        var query = client.query("SELECT * from account WHERE accountid="+id);
         
         query.on("row", function (row, result) {
             result.addRow(row);

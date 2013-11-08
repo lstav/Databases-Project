@@ -381,6 +381,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         
         var sell= $("#seller-info");
         sell.empty();
+        alert(currentProduct.aid);
         sell.append("<li><a  onClick= GoProfile('"+currentProduct.aid+"')>"+currentProduct.seller+"</a></li>");
 
         var idescription= $("#description");
