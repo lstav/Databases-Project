@@ -109,7 +109,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
        	
        }
        
-        $(document).on('click', '#sell-button', function() { 
+        $(document).on('click', '#sale-button', function() { 
         	
         	alert(loginAccount.username);
               if(loginAccount.username!= undefined)
@@ -320,28 +320,56 @@ $(document).on('pagebeforeshow', '#create-sale', function(){
 
 
 ///// Category and product
-/*
 $(document).on('click', '#search-button', function() { 
               GetCategories();
 }); 
 
 
 $(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
-				
+
 				var category= currentCategories;
 				var len= category.length;
-				var list=$("#showCategories");
+				var list=$("#show-categories");
 				list.empty();
-
+				
+				var cname;
                 for (var i=0; i < len; ++i){
-                var cname =category[i];
-                var cat= '<div data-role="collapsible" data-collapsed="false"> <h1>' + cname + '</h1>' ;
-                var clist='<ul data-role="listview" data-inset="true"></u>';
-                list.append(cat+clist+"</div>");
+                cname =category[i].catname;
+                cid= category[i].catid;
+                list.append("<li onClick= GetSubCategory("+cid+")><a>"+ cname+ "</a></li>");
                 }
-                list.listview("refresh");
+                list.listview("refresh" );
 				 
-});*/
+});
+
+$(document).on('pagebeforeshow', "#subcatLayout", function(event, ui) {
+
+				var category= subCategories;
+				var len= category.length;
+				var list=$("#show-subcategories");
+				list.empty();
+				
+				if(len > 0){
+                var pname=$("#pcat");
+                pname.empty();
+                pname.append(currentCategories[0].catname).trigger("create");
+                }
+				
+                
+                list.append("<li onClick= GetAllProducts("+category[0].parentid+")><a>All</a></li>");
+				
+				var sname;
+                for (var i=0; i < len; ++i){
+                sname =category[i].catname;
+                sid= category[i].catid;
+                list.append("<li onClick= GetCategoryProducts("+sid+")><a>"+ sname+ "</a></li>");
+                }
+                
+                list.listview("refresh" );
+                
+                 
+				 
+});
 
 $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 				//alert(loginAccount.username);
@@ -349,28 +377,32 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
                 var len =productCat.length;
                 var list = $("#product-list");
                 list.empty();
+                
+                if(len > 0){
                 var item;
                 for (var i=0; i < len; ++i){
                 item =productCat[i];
                 list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/>" + item.prodname + "<h4> Price: "+item.price+"<\h4></a></li>");
                 }
-                list.listview("refresh");
                 
                 var iname= $("#catName2");
                 iname.empty();
-                iname.append("<center>"+currentCategory+"</center>");
+                iname.append("<center>"+productCat[0].catname+"</center>");}
+                
+                else{
+                	
+                var msg='<li><a data-rel=back data-role="button">No products</a></li>;';
+                list.append(msg);                	
+                }
+                                
+                list.listview("refresh");
+                
+          
         
 });
 
 $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
-        //alert(loginAccount.username);
-        //var table1= $("#my-table");
-        //table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Price:        </b> $"+currentProduct.price  +"</td>");
-        //table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Quantity:        </b> "+currentProduct.quantity  +"</td>");
-        //table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Condition:        </b> "+currentProduct.condition  +"</td>");
-        //table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Shipping:        </b> "+currentProduct.shipping  +"</td>");
-   		//table1.append("<td><b class=&quot;ui-table-cell-label&quot;>Payments:        </b> "+currentProduct.payment  +"</td>");
-        
+		
         var list= $("#item-info");
         list.empty();
         list.append("<li><a> <strong>Price:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");
@@ -650,32 +682,6 @@ function SaveAccount(){
         alert("Account Created!");
 }
 
-/*var currentAccount= {};
-function GetAccount(accountid){
-        $.mobile.loading("show");
-        $.ajax({
-                url : "http://localhost:3412/Project1Srv/accounts/" + accountid,
-                method: 'get',
-                contentType: "application/json",
-                dataType:"json",
-                success : function(data, textStatus, jqXHR){
-                        currentAccount = data.account;
-                },
-                error: function(data, textStatus, jqXHR){
-                        console.log("textStatus: " + textStatus);
-                        $.mobile.loading("hide");
-                        if (data.status == 404){
-                                alert("Account not found.");
-                        }
-                        else {
-                                alert("Internal Server Error.");
-                        }
-                        
-                    return false; 
-                }
-        });
-}*/
-
 var currentAddress = {};
 
 function GetAddress(addressid){
@@ -844,8 +850,8 @@ function GetShoppingCart(scid){
                 }
         });
 }
-        
-function Sortby(id){
+       
+/* function Sortby(id){
 
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/sortProducts/"+ id,
@@ -869,7 +875,7 @@ function Sortby(id){
                 }
         });
         
-}
+}*/
 
 function UpdateShoppingCart(){
         alert("Account Saved!");
@@ -916,43 +922,23 @@ function EndSale(){
 }
 
 //////// Category
+var currentCategoryProducts = {};
 
-var currentCategory= {};
-function GetCategory(id){
+function GetAllProducts(id){
+ 
         $.mobile.loading("show");
         $.ajax({
-                url : "http://localhost:3412/Project1Srv/category/"+ id,
+                url : "http://localhost:3412/Project1Srv/categoryAll/"+ id,
                 method: 'get',
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                        currentCategory= data.categoryName[0].catname;},                        
-                error: function(data, textStatus, jqXHR){
-                        console.log("textStatus: " + textStatus);
+                        currentCategoryProducts= data.allProducts;
+                        alert(currentCategoryProducts.length);
                         $.mobile.loading("hide");
-                        if (data.status == 404){
-                                alert("Category does not exist!");
-                        }
-                        else {
-                                alert("Internal Server Error.");
-                        }
-                }
-
-        });
-}
-
-/*var currentCategories = {};
-function GetCategories(){
-     
-        $.mobile.loading("show");
-        $.ajax({
-               url : "http://localhost:3412/Project1Srv/category,
-                method: 'get',
-                contentType: "application/json",
-                dataType:"json",
-                success : function(data, textStatus, jqXHR){
-                       
-                        },                        
+                        $.mobile.changePage("productview.html", {
+                                info: id,
+                        });},                        
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
                         $.mobile.loading("hide");
@@ -965,12 +951,10 @@ function GetCategories(){
                 }
 
         });
-}*/
+}
 
-
-var currentCategoryProducts = {};
 function GetCategoryProducts(id){
-        GetCategory(id);
+      
         $.mobile.loading("show");
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/categoryProducts/"+ id,
@@ -996,6 +980,65 @@ function GetCategoryProducts(id){
 
         });
 }
+
+var currentCategories= {};
+function GetCategories(){
+     
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/category",
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                        currentCategories= data.categories;
+                        $.mobile.loading("hide");
+                        $.mobile.changePage("Categories.html");
+                        
+                       },                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Category Empty!");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });
+}
+
+var subCategories= {};
+function GetSubCategory(id){
+     
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/subcategory/"+id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                        subCategories= data.subcategory;
+                        $.mobile.loading("hide");
+                        $.mobile.navigate("subcategories.html");
+                        
+                       },                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Category Empty!");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });
+}
+
 
 var currentAuctionList = {};
 function GetAuctions(){

@@ -36,15 +36,16 @@
 		<div id="catLayout" data-role="page">
 			<div data-role="panel" id="mypanel" data-theme="a" data-position="right" data-display="reveal">
         		<ul data-role="listview" data-theme="a">
-        			<li><a href="Categories.html" >Search</a></li>
+        			<li><a id= "search-button" >Search</a></li>
         			<li><a onClick=GoAccount() >Account</a></li>  
 					<li><a href="message.html" >Messages</a></li>  
 					<li><a id= "logout" >Log Out</a></li>      		      		
         		</ul>
     		</div><!-- /panel -->
     		
-			<div data-role="header" data-theme="a"> <h1>Categories</h1>
+			<div data-role="header" data-theme="a"> 
 				
+				<h1><img src= 'http://img30.imageshack.us/img30/7994/r7b.gif' /></h1>			
 				<a data-role="button" data-position="left" data-icon="back" data-iconpos="notext" data-rel="back">Back</a>
 				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
 					<a data-role="button"  data-icon="home" data-iconpos="notext" href="homepage.html"> Home</a>
@@ -52,8 +53,13 @@
 				</div>
 			</div>
 			
-			<div id= "showCategories" data-role="content">	
-					<div data-role="collapsible" data-collapsed="false">
+			<div id= "showCategories" data-role="content"><br>
+				
+					<div data-role= "collapsible" data-collapsed="false" data-collapsed-icon= "false">
+					<h1>Categories:</h1>
+					<div id= "show-categories" data-role="listview" data-corners="true"></div></div>
+					
+					<!--<div data-role="collapsible" data-collapsed="false">
 						<h1>Books</h1>
 						<ul data-role="listview" data-inset="true">
 						<li><a onClick= GetCategoryProducts(1)>Arts & Photography</a></li>
@@ -118,7 +124,9 @@
 						<li><a onClick= GetCategoryProducts("BicycleSports")>Bicycles</a></li>
 						<li><a onClick= GetCategoryProducts("KayakSports")>Kayaks</a></li>
 						<li><a onClick= GetCategoryProducts("GolfSports")>Golf</a></li>
-						<li><a onClick= GetCategoryProducts("FishingSports")>Fishing</a></li></ul></div> 
-			</div></div>
+						<li><a onClick= GetCategoryProducts("FishingSports")>Fishing</a></li></ul></div> -->
+			</div>
+			
+		</div>
 	</body>
 </html>

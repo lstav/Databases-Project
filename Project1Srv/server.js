@@ -313,7 +313,7 @@ app.get('/Project1Srv/auctions/:id', function(req, res) {
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT prodname, startingbid as price, productid as id, imagelink as img FROM account natural join auction natural join product "+
+        var query = client.query("SELECT prodname, currentbid as price, productid as id, imagelink as img FROM account natural join auction natural join product "+
         "WHERE auction.prodid = product.productid AND auction.accountid = account.accountid AND accountid="+id);
         
         query.on("row", function (row, result) {
@@ -351,11 +351,11 @@ app.get('/Project1Srv/shoppingcarts', function(req, res) {
 
 app.get('/Project1Srv/category', function(req, res){
 
-        console.log("GET");
+        console.log("GET categories");
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM category WHERE parentid= 0");
+        var query = client.query("SELECT * FROM category WHERE parentid = 0");
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -363,44 +363,47 @@ app.get('/Project1Srv/category', function(req, res){
         query.on("end", function (result) {
                 var response = {"categories" : result.rows};
                 client.end();
-                  res.json(response);
+                 res.json(response);
          });
 });
 
 app.get('/Project1Srv/subcategory/:id', function(req, res){
 
-		var id= req.params.id;
-        console.log("GET");
+		var id = req.params.id;
+        console.log("GET categories");
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM category WHERE parentid="+id);
+        var query = client.query("SELECT * FROM category WHERE parentid =" + id);
         
         query.on("row", function (row, result) {
             result.addRow(row);
         });
         query.on("end", function (result) {
-                var response = {"subcategories" : result.rows};
+                var response = {"subcategory" : result.rows};
                 client.end();
-                  res.json(response);
+                 res.json(response);
          });
 });
 
-
-app.get('/Project1Srv/category/:id', function(req, res){
+app.get('/Project1Srv/categoryAll/:id', function(req, res){
         
         var id = req.params.id;
         console.log("GET category:"+ id);
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM category WHERE catid='"+id+"'");
+        var query = client.query("SELECT prodname, id, price, img, condition, description, img, catid, catname "+
+					"FROM ( SELECT prodname, product.productid as id, price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname "+
+					"FROM category as parent, category, product natural join sale WHERE category.parentId= parent.catid AND product.catid= category.catid AND product.productid = sale.prodid "+
+					"UNION SELECT prodname, product.productid as id, currentbid as price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname "+
+					"FROM category as parent, category, product natural join auction WHERE category.parentId= parent.catid AND product.catid= category.catid AND product.productid = auction.prodid ) as pdt WHERE catid="+id);
         
         query.on("row", function (row, result) {
             result.addRow(row);
         });
         query.on("end", function (result) {
-                var response = {"categoryName" : result.rows};
+                var response = {"allProducts" : result.rows};
                 client.end();
                   res.json(response);
          });
@@ -410,16 +413,16 @@ app.get('/Project1Srv/categoryProducts/:id', function(req, res){
 
         var id = req.params.id;
     
-    console.log("GET products in category:"+ id);
+ 		console.log("GET products in category:"+ id);
         
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT prodname, id, price, img, condition, description, img, catid "+
-		"FROM ( SELECT prodname, productid as id, price, condition, description, imagelink as img, catid "+
-		"FROM account natural join sale natural join product WHERE account.accountid = sale.accountid AND product.productid = sale.prodid "+ 
-		"UNION SELECT prodname, productid as id, startingbid as price, condition, description, imagelink as img, catid "+
-		"FROM account natural join auction natural join product WHERE auction.prodid = product.productid AND auction.accountid = account.accountid ) as pdt WHERE catid="+id);
+        var query = client.query("SELECT prodname, id, price, condition, description, img, catid, catname "+
+		"FROM ( SELECT prodname, productid as id, price, condition, description, imagelink as img, catid, catname "+
+		"FROM account natural join sale natural join product natural join category WHERE account.accountid = sale.accountid AND product.productid = sale.prodid "+ 
+		"AND category.catid= product.catid UNION SELECT prodname, productid as id, currentbid as price, condition, description, imagelink as img, catid, catname "+
+		"FROM account natural join auction natural join product natural join category WHERE auction.prodid = product.productid AND auction.accountid = account.accountid AND category.catid= product.catid ) as pdt WHERE catid="+id);
         
         console.log(query);
         
@@ -493,7 +496,7 @@ app.get('/Project1Srv/products/:id', function(req, res){
         	"SELECT seller, id, price, starttime, endtime, prodname, condition, description, img, aid " +
 			"FROM ( SELECT username as seller, productid as id, price, starttime, endtime, prodname, condition, description, imagelink as img, accountid as aid "+
 			"FROM account natural join sale natural join product WHERE account.accountid = sale.accountid AND product.productid = sale.prodid UNION "+
-			"SELECT username as seller, productid as id, startingbid as price, startdate as starttime, enddate as endtime, prodname, condition, description, imagelink as img, accountid as aid " + 
+			"SELECT username as seller, productid as id, currentbid as price, startdate as starttime, enddate as endtime, prodname, condition, description, imagelink as img, accountid as aid " + 
 			"FROM account natural join auction natural join product WHERE auction.prodid = product.productid AND auction.accountid = account.accountid) as pdt WHERE id=" + id);
         
         query.on("row", function (row, result) {
