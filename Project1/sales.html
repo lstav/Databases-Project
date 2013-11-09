@@ -38,21 +38,58 @@
 			
 			<div data-role="content" class="center-wrapper">
 						
-				<form id="item-form" align="center">
-				<fieldset data-role="controlgroup">
-	          		<input id="Product name" name="" placeholder="Name" type="text" value="" data-mini="true" data-corners="false"><br>
-	        	   	<input id="Price" name="" placeholder="Price" type="text" value="" data-mini="true" data-corners="false"><br>
-        	    	<input id="Location" name="" placeholder="location" type="text" value="" data-mini="true" data-corners="false"><br>
-		       	   	<input id="Shipping to:" name="" placeholder="Shipping" type="password" value="" data-mini="true" data-corners="false"> <br>
-		           	<input id="Payments accepted:" name="" placeholder="Choose:" type="text" value="" data-mini="true" data-corners="false"> <br>
-		            <input id="Time duration" name="" placeholder="Choose:" type="text" value="" data-mini="true" data-corners="false"> <br>
-
-
-	    	    	<a id= "submit-auction" data-role="button" data-transition="slide">
-		            	Submit
-        			</a>
-        		</fieldset>
-    		</form>
+				<form action="">
+            <div data-role="fieldcontain">
+                <input name="productname" id="Product Name" placeholder="Product Name"
+                value="" type="text" data-mini="true">
+            </div>
+            <div data-role="fieldcontain">
+                <input name="Price" id="Price" placeholder="Product Price" value="" type="text"
+                data-mini="true">
+            </div>
+            <div data-role="fieldcontain">
+                <label for="Condition">
+                    Condition
+                </label>
+                <select id="Condition" name="" data-theme="a" data-mini="true">
+                    <option value="New">
+                        New
+                    </option>
+                    <option value="Used">
+                        Used
+                    </option>
+                </select>
+            </div>
+            <div data-role="fieldcontain">
+                <input name="Shipping" id="Shipping to" placeholder="Shipping" value=""
+                type="text" data-mini="true">
+            </div>
+            <div id="Payments accepted" data-role="fieldcontain">
+                <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
+                    <legend>
+                        Payments
+                    </legend>
+                    <input id="checkbox1" name="Visa" type="checkbox">
+                    <label for="checkbox1">
+                        Visa
+                    </label>
+                    <input id="checkbox2" name="Paypal" type="checkbox">
+                    <label for="checkbox2">
+                        Paypal
+                    </label>
+                </fieldset>
+            </div>
+            <div data-role="fieldcontain">
+                <input name="Duration" id="Time duration" placeholder="Time duration"
+                value="" type="text" data-mini="true">
+            </div>
+            <div data-role="fieldcontain">
+                <input name="Image" id="image" placeholder="Image" value="" type="text"
+                data-mini="true">
+            </div>
+            <input id="submit-auction" type="submit" data-theme="a" value="Submit"
+            data-mini="true">
+        </form>
 			
 		    </div>
 			
@@ -87,8 +124,10 @@
 				<fieldset data-role="controlgroup">
 	          		<input id="Product name" name="" placeholder="Name" type="text" value="" data-mini="true" data-corners="false"><br>
 	        	   	<input id="Price" name="" placeholder="Price" type="text" value="" data-mini="true" data-corners="false"><br>
+	        	   	<input id="shippingPrice" name="" placeholder="Shipping Price" type="text" value="" data-mini="true" data-corners="false"> <br>
         	    	<input id="Location" name="" placeholder="location" type="text" value="" data-mini="true" data-corners="false"><br>
 		       	   	<input id="Shipping to:" name="" placeholder="Shipping" type="password" value="" data-mini="true" data-corners="false"> <br>
+		       	   	<input id="description" name="" placeholder="Description" type="text" value="" data-mini="true" data-corners="false"> <br>
 		           	<input id="Payments accepted:" name="" placeholder="Choose:" type="text" value="" data-mini="true" data-corners="false"> <br>
 		            <input id="Time duration" name="" placeholder="Choose:" type="text" value="" data-mini="true" data-corners="false"> <br>
 
@@ -98,7 +137,7 @@
         			</a>
         		</fieldset>
     		</form>
-			
+    		  			
 		    </div>
 			
 		</div>
