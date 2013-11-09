@@ -307,6 +307,30 @@ $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
 
 });
 
+$(document).on('pagebeforeshow', "#bidPage", function(event, ui) {
+        
+        		//alert(loginAccount.username);
+                var productbid = productBids;
+                var len =productBids.length;
+                
+                
+                if(len==0){
+                        var iname= $("#message");
+                        var msg= '<br><a data-rel="back"><center><h2>No bids to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
+                        iname.empty();
+                        iname.append(msg).trigger('create');}
+                        
+                else{
+                var list = $("#bid-info");
+                list.empty();
+                var item;
+                for (var i=0; i < len; ++i){
+                item =productbid[i];
+                list.append("<li><a>" + item.bidder + "<h4> Bid:"+item.bid+" on "+ item.bdate+"<\h4></a></li>");
+                }
+                list.listview("refresh");}
+});
+
 $(document).on('pagebeforeshow', '#create-auction', function(){  
 	
 	   //alert(loginAccount.username);
@@ -418,7 +442,10 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         
         var sell= $("#seller-info");
         sell.empty();
+<<<<<<< HEAD
        	// alert(currentProduct.aid);
+=======
+>>>>>>> 50b499118f839db411a21a95c70e1fb24a3823b2
         sell.append("<li><a  onClick= GoProfile('"+currentProduct.aid+"')>"+currentProduct.seller+"</a></li>");
 
         var idescription= $("#description");
@@ -442,7 +469,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         
         if(loginAccount.username == currentProduct.seller){
         	 var bid= $("#bid-name");
-             var msg= '<input type="button" value= "List of Bids" onClick=GetBids()" data-mini="true"/>';
+             var msg= '<input type="button" value= "List of Bids" onClick=GetBids('+currentProduct.id+') data-mini="true"/>';
              bid.empty();
              bid.append(msg).trigger('create');
              
@@ -463,18 +490,36 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              bid.empty();
              bid.append(msg).trigger('create');
              
+             if(loginAccount.username != undefined){
              var submit= $("#bid-offer");
-             var msg2= '<input type="submit" id= "submitBid" onClick=UpdateBid() value="Submit" data-theme="a" data-mini="true"/>';
+             var msg2= '<a><input type="submit" id= "submitBid" value="Submit" onClick= UpdateBid() data-theme="a" data-mini="true"/></a>';
              submit.empty();
              submit.append(msg2).trigger('create');
              
              var buy= $("#buy-now");
-             var msg3= '<input type="submit" id= "purchase" value= "Buy it now" onClick= GetShoppingCart(0) data-mini="true"/>';
+             var msg3= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= GetShoppingCart(0) data-mini="true"/></a>';
              buy.empty();
-             buy.append(msg3).trigger('create');
+             buy.append(msg3).trigger('create');}
+             
+             else{
+             	
+             var submit= $("#bid-offer");
+             var pop='<a id= "bid-offer" href="#popupLogin" data-rel="popup" data-position-to="window" data-inline="true">';
+             var msg2='<input type= "submit" id= "submitBid" value="Submit" value= "Submit" data-mini="true"/></a>';
+             submit.empty();
+             submit.append(pop+msg2).trigger('create');
+             
+             var buy= $("#buy-now");
+             var pop2= '<a href="#popupLogin" data-rel="popup" data-position-to="window" data-inline="true">';
+             var msg3= '<input type= "submit" value= "Buy it now" data-theme="a"data-mini="true" /></a>';
+            
+             buy.empty();
+             buy.append(pop2+msg3).trigger('create');
+             	
+             }
         }
         
-        $(document).on('click', '#purchase', function() { 
+        $(document).on('click', '#login-buy', function() { 
               alert("You have purchased this item!");
         });  
         
@@ -911,30 +956,30 @@ function DeleteShoppingCart(id){
 
 //Bids
 var productBids={};
-function GetBids(){
+function GetBids(id){
 	
-		$.mobile.changePage("bids.html");
-       /* $.mobile.loading("show");
+        $.mobile.loading("show");
         $.ajax({
-                url : "http://localhost:3412/Project1Srv/accounts,
+                url : "http://localhost:3412/Project1Srv/bidsproducts/"+id,
                 method: 'get',
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                        
+                			productBids= data.bids;
+                        	$.mobile.changePage("bids.html");
                         },                        
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
                         $.mobile.loading("hide");
                         if (data.status == 404){
-                                alert("Category does not exist!");
+                                alert("List of bids not available.");
                         }
                         else {
                                 alert("Internal Server Error.");
                         }
                 }
 
-        });*/
+        });
 }
 
 
@@ -955,7 +1000,10 @@ function GetAllProducts(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentCategoryProducts= data.allProducts;
+<<<<<<< HEAD
                         //alert(currentCategoryProducts.length);
+=======
+>>>>>>> 50b499118f839db411a21a95c70e1fb24a3823b2
                         $.mobile.loading("hide");
                         $.mobile.changePage("productview.html", {
                                 info: id,
