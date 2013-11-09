@@ -418,7 +418,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         
         var sell= $("#seller-info");
         sell.empty();
-        alert(currentProduct.aid);
+       	// alert(currentProduct.aid);
         sell.append("<li><a  onClick= GoProfile('"+currentProduct.aid+"')>"+currentProduct.seller+"</a></li>");
 
         var idescription= $("#description");
@@ -955,7 +955,7 @@ function GetAllProducts(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentCategoryProducts= data.allProducts;
-                        alert(currentCategoryProducts.length);
+                        //alert(currentCategoryProducts.length);
                         $.mobile.loading("hide");
                         $.mobile.changePage("productview.html", {
                                 info: id,
