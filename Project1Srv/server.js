@@ -196,7 +196,7 @@ for (var i=0; i < messageList.length;++i){
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
-var conString = "pg://course:course@localhost:5432/db2";
+var conString = "pg://postgres:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -335,7 +335,7 @@ app.get('/Project1Srv/auctions/:id', function(req, res) {
 app.get('/Project1Srv/bidsproducts/:id', function(req, res) {
         
         var id = req.params.id;
-        console.log("GET bids of product:"+ id);
+        console.log("GET bids on product:"+ id);
         var client = new pg.Client(conString);
         client.connect();
 
@@ -353,6 +353,76 @@ app.get('/Project1Srv/bidsproducts/:id', function(req, res) {
          });
          
 });
+
+app.get('/Project1Srv/bidusers/:id', function(req, res) {
+        
+        var id = req.params.id;
+        console.log("GET bids of user:"+ id);
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT prodname, max(bammmount) as bid, imagelink as img, max(bdate) as bdate, account.username as bidder, catid, productid as id "+
+		"FROM account, bid, auction, product WHERE auction.auctionid = bid.auctionid AND account.accountid= bid.accountid AND product.productid = auction.prodid "+
+		"AND account.accountid= "+id+" GROUP BY prodname, imagelink, account.username, catid, productid");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"biduser" : result.rows};
+                client.end();
+                  res.json(response);
+         });
+         
+});
+
+app.get('/Project1Srv/purchaseusers/:id', function(req, res) {
+        
+        var id = req.params.id;
+        console.log("GET purchases of user:"+ id);
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT prodname, max(bammmount) as bid, imagelink as img, max(bdate) as bdate, account.username as bidder, catid "+
+		"FROM account, bid, auction, product WHERE auction.auctionid = bid.auctionid AND account.accountid= bid.accountid AND product.productid = auction.prodid "+
+		"AND account.accountid= "+id+" GROUP BY prodname, imagelink, account.username, catid");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"purchaseuser" : result.rows};
+                client.end();
+                  res.json(response);
+         });
+         
+});
+
+app.get('/Project1Srv/salesusers/:id', function(req, res) {
+        
+        var id = req.params.id;
+        console.log("GET sales of user:"+ id);
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT catid, accountid, id, price, condition, img, prodname FROM "+
+        "(SELECT catid, accountid, productid as id, price, condition, imagelink as img, prodname "+
+		"FROM sale natural join product natural join account natural join category WHERE product.productid = sale.prodid "+
+		"AND account.accountid = sale.accountid AND category.catid = product.catid UNION SELECT catid, accountid, productid as id, currentbid as price, condition, imagelink as img, prodname "+
+		"FROM product natural join account natural join category natural join auction WHERE category.catid = product.catid AND auction.accountid = account.accountid "+
+		"AND auction.prodid = product.productid) as pdt WHERE accountid="+id);
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"saleuser" : result.rows};
+                client.end();
+                  res.json(response);
+         });
+         
+});
+
 
 app.get('/Project1Srv/histories', function(req, res) {
         console.log("GET");
@@ -383,6 +453,24 @@ app.get('/Project1Srv/category', function(req, res){
         client.connect();
 
         var query = client.query("SELECT * FROM category WHERE parentid = 0");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"categories" : result.rows};
+                client.end();
+                 res.json(response);
+         });
+});
+
+app.get('/Project1Srv/categories', function(req, res){
+
+        console.log("GET categories");
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT * FROM category");
         
         query.on("row", function (row, result) {
             result.addRow(row);
