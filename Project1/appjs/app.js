@@ -78,7 +78,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              block1.append(msg).trigger('create');
              
              var block2= $("#block2");
-             var msg2= '<a href= "messageView.html" data-role="button" data-corners="false" data-theme="a">Messages</a>';
+             var msg2= '<a href= "message.html" data-role="button" data-corners="false" data-theme="a">Messages</a>';
              block2.empty();
              block2.append(msg2).trigger('create'); 
              
@@ -1408,6 +1408,19 @@ function SaveOrder(){
         alert("Added to shopping cart!");
 }
 
+//////// Administrator
+
+function AddCategory(){
+        alert("Category Added!");
+}
+
+function ChangePassword(){
+	alert("Password Changed");
+}
+
+function DeleteAccount(){
+	alert("Account Deleted");
+}
 ///// Bid
 
 function UpdateBid(){
