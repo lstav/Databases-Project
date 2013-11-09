@@ -78,15 +78,14 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              block1.append(msg).trigger('create');
              
              var block2= $("#block2");
-             var msg2= '<a href= "#" data-role="button" data-corners="false">Watch List</a>';
+             var msg2= '<a href= "messageView.html" data-role="button" data-corners="false" data-theme="a">Messages</a>';
              block2.empty();
-             block2.append(msg2).trigger('create');
+             block2.append(msg2).trigger('create'); 
              
              var block3= $("#block3");
-             var msg3= '<a href= "messageView.html" data-role="button" data-corners="false" data-theme="a">Messages</a>';
+             var msg3= '<a href= "login.html" data-rel= "external" data-role="button" data-corners="false">Log Out</a>';
              block3.empty();
              block3.append(msg3).trigger('create');
-
        }
        
 		else{
@@ -425,9 +424,6 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
                 }
                                 
                 list.listview("refresh");
-                
-          
-        
 });
 
 $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
@@ -470,12 +466,12 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              bid.append(msg).trigger('create');
              
              var submit= $("#bid-offer");
-             var msg2= '<input type="submit" value="End Sale" onClick=EndSale() data-theme="a" data-mini="true"/>';
+             var msg2= '<input type="submit" href="homepage.html" value="End Sale" onClick=EndSale() data-theme="a" data-mini="true"/>';
              submit.empty();
              submit.append(msg2).trigger('create');
              
              var buy= $("#buy-now");
-             var msg3= '<input type="submit" id= "sale-other" value= "Sell another like this" data-mini="true"/>';
+             var msg3= '<input type="submit" href= "create-sale.html" id= "sale-other" value= "Sell another like this" data-mini="true"/>';
              buy.empty();
              buy.append(msg3).trigger('create');
         }
@@ -493,7 +489,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              submit.append(msg2).trigger('create');
              
              var buy= $("#buy-now");
-             var msg3= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= GetShoppingCart(0) data-mini="true"/></a>';
+             var msg3= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder() data-mini="true"/></a>';
              buy.empty();
              buy.append(msg3).trigger('create');}
              
@@ -718,14 +714,14 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
                 contentType: "application/json",
                 success : function(data, textStatus, jqXHR){
                         var categoriesList = data.categories;
-                        var len =categoriesList[0].categoriesList.length;
-                        var list = $("#categories-list");
+                        var len =categoriesList.length;
+                        var list = $("#categories-lists");
                         list.empty();
                         var categories;
                         categories = categoriesList[0];
                         for (var i=0; i < len; ++i){
-                                list.append("<li data-icon='delete' ><a onClick=DeleteCategory(" + categoriesList[i].id + ")>"+ 
-                                categoriesList[i].name + "</li>");
+                                list.append("<li data-icon='delete' ><a onClick=DeleteCategory(" + categoriesList[i].catid + ")>"+ 
+                                categoriesList[i].catname + "</li>");
                         }        
                         list.listview("refresh");
                 },
@@ -1384,7 +1380,7 @@ function submitMessage(){
 ////// Order
 
 function SaveOrder(){
-        alert("Order Processed!");
+        alert("Added to shopping cart!");
 }
 
 ///// Bid

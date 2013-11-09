@@ -464,6 +464,24 @@ app.get('/Project1Srv/category', function(req, res){
          });
 });
 
+app.get('/Project1Srv/categories', function(req, res){
+
+        console.log("GET categories");
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT * FROM category");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"categories" : result.rows};
+                client.end();
+                 res.json(response);
+         });
+});
+
 app.get('/Project1Srv/subcategory/:id', function(req, res){
 
 		var id = req.params.id;
