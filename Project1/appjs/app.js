@@ -154,8 +154,7 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
           var list = $("#account-list");
           list.empty();
           var account = loginAccount;
-               
-          list.append("<li>" + account.fname + " " +        account.lname + "</li>" + 
+          list.append("<li>" + account.fname + " " + account.lname + "</li>" + 
               "<li >Shipping Address: " + " " + account.shipping + "</li>" + 
               "<li>Billing Address: " + " " + account.billing + "</li>" +
               "<li>Credit Card: " + " " + account.cardnumber +"</li>" +
@@ -210,7 +209,7 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 	 	//alert(loginAccount.username);
         var list= $("#profile-info");
         list.empty();
-        list.append("<li><a <h4>Name: "+profile.fname +" "+ profile.sname+"</h4></a> </li>");
+        list.append("<li><a <h4>Name: "+profile.fname +" "+ profile.lname+"</h4></a> </li>");
         list.append("<li><a <h4>Rank: "+ profile.rank  +"</h4></a> </li>");
         //list.append("<li><a <h4>Location:"+profile.location  +"</h4></a> </li>");
         
@@ -580,52 +579,90 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 
 //////// History
 
-$(document).on('pagebeforeshow', "#history", function(event, ui) {
-        $.ajax({
-                url : "http://localhost:3412/Project1Srv/histories",
-                contentType: "application/json",
-                success : function(data, textStatus, jqXHR){
-                        var historyList = data.histories;
-                        var hlen = historyList.length;
-                        for (var j=0; j<hlen; j++) {
-                                if (historyList[j].purchased == 0) {                
-                                        var len = historyList[j].productList.length;
-                                        var list = $("#purchase-list");
-                                        list.empty();
-                                        var history;
-                                        history = historyList[j];
-                                        for(var i=0; i<len; i++) {
-                                                list.append("<li><a onclick=GetProduct(" + history.productList[i].id + ")>" +
-                                                        "<h2>" + history.productList[i].prodname + "</h2>" + 
-                                                        "<p><strong> Payment: " + history.productList[i].payment + "</strong></p>" + 
-                                                        "<p>" + history.productList[i].description + "</p>" +
-                                                        "<p class=\"ui-li-aside\">$" + history.productList[i].price + "</p>" +
-                                                        "</a></li>");
-                                        }
-                                        list.listview("refresh");
-                                } else if (historyList[j].purchased == 1) {
-                                        var len = historyList[j].productList.length;
-                                        var list = $("#sale-list");
-                                        list.empty();
-                                        var history;
-                                        history = historyList[j];
-                                        for(var i=0; i<len; i++) {
-                                                list.append("<li><a onclick=GetProduct(" + history.productList[i].id + ")>" +
-                                                        "<h2>" + history.productList[i].prodname + "</h2>" + 
-                                                        "<p><strong> Payment: " + history.productList[i].payment + "</strong></p>" + 
-                                                        "<p>" + history.productList[i].description + "</p>" +
-                                                        "<p class=\"ui-li-aside\">$" + history.productList[i].price + "</p>" +
-                                                        "</a></li>");
-                                        }
-                                        list.listview("refresh");
-                                }
-                        }
-                },
-                error: function(data, textStatus, jqXHR){
-                        console.log("textStatus: " + textStatus);
-                        alert("Data not found!");
+$(document).on('pagebeforeshow', "#historyPage", function(event, ui) {
+	
+		var list=$("#myhistory-list");
+		list.empty();
+	
+		var h1= '<li><a onClick=BidUser('+loginAccount.accountid+')>My Bids</a></li>';
+		var h2= '<li><a onClick=PurchaseUser('+loginAccount.accountid+')>Purchased</a></li>';
+		var h3= '<li><a onClick=SalesUser('+loginAccount.accountid+')>Sales</a></li>';
+		list.append(h1+h2+h3);
+		
+		list.listview("refresh");
+	
+        
+});
+
+$(document).on('pagebeforeshow', "#historyList", function(event, ui){
+	
+                var userbid = userBids;
+                var len =userBids.length;
+
+               if(len==0){ 
+                        var iname= $("#message");
+                        var msg= '<br><a data-rel="back"><center><h2>No bids to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
+                        iname.empty();
+                        iname.append(msg).trigger('create');}
+                        
+                else{
+                	
+                var list = $("#mybids-list");
+                list.empty();
+                var item;
+                for (var i=0; i < len; ++i){
+                item =userbid[i];
+                list.append("<li><a onClick= GetProduct("+item.id+")><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Your bid:"+item.bid+"<\h4></a></li>");
                 }
-        });
+                list.listview("refresh");}
+                
+});
+
+$(document).on('pagebeforeshow', "#purchaseList", function(event, ui){
+	
+                var usales = purchases;
+                var len =usales.length;
+
+               if(len==0){ 
+                        var iname= $("#message");
+                        var msg= '<br><a data-rel="back"><center><h2>No bids to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
+                        iname.empty();
+                        iname.append(msg).trigger('create');}
+                        
+                else{
+                	
+                var list = $("#mypurchase-list");
+                list.empty();
+                var item;
+                for (var i=0; i < len; ++i){
+                item =usales[i];
+                list.append("<li><a onClick= GetProduct("+item.id+")><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Your bid:"+item.bid+"<\h4></a></li>");
+                }
+                list.listview("refresh");}
+                
+});
+
+$(document).on('pagebeforeshow', "#saleList", function(event, ui){
+	
+                var usales = sales;
+                var len =usales.length;
+
+               if(len==0){ 
+                        var iname= $("#message");
+                        var msg= '<br><a data-rel="back"><center><h2>No bids to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
+                        iname.empty();
+                        iname.append(msg).trigger('create');}
+                        
+                else{
+                	
+                var list = $("#mysale-list");
+                list.empty();
+                var item;
+                for (var i=0; i < len; ++i){
+                item =usales[i];
+                list.append("<li><a onClick= GetProduct("+item.id+")><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Condition:"+item.condition+" </h4> <h5> Sale:"+item.price+"</h5></a></li>");
+                }
+                list.listview("refresh");}  
 });
 
 
@@ -711,7 +748,7 @@ function ConverToJSON(formData){
 function SaveSession(account){
 
     	sessionStorage.setItem("fname", account.fname);
-    	sessionStorage.setItem("sname", account.sname);
+    	sessionStorage.setItem("lname", account.lname);
     	//sessionStorage.setItem("aaccountnumber", account.aaccountnumber);
     	sessionStorage.setItem("email", account.email);
         sessionStorage.setItem("username", account.username);
@@ -821,8 +858,15 @@ function AccountLogin(username, password){
 
 var profile={};
 function GoProfile(id){
-        console.log("getting profile");
+	    console.log("getting profile");
         $.mobile.loading("show");
+        
+		if(loginAccount.accountid == id){
+			 $.mobile.loading("hide");
+             $.mobile.changePage("account.html");
+		}
+     
+     	else{
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/profiles/"+id,
                 method: 'get',
@@ -843,7 +887,7 @@ function GoProfile(id){
                                 alert("Internal Server Error.");
                         }
                 }
-        });        
+        });}    
 }
 
 function GoAccount(){
@@ -963,6 +1007,90 @@ function GetBids(id){
                 success : function(data, textStatus, jqXHR){
                 			productBids= data.bids;
                         	$.mobile.changePage("bids.html");
+                        },                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("List of bids not available.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });
+}
+
+var userBids={};
+function BidUser(id){
+	
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/bidusers/"+id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                			userBids= data.biduser;
+                			$.mobile.loading("hide");
+                        	$.mobile.changePage("biduser.html");
+                        },                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("List of bids not available.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });
+}
+
+var purchases={};
+function PurchaseUser(id){
+	
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/purchaseusers/"+id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                			purchases= data.purchaseuser;
+                			$.mobile.loading("hide");
+                        	$.mobile.changePage("purchaseuser.html");
+                        },                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("List of bids not available.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });
+}
+
+var sales={};
+function SalesUser(id){
+	
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/salesusers/"+id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                			sales= data.saleuser;
+                			$.mobile.loading("hide");
+                        	$.mobile.changePage("saleuser.html");
                         },                        
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
