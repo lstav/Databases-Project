@@ -28,7 +28,7 @@
 		
 	</head>
 	<body>
-		<div id="profile-page" data-role="page" style= "background: url('http://img39.imageshack.us/img39/2575/b83n.jpg') repeat;
+		<div id="userrank-page" data-role="page" style= "background: url('http://img39.imageshack.us/img39/2575/b83n.jpg') repeat;
     	background-size: 100% 100% !important;">
 			<div data-role="panel" id="mypanel" data-position="right" data-display="reveal">
         		<ul data-role="listview" data-theme="a">
@@ -49,45 +49,27 @@
 			</div>
 			<form data-role="content">
 				
-				<div id= "user-image"></div> 
+				<div id= "urank-image"></div> 
 
 				<div class="ui-grid-b">
 					<div class= "ui-block-a"> </div>
 					<div class= "ui-block-b">
-						<h2 id= "name" style= "color: DarkRed" data-role="button" data-mini= "true" data-corners="false"></h2>
+						<h2 id= "urname" style= "color: DarkRed" data-role="button" data-mini= "true" data-corners="false"></h2>
 					</div>
-					<div class= "ui-block-c"> </div>
+					
 				</div>
-				
-				<div class="ui-grid-a">
-				<div class="ui-block-a">
-				<a onClick=GetSales() data-role="button" data-theme="a" data-corners="false" >
-            			Sales
-      				</a>
+				<div class="ui-grid-b">
+					<div class= "ui-block-a">
+					</div>
+					<div class= "ui-block-b">
+						<label for="rank">
+                			Rank User
+            			</label>
+            			<input id="rank" type="range" name="slider" value="0" min="0" max="4"
+            				data-highlight="true" data-theme="a" data-track-theme="e" data-mini="true">
+					</div>
 				</div>
-				<div class="ui-block-b">
-				<a onClick=GetAuctions() data-role="button" data-theme="a" data-corners="false" >
-            			Auctions
-        			</a>
-				</div> </div>
-				
-				<div class="ui-grid-a">
-				<div class="ui-block-a">
-				<a  data-role="button" data-theme="a" data-corners="false" >
-            			Reviews
-      				</a>
-				</div>
-				<div class="ui-block-b">
-				<a onClick=RankUser() data-role="button" data-theme="a" data-corners="false" >
-            			Rank User
-        			</a>
-				</div> </div><br>
-			
-				<div data-role= "collapsible" data-collapsed="false" data-collapsed-icon= "false">
-				<h4 style= "color: white">Summary:</h4>
-				<ul data-role="listview" data-icon= "false" id="profile-info" ></ul><br></div>
-
-				<a data-role="button" href="newMessage.html" data-theme="a">Send Message</a>
+				<input id="submitrank" type="submit" data-theme="c" value="Submit" data-mini="true">
 			</form>
 		</div>
 		
