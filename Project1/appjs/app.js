@@ -111,7 +111,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
        
         $(document).on('click', '#sale-button', function() { 
         	
-        	alert(loginAccount.username);
+        	//alert(loginAccount.username);
               if(loginAccount.username!= undefined)
               {
               	 $.mobile.changePage("create-sale.html");
@@ -179,29 +179,30 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
         // loginAccount has been set at this point
-        /* var len = loginAccount.password.length;
+         var sessionId= GetSession();
+        var len = loginAccount.apassword.length;
         var pass = "";
         for (var i=0; i < len; ++i){
                 pass = pass + "*";
-        }*/
+        }
         //alert(loginAccount.username);
         $('#upd-username').val(loginAccount.username); 
         $('#upd-fname').val(loginAccount.fname);
         $('#upd-lname').val(loginAccount.lname);
         $("#upd-shipping").val(loginAccount.shipping);
         $("#upd-billing").val(loginAccount.billing);
-        //$('#upd-creditCard').val("*****" + loginAccount.accard.substr(5,6));
+        $('#upd-creditCard').val("*****" + loginAccount.cardnumber.substr(5,6));
         $('#upd-email').val(loginAccount.email);
-        //$('#upd-password').val(pass);
+       	$('#upd-password').val(pass);
         
         $('#username').html("Username: " + loginAccount.username);
         $('#fname').html("First Name: " + loginAccount.fname);
         $('#lname').html("Last Name: " + loginAccount.lname);
         $("#shippingA").html("Shipping Address: " + loginAccount.shipping);
         $("#billingA").html("Billing Address: " + loginAccount.billing);
-       // $('#cCard').html("Credit Card Number: *****" + loginAccount.accard.substr(5,6));
+       	$('#cCard').html("Credit Card Number: *****" + loginAccount.cardnumber.substr(5,6));
         $('#email').html("Email: " + loginAccount.email);
-        //$('#password').html("Password: " + pass); 
+       	$('#password').html("Password: " + pass); 
         
 });
 
@@ -210,7 +211,7 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 	 	//alert(loginAccount.username);
         var list= $("#profile-info");
         list.empty();
-        list.append("<li><a <h4>Name: "+profile.fname +" "+ profile.sname+"</h4></a> </li>");
+        list.append("<li><a <h4>Name: "+profile.fname +" "+ profile.lname+"</h4></a> </li>");
         list.append("<li><a <h4>Rank: "+ profile.rank  +"</h4></a> </li>");
         //list.append("<li><a <h4>Location:"+profile.location  +"</h4></a> </li>");
         
@@ -250,7 +251,7 @@ $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
                        
                         if(profile.username== loginAccount.username){
                         var sell= $("#sell-button");
-                        var msg2= '<br><a data-role= "button" data-mini= "true"><center><h2>Sale an item</h2></center></a>';
+                        var msg2= '<br><a data-role= "button" data-mini= "true"><center><h2>Sell an item</h2></center></a>';
                         sell.empty();
                         sell.append(msg2).trigger('create');
                         }
@@ -442,10 +443,6 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         
         var sell= $("#seller-info");
         sell.empty();
-<<<<<<< HEAD
-       	// alert(currentProduct.aid);
-=======
->>>>>>> 50b499118f839db411a21a95c70e1fb24a3823b2
         sell.append("<li><a  onClick= GoProfile('"+currentProduct.aid+"')>"+currentProduct.seller+"</a></li>");
 
         var idescription= $("#description");
@@ -1000,10 +997,6 @@ function GetAllProducts(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentCategoryProducts= data.allProducts;
-<<<<<<< HEAD
-                        //alert(currentCategoryProducts.length);
-=======
->>>>>>> 50b499118f839db411a21a95c70e1fb24a3823b2
                         $.mobile.loading("hide");
                         $.mobile.changePage("productview.html", {
                                 info: id,
