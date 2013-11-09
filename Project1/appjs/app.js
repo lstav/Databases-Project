@@ -812,6 +812,13 @@ function DeleteAccount(){
         }
 }
 
+function DeleteCategory(id){
+        var decision = confirm("Delete Category?");
+        if(decision == true) {
+                alert("Category Deleted");
+        }
+}
+
 function aconvert(dbModel){
         var aliModel = {};
         
