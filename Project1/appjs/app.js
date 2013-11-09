@@ -158,7 +158,7 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
           list.append("<li>" + account.fname + " " +        account.lname + "</li>" + 
               "<li >Shipping Address: " + " " + account.shipping + "</li>" + 
               "<li>Billing Address: " + " " + account.billing + "</li>" +
-             // "<li>Credit Card: *****</li>" +
+              "<li>Credit Card: " + " " + account.cardnumber +"</li>" +
               "<li> Rank: " + stars + "</li>");        
                       
                         var iname= $("#username2");
