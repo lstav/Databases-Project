@@ -714,7 +714,6 @@ app.post('/Project1Srv/messages', function(req, res) {
 
 });
 
-
 ////// Shopping Cart
 
 app.get('/Project1Srv/shoppingcarts/:scid', function(req, res){

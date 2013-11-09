@@ -229,6 +229,18 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 
 });
 
+$(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
+	    
+	    $(document).on('click', '#submitrank', function() {
+	    	alert("Rank submited!");
+	    	$.mobile.changePage("profile.html");
+	    });
+	    
+        var pname= $("#urname");
+        pname.empty();
+        pname.append("<center>"+profile.username+"</center>");
+});
+
 $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
         
         		//alert(loginAccount.username);
@@ -1103,7 +1115,6 @@ function SalesUser(id){
         });
 }
 
-
 function EndSale(){
         alert("Sale ended!");
 }
@@ -1195,6 +1206,12 @@ function GetCategories(){
 
         });
 }
+
+function RankUser(){
+		$.mobile.changePage("userrank.html");                                     
+}
+
+
 
 var subCategories= {};
 function GetSubCategory(id){
