@@ -196,7 +196,7 @@ for (var i=0; i < messageList.length;++i){
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
-var conString = "pg://postgres:course@localhost:5432/db2";
+var conString = "pg://course:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -293,6 +293,27 @@ app.get('/Project1Srv/address', function(req, res) {
          });
 });
 
+app.get('/Project1Srv/rankers/:id', function(req, res) {
+        
+        var id = req.params.id;
+        console.log("GET rankers:"+ id);
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("select buyerid, buyer.username, stars, rank.accountid " +
+        "from rank, account as buyer " +
+		"where buyer.accountid = rank.buyerid and rank.accountid =" + id);
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"rankers" : result.rows};
+                client.end();
+                  res.json(response);
+         });
+});
+
 app.get('/Project1Srv/profiles/:id', function(req, res) {
         
         var id = req.params.id;
@@ -300,7 +321,14 @@ app.get('/Project1Srv/profiles/:id', function(req, res) {
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * from account WHERE accountid="+id);
+        var query = client.query("select * from account, (select (C4.C4*100/Ct.Ct) as percent " +
+								"from (select count(rankid) as C4 " +
+								"from rank " +
+								"where stars = 4 and accountid =" + id +") as C4, " +
+								"(select count(rankid) as Ct " +
+								"from rank " +
+								"where accountid = " + id + ") as Ct) as prank " +
+								"where account.accountid =" + id);
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -311,6 +339,8 @@ app.get('/Project1Srv/profiles/:id', function(req, res) {
                   res.json(response);
          });
 });
+
+
 
 app.get('/Project1Srv/sales/:id', function(req, res) {
         
