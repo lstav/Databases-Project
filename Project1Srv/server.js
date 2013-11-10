@@ -196,7 +196,7 @@ for (var i=0; i < messageList.length;++i){
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
-var conString = "pg://course:course@localhost:5432/db2";
+var conString = "pg://postgres:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -224,6 +224,27 @@ app.get('/Project1Srv/accounts', function(req, res) {
                 var response = {"accounts" : result.rows};
                 client.end();
                   res.json(response);
+         });
+});
+
+// REST Operation - HTTP GET 
+app.get('/Project1Srv/accountsign/:id', function(req, res) {
+	
+		var id = req.params.id;
+        console.log("Check username availability.");
+        
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT username FROM account WHERE username='"+ id+"'");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"accounts" : result.rows};
+                client.end();
+                res.json(response);
          });
 });
 
@@ -733,25 +754,26 @@ app.post('/Project1Srv/messages', function(req, res) {
 
 ////// Shopping Cart
 
-app.get('/Project1Srv/shoppingcarts/:scid', function(req, res){
+app.get('/Project1Srv/shoppingcart/:id', function(req, res){
+	
+	    var id = req.params.id;
+        console.log("GET shopping cart:"+ id);
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT productid as id, imagelink as img, prodname, price FROM containsales natural join shoppingcart, sale natural join product "+
+        "WHERE shoppingcart.sid = containsales.sid AND containsales.saleid= sale.saleid AND sale.prodid= product.productid AND shoppingcart.accountid=" + id);
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"shoppingcart" : result.rows};
+                client.end();
+                  res.json(response);
+         });
                 
-        var scid = req.params.scid;
-        console.log("GET cart: " + scid);
-        var target = -1;
-                for (var i=0; i < shoppingcartList.length; ++i){
-                        if(shoppingcartList[0].productList[i].id == scid){
-                                        target= i;
-                                        break;
-                                }
-                }
-                if (target == -1){
-                        res.statusCode = 404;
-                        res.send("Product not found.");
-                }
-                else {
-                        var response = {"product" : shoppingcartList[0].productList[target]};
-                          res.json(response);        
-                  }                
+    
 });
 
 app.put('/Project1Srv/shoppingcarts/:scid', function(req, res) {
