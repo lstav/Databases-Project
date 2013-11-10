@@ -92,11 +92,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
         	  profile= loginAccount;
               $.mobile.changePage("account.html");
         });
-        
-         $(document).on('click', '#cart-button', function() {
-         	GetProducts(); 
-         	});
-        
+                
         var id= loginAccount.accountid;
         var iname= $("#welcome");
         iname.empty();
@@ -166,7 +162,6 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 
  });  
         
-
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 	
 		 var sessionId= GetSession();
@@ -678,44 +673,6 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
      	   list.listview("refresh");        
      });
 
-/*
-$(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
-		//alert(loginAccount.username);
-		var id= loginAccount.accountid();
-		
-        $.ajax({
-                url : "http://localhost:3412/Project1Srv/shoppingcarts",
-                contentType: "application/json",
-                success : function(data, textStatus, jqXHR){
-                        var shoppingcartList = data.shoppingcarts;
-                        var len =shoppingcartList[0].productList.length;
-                        var list = $("#shopping-list");
-                        list.empty();
-                        var shoppingcart;
-                        shoppingcart = shoppingcartList[0];
-                        shoppingcartTotal=0;
-                        for (var i=0; i < len; ++i){
-                                shoppingcartTotal+= parseFloat(shoppingcart.productList[i].price);
-                                list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + shoppingcart.productList[i].id + ")>"+ 
-                                "<img src='"+ shoppingcart.productList[i].img+ "'/>" + shoppingcart.productList[i].prodname + 
-                                        "<h4> Price: $"+shoppingcart.productList[i].price+"<\h4></a></li>");
-                        }        
-                        if (len < 1){
-                                //list.append("<li data-icon='false'> <a No items in your shopping cart. </a> </li>");
-                                var iname= $("#message");
-                       			var msg= '<br><a data-rel="back"><center><h2>No auctions to display.</h2><br> <img src="http://img59.imageshack.us/img59/1723/oby.gif" /></center></a> ';
-                       			iname.empty();
-                        		iname.append(msg).trigger('create');
-                        }
-                        list.listview("refresh");
-                },
-                error: function(data, textStatus, jqXHR){
-                        console.log("textStatus: " + textStatus);
-                        alert("Data not found!");
-                }
-        });
-});*/
-
 //////// History
 
 $(document).on('pagebeforeshow', "#historyPage", function(event, ui) {
@@ -764,7 +721,7 @@ $(document).on('pagebeforeshow', "#purchaseList", function(event, ui){
 
                if(len==0){ 
                         var iname= $("#message");
-                        var msg= '<br><a data-rel="back"><center><h2>No bids to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
+                        var msg= '<br><a data-rel="back"><center><h2>No purchases to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
                         iname.empty();
                         iname.append(msg).trigger('create');}
                         
@@ -982,17 +939,13 @@ function AccountLogin(username, password){
                         if(len !=0){        
                                 loginAccount= data.accountLogin[0];
                                 SaveSession(loginAccount);
-<<<<<<< HEAD
-                                $.mobile.changePage("index.html");
-=======
                                 var sc = '{"shoppingcart":[' +
    								'{"prodid":"13" },' +
    								'{"prodid":"5" },' +
   								'{"prodid":"20" }]}';
 								setCookie(loginAccount.accountid, JSON.stringify(sc));
                                
-                                $.mobile.changePage("homepage.html");
->>>>>>> 5fcc8bde3d7754ecdf83cb33d7f01f8b011f0cd2
+                                $.mobile.changePage("index.html");
                         }
                         else{
                                 alert("Invalid login information. Try again.");
