@@ -1,13 +1,46 @@
+function setCookie(c_name,value,exdays)
+{
+var exdate=new Date();
+exdate.setDate(exdate.getDate() + exdays);
+var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+document.cookie=c_name + "=" + c_value;
+}
+
+function getCookie(c_name)
+{
+var c_value = document.cookie;
+var c_start = c_value.indexOf(" " + c_name + "=");
+if (c_start == -1)
+  {
+  c_start = c_value.indexOf(c_name + "=");
+  }
+if (c_start == -1)
+  {
+  c_value = null;
+  }
+else
+  {
+  c_start = c_value.indexOf("=", c_start) + 1;
+  var c_end = c_value.indexOf(";", c_start);
+  if (c_end == -1)
+  {
+c_end = c_value.length;
+}
+c_value = unescape(c_value.substring(c_start,c_end));
+}
+return c_value;
+}
+
 $(document).on('pagebeforeshow', '#login', function(){  
         
         $(document).on('click', '#submit', function() { 
         
         var username= $('#username').val();
         var password= $('#password').val();
-        
         if(username.length > 0 && password.length > 0){
         	//alert(username+ password);
-           AccountLogin(username, password);           
+           AccountLogin(username, password);     
+               
         } 
         
         else {
@@ -49,19 +82,22 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 		
 	   var sessionId= GetSession();
 	   if(loginAccount.username == undefined && sessionId[1] != undefined){
-	   	
 	   		loginAccount.username= sessionId[1];
 	   		loginAccount.isadmin= sessionId[2];
 	   		loginAccount.accountid= GetSession()[0];
 	   }
 
        if(loginAccount.username!= undefined)	{
-      
         $(document).on('click', '#profile-account', function() { 
         	  profile= loginAccount;
               $.mobile.changePage("account.html");
-        });    
-             
+        });
+        
+         $(document).on('click', '#cart-button', function() {
+         	GetProducts(); 
+         	});
+        
+        var id= loginAccount.accountid;
         var iname= $("#welcome");
         iname.empty();
         iname.append("<center><h3>hello "+loginAccount.username+"!</h3></center>");
@@ -79,7 +115,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              block1.append(msg).trigger('create');
              
              var block2= $("#block2");
-             var msg2= '<a href= "messageView.html" data-role="button" data-corners="false" data-theme="a">Messages</a>';
+             var msg2= '<a href= "message.html" data-role="button" data-corners="false" data-theme="a">Messages</a>';
              block2.empty();
              block2.append(msg2).trigger('create'); 
              
@@ -228,6 +264,18 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
         pname.empty();
         pname.append("<center>"+profile.username+"</center>");
 
+});
+
+$(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
+	    
+	    $(document).on('click', '#submitrank', function() {
+	    	alert("Rank submited!");
+	    	$.mobile.changePage("profile.html");
+	    });
+	    
+        var pname= $("#urname");
+        pname.empty();
+        pname.append("<center>"+profile.username+"</center>");
 });
 
 $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
@@ -530,6 +578,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              
              var buy= $("#buy-now");
              var msg3= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder() data-mini="true"/></a>';
+
              buy.empty();
              buy.append(msg3).trigger('create');}
              
@@ -607,6 +656,31 @@ var shoppingcartTotal=0;
 
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 		//alert(loginAccount.username);
+		var id= loginAccount.accountid;
+		var products = productList;
+			var txt = $.parseJSON(getCookie(id));
+        	var obj = eval('(' + txt + ')');
+        	var list = $("#shopping-list");
+            list.empty();
+     	   var len = obj.shoppingcart.length;
+     	   shoppingcartTotal=0;
+     	   var j = 0;
+     	   for(var i=0; i<len; i++) {
+     	   		//GetProduct(obj.shoppingcart[i].prodid);
+     	   		
+     	   		list.append("<li>" + products[i].prodname + "</li>");
+     	   		/*prod = currentProduct[0];
+     	   		shoppingcartTotal+= parseFloat(prod.price);
+                                list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + prod.id + ")>"+ 
+                                "<img src='"+ prod.img+ "'/>" + prod.prodname + 
+                                        "<h4> Price: $"+prod.price+"<\h4></a></li>");*/
+     	   }
+     	   list.listview("refresh");        
+     });
+
+/*
+$(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
+		//alert(loginAccount.username);
 		var id= loginAccount.accountid();
 		
         $.ajax({
@@ -640,7 +714,7 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
                         alert("Data not found!");
                 }
         });
-});
+});*/
 
 //////// History
 
@@ -867,6 +941,13 @@ function DeleteAccount(){
         }
 }
 
+function DeleteCategory(id){
+        var decision = confirm("Delete Category?");
+        if(decision == true) {
+                alert("Category Deleted");
+        }
+}
+
 function aconvert(dbModel){
         var aliModel = {};
         
@@ -901,7 +982,17 @@ function AccountLogin(username, password){
                         if(len !=0){        
                                 loginAccount= data.accountLogin[0];
                                 SaveSession(loginAccount);
+<<<<<<< HEAD
                                 $.mobile.changePage("index.html");
+=======
+                                var sc = '{"shoppingcart":[' +
+   								'{"prodid":"13" },' +
+   								'{"prodid":"5" },' +
+  								'{"prodid":"20" }]}';
+								setCookie(loginAccount.accountid, JSON.stringify(sc));
+                               
+                                $.mobile.changePage("homepage.html");
+>>>>>>> 5fcc8bde3d7754ecdf83cb33d7f01f8b011f0cd2
                         }
                         else{
                                 alert("Invalid login information. Try again.");
@@ -1201,7 +1292,6 @@ function SalesUser(id){
         });
 }
 
-
 function EndSale(){
         alert("Sale ended!");
 }
@@ -1275,7 +1365,7 @@ function GetCategories(){
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                        currentCategories= data.categories;
+                        currentCategories= data.category;
                         $.mobile.loading("hide");
                         $.mobile.changePage("Categories.html");
                         
@@ -1293,6 +1383,12 @@ function GetCategories(){
 
         });
 }
+
+function RankUser(){
+		$.mobile.changePage("userrank.html");                                     
+}
+
+
 
 var subCategories= {};
 function GetSubCategory(id){
@@ -1374,6 +1470,35 @@ function GetSales(){
                         $.mobile.loading("hide");
                         if (data.status == 404){
                                 alert("Sales Error!");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });
+}
+
+var productList = {};
+function GetProducts(){
+        //id= profile.accountid;
+        //alert(profile.accountid);
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/products/",
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                        productList= data.products;
+                        $.mobile.loading("hide");
+                        $.mobile.changePage("shopping.html");
+          		},                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Products Error!");
                         }
                         else {
                                 alert("Internal Server Error.");
@@ -1481,6 +1606,19 @@ function SaveOrder(){
         alert("Added to shopping cart!");
 }
 
+//////// Administrator
+
+function AddCategory(){
+        alert("Category Added!");
+}
+
+function ChangePassword(){
+	alert("Password Changed");
+}
+
+function DeleteAccount(){
+	alert("Account Deleted");
+}
 ///// Bid
 
 function UpdateBid(){

@@ -196,7 +196,7 @@ for (var i=0; i < messageList.length;++i){
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
-var conString = "pg://postgres:course@localhost:5432/db2";
+var conString = "pg://course:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -444,7 +444,6 @@ app.get('/Project1Srv/salesusers/:id', function(req, res) {
          
 });
 
-
 app.get('/Project1Srv/histories', function(req, res) {
         console.log("GET");
         var response = {"histories" : historyList};
@@ -472,14 +471,13 @@ app.get('/Project1Srv/category', function(req, res){
         console.log("GET categories");
         var client = new pg.Client(conString);
         client.connect();
-
-        var query = client.query("SELECT * FROM category WHERE parentid = 0");
+       	var query = client.query("SELECT * FROM category WHERE parentid = 0");
         
         query.on("row", function (row, result) {
             result.addRow(row);
         });
         query.on("end", function (result) {
-                var response = {"categories" : result.rows};
+                var response = {"category" : result.rows};
                 client.end();
                  res.json(response);
          });
@@ -647,6 +645,25 @@ app.get('/Project1Srv/products/:id', function(req, res){
          });
 });
 
+app.get('/Project1Srv/products', function(req, res){
+
+        //var id = req.params.id;
+        console.log("GET products:");
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT * FROM product");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"products" : result.rows};
+                client.end();
+                  res.json(response);
+         });
+});
+
 app.put('/Project1Srv/products/:id', function(req, res) {
 
 });
@@ -734,7 +751,6 @@ app.del('/Project1Srv/messages/:mid', function(req, res) {
 app.post('/Project1Srv/messages', function(req, res) {
 
 });
-
 
 ////// Shopping Cart
 

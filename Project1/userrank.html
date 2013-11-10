@@ -28,7 +28,7 @@
 		
 	</head>
 	<body>
-		<div id="profile-page" data-role="page" style= "background: url('http://img39.imageshack.us/img39/2575/b83n.jpg') repeat;
+		<div id="userrank-page" data-role="page" style= "background: url('http://img39.imageshack.us/img39/2575/b83n.jpg') repeat;
     	background-size: 100% 100% !important;">
 			<div data-role="panel" id="mypanel" data-position="right" data-display="reveal">
         		<ul data-role="listview" data-theme="a">
@@ -49,14 +49,19 @@
 			</div>
 			<form data-role="content">
 				
-				<div id= "user-image"></div> 
+				<div id= "urank-image"></div> 
 
 				<div class="ui-grid-b">
 					<div class= "ui-block-a"> </div>
 					<div class= "ui-block-b">
-						<h2 id= "name" style= "color: DarkRed" data-role="button" data-mini= "true" data-corners="false"></h2>
+						<h2 id= "urname" style= "color: DarkRed" data-role="button" data-mini= "true" data-corners="false"></h2>
 					</div>
+					
+				</div>
+				<div class="ui-grid-b">
 					<div class= "ui-block-a">
+					</div>
+					<div class= "ui-block-b">
 						<label for="rank">
                 			Rank User
             			</label>
@@ -64,8 +69,7 @@
             				data-highlight="true" data-theme="a" data-track-theme="e" data-mini="true">
 					</div>
 				</div>
-				
-				
+				<input id="submitrank" type="submit" data-theme="c" value="Submit" data-mini="true">
 			</form>
 		</div>
 		
