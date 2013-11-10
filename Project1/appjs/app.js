@@ -91,6 +91,11 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
         	  profile= loginAccount;
               $.mobile.changePage("account.html");
         });
+        
+         $(document).on('click', '#cart-button', function() {
+         	GetProducts(); 
+         	});
+        
         var id= loginAccount.accountid;
         var iname= $("#welcome");
         iname.empty();
@@ -584,24 +589,25 @@ var shoppingcartTotal=0;
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 		//alert(loginAccount.username);
 		var id= loginAccount.accountid;
-		
+		var products = productList;
 			var txt = $.parseJSON(getCookie(id));
         	var obj = eval('(' + txt + ')');
         	var list = $("#shopping-list");
             list.empty();
-      	  alert(obj.shoppingcart[0].prodid);
      	   var len = obj.shoppingcart.length;
-     	   var prod;
      	   shoppingcartTotal=0;
+     	   var j = 0;
      	   for(var i=0; i<len; i++) {
      	   		//GetProduct(obj.shoppingcart[i].prodid);
+     	   		
+     	   		list.append("<li>" + products[i].prodname + "</li>");
      	   		/*prod = currentProduct[0];
      	   		shoppingcartTotal+= parseFloat(prod.price);
                                 list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + prod.id + ")>"+ 
                                 "<img src='"+ prod.img+ "'/>" + prod.prodname + 
                                         "<h4> Price: $"+prod.price+"<\h4></a></li>");*/
      	   }
-     	           
+     	   list.listview("refresh");        
      });
 
 /*
@@ -1362,6 +1368,35 @@ function GetSales(){
                         $.mobile.loading("hide");
                         if (data.status == 404){
                                 alert("Sales Error!");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });
+}
+
+var productList = {};
+function GetProducts(){
+        //id= profile.accountid;
+        //alert(profile.accountid);
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/products/",
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                        productList= data.products;
+                        $.mobile.loading("hide");
+                        $.mobile.changePage("shopping.html");
+          		},                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Products Error!");
                         }
                         else {
                                 alert("Internal Server Error.");
