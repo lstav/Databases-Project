@@ -1,13 +1,46 @@
+function setCookie(c_name,value,exdays)
+{
+var exdate=new Date();
+exdate.setDate(exdate.getDate() + exdays);
+var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+document.cookie=c_name + "=" + c_value;
+}
+
+function getCookie(c_name)
+{
+var c_value = document.cookie;
+var c_start = c_value.indexOf(" " + c_name + "=");
+if (c_start == -1)
+  {
+  c_start = c_value.indexOf(c_name + "=");
+  }
+if (c_start == -1)
+  {
+  c_value = null;
+  }
+else
+  {
+  c_start = c_value.indexOf("=", c_start) + 1;
+  var c_end = c_value.indexOf(";", c_start);
+  if (c_end == -1)
+  {
+c_end = c_value.length;
+}
+c_value = unescape(c_value.substring(c_start,c_end));
+}
+return c_value;
+}
+
 $(document).on('pagebeforeshow', '#login', function(){  
         
         $(document).on('click', '#submit', function() { 
         
         var username= $('#username').val();
         var password= $('#password').val();
-        
         if(username.length > 0 && password.length > 0){
         	//alert(username+ password);
-           AccountLogin(username, password);           
+           AccountLogin(username, password);     
+               
         } 
         
         else {
@@ -48,19 +81,17 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 		
 	   var sessionId= GetSession();
 	   if(loginAccount.username == undefined && sessionId[1] != undefined){
-	   	
 	   		loginAccount.username= sessionId[1];
 	   		loginAccount.isadmin= sessionId[2];
 	   		loginAccount.accountid= GetSession()[0];
 	   }
 
        if(loginAccount.username!= undefined)	{
-      
         $(document).on('click', '#profile-account', function() { 
         	  profile= loginAccount;
               $.mobile.changePage("account.html");
-        });    
-             
+        });
+        var id= loginAccount.accountid;
         var iname= $("#welcome");
         iname.empty();
         iname.append("<center><h3>hello "+loginAccount.username+"!</h3></center>");
@@ -552,6 +583,30 @@ var shoppingcartTotal=0;
 
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 		//alert(loginAccount.username);
+		var id= loginAccount.accountid;
+		
+			var txt = $.parseJSON(getCookie(id));
+        	var obj = eval('(' + txt + ')');
+        	var list = $("#shopping-list");
+            list.empty();
+      	  alert(obj.shoppingcart[0].prodid);
+     	   var len = obj.shoppingcart.length;
+     	   var prod;
+     	   shoppingcartTotal=0;
+     	   for(var i=0; i<len; i++) {
+     	   		//GetProduct(obj.shoppingcart[i].prodid);
+     	   		/*prod = currentProduct[0];
+     	   		shoppingcartTotal+= parseFloat(prod.price);
+                                list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + prod.id + ")>"+ 
+                                "<img src='"+ prod.img+ "'/>" + prod.prodname + 
+                                        "<h4> Price: $"+prod.price+"<\h4></a></li>");*/
+     	   }
+     	           
+     });
+
+/*
+$(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
+		//alert(loginAccount.username);
 		var id= loginAccount.accountid();
 		
         $.ajax({
@@ -585,7 +640,7 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
                         alert("Data not found!");
                 }
         });
-});
+});*/
 
 //////// History
 
@@ -853,6 +908,12 @@ function AccountLogin(username, password){
                         if(len !=0){        
                                 loginAccount= data.accountLogin[0];
                                 SaveSession(loginAccount);
+                                var sc = '{"shoppingcart":[' +
+   								'{"prodid":"13" },' +
+   								'{"prodid":"5" },' +
+  								'{"prodid":"20" }]}';
+								setCookie(loginAccount.accountid, JSON.stringify(sc));
+                               
                                 $.mobile.changePage("homepage.html");
                         }
                         else{
