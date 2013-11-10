@@ -624,20 +624,20 @@ app.get('/Project1Srv/products/:id', function(req, res){
          });
 });
 
-app.get('/Project1Srv/products', function(req, res){
+app.get('/Project1Srv/sales', function(req, res){
 
         //var id = req.params.id;
-        console.log("GET products:");
+        console.log("GET sales");
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM product");
+        var query = client.query("SELECT * FROM sale");
         
         query.on("row", function (row, result) {
             result.addRow(row);
         });
         query.on("end", function (result) {
-                var response = {"products" : result.rows};
+                var response = {"sales" : result.rows};
                 client.end();
                   res.json(response);
          });

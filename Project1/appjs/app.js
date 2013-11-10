@@ -93,7 +93,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
         });
         
          $(document).on('click', '#cart-button', function() {
-         	GetProducts(); 
+         	AllSales(); 
          	});
         
         var id= loginAccount.accountid;
@@ -589,18 +589,22 @@ var shoppingcartTotal=0;
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 		//alert(loginAccount.username);
 		var id= loginAccount.accountid;
-		var products = productList;
+		var sale = saleList;
 			var txt = $.parseJSON(getCookie(id));
         	var obj = eval('(' + txt + ')');
         	var list = $("#shopping-list");
             list.empty();
      	   var len = obj.shoppingcart.length;
      	   shoppingcartTotal=0;
-     	   var j = 0;
+     	   var j;
      	   for(var i=0; i<len; i++) {
      	   		//GetProduct(obj.shoppingcart[i].prodid);
+     	   		j = 0;
+     	   		while(obj.shoppingcart[i].saleid != sale[j].saleid) {
+     	   			j++;
+     	   		}
      	   		
-     	   		list.append("<li>" + products[i].prodname + "</li>");
+     	   		//list.append("<li>" + sale[j].sale + "</li>");
      	   		/*prod = currentProduct[0];
      	   		shoppingcartTotal+= parseFloat(prod.price);
                                 list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + prod.id + ")>"+ 
@@ -915,9 +919,9 @@ function AccountLogin(username, password){
                                 loginAccount= data.accountLogin[0];
                                 SaveSession(loginAccount);
                                 var sc = '{"shoppingcart":[' +
-   								'{"prodid":"13" },' +
-   								'{"prodid":"5" },' +
-  								'{"prodid":"20" }]}';
+   								'{"saleid":"13" },' +
+   								'{"saleid":"5" },' +
+  								'{"saleid":"20" }]}';
 								setCookie(loginAccount.accountid, JSON.stringify(sc));
                                
                                 $.mobile.changePage("homepage.html");
@@ -1377,18 +1381,18 @@ function GetSales(){
         });
 }
 
-var productList = {};
-function GetProducts(){
+var saleList = {};
+function AllSales(){
         //id= profile.accountid;
         //alert(profile.accountid);
         $.mobile.loading("show");
         $.ajax({
-                url : "http://localhost:3412/Project1Srv/products/",
+                url : "http://localhost:3412/Project1Srv/sales/",
                 method: 'get',
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                        productList= data.products;
+                        saleList= data.sales;
                         $.mobile.loading("hide");
                         $.mobile.changePage("shopping.html");
           		},                        
@@ -1396,7 +1400,7 @@ function GetProducts(){
                         console.log("textStatus: " + textStatus);
                         $.mobile.loading("hide");
                         if (data.status == 404){
-                                alert("Products Error!");
+                                alert("Sales Error!");
                         }
                         else {
                                 alert("Internal Server Error.");
