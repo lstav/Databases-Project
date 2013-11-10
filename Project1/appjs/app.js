@@ -17,6 +17,7 @@ $(document).on('pagebeforeshow', '#login', function(){
         });    
 });
 
+
 $(document).on('pagebeforeshow', '#sign-up', function(){  
     
         $(document).on('click', '#submit', function() { 
@@ -352,6 +353,36 @@ $(document).on('click', '#search-button', function() {
               GetCategories();
 }); 
 
+$(document).on('click', '#submit-signup', function() { 
+	
+			var username=$('#username').val();			
+			var password=$('#password').val();
+			var firstname=$('#fname').val();
+			var lastname=$('#lname').val();
+			var email= $('#email').val();
+			var street=$('#street').val();
+			var city=$('#city').val();
+			var state= $('#state').val(); 
+			var zipcode=$('#zipcode').val();
+			var country= $('#country').val(); 
+			
+			if(username.length > 0 && password.length > 0 && firstname.length > 0 && lastname.length > 0 && email.length > 0 && street.length > 0 && city.length > 0 && state.length > 0
+				&& zipcode.length > 0 && country.length > 0){
+          
+              SignUp(username); 
+              
+              }
+              
+            else{
+            	alert("Please fill all fields.");
+            }
+              
+           
+}); 
+
+$(document).on('click', '#cart-button', function() { 
+              GetShoppingCart(loginAccount.accountid);
+}); 
 
 $(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
 
@@ -398,9 +429,27 @@ $(document).on('pagebeforeshow', "#subcatLayout", function(event, ui) {
                  
 				 
 });
-
+	
 $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 				//alert(loginAccount.username);
+				$.expr[":"].contains = $.expr.createPseudo(function(arg) {
+   				 return function( elem ) {
+       			 return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+   				 };
+				});
+		
+				$("#search-basic").keyup(function(){
+				
+  				var term = $(this).val();
+  				
+  				if(term != ""){
+  					$("li").hide();
+    				$("li:contains('" + term + "')").show();
+  				}
+  				else{$("li").show();}
+  				
+				}); 
+
                 var productCat = currentCategoryProducts;
                 var len =productCat.length;
                 var list = $("#product-list");
@@ -410,7 +459,7 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
                 var item;
                 for (var i=0; i < len; ++i){
                 item =productCat[i];
-                list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/>" + item.prodname + "<h4> Price: "+item.price+"<\h4></a></li>");
+                list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/>" + item.prodname + "<h4>"+item.price+"<\h4></a></li>");
                 }
                 
                 var iname= $("#catName2");
@@ -419,7 +468,7 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
                 
                 else{
                 	
-                var msg='<li><a data-rel=back data-role="button">No products</a></li>;';
+                var msg='<li><a data-rel=back data-role="button">No products</a></li>';
                 list.append(msg);                	
                 }
                                 
@@ -431,9 +480,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         var list= $("#item-info");
         list.empty();
         list.append("<li><a> <strong>Price:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");
-        list.append("<li><a> <strong>Quantity:</strong><kbd> Unavailable </kbd></a> </li>");
         list.append("<li><a> <strong>Condition: </strong><kbd>"+currentProduct.condition  +"</kbd></a> </li>");
-        list.append("<li><a> <strong>Location: </strong><kbd>Unavailable</kbd></a> </li>");
         list.append("<li><a><strong> Item ID: </strong><kbd>"+currentProduct.id+"</kbd></a> </li>");
         
         var sell= $("#seller-info");
@@ -444,13 +491,6 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         idescription.append("<p>"+currentProduct.description+"</p>");
         $('#item-image').prepend('<center><img id="theImg" src="' + currentProduct.img+'"/></center>');
         //table1.table("refresh"); 
-        
-        var payment= $("#payments");
-        payment.append("<p>Payments</p>");
-        
-               
-        var shipping= $("#shipping");
-        shipping.append("<p>Unavailable/p>");
         
         var pname= $("#productName2");
         pname.empty();
@@ -466,7 +506,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              bid.append(msg).trigger('create');
              
              var submit= $("#bid-offer");
-             var msg2= '<input type="submit" href="homepage.html" value="End Sale" onClick=EndSale() data-theme="a" data-mini="true"/>';
+             var msg2= '<input type="submit" href="index.html" value="End Sale" onClick=EndSale() data-theme="a" data-mini="true"/>';
              submit.empty();
              submit.append(msg2).trigger('create');
              
@@ -534,6 +574,34 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 });
 
 ////////// Shopping Cart
+
+$(document).on('pagebeforeshow', "#shoppingList", function(event, ui){
+	
+                var shopping = shoppinglist;
+                var len =shopping.length;
+                
+               if(len==0){ 
+                        var iname= $("#message");
+                        var msg= '<br><a data-rel="back"><center><h2>No products to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
+                        iname.empty();
+                        iname.append(msg).trigger('create');}
+                        
+                else{
+                	
+               	if(loginAccount.username != undefined){
+                	
+                var list = $("#myshopping-list");
+                list.empty();
+                var item;
+                for (var i=0; i < len; ++i){
+                item =shopping[i];
+                list.append("<li><a onClick= GetProduct("+item.id+")><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Price:"+item.price+"<\h4></a></li>");
+                }
+                list.listview("refresh");}
+                
+                }
+                
+});
 
 var shoppingcartTotal=0;
 
@@ -833,7 +901,7 @@ function AccountLogin(username, password){
                         if(len !=0){        
                                 loginAccount= data.accountLogin[0];
                                 SaveSession(loginAccount);
-                                $.mobile.changePage("homepage.html");
+                                $.mobile.changePage("index.html");
                         }
                         else{
                                 alert("Invalid login information. Try again.");
@@ -887,6 +955,34 @@ function GoProfile(id){
         });}    
 }
 
+function SignUp(id){
+          	$.ajax({
+                url : "http://localhost:3412/Project1Srv/accountsign/"+id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+ 					
+                        if(data.accounts.length == 0){
+						alert("Valid username. Account created.");}
+						
+						else{
+							alert("Username in use. Try another one. ");
+						}
+						                        },
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Sign up loading error.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+        });
+}
+
 function GoAccount(){
         
          if(loginAccount.username!= undefined){
@@ -928,32 +1024,6 @@ function GetProduct(id){
         
 //////// Shopping Cart
 
-var currentShoppingCart = {};
-function GetShoppingCart(scid){
-        $.mobile.loading("show");
-        $.ajax({
-                url : "http://localhost:3412/Project1Srv/shoppingcarts/"+ scid,
-                method: 'get',
-                contentType: "application/json",
-                dataType:"json",
-                success : function(data, textStatus, jqXHR){
-                        currentShoppingCart= data.shoppingcart;
-                        $.mobile.loading("hide");
-                        $.mobile.changePage("shopping.html");
-                },
-                error: function(data, textStatus, jqXHR){
-                        console.log("textStatus: " + textStatus);
-                        $.mobile.loading("hide");
-                        if (data.status == 404){
-                                alert("Shopping Cart error.");
-                        }
-                        else {
-                                alert("Internal Server Error.");
-                        }
-                }
-        });
-}
-       
 /* function Sortby(id){
 
         $.ajax({
@@ -1018,6 +1088,34 @@ function GetBids(id){
 
         });
 }
+
+var shoppinglist= {};
+function GetShoppingCart(id){
+	
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/shoppingcart/"+id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                			shoppinglist= data.shoppingcart;
+                        	$.mobile.changePage("shopping.html");
+                        },                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Shopping cart not available.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });
+}
+
 
 var userBids={};
 function BidUser(id){

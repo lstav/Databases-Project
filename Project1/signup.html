@@ -9,6 +9,27 @@
  		<script src="js/jquery-1.9.1.min.js"></script>
   		<script src="js/jquery.mobile-1.3.2.min.js"></script> 
   		<script src="appjs/app.js"></script>
+  		
+  		
+  		<style type="text/css">
+		.ui-mobile-viewport{
+    	background: url("http://img39.imageshack.us/img39/2575/b83n.jpg") repeat;
+    	background-size: 100% 100% !important;
+		}
+		.ui-page{
+    	background:none;
+		}
+		.ui-overlay-a{
+    	background:#222 !important;
+		}
+		.ui-panel-content-wrap{
+    	background: none;
+		}
+		.ui-panel-content-wrap-closed{
+    	background: none;
+		}
+		</style> 
+		
 	</head>
 	<body>
 		<div id="sign-up" data-role="page" data-theme="a">
@@ -17,25 +38,45 @@
         		<h1><img src= 'http://img30.imageshack.us/img30/7994/r7b.gif' /></h1>	
         		<a data-role="button" data-position="left" data-icon="back" data-iconpos="notext" data-rel="back">Back</a>
 				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
-					<a data-role="button"  data-icon="home" data-iconpos="notext" href="homepage.html"> Home</a>
+					<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
 				</div>	
 			</div>
-			<div type="text" align="center">
-				<p>Registration:</p>
+			<div type="text" align="center" style="color: white">
+				<h2>Registration:</h2>
 			  	<p2>*All fields are required</p2>
 			</div>
-			<form id="account-form" align="center">
+			<form id="account-form" style="color:white" data-corners="true">
 				<fieldset data-role="controlgroup">
-	          		<input id="firstname" name="" placeholder="First Name" type="text" value="" data-mini="true" data-corners="false"><br>
-	        	   	<input id="lastname" name="" placeholder="Last Name" type="text" value="" data-mini="true" data-corners="false"><br>
-        	    	<input id="username" name="" placeholder="Username" type="text" value="" data-mini="true" data-corners="false"><br>
-		       	   	<input id="password" name="" placeholder="Password" type="password" value="" data-mini="true" data-corners="false"> <br>
-		           	<input id="email" name="" placeholder="Email" type="text" value="" data-mini="true" data-corners="false"> <br>
-	    	       	<input id="address" name="" placeholder="Shipping Address" type="text" value="" data-mini="true" data-corners="false"><br>
-		           	<input id="creditcard" name="" placeholder="Credit Card Number" type="text" value="" data-mini="true" data-corners="false"><br>
-		           	<input id="billingaddress" name="" placeholder="Billing Address" type="text" value="" data-mini="true" data-corners="false"><br>
-
-	    	    	<a id= "submit" data-role="button" data-transition="slide">
+					<o>First name</o>
+	          		<input id="fname" name="" placeholder= "" type="text" value="" data-mini="true">
+	        	   	
+	        	   	<p>Last name</p>
+	        	   	<input id="lname" name="" placeholder= "" type="text" value="" data-mini="true"> <br>
+	        	   	
+	        	   	<o>Username</o>
+        	    	<input id="username" name="" placeholder= "" type="text" value="" data-mini="true">
+        	    	
+        	    	<p>Password</p>
+		       	   	<input id="password" name="" placeholder= "" type="password" value="" data-mini="true"> 
+		           
+		           <p>Email</p>
+		           	<input id="email" name="" placeholder= "" type="text" value="" data-mini="true"> 
+		           	
+		           	<p>Street address</p>
+	    	       	<input id="street" name="" placeholder= "" type="text" value="" data-mini="true" >
+	    	       	
+	    	       	<p>City</p>
+	    	       	<input id="city" name="" placeholder= "" type="text" value="" data-mini="true" >
+	    	       	
+	    	       	<p>State</p>
+	    	       	<input id="state" name="" tplaceholder= "" ype="text" value="" data-mini="true" >
+	    	       	
+	    	       	<p>Zip code</p>
+	    	       	<input id="zipcode" name="" placeholder= "" type="text" value="" data-mini="true" >
+	    	       	
+	    	       	<p>Country</p>
+	    	       	<input id="country" name="" placeholder= "" type="text" value="" data-mini="true" ><br>
+	    	    	<a id= "submit-signup" data-role="button" data-transition="slide" data-corners="false" data-theme="a"> 
 		            	Submit
         			</a>
         		</fieldset>
