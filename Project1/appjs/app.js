@@ -1549,7 +1549,7 @@ function GetMessage(mid){
 }
 
 function submitMessage(){
-        alert("Message have been sent");
+        alert("Message has been sent");
         location.href="message.html";
 }
 
