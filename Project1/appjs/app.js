@@ -47,7 +47,7 @@ $(document).on('pagebeforeshow', '#login', function(){
             alert('Please fill all fields');
         }           
             return false; 
-        });    
+        });
 });
 
 
@@ -126,6 +126,13 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
                 else{
                         
                       //Guest
+                      
+                      var sc = '{"shoppingcart":[' +
+                     '{"saleid":"13" },' +
+                     '{"saleid":"5" },' +
+                     '{"saleid":"8" }]}';
+            setCookie('guest', JSON.stringify(sc));
+            
                         var block1= $("#block1");
              var msg= '<a  href= "login.html" data-role="button" data-corners="false">Sign in</a>';
              block1.empty();
@@ -139,7 +146,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              var block3= $("#block3");
              var msg3= '<a  href= "index.html" data-role="button" data-icon="home" data-corners="false" data-theme="a">Home</a>';
              block3.empty();
-             block3.append(msg3).trigger('create');  
+             block3.append(msg3).trigger('create'); 
                
        }
        
@@ -427,6 +434,15 @@ $(document).on('pagebeforeshow', '#create-sale', function(){
         });  
 });
 
+$(document).on('pagebeforeshow','#create-page', function(){
+	$(document).on('click', '#auction-button', function() {
+		$.mobile.changePage("auctions.html");
+	});
+	
+	$(document).on('click', '#sale-button', function() {
+		$.mobile.changePage("sales.html");
+	});
+});
 
 ///// Category and product
 $(document).on('click', '#search-button', function() { 
@@ -660,7 +676,7 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
         
         var info= $("#totalPurchase");
         info.empty();
-        info.append("Total: $     "+ shoppingcartTotal);
+        info.append("Total:     "+ shoppingcartTotal);
         
 });
 
@@ -698,6 +714,12 @@ var shoppingcartTotal=0;
 
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
                 //alert(loginAccount.username);
+                 
+                if (loginAccount.accountid != undefined) {
+                	 	$(document).on('click', '#checkout-button', function() {
+							$.mobile.changePage("check.html");
+						});
+				
                 var id= loginAccount.accountid;
                 var sales = saleList;
                         var txt = $.parseJSON(getCookie(id));
@@ -721,9 +743,37 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
                                 shoppingcartTotal+= parseFloat(sales[j].price);
                                 list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + sales[j].prodid + ")>"+ 
                                 "<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
+                                        "<h4> Price: "+sales[j].price+"<\h4></a></li>");
+                }
+                list.listview("refresh");  
+                }
+               /* else {
+                	var sales = saleList;
+                        var txt = $.parseJSON(getCookie('guest'));
+                var obj = eval('(' + txt + ')');
+                var list = $("#myshopping-list");
+            list.empty();
+                var len = obj.shoppingcart.length;
+                var len2 = sales.length;
+                shoppingcartTotal=0;
+                var prod = obj.shoppingcart;
+                var j;
+                for(var i=0; i<len; i++) {
+                                //GetProduct(obj.shoppingcart[i].prodid);
+                                j = 0;
+                                while(prod[i].saleid != sales[j].saleid) {
+                                        j++;
+                                }
+                                //list.append("<li>" + sales[i].price + "</li>");
+                                //list.append("<li>" + sales[j].saleid + "</li>");
+                                //prod = currentProduct[0];
+                                shoppingcartTotal+= parseFloat(sales[j].price);
+                                list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + sales[j].prodid + ")>"+ 
+                                "<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
                                         "<h4> Price: $"+sales[j].price+"<\h4></a></li>");
                 }
-                list.listview("refresh");        
+                list.listview("refresh"); 
+                }      */
      });
 
 //////// History
@@ -1003,6 +1053,7 @@ function aconvert(dbModel){
         
         return aliModel;
 }
+
 
 var loginAccount={};
 function AccountLogin(username, password){
