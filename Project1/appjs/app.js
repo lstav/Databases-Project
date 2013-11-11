@@ -252,6 +252,14 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 
 $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 	 	
+<<<<<<< HEAD
+=======
+	 	$(document).on('click', '#rankers-button', function() { 
+        	  GetRankers(profile.accountid);
+              
+        });
+	 	
+>>>>>>> 0bdd6effa0234ca889661096c5229ce6cb6dc1ea
 	 	var stars = "";
         
         for(var i=0; i<profile.rank; i++) {
@@ -263,6 +271,7 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
         list.empty();
         list.append("<li><h4>Name: "+profile.fname +" "+ profile.lname+"</h4></li>");
         list.append("<li><h4>Rank: "+ stars +"</h4></li>");
+<<<<<<< HEAD
         list.append("<li><h4>4 Star %: " + profile.percent + "%</h4></li>");
         var len = currentRankers.length;
         for(var i=0; i<len; i++) {
@@ -275,6 +284,9 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
         	//list.append(len);
         }
         
+=======
+        list.append("<li><h4>4 Star %: " + profile.percent + "%</h4></li>");        
+>>>>>>> 0bdd6effa0234ca889661096c5229ce6cb6dc1ea
         //list.append("<li><a <h4>Location:"+profile.location  +"</h4></a> </li>");
         
         var uname= $("#username");
@@ -295,11 +307,15 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 
 $(document).on('pagebeforeshow', "#ranks-page", function( event, ui ) {
        
+<<<<<<< HEAD
 	 	//alert(loginAccount.username);
+=======
+>>>>>>> 0bdd6effa0234ca889661096c5229ce6cb6dc1ea
         var list= $("#rank-list");
         list.empty();
         var len = currentRankers.length;
         for(var i=0; i<len; i++) {
+<<<<<<< HEAD
         	stars = "";
         
         	for(var j=0; j<currentRankers[i].rank; j++) {
@@ -309,6 +325,17 @@ $(document).on('pagebeforeshow', "#ranks-page", function( event, ui ) {
         	//list.append(len);
         	}
         
+=======
+        	star = "";
+        
+        	for(var j=0; j<currentRankers[i].stars; j++) {
+    	   		star = star + "*";
+       		}
+        		list.append("<li><h4>" + currentRankers[i].username+ ": " + star + "</h4></li>");
+        	//list.append("Hello");
+        	}
+        	list.listview("refresh");
+>>>>>>> 0bdd6effa0234ca889661096c5229ce6cb6dc1ea
         //list.append("<li><a <h4>Location:"+profile.location  +"</h4></a> </li>");
               
         var pname= $("#name");
@@ -585,7 +612,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         
         var sell= $("#seller-info");
         sell.empty();
-        sell.append("<li><a  onClick= 'GetRankers("+currentProduct.aid+"); GoProfile("+currentProduct.aid+");'>"+currentProduct.seller+"</a></li>");
+        sell.append("<li><a  onClick= GoProfile("+currentProduct.aid+")>"+currentProduct.seller+"</a></li>");
 
         var idescription= $("#description");
         idescription.append("<p>"+currentProduct.description+"</p>");
@@ -966,6 +993,7 @@ function GetAddress(addressid){
 var currentRankers= {};
 
 function GetRankers(id){
+		
         $.mobile.loading("show");
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/rankers/" + id,
@@ -975,6 +1003,7 @@ function GetRankers(id){
                 success : function(data, textStatus, jqXHR){
                         currentRankers = data.rankers;
                         $.mobile.loading("hide");
+                        $.mobile.changePage("reviews.html");
                 },
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
@@ -1458,6 +1487,35 @@ function RankUser(){
 }
 
 
+
+var subCategories= {};
+function GetSubCategory(id){
+     
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/subcategory/"+id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                        subCategories= data.subcategory;
+                        $.mobile.loading("hide");
+                        $.mobile.navigate("subcategories.html");
+                        
+                       },                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Category Empty!");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });
+}
 
 var subCategories= {};
 function GetSubCategory(id){
