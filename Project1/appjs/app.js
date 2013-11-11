@@ -92,6 +92,10 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
         	  profile= loginAccount;
               $.mobile.changePage("account.html");
         });
+        $(document).on('click', '#message-button', function() {
+        	profile = loginAccount;
+        	$.mobile.changePage("message.html");
+        });
          $(document).on('click', '#cart-button', function() {
          	AllSales(); 
          	});
@@ -113,7 +117,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              block1.append(msg).trigger('create');
              
              var block2= $("#block2");
-             var msg2= '<a href= "message.html" data-role="button" data-corners="false" data-theme="a">Messages</a>';
+             var msg2= '<a id = "message-button" data-role="button" data-corners="false" data-theme="a">Messages</a>';
              block2.empty();
              block2.append(msg2).trigger('create'); 
              
@@ -163,7 +167,15 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
             $.mobile.changePage("login.html");
 
  });  
-        
+
+$(document).on('pagebeforeshow', "#messages",function(event, ui) {
+	$(document).on('click', '#inbox-button', function() { 
+        	GetMessage();
+            $.mobile.changePage("inbox.html");
+
+ });
+});
+
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 	
 		 var sessionId= GetSession();
@@ -239,16 +251,27 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 });
 
 $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
-	 
+	 	
+	 	var stars = "";
+        
+        for(var i=0; i<profile.rank; i++) {
+    	   	stars = stars + "*";
+       }
+       
 	 	//alert(loginAccount.username);
         var list= $("#profile-info");
         list.empty();
         list.append("<li><h4>Name: "+profile.fname +" "+ profile.lname+"</h4></li>");
-        list.append("<li><h4>Rank: "+ profile.rank  +"</h4></li>");
+        list.append("<li><h4>Rank: "+ stars +"</h4></li>");
         list.append("<li><h4>4 Star %: " + profile.percent + "%</h4></li>");
         var len = currentRankers.length;
         for(var i=0; i<len; i++) {
-        	list.append("<li><h4>" + currentRankers[i].username+ ": " + currentRankers[i].stars + "%</h4></li>");
+        	stars = "";
+        
+        for(var j=0; j<currentRankers[i].rank; j++) {
+    	   	stars = stars + "*";
+       }
+        	list.append("<li><h4>" + currentRankers[i].username+ ": " + stars + "</h4></li>");
         	//list.append(len);
         }
         
@@ -264,6 +287,30 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
         img.append("<p> <center> <img src='http://img707.imageshack.us/img707/9563/i5n.gif'/> </center> </p>");
         list.listview("refresh");
         
+        var pname= $("#name");
+        pname.empty();
+        pname.append("<center>"+profile.username+"</center>");
+
+});
+
+$(document).on('pagebeforeshow', "#ranks-page", function( event, ui ) {
+       
+	 	//alert(loginAccount.username);
+        var list= $("#rank-list");
+        list.empty();
+        var len = currentRankers.length;
+        for(var i=0; i<len; i++) {
+        	stars = "";
+        
+        	for(var j=0; j<currentRankers[i].rank; j++) {
+    	   		stars = stars + "*";
+       		}
+        		list.append("<li><h4>" + currentRankers[i].username+ ": " + stars + "</h4></li>");
+        	//list.append(len);
+        	}
+        
+        //list.append("<li><a <h4>Location:"+profile.location  +"</h4></a> </li>");
+              
         var pname= $("#name");
         pname.empty();
         pname.append("<center>"+profile.username+"</center>");
@@ -431,11 +478,12 @@ $(document).on('click', '#submit-signup', function() {
               
            
 }); 
-
+/*
 $(document).on('click', '#cart-button', function() { 
-              GetShoppingCart(loginAccount.accountid);
+              //GetShoppingCart(loginAccount.accountid);
+              AllSales();
 }); 
-
+*/
 $(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
 
 				var category= currentCategories;
@@ -661,27 +709,29 @@ var shoppingcartTotal=0;
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 		//alert(loginAccount.username);
 		var id= loginAccount.accountid;
-		var sale = saleList;
+		var sales = saleList;
 			var txt = $.parseJSON(getCookie(id));
         	var obj = eval('(' + txt + ')');
-        	var list = $("#shopping-list");
+        	var list = $("#myshopping-list");
             list.empty();
      	   var len = obj.shoppingcart.length;
+     	   var len2 = sales.length;
      	   shoppingcartTotal=0;
+     	   var prod = obj.shoppingcart;
      	   var j;
      	   for(var i=0; i<len; i++) {
      	   		//GetProduct(obj.shoppingcart[i].prodid);
      	   		j = 0;
-     	   		while(obj.shoppingcart[i].saleid != sale[j].saleid) {
+     	   		while(prod[i].saleid != sales[j].saleid) {
      	   			j++;
      	   		}
-     	   		
-     	   		//list.append("<li>" + sale[j].sale + "</li>");
-     	   		/*prod = currentProduct[0];
-     	   		shoppingcartTotal+= parseFloat(prod.price);
-                                list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + prod.id + ")>"+ 
-                                "<img src='"+ prod.img+ "'/>" + prod.prodname + 
-                                        "<h4> Price: $"+prod.price+"<\h4></a></li>");*/
+     	   		//list.append("<li>" + sales[i].price + "</li>");
+     	   		//list.append("<li>" + sales[j].saleid + "</li>");
+     	   		//prod = currentProduct[0];
+     	   		shoppingcartTotal+= parseFloat(sales[j].price);
+                                list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + sales[j].prodid + ")>"+ 
+                                "<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
+                                        "<h4> Price: $"+sales[j].price+"<\h4></a></li>");
      	   }
      	   list.listview("refresh");        
      });
@@ -778,25 +828,38 @@ $(document).on('pagebeforeshow', "#saleList", function(event, ui){
 ////////// Message
 
 $(document).on('pagebeforeshow', "#inbox", function(event, ui) {
-        $.ajax({
-                url : "http://localhost:3412/Project1Srv/messages",
-                contentType: "application/json",
-                success : function(data, textStatus, jqXHR){
-                        var messageList = data.messages;
-                        var len = messageList.length;
-                        var list = $("#inbox-list");
-                        list.empty();
-                        var message;
-                        message = messageList[0];
-                        list.append("<li><h2>"+message.sName+ "</h2><p>" +message.mText+"</p></li>");
-                        list.listview("refresh");
-                },
-                error: function(data, textStatus, jqXHR){
-                        console.log("textStatus: " + textStatus);
-                        alert("Data not found!");
+        
+        		//alert(loginAccount.username);
+                var mess = currentMessageList;
+                var len =mess.length;
+                
+                //alert(profile.username + " "+ loginAccount.username);
+                /*
+                if(len==0){
+                        var iname= $("#message");
+                        var msg= '<br><a data-rel="back"><center><h2>No messages to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
+                        iname.empty();
+                        iname.append(msg).trigger('create');
+                        
+                        var order= $("#order-list");
+                        order.empty();
+
                 }
-        });
+                else{*/
+                var list = $("#inbox-list");
+                list.empty();
+                var item;
+                list.append(len);
+                for (var i=0; i < len; ++i){
+                item =mess[i];
+                //console.log("dhdhd");
+                //list.append("Hello");
+                //list.append("<li><a onClick=GetMessage()> "+ item.username + "<h4> "+item.text+" "+item.date+"<\h4></a></li>");
+                }
+                list.listview("refresh");
 });
+
+
 $(document).on('pagebeforeshow', "#sent", function(event, ui) {
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/messages",
@@ -982,7 +1045,7 @@ function AccountLogin(username, password){
                                 var sc = '{"shoppingcart":[' +
    								'{"saleid":"13" },' +
    								'{"saleid":"5" },' +
-  								'{"saleid":"20" }]}';
+  								'{"saleid":"15" }]}';
 								setCookie(loginAccount.accountid, JSON.stringify(sc));
                                
                                 $.mobile.changePage("index.html");
@@ -1366,7 +1429,7 @@ function GetCategories(){
      
         $.mobile.loading("show");
         $.ajax({
-                url : "http://vast-peak-8162.herokuapp.com/LHL/category",
+                url : "http://localhost:3412/Project1Srv/category",
                 method: 'get',
                 contentType: "application/json",
                 dataType:"json",
@@ -1572,32 +1635,33 @@ function GetHistory(hid){
 
 /////////// Message
 
-var currentMessage = {};
-function GetMessage(mid){
+var currentMessageList = {};
+function GetMessages(){
+        id= profile.accountid;
+        //alert(profile.accountid);
         $.mobile.loading("show");
         $.ajax({
-                url : "http://localhost:3412/Project1Srv/messages/" + mid,
+                url : "http://localhost:3412/Project1Srv/message/"+ id,
                 method: 'get',
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                        currentMessage = data.message;
+                        currentMessageList= data.message;
                         $.mobile.loading("hide");
-                        if(mid==0)
-                        $.mobile.navigate("inbox.html");
-                        else
-                        $.mobile.navigate("sentMessages.html");
-                },
+                        $.mobile.changePage("inbox.html", {
+                                info: id,
+                        });},                        
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
                         $.mobile.loading("hide");
                         if (data.status == 404){
-                                alert("Message not found.");
+                                alert("Sorry, Server is not running at the moment");
                         }
                         else {
                                 alert("Internal Server Error.");
                         }
                 }
+
         });
 }
 
