@@ -413,7 +413,7 @@ $(document).on('pagebeforeshow', "#bidPage", function(event, ui) {
                 var item;
                 for (var i=0; i < len; ++i){
                 item =productbid[i];
-                list.append("<li><a>" + item.bidder + "<h4> Bid:"+item.bid+" on "+ item.bdate+"<\h4></a></li>");
+                list.append("<li><a>" + item.bidder + "<h4> Bid:"+item.bid+" on "+ item.bdate.substring(0, 10)+"<\h4></a></li>");
                 }
                 list.listview("refresh");}
 });
@@ -538,23 +538,23 @@ $(document).on('pagebeforeshow', "#subcatLayout", function(event, ui) {
         
 $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
                                 //alert(loginAccount.username);
-                                $.expr[":"].contains = $.expr.createPseudo(function(arg) {
-                                    return function( elem ) {
-                                return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
-                                    };
-                                });
+              $.expr[":"].contains = $.expr.createPseudo(function(arg) {
+              return function( elem ) {
+              return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+                 };
+               });
                 
-                                $("#search-basic").keyup(function(){
+              $("#search-basic").keyup(function(){
                                 
-                                  var term = $(this).val();
+              var term = $(this).val();
                                   
-                                  if(term != ""){
-                                          $("li").hide();
-                                    $("li:contains('" + term + "')").show();
-                                  }
-                                  else{$("li").show();}
+              if(term != ""){
+              $("li").hide();
+              $("li:contains('" + term + "')").show();
+              }
+              else{$("li").show();}
                                   
-                                }); 
+              }); 
 
                 var productCat = currentCategoryProducts;
                 var len =productCat.length;
@@ -565,7 +565,7 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
                 var item;
                 for (var i=0; i < len; ++i){
                 item =productCat[i];
-                list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/>" + item.prodname + "<h4>"+item.price+"<\h4></a></li>");
+                list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/> " + item.prodname + "<h4>"+item.price+"<\h4></a></li>");
                 }
                 
                 var iname= $("#catName2");
@@ -592,6 +592,8 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         }
         list.append("<li><a> <strong>Condition: </strong><kbd>"+currentProduct.condition  +"</kbd></a> </li>");
         list.append("<li><a><strong> Item ID: </strong><kbd>"+currentProduct.id+"</kbd></a> </li>");
+        list.append("<li><a> <strong>Listing ends: </strong><kbd>"+currentProduct.endtime.substring(0, 10)+" at "+currentProduct.endtime.substring(12, 20)+"</kbd></a> </li>");
+
         
         var sell= $("#seller-info");
         sell.empty();
@@ -804,8 +806,9 @@ $(document).on('pagebeforeshow', "#historyPage", function(event, ui) {
                 list.empty();
         
                 var h1= '<li><a onClick=BidUser('+loginAccount.accountid+')>My Bids</a></li>';
-                var h2= '<li><a onClick=PurchaseUser('+loginAccount.accountid+')>Purchased</a></li>';
-                var h3= '<li><a onClick=SalesUser('+loginAccount.accountid+')>Sales</a></li>';
+                var h2= '<li><a onClick=SalesUser('+loginAccount.accountid+')>Sales</a></li>';
+                var h3= '<li><a onClick=PurchaseUser('+loginAccount.accountid+')>Purchased</a></li>';
+           
                 list.append(h1+h2+h3);
                 
                 list.listview("refresh");
