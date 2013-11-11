@@ -173,6 +173,10 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 
                  $(document).on('click', '#edit-account', function() { 
             $.mobile.changePage("settings.html");
+        });
+        $(document).on('click', '#rankers-button', function() { 
+                  GetRankers(loginAccount.accountid);
+              
         });  
         var stars = "";
         
@@ -282,7 +286,11 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 });
 
 $(document).on('pagebeforeshow', "#ranks-page", function( event, ui ) {
-       
+		var txt = sessionStorage.getItem("currentRankers");
+           var obj = eval('(' + txt + ')');
+           currentRankers = obj;
+           
+		
         var list= $("#rank-list");
         list.empty();
         var len = currentRankers.length;
@@ -305,7 +313,11 @@ $(document).on('pagebeforeshow', "#ranks-page", function( event, ui ) {
 });
 
 $(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
-            
+            var txt = sessionStorage.getItem("profile");
+           var obj = eval('(' + txt + ')');
+           if(profile.username == undefined && obj.username != undefined){
+                          profile = obj;
+                          }
             $(document).on('click', '#submitrank', function() {
                     alert("Rank submited!");
                     $.mobile.changePage("profile.html");
@@ -490,7 +502,13 @@ $(document).on('click', '#sent-button', function() {
 }); 
 
 $(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
-
+				
+			
+           var txt = sessionStorage.getItem("account");
+           var obj = eval('(' + txt + ')');
+           if(profile.username == undefined && obj.username != undefined){
+                          profile = obj;
+                          }
                                 var category= currentCategories;
                                 var len= category.length;
                                 var list=$("#show-categories");
@@ -508,6 +526,7 @@ $(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
 
 $(document).on('pagebeforeshow', "#subcatLayout", function(event, ui) {
 
+				
                                 var category= subCategories;
                                 var len= category.length;
                                 var list=$("#show-subcategories");
@@ -672,6 +691,37 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 ////////// Checkout
 
 $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
+        var txt2 = sessionStorage.getItem("account");
+        var obj2 = eval('(' + txt + ')');
+        if(loginAccount.username == undefined && obj2.username != undefined){
+                          loginAccount = obj2;
+        }
+        
+        var id= loginAccount.accountid;
+                var sales = saleList;
+               	var txt = $.parseJSON(getCookie(id));
+                var obj = eval('(' + txt + ')');
+                var list = $("#product-list");
+            list.empty();
+                var len = obj.shoppingcart.length;
+                var len2 = sales.length;
+                shoppingcartTotal=0;
+                prod = obj.shoppingcart;
+                var j;
+                for(var i=0; i<len; i++) {
+                                //GetProduct(obj.shoppingcart[i].prodid);
+                                j = 0;
+                                while(prod[i].saleid != sales[j].saleid) {
+                                        j++;
+                                }
+                                prod[i] = sales[j];
+                                shoppingcartTotal+= parseFloat(String(sales[j].price).substr(1));
+                                list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + sales[j].prodid + ")>"+ 
+                                "<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
+                                        "<h4> Price: "+sales[j].price+"<\h4></a></li>");
+                }
+                list.listview("refresh");  
+        
         
         var date = $("#date-list");
         date.empty();
@@ -679,7 +729,7 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
         
         var ship = $("#shipping-list");
         ship.empty();
-        ship.append("<li>" + profile.shipping + "</li>");
+        ship.append("<li>" + loginAccount.shipping + "</li>");
         
         var info= $("#totalPurchase");
         info.empty();
@@ -978,6 +1028,7 @@ function GetAddress(addressid){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentAddress = data.address;
+                        sessionStorage.setItem("currentAddress", JSON.stringify(currentAddress));
                         $.mobile.loading("hide");
                 },
                 error: function(data, textStatus, jqXHR){
@@ -1005,6 +1056,7 @@ function GetRankers(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentRankers = data.rankers;
+                        sessionStorage.setItem("currentRankers", JSON.stringify(currentRankers));
                         $.mobile.loading("hide");
                         $.mobile.changePage("reviews.html");
                 },
@@ -1277,6 +1329,7 @@ function GetProduct(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentProduct= data.product[0];
+                        sessionStorage.setItem("currentProduct", JSON.stringify(currentProduct));
                         $.mobile.loading("hide");        
                         $.mobile.changePage("item.html");
                         },
@@ -1343,6 +1396,7 @@ function GetBids(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                                         productBids= data.bids;
+                                        sessionStorage.setItem("productBids", JSON.stringify(productBids));
                                 $.mobile.changePage("bids.html");
                         },                        
                 error: function(data, textStatus, jqXHR){
@@ -1398,6 +1452,7 @@ function BidUser(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                                         userBids= data.biduser;
+                                        sessionStorage.setItem("userBids", JSON.stringify(userBids));
                                         $.mobile.loading("hide");
                                 $.mobile.changePage("biduser.html");
                         },                        
@@ -1426,6 +1481,7 @@ function PurchaseUser(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                                         purchases= data.purchaseuser;
+                                        sessionStorage.setItem("purchases", JSON.stringify(purchases));
                                         $.mobile.loading("hide");
                                 $.mobile.changePage("purchaseuser.html");
                         },                        
@@ -1454,6 +1510,7 @@ function SalesUser(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                                         sales= data.saleuser;
+                                        sessionStorage.setItem("sales", JSON.stringify(sales));
                                         $.mobile.loading("hide");
                                 $.mobile.changePage("saleuser.html");
                         },                        
@@ -1488,6 +1545,7 @@ function GetAllProducts(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentCategoryProducts= data.allProducts;
+                        sessionStorage.setItem("currentCategoryProducts", JSON.stringify(currentCategoryProducts));
                         $.mobile.loading("hide");
                         $.mobile.changePage("productview.html", {
                                 info: id,
@@ -1516,6 +1574,7 @@ function GetCategoryProducts(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentCategoryProducts= data.productsIncategory;
+                        sessionStorage.setItem("currentCategoryProducts", JSON.stringify(currentCategoryProducts));
                         $.mobile.loading("hide");
                         $.mobile.changePage("productview.html", {
                                 info: id,
@@ -1545,6 +1604,7 @@ function GetCategories(){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentCategories= data.category;
+                        sessionStorage.setItem("currentCategories", JSON.stringify(currentCategories));
                         $.mobile.loading("hide");
                         $.mobile.changePage("Categories.html");
                         
@@ -1580,6 +1640,7 @@ function GetSubCategory(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         subCategories= data.subcategory;
+                        sessionStorage.setItem("subCategories", JSON.stringify(subCategories));
                         $.mobile.loading("hide");
                         $.mobile.navigate("subcategories.html");
                         
@@ -1597,36 +1658,6 @@ function GetSubCategory(id){
 
         });
 }
-
-var subCategories= {};
-function GetSubCategory(id){
-     
-        $.mobile.loading("show");
-        $.ajax({
-                url : "http://localhost:3412/Project1Srv/subcategory/"+id,
-                method: 'get',
-                contentType: "application/json",
-                dataType:"json",
-                success : function(data, textStatus, jqXHR){
-                        subCategories= data.subcategory;
-                        $.mobile.loading("hide");
-                        $.mobile.navigate("subcategories.html");
-                        
-                       },                        
-                error: function(data, textStatus, jqXHR){
-                        console.log("textStatus: " + textStatus);
-                        $.mobile.loading("hide");
-                        if (data.status == 404){
-                                alert("Category Empty!");
-                        }
-                        else {
-                                alert("Internal Server Error.");
-                        }
-                }
-
-        });
-}
-
 
 var currentAuctionList = {};
 function GetAuctions(){
@@ -1639,6 +1670,7 @@ function GetAuctions(){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentAuctionList= data.userAuctions;
+                        sessionStorage.setItem("currentAuctionList", JSON.stringify(currentAuctionList));
                         $.mobile.loading("hide");
                         $.mobile.changePage("uauctions.html", {
                                 info: id,
@@ -1669,6 +1701,7 @@ function GetSales(){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentSalesList= data.userSales;
+                        sessionStorage.setItem("currentSalesList", JSON.stringify(currentSalesList));
                         $.mobile.loading("hide");
                         $.mobile.changePage("usales.html", {
                                 info: id,
@@ -1785,6 +1818,7 @@ function GetMessage(mid){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentMessage = data.message;
+                        sessionStorage.setItem("currentMessage", JSON.stringify(currentMessage));
                         $.mobile.loading("hide");
                         if(mid==0)
                         $.mobile.navigate("inbox.html");
@@ -1816,6 +1850,7 @@ function GetInbox(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         inboxMessage = data.message;
+                        sessionStorage.setItem("inboxMessage", JSON.stringify(inboxMessage));
                         $.mobile.loading("hide");
                         $.mobile.navigate("inbox.html");
                
@@ -1843,6 +1878,7 @@ function GetSent(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         sentMessage = data.message;
+                        sessionStorage.setItem("sentMessage", JSON.stringify(sentMessage));
                         $.mobile.loading("hide");
                         $.mobile.navigate("sentMessages.html");
                
