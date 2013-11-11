@@ -682,7 +682,8 @@ app.get('/Project1Srv/sales', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM sale");
+        var query = client.query("SELECT * FROM sale, product " +
+        		"where productid = prodid");
         
         query.on("row", function (row, result) {
             result.addRow(row);
