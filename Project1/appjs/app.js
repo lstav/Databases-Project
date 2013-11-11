@@ -92,7 +92,9 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
         	  profile= loginAccount;
               $.mobile.changePage("account.html");
         });
-                
+         $(document).on('click', '#cart-button', function() {
+         	AllSales(); 
+         	});
         var id= loginAccount.accountid;
         var iname= $("#welcome");
         iname.empty();
@@ -241,8 +243,15 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 	 	//alert(loginAccount.username);
         var list= $("#profile-info");
         list.empty();
-        list.append("<li><a <h4>Name: "+profile.fname +" "+ profile.lname+"</h4></a> </li>");
-        list.append("<li><a <h4>Rank: "+ profile.rank  +"</h4></a> </li>");
+        list.append("<li><h4>Name: "+profile.fname +" "+ profile.lname+"</h4></li>");
+        list.append("<li><h4>Rank: "+ profile.rank  +"</h4></li>");
+        list.append("<li><h4>4 Star %: " + profile.percent + "%</h4></li>");
+        var len = currentRankers.length;
+        for(var i=0; i<len; i++) {
+        	list.append("<li><h4>" + currentRankers[i].username+ ": " + currentRankers[i].stars + "%</h4></li>");
+        	//list.append(len);
+        }
+        
         //list.append("<li><a <h4>Location:"+profile.location  +"</h4></a> </li>");
         
         var uname= $("#username");
@@ -528,7 +537,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         
         var sell= $("#seller-info");
         sell.empty();
-        sell.append("<li><a  onClick= GoProfile('"+currentProduct.aid+"')>"+currentProduct.seller+"</a></li>");
+        sell.append("<li><a  onClick= 'GetRankers("+currentProduct.aid+"); GoProfile("+currentProduct.aid+");'>"+currentProduct.seller+"</a></li>");
 
         var idescription= $("#description");
         idescription.append("<p>"+currentProduct.description+"</p>");
@@ -652,18 +661,22 @@ var shoppingcartTotal=0;
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 		//alert(loginAccount.username);
 		var id= loginAccount.accountid;
-		var products = productList;
+		var sale = saleList;
 			var txt = $.parseJSON(getCookie(id));
         	var obj = eval('(' + txt + ')');
         	var list = $("#shopping-list");
             list.empty();
      	   var len = obj.shoppingcart.length;
      	   shoppingcartTotal=0;
-     	   var j = 0;
+     	   var j;
      	   for(var i=0; i<len; i++) {
      	   		//GetProduct(obj.shoppingcart[i].prodid);
+     	   		j = 0;
+     	   		while(obj.shoppingcart[i].saleid != sale[j].saleid) {
+     	   			j++;
+     	   		}
      	   		
-     	   		list.append("<li>" + products[i].prodname + "</li>");
+     	   		//list.append("<li>" + sale[j].sale + "</li>");
      	   		/*prod = currentProduct[0];
      	   		shoppingcartTotal+= parseFloat(prod.price);
                                 list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + prod.id + ")>"+ 
@@ -887,6 +900,33 @@ function GetAddress(addressid){
         });
 }
 
+var currentRankers= {};
+
+function GetRankers(id){
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/rankers/" + id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                        currentRankers = data.rankers;
+                        $.mobile.loading("hide");
+                },
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Rankers not found.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+        });
+}
+
+
 function UpdateAccount(){
         alert("Account Saved!");
 }
@@ -940,9 +980,9 @@ function AccountLogin(username, password){
                                 loginAccount= data.accountLogin[0];
                                 SaveSession(loginAccount);
                                 var sc = '{"shoppingcart":[' +
-   								'{"prodid":"13" },' +
-   								'{"prodid":"5" },' +
-  								'{"prodid":"20" }]}';
+   								'{"saleid":"13" },' +
+   								'{"saleid":"5" },' +
+  								'{"saleid":"20" }]}';
 								setCookie(loginAccount.accountid, JSON.stringify(sc));
                                
                                 $.mobile.changePage("index.html");
@@ -1432,18 +1472,18 @@ function GetSales(){
         });
 }
 
-var productList = {};
-function GetProducts(){
+var saleList = {};
+function AllSales(){
         //id= profile.accountid;
         //alert(profile.accountid);
         $.mobile.loading("show");
         $.ajax({
-                url : "http://localhost:3412/Project1Srv/products/",
+                url : "http://localhost:3412/Project1Srv/sales/",
                 method: 'get',
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                        productList= data.products;
+                        saleList= data.sales;
                         $.mobile.loading("hide");
                         $.mobile.changePage("shopping.html");
           		},                        
@@ -1451,7 +1491,7 @@ function GetProducts(){
                         console.log("textStatus: " + textStatus);
                         $.mobile.loading("hide");
                         if (data.status == 404){
-                                alert("Products Error!");
+                                alert("Sales Error!");
                         }
                         else {
                                 alert("Internal Server Error.");
