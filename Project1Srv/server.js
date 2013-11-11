@@ -710,25 +710,46 @@ app.post('/Project1Srv/products', function(req, res) {
 
 //////////// History
 
-app.get('/Project1Srv/histories/:hid', function(req, res){
-                
-        var hid = req.params.hid;
-        console.log("GET history: " + hid);
-        var target = -1;
-                for (var i=0; i < historyList.length; ++i){
-                        if(historyList[i].hid == hid){
-                                        target= i;
-                                        break;
-                                }
-                }
-                if (target == -1){
-                        res.statusCode = 404;
-                        res.send("Product not found.");
-                }
-                else {
-                        var response = {"product" : historyList[i].productList[target]};
-                          res.json(response);        
-                  }                
+app.get('/Project1Srv/purchasesusers/:id', function(req, res){
+       var id = req.params.id;
+        console.log("GET purchases:"+ id);
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("select * "  +
+			"from invoice, checkout, sale, product " +
+			"where invoice.invoiceid = checkout.invid and checkout.saleid = sale.saleid " +
+			"and sale.prodid = product.productid and invoice.buyerid = " +id);
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"purchaseuser" : result.rows};
+                client.end();
+                  res.json(response);
+         });
+});
+
+app.get('/Project1Srv/salehistories/:id', function(req, res){
+       var id = req.params.id;
+        console.log("GET sales:"+ id);
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("select * "  +
+			"from invoice, checkout, sale, product " +
+			"where invoice.invoiceid = checkout.invid and checkout.saleid = sale.saleid " +
+			"and sale.prodid = product.productid and sale.accountid=" +id);
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"salehistories" : result.rows};
+                client.end();
+                  res.json(response);
+         });
 });
 
 app.put('/Project1Srv/histories/:hid', function(req, res) {

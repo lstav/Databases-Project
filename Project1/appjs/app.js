@@ -117,7 +117,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              block2.append(msg2).trigger('create'); 
              
              var block3= $("#block3");
-             var msg3= '<a href= "login.html" data-rel= "external" data-role="button" data-corners="false">Log Out</a>';
+             var msg3= '<a id="logout" href= "login.html" data-rel= "external" data-role="button" data-corners="false">Log Out</a>';
              block3.empty();
              block3.append(msg3).trigger('create');
        }
@@ -151,12 +151,18 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
               else{
                        $.mobile.changePage("login.html");
               }
-        });  
+        }); 
+        
+        $(document).on('click', '#logout', function() { 
+            sessionStorage.clear();
+            $.mobile.changePage("login.html");
+
+ });   
                
 });
 
  $(document).on('click', '#logout', function() { 
-                sessionStorage.clear();
+            sessionStorage.clear();
             $.mobile.changePage("login.html");
 
  });  
