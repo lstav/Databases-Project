@@ -12,6 +12,7 @@
 		<script src="appjs/shoppingcart.js"></script>
 		<script src="appjs/app.js"></script>
 		
+		
 		<style type="text/css">
 		.ui-mobile-viewport{
     	background: url("http://img39.imageshack.us/img39/2575/b83n.jpg") repeat;
@@ -57,24 +58,24 @@
 					
 				<div id= "purchase" data-role= "content">
 				
-				<h3>Order:</h3>
+				<h1 data-role="content" style="color:white">Order:</h1>
 				
+				<div data-role="content" style="color:white">
+                	<h2>Date</h2>
+                 	<ul id="date-list" data-role="listview" data-inset="true"></ul>
+                </div> 
+                
 				 <div data-role="collapsible" data-collapsed="false" data-collapsed-icon= "false">
                     <h2>Products</h2>
                  	<ul id="product-list" data-role="listview" data-inset="true"></ul>
                  </div>
-                 
-                <div>
-                	<h2>Date</h2>
-                 	<ul id="date-list" data-role="listview" data-inset="true"></ul>
-                </div>  
-   				 
-   				<div>
-                	<h2>Shipping Address</h2>
+                    				 
+   				<div data-role="collapsible" data-collapsed="false" data-collapsed-icon="false">
+                	<h1>Shipping Address</h1>
                  	<ul id="shipping-list" data-role="listview" data-inset="true"></ul>
                 </div>
 						
-				<ul id="totalPurchase"></ul>				
+				<ul style="color:white" id="totalPurchase"></ul>				
 				<a data-role="button" id="submitcheckout-button" data-theme="a" data-rel="back">Submit</a>
 				</div>
 
