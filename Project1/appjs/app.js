@@ -38,7 +38,7 @@ $(document).on('pagebeforeshow', '#login', function(){
         var username= $('#username').val();
         var password= $('#password').val();
         if(username.length > 0 && password.length > 0){
-        	//alert(username+ password);
+                //alert(username+ password);
            AccountLogin(username, password);     
                
         } 
@@ -79,26 +79,22 @@ $(document).on('pagebeforeshow', '#sign-up', function(){
 
 
 $(document).on('pagebeforeshow', '#homepage-account', function(){
-		
-	   var sessionId= GetSession();
-	   if(loginAccount.username == undefined && sessionId[1] != undefined){
-	   		loginAccount.username= sessionId[1];
-	   		loginAccount.isadmin= sessionId[2];
-	   		loginAccount.accountid= GetSession()[0];
-	   }
+                
+           var sessionId= GetSession();
+           if(loginAccount.username == undefined && sessionId[1] != undefined){
+                           loginAccount.username= sessionId[1];
+                           loginAccount.isadmin= sessionId[2];
+                           loginAccount.accountid= GetSession()[0];
+           }
 
-       if(loginAccount.username!= undefined)	{
+       if(loginAccount.username!= undefined)        {
         $(document).on('click', '#profile-account', function() { 
-        	  profile= loginAccount;
+                  profile= loginAccount;
               $.mobile.changePage("account.html");
         });
-        $(document).on('click', '#message-button', function() {
-        	profile = loginAccount;
-        	$.mobile.changePage("message.html");
-        });
          $(document).on('click', '#cart-button', function() {
-         	AllSales(); 
-         	});
+                 AllSales(); 
+                 });
         var id= loginAccount.accountid;
         var iname= $("#welcome");
         iname.empty();
@@ -117,7 +113,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              block1.append(msg).trigger('create');
              
              var block2= $("#block2");
-             var msg2= '<a id = "message-button" data-role="button" data-corners="false" data-theme="a">Messages</a>';
+             var msg2= '<a href= "message.html" data-role="button" data-corners="false" data-theme="a">Messages</a>';
              block2.empty();
              block2.append(msg2).trigger('create'); 
              
@@ -127,10 +123,10 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              block3.append(msg3).trigger('create');
        }
        
-		else{
-			
-      		//Guest
-       		 var block1= $("#block1");
+                else{
+                        
+                      //Guest
+                        var block1= $("#block1");
              var msg= '<a  href= "login.html" data-role="button" data-corners="false">Sign in</a>';
              block1.empty();
              block1.append(msg).trigger('create');
@@ -144,56 +140,48 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              var msg3= '<a  href= "index.html" data-role="button" data-icon="home" data-corners="false" data-theme="a">Home</a>';
              block3.empty();
              block3.append(msg3).trigger('create');  
-       	
+               
        }
        
         $(document).on('click', '#sale-button', function() { 
-        	
-        	//alert(loginAccount.username);
+                
+                //alert(loginAccount.username);
               if(loginAccount.username!= undefined)
               {
-              	 $.mobile.changePage("create-sale.html");
+                       $.mobile.changePage("create-sale.html");
               }
               
               else{
-              	 $.mobile.changePage("login.html");
+                       $.mobile.changePage("login.html");
               }
         });  
-	       
+               
 });
 
  $(document).on('click', '#logout', function() { 
-        	sessionStorage.clear();
+                sessionStorage.clear();
             $.mobile.changePage("login.html");
 
  });  
-
-$(document).on('pagebeforeshow', "#messages",function(event, ui) {
-	$(document).on('click', '#inbox-button', function() { 
-        	GetMessage();
-            $.mobile.changePage("inbox.html");
-
- });
-});
-
+        
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
-	
-		 var sessionId= GetSession();
-	  	 if(loginAccount.username == undefined && sessionId[1] != undefined){
-	   		loginAccount.accountid= GetSession()[0];
-	   		loginAccount.username= sessionId[1];
-	   		loginAccount.isadmin= sessionId[2];	}
+        
+                 var sessionId= GetSession();
+                   if(loginAccount.username == undefined && sessionId[1] != undefined){
+                           loginAccount.accountid= GetSession()[0];
+                           loginAccount.username= sessionId[1];
+                           loginAccount.isadmin= sessionId[2];        }
 
-		 //alert(loginAccount.username);
-		 if(loginAccount.username!= undefined){
+                 //alert(loginAccount.username);
+                 if(loginAccount.username!= undefined){
 
-		 $(document).on('click', '#edit-account', function() { 
+                 $(document).on('click', '#edit-account', function() { 
             $.mobile.changePage("settings.html");
         });  
         var stars = "";
         
         for(var i=0; i<loginAccount.rank; i++) {
-    	   	stars = stars + "*";
+                       stars = stars + "*";
        }
         
           var list = $("#account-list");
@@ -216,7 +204,7 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
                         list.listview("refresh");}
                         
            else{
-           		$.mobile.changePage("login.html");
+                           $.mobile.changePage("login.html");
            }
 
 });
@@ -237,56 +225,38 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
         $("#upd-billing").val(loginAccount.billing);
         $('#upd-creditCard').val("*****" + loginAccount.cardnumber.substr(5,6));
         $('#upd-email').val(loginAccount.email);
-       	$('#upd-password').val(pass);
+               $('#upd-password').val(pass);
         
         $('#username').html("Username: " + loginAccount.username);
         $('#fname').html("First Name: " + loginAccount.fname);
         $('#lname').html("Last Name: " + loginAccount.lname);
         $("#shippingA").html("Shipping Address: " + loginAccount.shipping);
         $("#billingA").html("Billing Address: " + loginAccount.billing);
-       	$('#cCard').html("Credit Card Number: *****" + loginAccount.cardnumber.substr(5,6));
+               $('#cCard').html("Credit Card Number: *****" + loginAccount.cardnumber.substr(5,6));
         $('#email').html("Email: " + loginAccount.email);
-       	$('#password').html("Password: " + pass); 
+               $('#password').html("Password: " + pass); 
         
 });
 
 $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
-	 	
-<<<<<<< HEAD
-=======
-	 	$(document).on('click', '#rankers-button', function() { 
-        	  GetRankers(profile.accountid);
+                 
+                 $(document).on('click', '#rankers-button', function() { 
+                  GetRankers(profile.accountid);
               
         });
-	 	
->>>>>>> 0bdd6effa0234ca889661096c5229ce6cb6dc1ea
-	 	var stars = "";
+                 
+                 var stars = "";
         
         for(var i=0; i<profile.rank; i++) {
-    	   	stars = stars + "*";
+                       stars = stars + "*";
        }
        
-	 	//alert(loginAccount.username);
+                 //alert(loginAccount.username);
         var list= $("#profile-info");
         list.empty();
         list.append("<li><h4>Name: "+profile.fname +" "+ profile.lname+"</h4></li>");
         list.append("<li><h4>Rank: "+ stars +"</h4></li>");
-<<<<<<< HEAD
-        list.append("<li><h4>4 Star %: " + profile.percent + "%</h4></li>");
-        var len = currentRankers.length;
-        for(var i=0; i<len; i++) {
-        	stars = "";
-        
-        for(var j=0; j<currentRankers[i].rank; j++) {
-    	   	stars = stars + "*";
-       }
-        	list.append("<li><h4>" + currentRankers[i].username+ ": " + stars + "</h4></li>");
-        	//list.append(len);
-        }
-        
-=======
         list.append("<li><h4>4 Star %: " + profile.percent + "%</h4></li>");        
->>>>>>> 0bdd6effa0234ca889661096c5229ce6cb6dc1ea
         //list.append("<li><a <h4>Location:"+profile.location  +"</h4></a> </li>");
         
         var uname= $("#username");
@@ -307,35 +277,19 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 
 $(document).on('pagebeforeshow', "#ranks-page", function( event, ui ) {
        
-<<<<<<< HEAD
-	 	//alert(loginAccount.username);
-=======
->>>>>>> 0bdd6effa0234ca889661096c5229ce6cb6dc1ea
         var list= $("#rank-list");
         list.empty();
         var len = currentRankers.length;
         for(var i=0; i<len; i++) {
-<<<<<<< HEAD
-        	stars = "";
+                star = "";
         
-        	for(var j=0; j<currentRankers[i].rank; j++) {
-    	   		stars = stars + "*";
-       		}
-        		list.append("<li><h4>" + currentRankers[i].username+ ": " + stars + "</h4></li>");
-        	//list.append(len);
-        	}
-        
-=======
-        	star = "";
-        
-        	for(var j=0; j<currentRankers[i].stars; j++) {
-    	   		star = star + "*";
-       		}
-        		list.append("<li><h4>" + currentRankers[i].username+ ": " + star + "</h4></li>");
-        	//list.append("Hello");
-        	}
-        	list.listview("refresh");
->>>>>>> 0bdd6effa0234ca889661096c5229ce6cb6dc1ea
+                for(var j=0; j<currentRankers[i].stars; j++) {
+                               star = star + "*";
+                       }
+                        list.append("<li><h4>" + currentRankers[i].username+ ": " + star + "</h4></li>");
+                //list.append("Hello");
+                }
+                list.listview("refresh");
         //list.append("<li><a <h4>Location:"+profile.location  +"</h4></a> </li>");
               
         var pname= $("#name");
@@ -345,12 +299,12 @@ $(document).on('pagebeforeshow', "#ranks-page", function( event, ui ) {
 });
 
 $(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
-	    
-	    $(document).on('click', '#submitrank', function() {
-	    	alert("Rank submited!");
-	    	$.mobile.changePage("profile.html");
-	    });
-	    
+            
+            $(document).on('click', '#submitrank', function() {
+                    alert("Rank submited!");
+                    $.mobile.changePage("profile.html");
+            });
+            
         var pname= $("#urname");
         pname.empty();
         pname.append("<center>"+profile.username+"</center>");
@@ -358,7 +312,7 @@ $(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
 
 $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
         
-        		//alert(loginAccount.username);
+                        //alert(loginAccount.username);
                 var productCat = currentSalesList;
                 var len =productCat.length;
                 
@@ -393,8 +347,8 @@ $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
 });
 
 $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
-	
-			 	//alert(loginAccount.username);
+        
+                                 //alert(loginAccount.username);
                 var productCat = currentAuctionList;
                 var len =productCat.length;
 
@@ -426,8 +380,8 @@ $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
                 list.listview("refresh");
                 
                       $(document).on('click', '#bid-icon', function() { 
-						$.mobile.changePage("bids.html");
-					 });    
+                                                $.mobile.changePage("bids.html");
+                                         });    
                 
                 }
 
@@ -435,7 +389,7 @@ $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
 
 $(document).on('pagebeforeshow', "#bidPage", function(event, ui) {
         
-        		//alert(loginAccount.username);
+                        //alert(loginAccount.username);
                 var productbid = productBids;
                 var len =productBids.length;
                 
@@ -458,8 +412,8 @@ $(document).on('pagebeforeshow', "#bidPage", function(event, ui) {
 });
 
 $(document).on('pagebeforeshow', '#create-auction', function(){  
-	
-	   //alert(loginAccount.username);
+        
+           //alert(loginAccount.username);
        $(document).on('click', '#submit-auction', function() { 
               alert("You have created an auction!");
         });    
@@ -467,7 +421,7 @@ $(document).on('pagebeforeshow', '#create-auction', function(){
 
 $(document).on('pagebeforeshow', '#create-sale', function(){  
 
-		//alert(loginAccount.username);
+                //alert(loginAccount.username);
        $(document).on('click', '#submit-sale', function() { 
               alert("Your product is on sale!");
         });  
@@ -480,27 +434,27 @@ $(document).on('click', '#search-button', function() {
 }); 
 
 $(document).on('click', '#submit-signup', function() { 
-	
-			var username=$('#username').val();			
-			var password=$('#password').val();
-			var firstname=$('#fname').val();
-			var lastname=$('#lname').val();
-			var email= $('#email').val();
-			var street=$('#street').val();
-			var city=$('#city').val();
-			var state= $('#state').val(); 
-			var zipcode=$('#zipcode').val();
-			var country= $('#country').val(); 
-			
-			if(username.length > 0 && password.length > 0 && firstname.length > 0 && lastname.length > 0 && email.length > 0 && street.length > 0 && city.length > 0 && state.length > 0
-				&& zipcode.length > 0 && country.length > 0){
+        
+                        var username=$('#username').val();                        
+                        var password=$('#password').val();
+                        var firstname=$('#fname').val();
+                        var lastname=$('#lname').val();
+                        var email= $('#email').val();
+                        var street=$('#street').val();
+                        var city=$('#city').val();
+                        var state= $('#state').val(); 
+                        var zipcode=$('#zipcode').val();
+                        var country= $('#country').val(); 
+                        
+                        if(username.length > 0 && password.length > 0 && firstname.length > 0 && lastname.length > 0 && email.length > 0 && street.length > 0 && city.length > 0 && state.length > 0
+                                && zipcode.length > 0 && country.length > 0){
           
               SignUp(username); 
               
               }
               
             else{
-            	alert("Please fill all fields.");
+                    alert("Please fill all fields.");
             }
               
            
@@ -511,40 +465,49 @@ $(document).on('click', '#cart-button', function() {
               AllSales();
 }); 
 */
+
+$(document).on('click', '#inbox-button', function() { 
+      GetInbox(loginAccount.accountid);
+}); 
+
+$(document).on('click', '#sent-button', function() { 
+      GetSent(loginAccount.accountid);
+}); 
+
 $(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
 
-				var category= currentCategories;
-				var len= category.length;
-				var list=$("#show-categories");
-				list.empty();
-				
-				var cname;
+                                var category= currentCategories;
+                                var len= category.length;
+                                var list=$("#show-categories");
+                                list.empty();
+                                
+                                var cname;
                 for (var i=0; i < len; ++i){
                 cname =category[i].catname;
                 cid= category[i].catid;
                 list.append("<li onClick= GetSubCategory("+cid+")><a>"+ cname+ "</a></li>");
                 }
                 list.listview("refresh" );
-				 
+                                 
 });
 
 $(document).on('pagebeforeshow', "#subcatLayout", function(event, ui) {
 
-				var category= subCategories;
-				var len= category.length;
-				var list=$("#show-subcategories");
-				list.empty();
-				
-				if(len > 0){
+                                var category= subCategories;
+                                var len= category.length;
+                                var list=$("#show-subcategories");
+                                list.empty();
+                                
+                                if(len > 0){
                 var pname=$("#pcat");
                 pname.empty();
                 pname.append(currentCategories[0].catname).trigger("create");
                 }
-				
+                                
                 
                 list.append("<li onClick= GetAllProducts("+category[0].parentid+")><a>All</a></li>");
-				
-				var sname;
+                                
+                                var sname;
                 for (var i=0; i < len; ++i){
                 sname =category[i].catname;
                 sid= category[i].catid;
@@ -554,28 +517,28 @@ $(document).on('pagebeforeshow', "#subcatLayout", function(event, ui) {
                 list.listview("refresh" );
                 
                  
-				 
+                                 
 });
-	
+        
 $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
-				//alert(loginAccount.username);
-				$.expr[":"].contains = $.expr.createPseudo(function(arg) {
-   				 return function( elem ) {
-       			 return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
-   				 };
-				});
-		
-				$("#search-basic").keyup(function(){
-				
-  				var term = $(this).val();
-  				
-  				if(term != ""){
-  					$("li").hide();
-    				$("li:contains('" + term + "')").show();
-  				}
-  				else{$("li").show();}
-  				
-				}); 
+                                //alert(loginAccount.username);
+                                $.expr[":"].contains = $.expr.createPseudo(function(arg) {
+                                    return function( elem ) {
+                                return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+                                    };
+                                });
+                
+                                $("#search-basic").keyup(function(){
+                                
+                                  var term = $(this).val();
+                                  
+                                  if(term != ""){
+                                          $("li").hide();
+                                    $("li:contains('" + term + "')").show();
+                                  }
+                                  else{$("li").show();}
+                                  
+                                }); 
 
                 var productCat = currentCategoryProducts;
                 var len =productCat.length;
@@ -594,16 +557,16 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
                 iname.append("<center>"+productCat[0].catname+"</center>");}
                 
                 else{
-                	
+                        
                 var msg='<li><a data-rel=back data-role="button">No products</a></li>';
-                list.append(msg);                	
+                list.append(msg);                        
                 }
                                 
                 list.listview("refresh");
 });
 
 $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
-		
+                
         var list= $("#item-info");
         list.empty();
         list.append("<li><a> <strong>Price:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");
@@ -627,7 +590,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         sell.listview("refresh");
         
         if(loginAccount.username == currentProduct.seller){
-        	 var bid= $("#bid-name");
+                 var bid= $("#bid-name");
              var msg= '<input type="button" value= "List of Bids" onClick=GetBids('+currentProduct.id+') data-mini="true"/>';
              bid.empty();
              bid.append(msg).trigger('create');
@@ -644,7 +607,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         }
         else
         {
-        	 var bid= $("#bid-name");
+                 var bid= $("#bid-name");
              var msg= '<input type="text" id="bid" value= "Make a bid" data-mini="true"/>';
              bid.empty();
              bid.append(msg).trigger('create');
@@ -662,7 +625,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              buy.append(msg3).trigger('create');}
              
              else{
-             	
+                     
              var submit= $("#bid-offer");
              var pop='<a id= "bid-offer" href="#popupLogin" data-rel="popup" data-position-to="window" data-inline="true">';
              var msg2='<input type= "submit" id= "submitBid" value="Submit" value= "Submit" data-mini="true"/></a>';
@@ -675,7 +638,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
             
              buy.empty();
              buy.append(pop2+msg3).trigger('create');
-             	
+                     
              }
         }
         
@@ -704,7 +667,7 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 ////////// Shopping Cart
 
 $(document).on('pagebeforeshow', "#shoppingList", function(event, ui){
-	
+        
                 var shopping = shoppinglist;
                 var len =shopping.length;
                 
@@ -715,9 +678,9 @@ $(document).on('pagebeforeshow', "#shoppingList", function(event, ui){
                         iname.append(msg).trigger('create');}
                         
                 else{
-                	
-               	if(loginAccount.username != undefined){
-                	
+                        
+                       if(loginAccount.username != undefined){
+                        
                 var list = $("#myshopping-list");
                 list.empty();
                 var item;
@@ -734,54 +697,54 @@ $(document).on('pagebeforeshow', "#shoppingList", function(event, ui){
 var shoppingcartTotal=0;
 
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
-		//alert(loginAccount.username);
-		var id= loginAccount.accountid;
-		var sales = saleList;
-			var txt = $.parseJSON(getCookie(id));
-        	var obj = eval('(' + txt + ')');
-        	var list = $("#myshopping-list");
+                //alert(loginAccount.username);
+                var id= loginAccount.accountid;
+                var sales = saleList;
+                        var txt = $.parseJSON(getCookie(id));
+                var obj = eval('(' + txt + ')');
+                var list = $("#myshopping-list");
             list.empty();
-     	   var len = obj.shoppingcart.length;
-     	   var len2 = sales.length;
-     	   shoppingcartTotal=0;
-     	   var prod = obj.shoppingcart;
-     	   var j;
-     	   for(var i=0; i<len; i++) {
-     	   		//GetProduct(obj.shoppingcart[i].prodid);
-     	   		j = 0;
-     	   		while(prod[i].saleid != sales[j].saleid) {
-     	   			j++;
-     	   		}
-     	   		//list.append("<li>" + sales[i].price + "</li>");
-     	   		//list.append("<li>" + sales[j].saleid + "</li>");
-     	   		//prod = currentProduct[0];
-     	   		shoppingcartTotal+= parseFloat(sales[j].price);
+                var len = obj.shoppingcart.length;
+                var len2 = sales.length;
+                shoppingcartTotal=0;
+                var prod = obj.shoppingcart;
+                var j;
+                for(var i=0; i<len; i++) {
+                                //GetProduct(obj.shoppingcart[i].prodid);
+                                j = 0;
+                                while(prod[i].saleid != sales[j].saleid) {
+                                        j++;
+                                }
+                                //list.append("<li>" + sales[i].price + "</li>");
+                                //list.append("<li>" + sales[j].saleid + "</li>");
+                                //prod = currentProduct[0];
+                                shoppingcartTotal+= parseFloat(sales[j].price);
                                 list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + sales[j].prodid + ")>"+ 
                                 "<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
                                         "<h4> Price: $"+sales[j].price+"<\h4></a></li>");
-     	   }
-     	   list.listview("refresh");        
+                }
+                list.listview("refresh");        
      });
 
 //////// History
 
 $(document).on('pagebeforeshow', "#historyPage", function(event, ui) {
-	
-		var list=$("#myhistory-list");
-		list.empty();
-	
-		var h1= '<li><a onClick=BidUser('+loginAccount.accountid+')>My Bids</a></li>';
-		var h2= '<li><a onClick=PurchaseUser('+loginAccount.accountid+')>Purchased</a></li>';
-		var h3= '<li><a onClick=SalesUser('+loginAccount.accountid+')>Sales</a></li>';
-		list.append(h1+h2+h3);
-		
-		list.listview("refresh");
-	
+        
+                var list=$("#myhistory-list");
+                list.empty();
+        
+                var h1= '<li><a onClick=BidUser('+loginAccount.accountid+')>My Bids</a></li>';
+                var h2= '<li><a onClick=PurchaseUser('+loginAccount.accountid+')>Purchased</a></li>';
+                var h3= '<li><a onClick=SalesUser('+loginAccount.accountid+')>Sales</a></li>';
+                list.append(h1+h2+h3);
+                
+                list.listview("refresh");
+        
         
 });
 
 $(document).on('pagebeforeshow', "#historyList", function(event, ui){
-	
+        
                 var userbid = userBids;
                 var len =userBids.length;
 
@@ -792,7 +755,7 @@ $(document).on('pagebeforeshow', "#historyList", function(event, ui){
                         iname.append(msg).trigger('create');}
                         
                 else{
-                	
+                        
                 var list = $("#mybids-list");
                 list.empty();
                 var item;
@@ -805,7 +768,7 @@ $(document).on('pagebeforeshow', "#historyList", function(event, ui){
 });
 
 $(document).on('pagebeforeshow', "#purchaseList", function(event, ui){
-	
+        
                 var usales = purchases;
                 var len =usales.length;
 
@@ -816,7 +779,7 @@ $(document).on('pagebeforeshow', "#purchaseList", function(event, ui){
                         iname.append(msg).trigger('create');}
                         
                 else{
-                	
+                        
                 var list = $("#mypurchase-list");
                 list.empty();
                 var item;
@@ -829,7 +792,7 @@ $(document).on('pagebeforeshow', "#purchaseList", function(event, ui){
 });
 
 $(document).on('pagebeforeshow', "#saleList", function(event, ui){
-	
+        
                 var usales = sales;
                 var len =usales.length;
 
@@ -840,7 +803,7 @@ $(document).on('pagebeforeshow', "#saleList", function(event, ui){
                         iname.append(msg).trigger('create');}
                         
                 else{
-                	
+                        
                 var list = $("#mysale-list");
                 list.empty();
                 var item;
@@ -855,57 +818,45 @@ $(document).on('pagebeforeshow', "#saleList", function(event, ui){
 ////////// Message
 
 $(document).on('pagebeforeshow', "#inbox", function(event, ui) {
-        
-        		//alert(loginAccount.username);
-                var mess = currentMessageList;
-                var len =mess.length;
-                
-                //alert(profile.username + " "+ loginAccount.username);
-                /*
-                if(len==0){
-                        var iname= $("#message");
-                        var msg= '<br><a data-rel="back"><center><h2>No messages to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
-                        iname.empty();
-                        iname.append(msg).trigger('create');
-                        
-                        var order= $("#order-list");
-                        order.empty();
+       var message = inboxMessage;
+       var len =message.length;
 
-                }
-                else{*/
-                var list = $("#inbox-list");
-                list.empty();
-                var item;
-                list.append(len);
-                for (var i=0; i < len; ++i){
-                item =mess[i];
-                //console.log("dhdhd");
-                //list.append("Hello");
-                //list.append("<li><a onClick=GetMessage()> "+ item.username + "<h4> "+item.text+" "+item.date+"<\h4></a></li>");
-                }
-                list.listview("refresh");
+       if(len==0){ 
+        	var iname= $("#message");
+       		var msg= '<br><a data-rel="back"><center><h2>No messages to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
+            iname.empty();
+            iname.append(msg).trigger('create');}
+                        
+       else{                 
+       		var list = $("#inbox-list");
+            list.empty();
+            var item;
+            for (var i=0; i < len; ++i){
+            item =message[i];
+            list.append("<li><a onClick= GetMessage("+item.messageid+")> From: "+item.username + "<h4>Subject: 	</h4><p> Date:"+item.date+" </p></a></li>");
+           }
+           list.listview("refresh");}  
 });
 
-
 $(document).on('pagebeforeshow', "#sent", function(event, ui) {
-        $.ajax({
-                url : "http://localhost:3412/Project1Srv/messages",
-                contentType: "application/json",
-                success : function(data, textStatus, jqXHR){
-                        var messageList = data.messages;
-                        var len = messageList.length;
-                        var list = $("#sentMessage-list");
-                        list.empty();
-                        var message;
-                        message = messageList[1];
-                        list.append("<li><h2>"+message.sName+ "</h2><p>" +message.mText+"</p></li>");
-                        list.listview("refresh");
-                },
-                error: function(data, textStatus, jqXHR){
-                        console.log("textStatus: " + textStatus);
-                        alert("Data not found!");
-                }
-        });
+       var message = sentMessage;
+       var len =message.length;
+
+       if(len==0){ 
+        	var iname= $("#message");
+       		var msg= '<br><a data-rel="back"><center><h2>No messages to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
+            iname.empty();
+            iname.append(msg).trigger('create');}
+                        
+       else{                 
+       		var list = $("#sentMessage-list");
+            list.empty();
+            var item;
+            for (var i=0; i < len; ++i){
+            item =message[i];
+            list.append("<li><a onClick= GetMessage("+item.messageid+")> To: "+item.receiver + "<h4>Subject: 	</h4><p> Date:"+item.date+" </p></a></li>");
+           }
+           list.listview("refresh");}  
 });
 
 ////////// Total Categories ////////////////
@@ -946,17 +897,17 @@ function ConverToJSON(formData){
 
 function SaveSession(account){
 
-    	sessionStorage.setItem("fname", account.fname);
-    	sessionStorage.setItem("lname", account.lname);
-    	//sessionStorage.setItem("aaccountnumber", account.aaccountnumber);
-    	sessionStorage.setItem("email", account.email);
+            sessionStorage.setItem("fname", account.fname);
+            sessionStorage.setItem("lname", account.lname);
+            //sessionStorage.setItem("aaccountnumber", account.aaccountnumber);
+            sessionStorage.setItem("email", account.email);
         sessionStorage.setItem("username", account.username);
         sessionStorage.setItem("accountid", account.accountid);
         sessionStorage.setItem("isadmin", account.isadmin);
 }
 
 function GetSession(){
-		var session= new Array(sessionStorage.getItem("accountid"), sessionStorage.getItem("username"));
+                var session= new Array(sessionStorage.getItem("accountid"), sessionStorage.getItem("username"));
         return session; 
 }
 
@@ -993,7 +944,7 @@ function GetAddress(addressid){
 var currentRankers= {};
 
 function GetRankers(id){
-		
+                
         $.mobile.loading("show");
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/rankers/" + id,
@@ -1046,7 +997,7 @@ function aconvert(dbModel){
         aliModel.aEmail = dbModel.email;
         aliModel.aUsername = dbModel.username;
         aliModel.aPassword = dbModel.apassword;
-       	aliModel.aShipping = dbModel.shipping;
+               aliModel.aShipping = dbModel.shipping;
         aliModel.aBilling = dbModel.billing;
         aliModel.rank = dbModel.rank;
         
@@ -1072,10 +1023,10 @@ function AccountLogin(username, password){
                                 loginAccount= data.accountLogin[0];
                                 SaveSession(loginAccount);
                                 var sc = '{"shoppingcart":[' +
-   								'{"saleid":"13" },' +
-   								'{"saleid":"5" },' +
-  								'{"saleid":"15" }]}';
-								setCookie(loginAccount.accountid, JSON.stringify(sc));
+                                                                   '{"saleid":"13" },' +
+                                                                   '{"saleid":"5" },' +
+                                                                  '{"saleid":"15" }]}';
+                                                                setCookie(loginAccount.accountid, JSON.stringify(sc));
                                
                                 $.mobile.changePage("index.html");
                         }
@@ -1099,15 +1050,15 @@ function AccountLogin(username, password){
 
 var profile={};
 function GoProfile(id){
-	    console.log("getting profile");
+            console.log("getting profile");
         $.mobile.loading("show");
         
-		if(loginAccount.accountid == id){
-			 $.mobile.loading("hide");
+                if(loginAccount.accountid == id){
+                         $.mobile.loading("hide");
              $.mobile.changePage("account.html");
-		}
+                }
      
-     	else{
+             else{
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/profiles/"+id,
                 method: 'get',
@@ -1132,20 +1083,20 @@ function GoProfile(id){
 }
 
 function SignUp(id){
-          	$.ajax({
+                  $.ajax({
                 url : "http://localhost:3412/Project1Srv/accountsign/"+id,
                 method: 'get',
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
- 					
+                                         
                         if(data.accounts.length == 0){
-						alert("Valid username. Account created.");}
-						
-						else{
-							alert("Username in use. Try another one. ");
-						}
-						                        },
+                                                alert("Valid username. Account created.");}
+                                                
+                                                else{
+                                                        alert("Username in use. Try another one. ");
+                                                }
+                                                                        },
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
                         $.mobile.loading("hide");
@@ -1162,26 +1113,26 @@ function SignUp(id){
 function GoAccount(){
         
          if(loginAccount.username!= undefined){
-         	
-         	   $.mobile.changePage("account.html");
+                 
+                    $.mobile.changePage("account.html");
 
-		   }
+                   }
                         
            else{
-           		$.mobile.changePage("login.html");
+                           $.mobile.changePage("login.html");
            }
 }
 
 function GoMessages(){
 
          if(loginAccount.username!= undefined){
-         	
-         	   $.mobile.changePage("message.html");
+                 
+                    $.mobile.changePage("message.html");
 
-		   }
+                   }
                         
            else{
-           		$.mobile.changePage("login.html");
+                           $.mobile.changePage("login.html");
            }
 }
 ////// Product
@@ -1253,7 +1204,7 @@ function DeleteShoppingCart(id){
 //Bids
 var productBids={};
 function GetBids(id){
-	
+        
         $.mobile.loading("show");
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/bidsproducts/"+id,
@@ -1261,8 +1212,8 @@ function GetBids(id){
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                			productBids= data.bids;
-                        	$.mobile.changePage("bids.html");
+                                        productBids= data.bids;
+                                $.mobile.changePage("bids.html");
                         },                        
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
@@ -1280,7 +1231,7 @@ function GetBids(id){
 
 var shoppinglist= {};
 function GetShoppingCart(id){
-	
+        
         $.mobile.loading("show");
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/shoppingcart/"+id,
@@ -1288,8 +1239,8 @@ function GetShoppingCart(id){
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                			shoppinglist= data.shoppingcart;
-                        	$.mobile.changePage("shopping.html");
+                                        shoppinglist= data.shoppingcart;
+                                $.mobile.changePage("shopping.html");
                         },                        
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
@@ -1308,7 +1259,7 @@ function GetShoppingCart(id){
 
 var userBids={};
 function BidUser(id){
-	
+        
         $.mobile.loading("show");
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/bidusers/"+id,
@@ -1316,9 +1267,9 @@ function BidUser(id){
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                			userBids= data.biduser;
-                			$.mobile.loading("hide");
-                        	$.mobile.changePage("biduser.html");
+                                        userBids= data.biduser;
+                                        $.mobile.loading("hide");
+                                $.mobile.changePage("biduser.html");
                         },                        
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
@@ -1336,7 +1287,7 @@ function BidUser(id){
 
 var purchases={};
 function PurchaseUser(id){
-	
+        
         $.mobile.loading("show");
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/purchaseusers/"+id,
@@ -1344,9 +1295,9 @@ function PurchaseUser(id){
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                			purchases= data.purchaseuser;
-                			$.mobile.loading("hide");
-                        	$.mobile.changePage("purchaseuser.html");
+                                        purchases= data.purchaseuser;
+                                        $.mobile.loading("hide");
+                                $.mobile.changePage("purchaseuser.html");
                         },                        
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
@@ -1364,7 +1315,7 @@ function PurchaseUser(id){
 
 var sales={};
 function SalesUser(id){
-	
+        
         $.mobile.loading("show");
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/salesusers/"+id,
@@ -1372,9 +1323,9 @@ function SalesUser(id){
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                			sales= data.saleuser;
-                			$.mobile.loading("hide");
-                        	$.mobile.changePage("saleuser.html");
+                                        sales= data.saleuser;
+                                        $.mobile.loading("hide");
+                                $.mobile.changePage("saleuser.html");
                         },                        
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
@@ -1483,7 +1434,7 @@ function GetCategories(){
 }
 
 function RankUser(){
-		$.mobile.changePage("userrank.html");                                     
+                $.mobile.changePage("userrank.html");                                     
 }
 
 
@@ -1620,7 +1571,7 @@ function AllSales(){
                         saleList= data.sales;
                         $.mobile.loading("hide");
                         $.mobile.changePage("shopping.html");
-          		},                        
+                          },                        
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
                         $.mobile.loading("hide");
@@ -1693,35 +1644,91 @@ function GetHistory(hid){
 
 /////////// Message
 
-var currentMessageList = {};
-function GetMessages(){
-        id= profile.accountid;
-        //alert(profile.accountid);
+var currentMessage = {};
+function GetMessage(mid){
         $.mobile.loading("show");
         $.ajax({
-                url : "http://localhost:3412/Project1Srv/message/"+ id,
+                url : "http://localhost:3412/Project1Srv/messages/" + mid,
                 method: 'get',
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                        currentMessageList= data.message;
+                        currentMessage = data.message;
                         $.mobile.loading("hide");
-                        $.mobile.changePage("inbox.html", {
-                                info: id,
-                        });},                        
+                        if(mid==0)
+                        $.mobile.navigate("inbox.html");
+                        else
+                        $.mobile.navigate("sentMessages.html");
+                },
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
                         $.mobile.loading("hide");
                         if (data.status == 404){
-                                alert("Sorry, Server is not running at the moment");
+                                alert("Message not found.");
                         }
                         else {
                                 alert("Internal Server Error.");
                         }
                 }
-
         });
 }
+
+/////////// Message
+
+var inboxMessage = {};
+function GetInbox(id){
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/message-inbox/" + id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                        inboxMessage = data.message;
+                        $.mobile.loading("hide");
+                        $.mobile.navigate("inbox.html");
+               
+                },
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Message not found.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+        });
+}
+
+var sentMessage = {};
+function GetSent(id){
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/message-sent/" + id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                        sentMessage = data.message;
+                        $.mobile.loading("hide");
+                        $.mobile.navigate("sentMessages.html");
+               
+                },
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Message not found.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+        });
+}
+
 
 function submitMessage(){
         alert("Message has been sent");
@@ -1741,11 +1748,11 @@ function AddCategory(){
 }
 
 function ChangePassword(){
-	alert("Password Changed");
+        alert("Password Changed");
 }
 
 function DeleteAccount(){
-	alert("Account Deleted");
+        alert("Account Deleted");
 }
 ///// Bid
 

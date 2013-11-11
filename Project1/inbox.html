@@ -45,8 +45,8 @@
         		<h1>Inbox</h1>
     		</div><!-- /panel --> 
     		
-    		<div data-role="header"> <h1>Inbox</h1>
-			
+    		<div data-role="header"> 
+			    <h1><img src= 'http://img30.imageshack.us/img30/7994/r7b.gif' /></h1>			
 				<a href="product.html" data-role="button" data-position="left" data-icon="back" data-iconpos="notext" data-rel="back">Back</a>
 				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
 					<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
@@ -54,9 +54,17 @@
 				</div>
 			</div>
 		<div data-role="content">
-				<ul data-role="listview" id="inbox-list">
-					
-				</ul>
+				<div data-role="collapsible" data-collapsed="false" data-collapsed-icon= "false">
+				<h2>Inbox</h2>
+				<ul id="inbox-list" data-role="listview" data-inset="true"></ul>
+				</div>
+				
+				<div class="ui-grid-b">
+				<div class="ui-block-a"></div>
+				<div id= "message" class="ui-block-b" style= "color: DarkRed"></div>
+				<div class="ui-block-c" ></div>
+				</div>
+				
 		</div>
 		</div>
 	</body>	
