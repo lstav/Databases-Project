@@ -1366,7 +1366,7 @@ function GetCategories(){
      
         $.mobile.loading("show");
         $.ajax({
-                url : "http://localhost:3412/Project1Srv/category",
+                url : "http://vast-peak-8162.herokuapp.com/LHL/category",
                 method: 'get',
                 contentType: "application/json",
                 dataType:"json",
