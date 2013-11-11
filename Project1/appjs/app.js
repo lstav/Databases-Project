@@ -566,10 +566,14 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 });
 
 $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
-                
+
         var list= $("#item-info");
         list.empty();
-        list.append("<li><a> <strong>Price:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");
+        if(isSale){
+        list.append("<li><a> <strong>Price:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");}
+        else{
+        list.append("<li><a> <strong>Current bid:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");
+        }
         list.append("<li><a> <strong>Condition: </strong><kbd>"+currentProduct.condition  +"</kbd></a> </li>");
         list.append("<li><a><strong> Item ID: </strong><kbd>"+currentProduct.id+"</kbd></a> </li>");
         
@@ -590,54 +594,69 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         sell.listview("refresh");
         
         if(loginAccount.username == currentProduct.seller){
-                 var bid= $("#bid-name");
-             var msg= '<input type="button" value= "List of Bids" onClick=GetBids('+currentProduct.id+') data-mini="true"/>';
-             bid.empty();
-             bid.append(msg).trigger('create');
-             
-             var submit= $("#bid-offer");
-             var msg2= '<input type="submit" href="index.html" value="End Sale" onClick=EndSale() data-theme="a" data-mini="true"/>';
+        	 var bid= $("#bid-name");
+        	 var submit= $("#bid-offer");
+        	 bid.empty();
              submit.empty();
-             submit.append(msg2).trigger('create');
+        	  
+        	 if(!isSale){
+             
+             var msg= '<input type="button" value= "List of Bids" onClick=GetBids('+currentProduct.id+') data-mini="true"/>';
+             bid.append(msg).trigger('create');      
+           
+             var msg2= '<input type="submit" href="index.html" value="End Sale" onClick=EndSale() data-theme="a" data-mini="true"/>';
+             submit.append(msg2).trigger('create');}
              
              var buy= $("#buy-now");
-             var msg3= '<input type="submit" href= "create-sale.html" id= "sale-other" value= "Sell another like this" data-mini="true"/>';
              buy.empty();
-             buy.append(msg3).trigger('create');
+             
+             if(isSale){
+             var msg3= '<input type="submit" href= "create-sale.html" id= "sale-other" value= "Sell another like this" data-mini="true"/>';
+             buy.append(msg3).trigger('create'); isSale=false;}
         }
         else
         {
-                 var bid= $("#bid-name");
-             var msg= '<input type="text" id="bid" value= "Make a bid" data-mini="true"/>';
+             var bid= $("#bid-name");
              bid.empty();
-             bid.append(msg).trigger('create');
+             
+             if(!isSale){
+             var msg= '<input type="text" id="bid" value= "Make a bid" data-mini="true"/>';         
+             bid.append(msg).trigger('create');}
              
              if(loginAccount.username != undefined){
-             var submit= $("#bid-offer");
-             var msg2= '<a><input type="submit" id= "submitBid" value="Submit" onClick= UpdateBid() data-theme="a" data-mini="true"/></a>';
+             var submit= $("#bid-offer");	
              submit.empty();
-             submit.append(msg2).trigger('create');
+             
+             if(!isSale){
+             var msg2= '<a><input type="submit" id= "submitBid" value="Submit" onClick= UpdateBid() data-theme="a" data-mini="true"/></a>';
+             submit.append(msg2).trigger('create');}
              
              var buy= $("#buy-now");
-             var msg3= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder() data-mini="true"/></a>';
-
              buy.empty();
-             buy.append(msg3).trigger('create');}
+             
+             if(isSale){
+             var msg3= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder() data-mini="true"/></a>';
+             buy.append(msg3).trigger('create'); isSale=false;}
+             
+             }
              
              else{
                      
              var submit= $("#bid-offer");
-             var pop='<a id= "bid-offer" href="#popupLogin" data-rel="popup" data-position-to="window" data-inline="true">';
-             var msg2='<input type= "submit" id= "submitBid" value="Submit" value= "Submit" data-mini="true"/></a>';
              submit.empty();
-             submit.append(pop+msg2).trigger('create');
              
+             if(!isSale){
+             var pop='<a id= "bid-offer" href="#popupLogin" data-rel="popup" data-position-to="window" data-inline="true">';
+             var msg2='<input type= "submit" id= "submitBid" value="Submit" value= "Submit" data-mini="true"/></a>';            
+             submit.append(pop+msg2).trigger('create');}
+                          
              var buy= $("#buy-now");
+             buy.empty();
+             
+             if(isSale){
              var pop2= '<a href="#popupLogin" data-rel="popup" data-position-to="window" data-inline="true">';
              var msg3= '<input type= "submit" value= "Buy it now" data-theme="a"data-mini="true" /></a>';
-            
-             buy.empty();
-             buy.append(pop2+msg3).trigger('create');
+             buy.append(pop2+msg3).trigger('create'); isSale=false;}
                      
              }
         }
@@ -649,6 +668,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         $(document).on('click', '#sale-other', function() { 
               $.mobile.changePage("create-sale.html");
         });  
+       
         
         
 
@@ -817,6 +837,28 @@ $(document).on('pagebeforeshow', "#saleList", function(event, ui){
 
 ////////// Message
 
+var reply= false;
+$(document).on('click', "#reply", function(event, ui) {
+        
+        reply= true;
+        $.mobile.changePage("newMessage.html");
+        
+});
+
+$(document).on('pagebeforeshow', "#newMessage", function(event, ui) {
+      
+      if(reply){
+      	reply= false;
+      	var message = $("#messageTo");
+        message.empty();
+      	var to= '<input type="text" value="'+messageFrom+'" name="userName">';
+      	message.append(to).trigger('create');
+      	messageFrom={};
+      	
+      }
+});
+
+var messageFrom= {};
 $(document).on('pagebeforeshow', "#inbox", function(event, ui) {
        var message = inboxMessage;
        var len =message.length;
@@ -858,6 +900,39 @@ $(document).on('pagebeforeshow', "#sent", function(event, ui) {
            }
            list.listview("refresh");}  
 });
+
+
+$(document).on('pagebeforeshow', "#message-view", function(event, ui) {
+       var message = viewMessage;
+       var len =message.length;
+
+       if(len==0){ 
+        	var iname= $("#message");
+       		var msg= '<br><a data-rel="back"><center><h2>No messages to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
+            iname.empty();
+            iname.append(msg).trigger('create');}
+                        
+       else{                 
+       		var list = $("#message-show");
+            list.empty();
+            var item;
+            for (var i=0; i < len; ++i){
+            item =message[i];
+            var sender= '<input type="text" value= "From:'+ item.sender + '" data-mini="true"readonly="readonly"/><br>';
+            var receiver= '<input type="text" value= "To: '+ item.receiver + '" data-mini="true" readonly="readonly"/><br>';
+            var date= '<input type="text" value= "Date:'+ item.date + '" data-mini="true" readonly="readonly"/><br>';
+            var subject= '<input type="text" value= "Subject: " data-mini="true" readonly="readonly"/><br> ';
+            var message= '<textarea cols="40" rows="8" readonly="readonly">'+item.text+'</textarea><br>';
+            
+            if(loginAccount.username == item.sender){messageFrom= item.receiver;}
+            else{messageFrom=item.sender;}
+            list.append(sender+receiver+date+subject+message).trigger('create');       
+           }}
+           
+                             
+
+});
+
 
 ////////// Total Categories ////////////////
 
@@ -1026,7 +1101,7 @@ function AccountLogin(username, password){
                                                                    '{"saleid":"13" },' +
                                                                    '{"saleid":"5" },' +
                                                                   '{"saleid":"15" }]}';
-                                                                setCookie(loginAccount.accountid, JSON.stringify(sc));
+                                setCookie(loginAccount.accountid, JSON.stringify(sc));
                                
                                 $.mobile.changePage("index.html");
                         }
@@ -1138,6 +1213,7 @@ function GoMessages(){
 ////// Product
 
 var currentProduct= {};
+var isSale= false;
 function GetProduct(id){
         $.mobile.loading("show");
         $.ajax({
@@ -1147,9 +1223,31 @@ function GetProduct(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentProduct= data.product[0];
+
+       			$.ajax({
+                url : "http://localhost:3412/Project1Srv/sales-product/"+ id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                	
+                        var result= data.sale;
+                        if(result.length != 0){isSale= true;}
                         $.mobile.loading("hide");        
                         $.mobile.changePage("item.html");
                         },
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Product error.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+              		  }
+       			 });                                            
+                },
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
                         $.mobile.loading("hide");
@@ -1644,37 +1742,6 @@ function GetHistory(hid){
 
 /////////// Message
 
-var currentMessage = {};
-function GetMessage(mid){
-        $.mobile.loading("show");
-        $.ajax({
-                url : "http://localhost:3412/Project1Srv/messages/" + mid,
-                method: 'get',
-                contentType: "application/json",
-                dataType:"json",
-                success : function(data, textStatus, jqXHR){
-                        currentMessage = data.message;
-                        $.mobile.loading("hide");
-                        if(mid==0)
-                        $.mobile.navigate("inbox.html");
-                        else
-                        $.mobile.navigate("sentMessages.html");
-                },
-                error: function(data, textStatus, jqXHR){
-                        console.log("textStatus: " + textStatus);
-                        $.mobile.loading("hide");
-                        if (data.status == 404){
-                                alert("Message not found.");
-                        }
-                        else {
-                                alert("Internal Server Error.");
-                        }
-                }
-        });
-}
-
-/////////// Message
-
 var inboxMessage = {};
 function GetInbox(id){
         $.mobile.loading("show");
@@ -1729,6 +1796,33 @@ function GetSent(id){
         });
 }
 
+var viewMessage = {};
+function GetMessage(id){
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/message-view/" + id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                        viewMessage = data.message;
+                        $.mobile.loading("hide");
+                        $.mobile.navigate("messageView.html");
+               
+                },
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Message not found.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+        });
+}
+
 
 function submitMessage(){
         alert("Message has been sent");
@@ -1759,3 +1853,4 @@ function DeleteAccount(){
 function UpdateBid(){
         alert("Bid submitted!");
 }
+

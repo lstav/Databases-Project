@@ -45,7 +45,8 @@
         		<h1>New Message</h1>
     		</div><!-- /panel --> 
     		
-    		<div data-role="header" data-theme="a"> <h1>New Message</h1>
+    		<div data-role="header" data-theme="a"> 
+    			<h1><img src= 'http://img30.imageshack.us/img30/7994/r7b.gif' /></h1>
 			
 				<a data-role="button" data-position="left" data-icon="back" data-iconpos="notext" data-rel="back">Back</a>
 				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
@@ -55,8 +56,8 @@
 			</div>
 		<div data-role="content" style="color:white">	
 				<form>
-					To:<input type="text" name="userName"><br>
-					Message:<textarea class="FormElement" name="term" id="term" cols="40" rows="4"></textarea>
+					To:<a id="messageTo"><input type="text" name="userName"></a><br>
+					Message:<a id="message"><textarea class="FormElement" name="term" id="term" cols="40" rows="4"></textarea></a>
 					<input type="button" onclick="submitMessage()" value="Send" />
 				</form>
 		</div>

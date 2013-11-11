@@ -474,6 +474,25 @@ app.get('/Project1Srv/salesusers/:id', function(req, res) {
          
 });
 
+app.get('/Project1Srv/sales-product/:id', function(req, res) {
+        
+        var id = req.params.id;
+        console.log("GET sales of user:"+ id);
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT prodid as id FROM sale WHERE sale.prodid="+id);
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"sale" : result.rows};
+                client.end();
+                  res.json(response);
+         });
+});
+
 app.get('/Project1Srv/histories', function(req, res) {
         console.log("GET");
         var response = {"histories" : historyList};
@@ -800,6 +819,26 @@ app.get('/Project1Srv/message-sent/:id', function(req, res){
 
         var query = client.query("SELECT date, s.username, receiverid, messageid, r.username as receiver FROM message, account as s, account as r WHERE s.accountid = message.senderid "+
         "AND r.accountid=message.receiverid AND senderid=" +id);
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"message" : result.rows};
+                client.end();
+                  res.json(response);
+         });
+});
+
+app.get('/Project1Srv/message-view/:id', function(req, res){
+
+        var id = req.params.id;
+        console.log("GET message:"+ id);
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT text, date, s.username as sender, r.username as receiver "+
+		"FROM message, account as s, account as r WHERE s.accountid = message.senderid AND r.accountid=message.receiverid AND messageid=" +id);
         
         query.on("row", function (row, result) {
             result.addRow(row);
