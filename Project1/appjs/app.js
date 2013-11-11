@@ -1117,6 +1117,19 @@ function GoAccount(){
            		$.mobile.changePage("login.html");
            }
 }
+
+function GoMessages(){
+
+         if(loginAccount.username!= undefined){
+         	
+         	   $.mobile.changePage("message.html");
+
+		   }
+                        
+           else{
+           		$.mobile.changePage("login.html");
+           }
+}
 ////// Product
 
 var currentProduct= {};
@@ -1627,7 +1640,7 @@ function GetMessage(mid){
 }
 
 function submitMessage(){
-        alert("Message have been sent");
+        alert("Message has been sent");
         location.href="message.html";
 }
 
