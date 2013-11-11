@@ -744,31 +744,23 @@ app.post('/Project1Srv/histories', function(req, res) {
 
 /////////// Messages
 
-app.get('/Project1Srv/messages/:mid', function(req, res) {
-        var mid = req.params.mid;
-                console.log("GET message: " + mid);
-        if ((mid < 0) || (mid >= midNextId)){
-                // not found
-                res.statusCode = 404;
-                res.send("Message not found.");
-        }
-        else {
-                var target = -1;
-                for (var i=0; i < messageList.length; ++i){
-                        if (messageList[i].mid == mid){
-                                target = i;
-                                break;        
-                        }
-                }
-                if (target == -1){
-                        res.statusCode = 404;
-                        res.send("Message not found.");
-                }
-                else {
-                        var response = {"message" : messageList[target]};
-                          res.json(response);        
-                  }        
-        }
+app.get('/Project1Srv/message/:id', function(req, res) {
+        var id = req.params.id;
+        console.log("GET inbox:" + id);
+        
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("select username,text,date from account natural join(select senderid as accountid,recieverid,text,date from message)as msg where recieverid=$1 order by date desc",[id]);
+       	//var query = client.query("select messageid from message where recieverid = "+id);
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"message" : result.rows};
+                client.end();
+                  res.json(response);
+         });
 });
 
 app.put('/Project1Srv/messages/:mid', function(req, res) {

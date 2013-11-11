@@ -92,6 +92,10 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
         	  profile= loginAccount;
               $.mobile.changePage("account.html");
         });
+        $(document).on('click', '#message-button', function() {
+        	profile = loginAccount;
+        	$.mobile.changePage("message.html");
+        });
          $(document).on('click', '#cart-button', function() {
          	AllSales(); 
          	});
@@ -113,7 +117,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              block1.append(msg).trigger('create');
              
              var block2= $("#block2");
-             var msg2= '<a href= "message.html" data-role="button" data-corners="false" data-theme="a">Messages</a>';
+             var msg2= '<a id = "message-button" data-role="button" data-corners="false" data-theme="a">Messages</a>';
              block2.empty();
              block2.append(msg2).trigger('create'); 
              
@@ -163,7 +167,15 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
             $.mobile.changePage("login.html");
 
  });  
-        
+
+$(document).on('pagebeforeshow', "#messages",function(event, ui) {
+	$(document).on('click', '#inbox-button', function() { 
+        	GetMessage();
+            $.mobile.changePage("inbox.html");
+
+ });
+});
+
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 	
 		 var sessionId= GetSession();
@@ -816,25 +828,38 @@ $(document).on('pagebeforeshow', "#saleList", function(event, ui){
 ////////// Message
 
 $(document).on('pagebeforeshow', "#inbox", function(event, ui) {
-        $.ajax({
-                url : "http://localhost:3412/Project1Srv/messages",
-                contentType: "application/json",
-                success : function(data, textStatus, jqXHR){
-                        var messageList = data.messages;
-                        var len = messageList.length;
-                        var list = $("#inbox-list");
-                        list.empty();
-                        var message;
-                        message = messageList[0];
-                        list.append("<li><h2>"+message.sName+ "</h2><p>" +message.mText+"</p></li>");
-                        list.listview("refresh");
-                },
-                error: function(data, textStatus, jqXHR){
-                        console.log("textStatus: " + textStatus);
-                        alert("Data not found!");
+        
+        		//alert(loginAccount.username);
+                var mess = currentMessageList;
+                var len =mess.length;
+                
+                //alert(profile.username + " "+ loginAccount.username);
+                /*
+                if(len==0){
+                        var iname= $("#message");
+                        var msg= '<br><a data-rel="back"><center><h2>No messages to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
+                        iname.empty();
+                        iname.append(msg).trigger('create');
+                        
+                        var order= $("#order-list");
+                        order.empty();
+
                 }
-        });
+                else{*/
+                var list = $("#inbox-list");
+                list.empty();
+                var item;
+                list.append(len);
+                for (var i=0; i < len; ++i){
+                item =mess[i];
+                //console.log("dhdhd");
+                //list.append("Hello");
+                //list.append("<li><a onClick=GetMessage()> "+ item.username + "<h4> "+item.text+" "+item.date+"<\h4></a></li>");
+                }
+                list.listview("refresh");
 });
+
+
 $(document).on('pagebeforeshow', "#sent", function(event, ui) {
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/messages",
@@ -1610,32 +1635,33 @@ function GetHistory(hid){
 
 /////////// Message
 
-var currentMessage = {};
-function GetMessage(mid){
+var currentMessageList = {};
+function GetMessages(){
+        id= profile.accountid;
+        //alert(profile.accountid);
         $.mobile.loading("show");
         $.ajax({
-                url : "http://localhost:3412/Project1Srv/messages/" + mid,
+                url : "http://localhost:3412/Project1Srv/message/"+ id,
                 method: 'get',
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                        currentMessage = data.message;
+                        currentMessageList= data.message;
                         $.mobile.loading("hide");
-                        if(mid==0)
-                        $.mobile.navigate("inbox.html");
-                        else
-                        $.mobile.navigate("sentMessages.html");
-                },
+                        $.mobile.changePage("inbox.html", {
+                                info: id,
+                        });},                        
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
                         $.mobile.loading("hide");
                         if (data.status == 404){
-                                alert("Message not found.");
+                                alert("Sorry, Server is not running at the moment");
                         }
                         else {
                                 alert("Internal Server Error.");
                         }
                 }
+
         });
 }
 
