@@ -196,7 +196,7 @@ for (var i=0; i < messageList.length;++i){
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
-var conString = "pg://postgres:course@localhost:5432/db2";
+var conString = "pg://course:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -682,7 +682,8 @@ app.get('/Project1Srv/sales', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM sale");
+        var query = client.query("SELECT * FROM sale, product " +
+        		"where productid = prodid");
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -743,31 +744,23 @@ app.post('/Project1Srv/histories', function(req, res) {
 
 /////////// Messages
 
-app.get('/Project1Srv/messages/:mid', function(req, res) {
-        var mid = req.params.mid;
-                console.log("GET message: " + mid);
-        if ((mid < 0) || (mid >= midNextId)){
-                // not found
-                res.statusCode = 404;
-                res.send("Message not found.");
-        }
-        else {
-                var target = -1;
-                for (var i=0; i < messageList.length; ++i){
-                        if (messageList[i].mid == mid){
-                                target = i;
-                                break;        
-                        }
-                }
-                if (target == -1){
-                        res.statusCode = 404;
-                        res.send("Message not found.");
-                }
-                else {
-                        var response = {"message" : messageList[target]};
-                          res.json(response);        
-                  }        
-        }
+app.get('/Project1Srv/message/:id', function(req, res) {
+        var id = req.params.id;
+        console.log("GET inbox:" + id);
+        
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("select username,text,date from account natural join(select senderid as accountid,recieverid,text,date from message)as msg where recieverid=$1 order by date desc",[id]);
+       	//var query = client.query("select messageid from message where recieverid = "+id);
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"message" : result.rows};
+                client.end();
+                  res.json(response);
+         });
 });
 
 app.put('/Project1Srv/messages/:mid', function(req, res) {
