@@ -1079,6 +1079,19 @@ function GoAccount(){
            		$.mobile.changePage("login.html");
            }
 }
+
+function GoMessages(){
+
+         if(loginAccount.username!= undefined){
+         	
+         	   $.mobile.changePage("message.html");
+
+		   }
+                        
+           else{
+           		$.mobile.changePage("login.html");
+           }
+}
 ////// Product
 
 var currentProduct= {};
