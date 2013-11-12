@@ -1289,7 +1289,7 @@ function AccountLogin(username, password){
                         $.mobile.loading("hide");
                         if(len !=0){        
                                 loginAccount= data.accountLogin[0];
-                                SaveSession(loginAccount);
+                                sessionStorage.setItem("account", JSON.stringify(loginAccount));
                                 setCookie(loginAccount.accountid, JSON.stringify(sc[loginAccount.accountid-1]));
                                
                                 $.mobile.changePage("index.html");
