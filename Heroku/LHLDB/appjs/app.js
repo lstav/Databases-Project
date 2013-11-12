@@ -173,17 +173,20 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
         
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
         
-                 var sessionId= GetSession();
-                   if(loginAccount.username == undefined && sessionId[1] != undefined){
-                           loginAccount.accountid= GetSession()[0];
-                           loginAccount.username= sessionId[1];
-                           loginAccount.isadmin= sessionId[2];        }
-
+           var txt = sessionStorage.getItem("account");
+           var obj = eval('(' + txt + ')');
+           if(loginAccount.username == undefined && obj.username != undefined){
+                          loginAccount = obj;
+              }
                  //alert(loginAccount.username);
                  if(loginAccount.username!= undefined){
 
                  $(document).on('click', '#edit-account', function() { 
             $.mobile.changePage("settings.html");
+        });
+        $(document).on('click', '#rankers-button', function() { 
+                  GetRankers(loginAccount.accountid);
+              
         });  
         var stars = "";
         
@@ -218,7 +221,12 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
         // loginAccount has been set at this point
-         var sessionId= GetSession();
+        var txt = sessionStorage.getItem("account");
+        var obj = eval('(' + txt + ')');
+        if(loginAccount.username == undefined && obj.username != undefined){
+                          loginAccount = obj;
+        }
+        
         var len = loginAccount.apassword.length;
         var pass = "";
         for (var i=0; i < len; ++i){
@@ -246,7 +254,12 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 });
 
 $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
-                 
+        
+        var txt = sessionStorage.getItem("profile");
+        var obj = eval('(' + txt + ')');
+        if(profile.username == undefined && obj.username != undefined){
+                         	profile = obj;
+        }
                  $(document).on('click', '#rankers-button', function() { 
                   GetRankers(profile.accountid);
               
@@ -283,7 +296,6 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 });
 
 $(document).on('pagebeforeshow', "#ranks-page", function( event, ui ) {
-       
         var list= $("#rank-list");
         list.empty();
         var len = currentRankers.length;
@@ -304,6 +316,23 @@ $(document).on('pagebeforeshow', "#ranks-page", function( event, ui ) {
         pname.append("<center>"+profile.username+"</center>");
 
 });
+
+$(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
+            var txt = sessionStorage.getItem("profile");
+           var obj = eval('(' + txt + ')');
+           if(profile.username == undefined && obj.username != undefined){
+                          profile = obj;
+                          }
+            $(document).on('click', '#submitrank', function() {
+                    alert("Rank submited!");
+                    $.mobile.changePage("profile.html");
+            });
+            
+        var pname= $("#urname");
+        pname.empty();
+        pname.append("<center>"+profile.username+"</center>");
+});
+
 
 $(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
             
@@ -695,6 +724,45 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 ////////// Checkout
 
 $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
+        var txt2 = sessionStorage.getItem("account");
+        var obj2 = eval('(' + txt + ')');
+        if(loginAccount.username == undefined && obj2.username != undefined){
+                          loginAccount = obj2;
+        }
+        
+        var id= loginAccount.accountid;
+                var sales = saleList;
+               	var txt = $.parseJSON(getCookie(id));
+                var obj = eval('(' + txt + ')');
+                var list = $("#product-list");
+            list.empty();
+                var len = obj.shoppingcart.length;
+                var len2 = sales.length;
+                shoppingcartTotal=0;
+                prod = obj.shoppingcart;
+                var j;
+                for(var i=0; i<len; i++) {
+                                //GetProduct(obj.shoppingcart[i].prodid);
+                                j = 0;
+                                while(prod[i].saleid != sales[j].saleid) {
+                                        j++;
+                                }
+                                prod[i] = sales[j];
+                                shoppingcartTotal+= parseFloat(String(sales[j].price).substr(1));
+                                list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + sales[j].prodid + ")>"+ 
+                                "<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
+                                        "<h4> Price: "+sales[j].price+"<\h4></a></li>");
+                }
+                list.listview("refresh");  
+        
+        
+        var date = $("#date-list");
+        date.empty();
+        date.append("<li>" + new Date() + "</li>");
+        
+        var ship = $("#shipping-list");
+        ship.empty();
+        ship.append("<li>" + loginAccount.shipping + "</li>");
         
         var info= $("#totalPurchase");
         info.empty();
@@ -928,7 +996,7 @@ $(document).on('pagebeforeshow', "#inbox", function(event, ui) {
             var item;
             for (var i=0; i < len; ++i){
             item =message[i];
-            list.append("<li><a onClick= GetMessage("+item.messageid+")> From: "+item.username + "<h4>Subject: 	</h4><p> Date:"+item.date+" </p></a></li>");
+            list.append("<li><a onClick= GetMessage("+item.messageid+")> From: "+item.username + "<h4>Subject:"+ item.subject+"</h4><p> Date:"+item.date+" </p></a></li>");
            }
            list.listview("refresh");}  
 });
@@ -949,7 +1017,7 @@ $(document).on('pagebeforeshow', "#sent", function(event, ui) {
             var item;
             for (var i=0; i < len; ++i){
             item =message[i];
-            list.append("<li><a onClick= GetMessage("+item.messageid+")> To: "+item.receiver + "<h4>Subject: 	</h4><p> Date:"+item.date+" </p></a></li>");
+            list.append("<li><a onClick= GetMessage("+item.messageid+")> To: "+item.receiver + "<h4>Subject:"+item.subject+"</h4><p> Date:"+item.date+" </p></a></li>");
            }
            list.listview("refresh");}  
 });
@@ -1132,6 +1200,77 @@ function aconvert(dbModel){
         return aliModel;
 }
 
+var sc = ['{"shoppingcart":[' +
+	'{"saleid":"13" },' +
+	'{"saleid":"5" },' +
+	'{"saleid":"15" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"10" },' +
+	'{"saleid":"11" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"9" },' +
+	'{"saleid":"11" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"14" },' +
+	'{"saleid":"15" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"7" },' +
+	'{"saleid":"6" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"3" },' +
+	'{"saleid":"6" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"13" },' +
+	'{"saleid":"15" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"3" },' +
+	'{"saleid":"6" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"13" },' +
+	'{"saleid":"15" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"9" },' +
+	'{"saleid":"11" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"13" },' +
+	'{"saleid":"15" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"3" },' +
+	'{"saleid":"8" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"13" },' +
+	'{"saleid":"15" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"3" },' +
+	'{"saleid":"6" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"13" },' +
+	'{"saleid":"15" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"3" },' +
+	'{"saleid":"5" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"6" },' +
+	'{"saleid":"11" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"10" },' +
+	'{"saleid":"9" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"7" },' +
+	'{"saleid":"6" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"2" },' +
+	'{"saleid":"8" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"8" },' +
+	'{"saleid":"6" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"2" },' +
+	'{"saleid":"7" }]}',
+	'{"shoppingcart":[' +
+	'{"saleid":"13" },' +
+	'{"saleid":"2" }]}'];
+
 
 var loginAccount={};
 function AccountLogin(username, password){
@@ -1150,12 +1289,8 @@ function AccountLogin(username, password){
                         $.mobile.loading("hide");
                         if(len !=0){        
                                 loginAccount= data.accountLogin[0];
-                                SaveSession(loginAccount);
-                                var sc = '{"shoppingcart":[' +
-                                                                   '{"saleid":"13" },' +
-                                                                   '{"saleid":"5" },' +
-                                                                  '{"saleid":"15" }]}';
-                                setCookie(loginAccount.accountid, JSON.stringify(sc));
+                                sessionStorage.setItem("account", JSON.stringify(loginAccount));
+                                setCookie(loginAccount.accountid, JSON.stringify(sc[loginAccount.accountid-1]));
                                
                                 $.mobile.changePage("index.html");
                         }
@@ -1195,6 +1330,7 @@ function GoProfile(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         profile= data.profile[0];
+                        sessionStorage.setItem("profile", JSON.stringify(data.profile[0]));
                         $.mobile.loading("hide");
                         $.mobile.changePage("profile.html");
                         },
