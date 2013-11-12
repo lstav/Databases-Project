@@ -27,7 +27,12 @@ app.use(express.bodyParser());
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
+<<<<<<< HEAD
 var conString = "pg://postgres:course@localhost:5432/db2";
+=======
+//var conString = "pg://course:course@localhost:5432/db2";
+var conString = "pg://nqvougjowkmbfz:7B_RI-70Hqklw9bDBgIByAbw8K@ec2-107-22-190-179.compute-1.amazonaws.com:5432/dbtm3be2ga32hb";
+>>>>>>> 339d00dcd84b94dd6135eb9a362542d8aaa6d62b
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -559,25 +564,46 @@ app.post('/Project1Srv/products', function(req, res) {
 
 //////////// History
 
-app.get('/Project1Srv/histories/:hid', function(req, res){
-                
-        var hid = req.params.hid;
-        console.log("GET history: " + hid);
-        var target = -1;
-                for (var i=0; i < historyList.length; ++i){
-                        if(historyList[i].hid == hid){
-                                        target= i;
-                                        break;
-                                }
-                }
-                if (target == -1){
-                        res.statusCode = 404;
-                        res.send("Product not found.");
-                }
-                else {
-                        var response = {"product" : historyList[i].productList[target]};
-                          res.json(response);        
-                  }                
+app.get('/Project1Srv/purchasesusers/:id', function(req, res){
+       var id = req.params.id;
+        console.log("GET purchases:"+ id);
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("select * "  +
+			"from invoice, checkout, sale, product " +
+			"where invoice.invoiceid = checkout.invid and checkout.saleid = sale.saleid " +
+			"and sale.prodid = product.productid and invoice.buyerid = " +id);
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"purchaseuser" : result.rows};
+                client.end();
+                  res.json(response);
+         });
+});
+
+app.get('/Project1Srv/salehistories/:id', function(req, res){
+       var id = req.params.id;
+        console.log("GET sales:"+ id);
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("select * "  +
+			"from invoice, checkout, sale, product " +
+			"where invoice.invoiceid = checkout.invid and checkout.saleid = sale.saleid " +
+			"and sale.prodid = product.productid and sale.accountid=" +id);
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"salehistories" : result.rows};
+                client.end();
+                  res.json(response);
+         });
 });
 
 app.put('/Project1Srv/histories/:hid', function(req, res) {
