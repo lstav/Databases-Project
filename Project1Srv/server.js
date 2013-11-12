@@ -27,12 +27,7 @@ app.use(express.bodyParser());
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
-<<<<<<< HEAD
 var conString = "pg://postgres:course@localhost:5432/db2";
-=======
-//var conString = "pg://course:course@localhost:5432/db2";
-var conString = "pg://nqvougjowkmbfz:7B_RI-70Hqklw9bDBgIByAbw8K@ec2-107-22-190-179.compute-1.amazonaws.com:5432/dbtm3be2ga32hb";
->>>>>>> 339d00dcd84b94dd6135eb9a362542d8aaa6d62b
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 

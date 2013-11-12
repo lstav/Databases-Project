@@ -80,11 +80,12 @@ $(document).on('pagebeforeshow', '#sign-up', function(){
 
 $(document).on('pagebeforeshow', '#homepage-account', function(){
                 
-           var txt = sessionStorage.getItem("account");
-           var obj = eval('(' + txt + ')');
-           if(loginAccount.username == undefined && obj.username != undefined){
-                          loginAccount = obj;
-                          }
+           var sessionId= GetSession();
+           if(loginAccount.username == undefined && sessionId[1] != undefined){
+                           loginAccount.username= sessionId[1];
+                           loginAccount.isadmin= sessionId[2];
+                           loginAccount.accountid= GetSession()[0];
+           }
 
        if(loginAccount.username!= undefined)        {
         $(document).on('click', '#profile-account', function() { 
@@ -117,13 +118,22 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              block2.append(msg2).trigger('create'); 
              
              var block3= $("#block3");
-             var msg3= '<a id="logout" href= "login.html" data-rel= "external" data-role="button" data-corners="false">Log Out</a>';
+             var msg3= '<a href= "login.html" data-rel= "external" data-role="button" data-corners="false">Log Out</a>';
              block3.empty();
              block3.append(msg3).trigger('create');
        }
        
                 else{
-           	var block1= $("#block1");
+                        
+                      //Guest
+                      
+                      var sc = '{"shoppingcart":[' +
+                     '{"saleid":"13" },' +
+                     '{"saleid":"5" },' +
+                     '{"saleid":"8" }]}';
+            setCookie('guest', JSON.stringify(sc));
+            
+                        var block1= $("#block1");
              var msg= '<a  href= "login.html" data-role="button" data-corners="false">Sign in</a>';
              block1.empty();
              block1.append(msg).trigger('create');
@@ -151,38 +161,29 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
               else{
                        $.mobile.changePage("login.html");
               }
-        }); 
-        
-        $(document).on('click', '#logout', function() { 
-            sessionStorage.clear();
-            $.mobile.changePage("login.html");
-
- });   
+        });  
                
 });
 
  $(document).on('click', '#logout', function() { 
-            sessionStorage.clear();
+                sessionStorage.clear();
             $.mobile.changePage("login.html");
 
  });  
         
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
         
-           var txt = sessionStorage.getItem("account");
-           var obj = eval('(' + txt + ')');
-           if(loginAccount.username == undefined && obj.username != undefined){
-                          loginAccount = obj;
-              }
+                 var sessionId= GetSession();
+                   if(loginAccount.username == undefined && sessionId[1] != undefined){
+                           loginAccount.accountid= GetSession()[0];
+                           loginAccount.username= sessionId[1];
+                           loginAccount.isadmin= sessionId[2];        }
+
                  //alert(loginAccount.username);
                  if(loginAccount.username!= undefined){
 
                  $(document).on('click', '#edit-account', function() { 
             $.mobile.changePage("settings.html");
-        });
-        $(document).on('click', '#rankers-button', function() { 
-                  GetRankers(loginAccount.accountid);
-              
         });  
         var stars = "";
         
@@ -217,12 +218,7 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 
 $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
         // loginAccount has been set at this point
-        var txt = sessionStorage.getItem("account");
-        var obj = eval('(' + txt + ')');
-        if(loginAccount.username == undefined && obj.username != undefined){
-                          loginAccount = obj;
-        }
-        
+         var sessionId= GetSession();
         var len = loginAccount.apassword.length;
         var pass = "";
         for (var i=0; i < len; ++i){
@@ -250,12 +246,7 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 });
 
 $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
-        
-        var txt = sessionStorage.getItem("profile");
-        var obj = eval('(' + txt + ')');
-        if(profile.username == undefined && obj.username != undefined){
-                         	profile = obj;
-        }
+                 
                  $(document).on('click', '#rankers-button', function() { 
                   GetRankers(profile.accountid);
               
@@ -292,11 +283,7 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 });
 
 $(document).on('pagebeforeshow', "#ranks-page", function( event, ui ) {
-		var txt = sessionStorage.getItem("currentRankers");
-           var obj = eval('(' + txt + ')');
-           currentRankers = obj;
-           
-		
+       
         var list= $("#rank-list");
         list.empty();
         var len = currentRankers.length;
@@ -319,11 +306,7 @@ $(document).on('pagebeforeshow', "#ranks-page", function( event, ui ) {
 });
 
 $(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
-            var txt = sessionStorage.getItem("profile");
-           var obj = eval('(' + txt + ')');
-           if(profile.username == undefined && obj.username != undefined){
-                          profile = obj;
-                          }
+            
             $(document).on('click', '#submitrank', function() {
                     alert("Rank submited!");
                     $.mobile.changePage("profile.html");
@@ -508,13 +491,7 @@ $(document).on('click', '#sent-button', function() {
 }); 
 
 $(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
-				
-			
-           var txt = sessionStorage.getItem("account");
-           var obj = eval('(' + txt + ')');
-           if(profile.username == undefined && obj.username != undefined){
-                          profile = obj;
-                          }
+
                                 var category= currentCategories;
                                 var len= category.length;
                                 var list=$("#show-categories");
@@ -532,7 +509,6 @@ $(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
 
 $(document).on('pagebeforeshow', "#subcatLayout", function(event, ui) {
 
-				
                                 var category= subCategories;
                                 var len= category.length;
                                 var list=$("#show-subcategories");
@@ -719,45 +695,6 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 ////////// Checkout
 
 $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
-        var txt2 = sessionStorage.getItem("account");
-        var obj2 = eval('(' + txt + ')');
-        if(loginAccount.username == undefined && obj2.username != undefined){
-                          loginAccount = obj2;
-        }
-        
-        var id= loginAccount.accountid;
-                var sales = saleList;
-               	var txt = $.parseJSON(getCookie(id));
-                var obj = eval('(' + txt + ')');
-                var list = $("#product-list");
-            list.empty();
-                var len = obj.shoppingcart.length;
-                var len2 = sales.length;
-                shoppingcartTotal=0;
-                prod = obj.shoppingcart;
-                var j;
-                for(var i=0; i<len; i++) {
-                                //GetProduct(obj.shoppingcart[i].prodid);
-                                j = 0;
-                                while(prod[i].saleid != sales[j].saleid) {
-                                        j++;
-                                }
-                                prod[i] = sales[j];
-                                shoppingcartTotal+= parseFloat(String(sales[j].price).substr(1));
-                                list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + sales[j].prodid + ")>"+ 
-                                "<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
-                                        "<h4> Price: "+sales[j].price+"<\h4></a></li>");
-                }
-                list.listview("refresh");  
-        
-        
-        var date = $("#date-list");
-        date.empty();
-        date.append("<li>" + new Date() + "</li>");
-        
-        var ship = $("#shipping-list");
-        ship.empty();
-        ship.append("<li>" + loginAccount.shipping + "</li>");
         
         var info= $("#totalPurchase");
         info.empty();
@@ -796,7 +733,7 @@ $(document).on('pagebeforeshow', "#shoppingList", function(event, ui){
 });
 
 var shoppingcartTotal=0;
-var prod;
+
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
                 //alert(loginAccount.username);
                  
@@ -814,7 +751,7 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
                 var len = obj.shoppingcart.length;
                 var len2 = sales.length;
                 shoppingcartTotal=0;
-                prod = obj.shoppingcart;
+                var prod = obj.shoppingcart;
                 var j;
                 for(var i=0; i<len; i++) {
                                 //GetProduct(obj.shoppingcart[i].prodid);
@@ -822,11 +759,10 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
                                 while(prod[i].saleid != sales[j].saleid) {
                                         j++;
                                 }
-                                prod[i] = sales[j];
                                 //list.append("<li>" + sales[i].price + "</li>");
                                 //list.append("<li>" + sales[j].saleid + "</li>");
                                 //prod = currentProduct[0];
-                                shoppingcartTotal+= parseFloat(String(sales[j].price).substr(1));
+                                shoppingcartTotal+= parseFloat(sales[j].price);
                                 list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + sales[j].prodid + ")>"+ 
                                 "<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
                                         "<h4> Price: "+sales[j].price+"<\h4></a></li>");
@@ -1088,12 +1024,18 @@ function ConverToJSON(formData){
 }
 
 function SaveSession(account){
-		sessionStorage.setItem("account", account);
+
+            sessionStorage.setItem("fname", account.fname);
+            sessionStorage.setItem("lname", account.lname);
+            //sessionStorage.setItem("aaccountnumber", account.aaccountnumber);
+            sessionStorage.setItem("email", account.email);
+        sessionStorage.setItem("username", account.username);
+        sessionStorage.setItem("accountid", account.accountid);
+        sessionStorage.setItem("isadmin", account.isadmin);
 }
 
 function GetSession(){
-		var session= new Array(sessionStorage.getItem("accountid"), sessionStorage.getItem("username"), 
-		sessionStorage.getItem("isadmin"), sessionStorage.getItem("fname"));
+                var session= new Array(sessionStorage.getItem("accountid"), sessionStorage.getItem("username"));
         return session; 
 }
 
@@ -1112,7 +1054,6 @@ function GetAddress(addressid){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentAddress = data.address;
-                        sessionStorage.setItem("currentAddress", JSON.stringify(currentAddress));
                         $.mobile.loading("hide");
                 },
                 error: function(data, textStatus, jqXHR){
@@ -1140,7 +1081,6 @@ function GetRankers(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentRankers = data.rankers;
-                        sessionStorage.setItem("currentRankers", JSON.stringify(currentRankers));
                         $.mobile.loading("hide");
                         $.mobile.changePage("reviews.html");
                 },
@@ -1193,79 +1133,6 @@ function aconvert(dbModel){
 }
 
 
-var sc = ['{"shoppingcart":[' +
-	'{"saleid":"13" },' +
-	'{"saleid":"5" },' +
-	'{"saleid":"15" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"10" },' +
-	'{"saleid":"11" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"9" },' +
-	'{"saleid":"11" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"14" },' +
-	'{"saleid":"15" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"7" },' +
-	'{"saleid":"6" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"3" },' +
-	'{"saleid":"6" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"13" },' +
-	'{"saleid":"15" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"3" },' +
-	'{"saleid":"6" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"13" },' +
-	'{"saleid":"15" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"9" },' +
-	'{"saleid":"11" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"13" },' +
-	'{"saleid":"15" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"3" },' +
-	'{"saleid":"8" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"13" },' +
-	'{"saleid":"15" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"3" },' +
-	'{"saleid":"6" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"13" },' +
-	'{"saleid":"15" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"3" },' +
-	'{"saleid":"5" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"6" },' +
-	'{"saleid":"11" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"10" },' +
-	'{"saleid":"9" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"7" },' +
-	'{"saleid":"6" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"2" },' +
-	'{"saleid":"8" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"8" },' +
-	'{"saleid":"6" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"2" },' +
-	'{"saleid":"7" }]}',
-	'{"shoppingcart":[' +
-	'{"saleid":"13" },' +
-	'{"saleid":"2" }]}'];
-
-
-
 var loginAccount={};
 function AccountLogin(username, password){
         
@@ -1283,19 +1150,12 @@ function AccountLogin(username, password){
                         $.mobile.loading("hide");
                         if(len !=0){        
                                 loginAccount= data.accountLogin[0];
-<<<<<<< HEAD
                                 SaveSession(loginAccount);
                                 var sc = '{"shoppingcart":[' +
                                                                    '{"saleid":"13" },' +
                                                                    '{"saleid":"5" },' +
                                                                   '{"saleid":"15" }]}';
                                 setCookie(loginAccount.accountid, JSON.stringify(sc));
-=======
-                                sessionStorage.setItem("account", JSON.stringify(loginAccount));
-                                
-                                        setCookie(loginAccount.accountid, JSON.stringify(sc[loginAccount.accountid-1]));
-                                        //setCookie(loginAccount.accountid, JSON.stringify(sc));
->>>>>>> 339d00dcd84b94dd6135eb9a362542d8aaa6d62b
                                
                                 $.mobile.changePage("index.html");
                         }
@@ -1317,7 +1177,7 @@ function AccountLogin(username, password){
         });        
 }
 
-var profile= {};
+var profile={};
 function GoProfile(id){
             console.log("getting profile");
         $.mobile.loading("show");
@@ -1334,8 +1194,7 @@ function GoProfile(id){
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                        putProfile(data.profile[0]);
-                        sessionStorage.setItem("profile", JSON.stringify(data.profile[0]));
+                        profile= data.profile[0];
                         $.mobile.loading("hide");
                         $.mobile.changePage("profile.html");
                         },
@@ -1351,11 +1210,6 @@ function GoProfile(id){
                 }
         });}    
 }
-
-function putProfile(data){
-    profile = data;
-    console.log(profile);
-};
 
 function SignUp(id){
                   $.ajax({
@@ -1423,7 +1277,6 @@ function GetProduct(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentProduct= data.product[0];
-<<<<<<< HEAD
 
        			$.ajax({
                 url : "http://localhost:3412/Project1Srv/sales-product/"+ id,
@@ -1434,9 +1287,6 @@ function GetProduct(id){
                 	
                         var result= data.sale;
                         if(result.length != 0){isSale= true;}
-=======
-                        sessionStorage.setItem("currentProduct", JSON.stringify(currentProduct));
->>>>>>> 339d00dcd84b94dd6135eb9a362542d8aaa6d62b
                         $.mobile.loading("hide");        
                         $.mobile.changePage("item.html");
                         },
@@ -1515,7 +1365,6 @@ function GetBids(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                                         productBids= data.bids;
-                                        sessionStorage.setItem("productBids", JSON.stringify(productBids));
                                 $.mobile.changePage("bids.html");
                         },                        
                 error: function(data, textStatus, jqXHR){
@@ -1571,7 +1420,6 @@ function BidUser(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                                         userBids= data.biduser;
-                                        sessionStorage.setItem("userBids", JSON.stringify(userBids));
                                         $.mobile.loading("hide");
                                 $.mobile.changePage("biduser.html");
                         },                        
@@ -1600,7 +1448,6 @@ function PurchaseUser(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                                         purchases= data.purchaseuser;
-                                        sessionStorage.setItem("purchases", JSON.stringify(purchases));
                                         $.mobile.loading("hide");
                                 $.mobile.changePage("purchaseuser.html");
                         },                        
@@ -1629,7 +1476,6 @@ function SalesUser(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                                         sales= data.saleuser;
-                                        sessionStorage.setItem("sales", JSON.stringify(sales));
                                         $.mobile.loading("hide");
                                 $.mobile.changePage("saleuser.html");
                         },                        
@@ -1664,7 +1510,6 @@ function GetAllProducts(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentCategoryProducts= data.allProducts;
-                        sessionStorage.setItem("currentCategoryProducts", JSON.stringify(currentCategoryProducts));
                         $.mobile.loading("hide");
                         $.mobile.changePage("productview.html", {
                                 info: id,
@@ -1693,7 +1538,6 @@ function GetCategoryProducts(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentCategoryProducts= data.productsIncategory;
-                        sessionStorage.setItem("currentCategoryProducts", JSON.stringify(currentCategoryProducts));
                         $.mobile.loading("hide");
                         $.mobile.changePage("productview.html", {
                                 info: id,
@@ -1723,7 +1567,6 @@ function GetCategories(){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentCategories= data.category;
-                        sessionStorage.setItem("currentCategories", JSON.stringify(currentCategories));
                         $.mobile.loading("hide");
                         $.mobile.changePage("Categories.html");
                         
@@ -1759,7 +1602,6 @@ function GetSubCategory(id){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         subCategories= data.subcategory;
-                        sessionStorage.setItem("subCategories", JSON.stringify(subCategories));
                         $.mobile.loading("hide");
                         $.mobile.navigate("subcategories.html");
                         
@@ -1778,6 +1620,36 @@ function GetSubCategory(id){
         });
 }
 
+var subCategories= {};
+function GetSubCategory(id){
+     
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/subcategory/"+id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                        subCategories= data.subcategory;
+                        $.mobile.loading("hide");
+                        $.mobile.navigate("subcategories.html");
+                        
+                       },                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Category Empty!");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });
+}
+
+
 var currentAuctionList = {};
 function GetAuctions(){
         id= profile.accountid;
@@ -1789,7 +1661,6 @@ function GetAuctions(){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentAuctionList= data.userAuctions;
-                        sessionStorage.setItem("currentAuctionList", JSON.stringify(currentAuctionList));
                         $.mobile.loading("hide");
                         $.mobile.changePage("uauctions.html", {
                                 info: id,
@@ -1820,7 +1691,6 @@ function GetSales(){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentSalesList= data.userSales;
-                        sessionStorage.setItem("currentSalesList", JSON.stringify(currentSalesList));
                         $.mobile.loading("hide");
                         $.mobile.changePage("usales.html", {
                                 info: id,
@@ -1851,7 +1721,6 @@ function AllSales(){
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         saleList= data.sales;
-                        sessionStorage.setItem("shopping", JSON.stringify(saleList)); 
                         $.mobile.loading("hide");
                         $.mobile.changePage("shopping.html");
                           },                        
@@ -1936,12 +1805,7 @@ function GetInbox(id){
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-<<<<<<< HEAD
                         inboxMessage = data.message;
-=======
-                        currentMessage = data.message;
-                        sessionStorage.setItem("currentMessage", JSON.stringify(currentMessage));
->>>>>>> 339d00dcd84b94dd6135eb9a362542d8aaa6d62b
                         $.mobile.loading("hide");
                         $.mobile.navigate("inbox.html");
                
@@ -1968,12 +1832,7 @@ function GetSent(id){
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-<<<<<<< HEAD
                         sentMessage = data.message;
-=======
-                        inboxMessage = data.message;
-                        sessionStorage.setItem("inboxMessage", JSON.stringify(inboxMessage));
->>>>>>> 339d00dcd84b94dd6135eb9a362542d8aaa6d62b
                         $.mobile.loading("hide");
                         $.mobile.navigate("sentMessages.html");
                
@@ -2000,12 +1859,7 @@ function GetMessage(id){
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-<<<<<<< HEAD
                         viewMessage = data.message;
-=======
-                        sentMessage = data.message;
-                        sessionStorage.setItem("sentMessage", JSON.stringify(sentMessage));
->>>>>>> 339d00dcd84b94dd6135eb9a362542d8aaa6d62b
                         $.mobile.loading("hide");
                         $.mobile.navigate("messageView.html");
                
@@ -2053,4 +1907,3 @@ function DeleteAccount(){
 function UpdateBid(){
         alert("Bid submitted!");
 }
-
