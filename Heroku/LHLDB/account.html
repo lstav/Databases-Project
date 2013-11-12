@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Account</title>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
+  		<link rel="stylesheet" href="css/gt.css" />
+  		<link rel="stylesheet" href="css/jquery.mobile.structure-1.3.2.min.css" /> 
+ 		<script src="js/jquery-1.9.1.min.js"></script>
+  		<script src="js/jquery.mobile-1.3.2.min.js"></script> 
+		<script src="appjs/account.js"></script>
+		<script src="appjs/app.js"></script>
+		<script src="appjs/jquery.session.js"></script>
+
+		<style type="text/css">
+		.ui-mobile-viewport{
+    	background: url("http://img39.imageshack.us/img39/2575/b83n.jpg") repeat;
+    	background-size: 100% 100% !important;
+		}
+		.ui-page{
+    	background:none;
+		}
+		.ui-overlay-a{
+    	background:#222 !important;
+		}
+		.ui-panel-content-wrap{
+    	background: none;
+		}
+		.ui-panel-content-wrap-closed{
+    	background: none;
+		}
+		</style> 
+		
+	</head>
+	<body>
+		<div id="accounts" data-role="page" style= "background: url('http://img39.imageshack.us/img39/2575/b83n.jpg') repeat;
+    	background-size: 100% 100% !important;">
+			<div data-role="panel" id="mypanel" data-position="right" data-display="reveal">
+        		<ul data-role="listview" data-theme="a">
+        			<li><a id= "search-button" >Search</a></li>
+        			<li><a onClick=GoAccount() >Account</a></li>  
+					<li><a onClick=GoMessages() >Messages</a></li>  
+					<li><a href="login.html" >Log Out</a></li>      		      		
+        		</ul>
+   			</div><!-- /panel -->
+    		
+    		<div data-role="header" data-theme="a"> 
+    			<h1><img src= 'http://img30.imageshack.us/img30/7994/r7b.gif' /></h1>			
+				<a data-role="button" data-position="left" data-icon="back" data-iconpos="notext" data-rel="back">Back</a>
+				<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
+					<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
+					<a href="#mypanel" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
+				</div>
+			</div>
+			<div data-role="content">
+				
+				<div id= "user-image"></div>
+				
+				<div class="ui-grid-b">
+					<div class= "ui-block-a"> </div>
+					<div id= "username2" class= "ui-block-b"></div>
+					<div class= "ui-block-c"> </div>
+				</div>
+				
+			<div class="ui-grid-a">
+				<div class="ui-block-a">
+				<a onClick=GetSales() data-role="button" data-theme="a" data-corners="false" >
+            			Items for Sale
+      				</a>
+				</div>
+				
+				<div class="ui-block-b">
+				<a onClick=GetAuctions() data-role="button"  data-theme="a" data-corners="false">
+            			Items bidding
+        			</a>
+				</div> </div>
+				
+				
+				<div class="ui-grid-a">
+				<div class="ui-block-a">
+				<a id="rankers-button" data-role="button" data-theme="a" data-corners="false" >
+            			Feedback
+        			</a>
+				</div>
+				<div class="ui-block-b">
+				<a href= "history.html" data-role="button" data-theme="a" data-corners="false" >
+            			Recent activity
+        			</a>
+				</div>
+			</div>
+			
+			
+				<h4 style= "color: white">Personal Information:</h4>
+				<ul id="account-list" data-role="listview" data-inset="true"></ul>
+				
+				<a data-role="button" id="edit-account" href= "#account-view" data-theme="a">Edit</a>
+			</div>
+		</div>
+	</body>
+</html>
