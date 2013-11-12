@@ -1,0 +1,14 @@
+1. Category:
+This table stores each category, of the products to be sold, with it's name and it's parent category if any.
+2. Address:
+This table stores each address to be used for the accounts and credit cards.
+3. depositaccount:
+This table contains the bank account number and it's bank routing number, for the deposit account in which payments of sales will be stored.
+4. account:
+Here we have all the basic information about the accounts and the users.
+5. creditcard:
+This table has the information about every user's credit card. This table reference an address which is the billing address of the user.
+6. product:
+This table stores only the basic information of a product such as category, name, condition,description and image. It references category to obtain it's category name.
+7. auction:
+  
