@@ -2028,7 +2028,30 @@ function SaveOrder(){
 //////// Administrator
 
 function AddCategory(){
-        alert("Category Added!");
+	/*$(document).ready(function() {
+		var name = $('#category-form').serializeArray();
+		$.each(name, function(i, field){
+    	alert(field.name + ":" + field.value + " ");
+  		});
+		alert('The value is: ' + JSON.stringify(ConverToJSON(name)));
+	});*/
+	$.mobile.loading("show");
+	var form = $("#category-form");
+	var formData = form.serializeArray();
+	//alert("form Data: " + formData);
+	//var newCat = ConverToJSON(formData);
+	//alert("New Cat: " + JSON.stringify(newCat));
+	//var newCatJSON = JSON.stringify(newCat);
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/categories/",
+		type: 'post',
+		data : formData,
+		//contentType: "application/json",
+		//dataType:"json",
+		success : function() {
+			alert('POST Completed');
+		}
+	});
 }
 
 function ChangePassword(){

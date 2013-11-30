@@ -496,7 +496,30 @@ app.del('/Project1Srv/categories/:id', function(req, res) {
 });
 
 app.post('/Project1Srv/categories', function(req, res) {
+		console.log("POST category: ");
+        var client = new pg.Client(conString);
+        client.connect();
 
+        var query = client.query("INSERT INTO category (catname, parentid)" +
+         						"values ('" + req.param('name')+ "', " 
+         						+ req.param('parent')+ ")");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var len = result.rows.length;
+                if (len == 0){
+                        res.statusCode = 404;
+                        res.send("Address not found.");
+                }
+                else {        
+                          var response = {"address" : result.rows[0]};
+                        client.end();
+                          res.json(response);
+                  }
+         });
+        //console.log(req.param('parent'));
 });
 
 ////////// Product
@@ -806,7 +829,7 @@ app.get('/Project1Srv/address/:addressid', function(req, res) {
 
 // REST Operation - HTTP PUT to updated an account based on its id
 app.put('/Project1Srv/accounts/:aid', function(req, res) {
-
+	
 });
 
 // REST Operation - HTTP DELETE to delete an account based on its id
@@ -816,7 +839,28 @@ app.del('/Project1Srv/accounts/:aid', function(req, res) {
 
 // REST Operation - HTTP POST to add a new a account
 app.post('/Project1Srv/accounts', function(req, res) {
+		console.log("POST account: ");
+        var client = new pg.Client(conString);
+        client.connect();
 
+         var query = client.query("insert into account (username, fname, lname, email, apassword, shippingid, billingid, depositid)" +
+			"values ('jsmith', 'john', 'smith', 'jsmith@example.com', 1234, 2, 2, 2)");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var len = result.rows.length;
+                if (len == 0){
+                        res.statusCode = 404;
+                        res.send("Address not found.");
+                }
+                else {        
+                          var response = {"address" : result.rows[0]};
+                        client.end();
+                          res.json(response);
+                  }
+         });
 });
 
 
