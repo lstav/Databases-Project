@@ -2036,8 +2036,9 @@ function AddCategory(){
 		type: 'post',
 		data : formData,
 		success : function() {
-			alert('POST Completed');
-			
+			console.log('POST Completed');
+			$.mobile.loading("hide");
+            $.mobile.navigate("administrator.html");
 		}
 	});
 }
