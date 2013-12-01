@@ -48,37 +48,48 @@
 			<form id="account-form" style="color:white" data-corners="true">
 				<fieldset data-role="controlgroup">
 					<p>First name</p>
-	          		<input id="fname" name="" placeholder= "" type="text" value="" data-mini="true">
+	          		<input id="fname" type="text" data-mini="true">
 	        	   	
 	        	   	<p>Last name</p>
-	        	   	<input id="lname" name="" placeholder= "" type="text" value="" data-mini="true"> <br>
+	        	   	<input id="lname" type="text" data-mini="true"> <br>
 	        	   	
 	        	   	<o>Username</o>
-        	    	<input id="username" name="" placeholder= "" type="text" value="" data-mini="true">
+        	    	<input id="username" type="text" data-mini="true">
         	    	
         	    	<p>Password</p>
-		       	   	<input id="password" name="" placeholder= "" type="password" value="" data-mini="true"> 
+		       	   	<input id="password" type="password" data-mini="true"> 
 		           
 		           <p>Email</p>
-		           	<input id="email" name="" placeholder= "" type="text" value="" data-mini="true"> 
+		           	<input id="email" type="text" data-mini="true"> 
 		           	
-		           	<p>Street address</p>
-	    	       	<input id="street" name="" placeholder= "" type="text" value="" data-mini="true" >
+		           	<!--<p>Street address</p>
+	    	       	<input id="street" type="text" data-mini="true" >
 	    	       	
 	    	       	<p>City</p>
-	    	       	<input id="city" name="" placeholder= "" type="text" value="" data-mini="true" >
+	    	       	<input id="city" type="text" data-mini="true" >
 	    	       	
 	    	       	<p>State</p>
-	    	       	<input id="state" name="" tplaceholder= "" ype="text" value="" data-mini="true" >
+	    	       	<input id="state" type="text" data-mini="true" >
 	    	       	
 	    	       	<p>Zip code</p>
-	    	       	<input id="zipcode" name="" placeholder= "" type="text" value="" data-mini="true" >
+	    	       	<input id="zipcode" type="text" data-mini="true" >
 	    	       	
 	    	       	<p>Country</p>
-	    	       	<input id="country" name="" placeholder= "" type="text" value="" data-mini="true" ><br>
-	    	    	<a id= "submit-signup" data-role="button" data-transition="slide" data-corners="false" data-theme="a"> 
-		            	Submit
-        			</a>
+	    	       	<input id="country" type="text" data-mini="true" ><br></br>-->
+	    	       	<p>Shipping Address</p>
+	    	       	<input id="shipping" type="text" data-mini="true" >
+	    	       	<p>Billing Address</p>
+	    	       	<input id="billing" type="text" data-mini="true" >
+	    	       	<p>Credit Card Number</p>
+	    	       	<input id="creditnumber" type="text" data-mini="true" ><br>
+	    	       	<p>Credit Card Type</p>
+	    	       	<input id="credittype" type="text" data-mini="true" ><br>
+	    	       	<p>Security Number</p>
+	    	       	<input id="securitynumber" type="text" data-mini="true" ><br>
+	    	       	<p>Expiration Date</p>
+	    	       	<input id="expdate" type="text" data-mini="true" ><br>
+	    	       	
+	    	    	<input value="Submit" type="submit" onClick=AddAccount() /> 
         		</fieldset>
     		</form>
 		</div>

@@ -2043,6 +2043,22 @@ function AddCategory(){
 	});
 }
 
+function AddAccount(){
+	$.mobile.loading("show");
+	var form = $("#account-form");
+	var formData = form.serializeArray();
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accounts/",
+		type: 'post',
+		data : formData,
+		success : function() {
+			console.log('POST Completed');
+			$.mobile.loading("hide");
+            $.mobile.navigate("account.html");
+		}
+	});
+}
+
 function ChangePassword(){
         alert("Password Changed");
 }
