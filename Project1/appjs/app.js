@@ -2066,14 +2066,25 @@ function AddAccount(){
 }
 
 function ChangePassword(){
-        alert("Password Changed");
+	$.mobile.loading("show");
+	var form = $("#accountpass-form");
+	var formData = form.serializeArray();
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accountspassword/",
+		type : 'post',
+		data : formData,
+		success : function() {
+			alert('DELETE Completed');
+			$.mobile.loading("hide");
+            $.mobile.navigate("index.html");
+		}
+	});
 }
 
 function DeleteAccount(){
     $.mobile.loading("show");
-	var form = $("#accountdel-form");
+	var form = $("#account-form");
 	var formData = form.serializeArray();
-	alert(form);
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountsdeleted/",
 		type : 'post',

@@ -832,6 +832,32 @@ app.put('/Project1Srv/accounts/:aid', function(req, res) {
 	
 });
 
+app.post('/Project1Srv/accountspassword/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+        var client = new pg.Client(conString);
+        client.connect();
+		// Hay que buscar el query correcto
+         var query = client.query("UPDATE account SET apassword= '" + req.param('password') + "' " +
+			"WHERE username= '" + req.param('username') + "'");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var len = result.rows.length;
+                if (len == 0){
+                        res.statusCode = 404;
+                        res.send("Address not found.");
+                }
+                else {        
+                          var response = {"address" : result.rows[0]};
+                        client.end();
+                          res.json(response);
+                  }
+         });
+});
+
+
 // REST Operation - HTTP DELETE to delete an account based on its id
 app.post('/Project1Srv/accountsdeleted/', function(req, res) {
 	console.log("DELETE account: " + req.param('username'));

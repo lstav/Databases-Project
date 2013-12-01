@@ -31,7 +31,7 @@
 		
 	</head>
 	<body>		
-		<div id="account-view" data-role="page" data-theme"a" style= "background: url('http://img39.imageshack.us/img39/2575/b83n.jpg') repeat;
+		<div id="account-view" data-role="page" data-theme="a" style= "background: url('http://img39.imageshack.us/img39/2575/b83n.jpg') repeat;
     	background-size: 100% 100% !important;">
 			<div data-role="header" data-position="fixed">
 				<a data-role="button" data-rel="back">Cancel</a>
@@ -41,7 +41,7 @@
 			<center>
 				<h2 style= "color: white">Edit Account Info</h2>
 			</center>
-			<form id="account-view-form" data-role="content" class="center-wrapper">
+			<form id="account-form" data-role="content" class="center-wrapper">
  				<!--<fieldset data-role="controlgroup"> -->
  				<ul data-role="listview" data-icon="false">
  					<li>
@@ -49,7 +49,7 @@
  						<div data-role="popup" id="popupUsername">
  			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
  			 				<h1>Username:</h1>
-        	 				<input id="upd-username" name="name" type="text">
+        	 				<input id="upd-username" name="username" type="text">
         	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
  			 			</div>
 					</li>
@@ -58,7 +58,7 @@
  						<div data-role="popup" id="popupfName">
  			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
  			 				<h1>First Name:</h1>
-        	 				<input id="upd-fname" name="name" type="text">
+        	 				<input id="upd-fname" name="fname" type="text">
         	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
  			 			</div>
 					</li>
@@ -67,7 +67,7 @@
  						<div data-role="popup" id="popuplName">
  			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
  			 				<h1>Last Name:</h1>
-        	 				<input id="upd-lname" name="name" type="text">
+        	 				<input id="upd-lname" name="lname" type="text">
         	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
  			 			</div>
 					</li>
@@ -76,7 +76,7 @@
  						<div data-role="popup" id="popupShippingA">
  			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
  			 				<h1>Shipping Address: </h1>
-        	 				<input id="upd-shipping" name="name" type="text">
+        	 				<input id="upd-shipping" name="shipping" type="text">
         	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
  			 			</div>
 					</li>
@@ -85,7 +85,7 @@
  						<div data-role="popup" id="popupBillingA">
  			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
  			 				<h1>Billing Address: </h1>
-        	 				<input id="upd-billing" name="name" type="text">
+        	 				<input id="upd-billing" name="billing" type="text">
         	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
  			 			</div>
 					</li>
@@ -94,7 +94,7 @@
  						<div data-role="popup" id="popupcCard">
  			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
  			 				<h1>Credit Card Number: </h1>
-        	 				<input id="upd-creditCard" name="name" type="text">
+        	 				<input id="upd-creditCard" name="credit" type="text">
         	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
  			 			</div>
 					</li>
@@ -103,7 +103,7 @@
  						<div data-role="popup" id="popupcCardType">
  			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
  			 				<h1>Credit Card Type: </h1>
-        	 				<input id="upd-cardType" name="name" type="text">
+        	 				<input id="upd-cardType" name="type" type="text">
         	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
  			 			</div>
 					</li>
@@ -112,7 +112,7 @@
  						<div data-role="popup" id="popupSecurity">
  			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
  			 				<h1>Security Number: </h1>
-        	 				<input id="upd-security" name="name" type="text">
+        	 				<input id="upd-security" name="security" type="text">
         	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
  			 			</div>
 					</li>
@@ -121,7 +121,7 @@
  						<div data-role="popup" id="popupexpDate">
  			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
  			 				<h1>Expiration Date: </h1>
-        	 				<input id="upd-expDate" name="name" type="text">
+        	 				<input id="upd-expDate" name="expdate" type="text">
         	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
  			 			</div>
 					</li>
@@ -130,7 +130,7 @@
  						<div data-role="popup" id="popupEmail">
  			 				<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
  			 				<h1>Email: </h1>
-        	 				<input id="upd-email" name="name" type="text">
+        	 				<input id="upd-email" name="email" type="text">
         	 				<a data-role="button" data-transition="slide" href="#account-view">Submit</a>
  			 			</div>
 					</li>
