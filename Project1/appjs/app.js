@@ -239,17 +239,23 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
         $("#upd-shipping").val(loginAccount.shipping);
         $("#upd-billing").val(loginAccount.billing);
         $('#upd-creditCard').val("*****" + loginAccount.cardnumber.substr(5,6));
+        $('#upd-cardType').val(loginAccount.cardtype);
+        $('#upd-security').val(loginAccount.securitynumber);
+        $('#upd-expDate').val(loginAccount.expdate);
         $('#upd-email').val(loginAccount.email);
-               $('#upd-password').val(pass);
+        $('#upd-password').val(pass);
         
         $('#username').html("Username: " + loginAccount.username);
         $('#fname').html("First Name: " + loginAccount.fname);
         $('#lname').html("Last Name: " + loginAccount.lname);
         $("#shippingA").html("Shipping Address: " + loginAccount.shipping);
         $("#billingA").html("Billing Address: " + loginAccount.billing);
-               $('#cCard').html("Credit Card Number: *****" + loginAccount.cardnumber.substr(5,6));
+        $('#cCard').html("Credit Card Number: *****" + loginAccount.cardnumber.substr(5,6));
+        $('#cCardType').html("Credit Card Type: " + loginAccount.cardtype);
+        $('#security').html("Security Number: " + loginAccount.securitynumber);
+        $('#expDate').html("Expiration Date: " + loginAccount.expdate);
         $('#email').html("Email: " + loginAccount.email);
-               $('#password').html("Password: " + pass); 
+        $('#password').html("Password: " + pass); 
         
 });
 
@@ -2064,7 +2070,20 @@ function ChangePassword(){
 }
 
 function DeleteAccount(){
-        alert("Account Deleted");
+    $.mobile.loading("show");
+	var form = $("#account-form");
+	var formData = form.serializeArray();
+	alert(form);
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accounts/",
+		type: 'delete',
+		data : formData,
+		success : function() {
+			console.log('DELETE Completed');
+			$.mobile.loading("hide");
+            $.mobile.navigate("index.html");
+		}
+	});
 }
 ///// Bid
 

@@ -27,7 +27,7 @@ app.use(express.bodyParser());
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
-var conString = "pg://course:course@localhost:5432/db2";
+var conString = "pg://course:course@localhost:5432/projectdb";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -89,7 +89,7 @@ app.get('/Project1Srv/login/:username/:password', function(req, res) {
 
         var query = client.query("select * from account natural join (select address as shipping, addressid as shippingid "+ 
                         "from account, address where account.shippingid = address.addressid) as s natural join " +
-                        "(select address as billing, b.addressid as billingid, cardnumber " + 
+                        "(select address as billing, b.addressid as billingid, cardnumber, cardtype, securitynumber, expdate " + 
                         "from account, address as b, creditcard as c " +
                         "where account.billingid = b.addressid and c.addressid = b.addressid) as b " + 
                         "where account.username = '" + username + "'");
@@ -833,8 +833,29 @@ app.put('/Project1Srv/accounts/:aid', function(req, res) {
 });
 
 // REST Operation - HTTP DELETE to delete an account based on its id
-app.del('/Project1Srv/accounts/:aid', function(req, res) {
-
+app.del('/Project1Srv/accounts/', function(req, res) {
+	console.log("DELETE account: ");
+        var client = new pg.Client(conString);
+        client.connect();
+		// Hay que buscar el query correcto
+         var query = client.query("UPDATE account SET isactive='FALSE' " +
+			"WHERE username='" + req.param('username') + "'");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var len = result.rows.length;
+                if (len == 0){
+                        res.statusCode = 404;
+                        res.send("Address not found.");
+                }
+                else {        
+                          var response = {"address" : result.rows[0]};
+                        client.end();
+                          res.json(response);
+                  }
+         });
 });
 
 // REST Operation - HTTP POST to add a new a account
@@ -842,7 +863,7 @@ app.post('/Project1Srv/accounts', function(req, res) {
 		console.log("POST account: ");
         var client = new pg.Client(conString);
         client.connect();
-
+		// Hay que buscar el query correcto
          var query = client.query("insert into account (username, fname, lname, email, apassword, shippingid, billingid, depositid)" +
 			"values ('jsmith', 'john', 'smith', 'jsmith@example.com', 1234, 2, 2, 2)");
         
