@@ -88,22 +88,29 @@
 				</div>
 				<div data-role="collapsible" data-collapsed="true">
 						<h1>User Account</h1>
-						<form id="account-form" data-ajax="false"> 
+						<div data-role="collapsible" data-collapsed="true">
+						<h1>Change Password</h1>
+						<form id="accountpass-form" data-ajax="false"> 
 							<fieldset data-role="controlgroup">
 								<ul data-role="listview" data-inset="true">
-									<li><input type="text" placeholder="Username" id="username" /></li>
-									<li><input type="text" placeholder="Password" id="password" /></li>
-									<li><div class="ui-grid-a">
-										<div class="ui-block-a">
-											<input value="Submit" type="submit" onClick=ChangePassword() />
-										</div>
-										<div class="ui-block-b">
-											<input value="Delete" type="submit" onClick=DeleteAccount() />
-										</div>
-									</div></li>
+									<li><input type="text" placeholder="Username" name="username" id="username" /></li>
+									<li><input type="text" placeholder="Password" name="password" id="password" /></li>
+									<li><input value="Submit" type="submit" onClick=ChangePassword() /></li>
 								</ul>
 							</fieldset>
 						</form>
+						</div>
+						<div data-role="collapsible" data-collapsed="true">
+						<h1>Delete Account</h1>
+						<form id="accountdel-form" data-ajax="false"> 
+							<fieldset data-role="controlgroup">
+								<ul data-role="listview" data-inset="true">
+									<li><input type="text" placeholder="Username" name="username" id="username" /></li>
+									<li><input value="Delete" type="submit" onClick=DeleteAccount() /></li>
+								</ul>
+							</fieldset>
+						</form>
+						</div>
 				</div>
 			</div>
 		</div>

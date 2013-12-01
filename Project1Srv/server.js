@@ -833,13 +833,13 @@ app.put('/Project1Srv/accounts/:aid', function(req, res) {
 });
 
 // REST Operation - HTTP DELETE to delete an account based on its id
-app.del('/Project1Srv/accounts/', function(req, res) {
-	console.log("DELETE account: ");
+app.post('/Project1Srv/accountsdeleted/', function(req, res) {
+	console.log("DELETE account: " + req.param('username'));
         var client = new pg.Client(conString);
         client.connect();
 		// Hay que buscar el query correcto
          var query = client.query("UPDATE account SET isactive='FALSE' " +
-			"WHERE username='" + req.param('username') + "'");
+			"WHERE username= '" + req.param('username') + "'");
         
         query.on("row", function (row, result) {
             result.addRow(row);

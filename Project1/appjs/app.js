@@ -2057,7 +2057,7 @@ function AddAccount(){
 		url : "http://localhost:3412/Project1Srv/accounts/",
 		type: 'post',
 		data : formData,
-		success : function() {
+		success : function(result) {
 			console.log('POST Completed');
 			$.mobile.loading("hide");
             $.mobile.navigate("account.html");
@@ -2071,12 +2071,12 @@ function ChangePassword(){
 
 function DeleteAccount(){
     $.mobile.loading("show");
-	var form = $("#account-form");
+	var form = $("#accountdel-form");
 	var formData = form.serializeArray();
 	alert(form);
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts/",
-		type: 'delete',
+		url : "http://localhost:3412/Project1Srv/accountsdeleted/",
+		type : 'post',
 		data : formData,
 		success : function() {
 			console.log('DELETE Completed');
