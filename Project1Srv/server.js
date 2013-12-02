@@ -92,7 +92,7 @@ app.get('/Project1Srv/login/:username/:password', function(req, res) {
                         "(select address as billing, b.addressid as billingid, cardnumber, cardtype, securitynumber, expdate " + 
                         "from account, address as b, creditcard as c " +
                         "where account.billingid = b.addressid and c.addressid = b.addressid) as b " + 
-                        "where account.username = '" + username + "'");
+                        "where account.username = '" + username + "' and account.isactive = 'TRUE'");
         
         query.on("row", function (row, result) {
                 if(row.apassword == password){
