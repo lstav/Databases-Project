@@ -257,6 +257,10 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
         $('#email').html("Email: " + loginAccount.email);
         $('#password').html("Password: " + pass); 
         
+        $(document).on('click', '#deleteaccount', function() { 
+        	DeleteAccounts(loginAccount.accountid);
+}); 
+        
 });
 
 $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
@@ -1176,17 +1180,39 @@ function UpdateAccount(){
         alert("Account Saved!");
 }
 
-function DeleteAccount(){
+function DeleteAccounts(id){
         var decision = confirm("Delete Account?");
         if(decision == true) {
-                alert("Account Deleted");
+        $.mobile.loading("show");
+		$.ajax({
+		url : "http://localhost:3412/Project1Srv/accountsdelete/" + id,
+		type: 'post',
+		contentType: "application/json",
+        dataType:"json",
+		success : function(data, textStatus, jqXHR) {
+			console.log('POST Completed');
+			$.mobile.loading("hide");
+            $.mobile.navigate("index.html");
+		}
+	});
         }
 }
 
 function DeleteCategory(id){
         var decision = confirm("Delete Category?");
         if(decision == true) {
-                alert("Category Deleted");
+        $.mobile.loading("show");
+		$.ajax({
+		url : "http://localhost:3412/Project1Srv/categories/" + id,
+		type: 'post',
+		contentType: "application/json",
+        dataType:"json",
+		success : function(data, textStatus, jqXHR) {
+			console.log('POST Completed');
+			$.mobile.loading("hide");
+            $.mobile.navigate("administrator.html");
+		}
+	});
         }
 }
 
