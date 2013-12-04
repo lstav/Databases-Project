@@ -926,7 +926,8 @@ $(document).on('pagebeforeshow', "#purchaseList", function(event, ui){
                 var item;
                 for (var i=0; i < len; ++i){
                 item =usales[i];
-                list.append("<li><a onClick= GetProduct("+item.id+")><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Your bid:"+item.bid+"<\h4></a></li>");
+                var fal= 'data-icon="false"';
+                list.append("<li "+fal+ "><a onClick= GetProduct("+item.proid+")><img src='"+ item.imagelink+ "'/>"+item.prodname + "<h4> Price paid:"+item.totalprice+"<\h4></a></li>");
                 }
                 list.listview("refresh");}
                 
@@ -1578,7 +1579,7 @@ function PurchaseUser(id){
         
         $.mobile.loading("show");
         $.ajax({
-                url : "http://lhl.herokuapp.com/LHL/purchaseusers/"+id,
+                url : "http://lhl.herokuapp.com/LHL/purchasesusers/"+id,
                 method: 'get',
                 contentType: "application/json",
                 dataType:"json",
