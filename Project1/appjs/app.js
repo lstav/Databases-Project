@@ -368,64 +368,95 @@ $(document).on('pagebeforeshow', '#create-sale', function(){
                         list.empty();
                         var categories;
                         categories = categoriesList[0];
-                        for (var i=0; i < len; ++i){
-                        	    var option= '<option value='+ categoriesList[i].catid+'>' + categoriesList[i].catname + '</option>';
-                                list.append(option).trigger('create');
-                        }        
+                        var catparents= [];
+                        var catnames= [];
+                        
+                        for(var i=0; i < len; ++i){
+                        	if(categoriesList[i].parentid== 0){
+                        		catparents.push(categoriesList[i].catid);
+                        		catnames.push(categoriesList[i].catname);
+                        	}
+                        }
+                        
+                        for(var j=0; j< catparents.length; j++){
+                        	
+                        	var opt = '<optgroup label="'+ catnames[j]+'">';
+                        	list.append(opt).trigger('create');
+
+                        	for (var i=0; i < len; ++i){	
+                        			if(categoriesList[i].parentid == catparents[j]){
+                        		    var option= '<option value='+ categoriesList[i].catid+'>' + categoriesList[i].catname + '</option>';
+                        	        list.append(option).trigger('create');
+                        	        }
+                       		 }        
+                       		var opt2= '</optgroup>';
+                            list.append(opt2).trigger('create');
+                       		
+                       	}
                 },
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
                         alert("categories not found!");
                 }
         }); 
-        
-        $(document).on('click', '#submit-sale', function() { 
-        
+
+});
+
+$(document).on('click', '#submit-sale', function() { 
+	
         var pname= $('#product-name').val();
         var pprice= $('#pprice').val();
-        var condition= $('#condition').val();
+        var cond= $('#condition').val();
         var shippingto= $('#shipping-to').val();
         var enddate= $('#enddate').val();
-        var endtime= $('#endtime').val();
         var image= $('#image').val();
         var visa= $('#checkbox1').is(':checked');
         var paypal= $('#checkbox2').is(':checked');
+        var cat= $('#categories-lists').val();
+        var dcription= $('#ptext').val();
+        var qty= $('#pqty').val();
 
-        if(pname.length > 0 && pprice.length> 0 && shippingto.length>0 && image.length && (visa||paypal)){
-         // $.mobile.loading("show");
-	      var formData = {name: pname, price: pprice, condition: condition, shipping: shippingto, pmethod1: visa, pmethod2: paypal, link: image};
-	      //alert(formData.name);
-	        /* $.ajax({
-			url : "http://localhost:3412/Project1Srv/products/",
-			type: 'post',
-			data : formData,
-			success : function() {
-			console.log('POST Completed: Product sale added');
-			}});*/
-			
-			/* $.ajax({
-			url : "http://localhost:3412/Project1Srv/addsale/",
-			type: 'post',
-			data : formData,
-			success : function() {
-			console.log('POST Completed: Product sale added');
-			$.mobile.loading("hide");
-            $.mobile.navigate("homepage.html");
-			}});*/
-			
-			
-			
+        if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0 && (visa||paypal)){
+           
+           alert("Submited!");
+	       var formData = {account: loginAccount.accountid, name: pname, price:pprice, condition:cond, catid:cat, pmethod1: visa, pmethod2:paypal, link:image, date:enddate, description:dcription, quantity: qty};
+		   var product= {};
+            $.ajax({
+                url : "http://localhost:3412/Project1Srv/products",
+                type: 'post',
+                dataType: 'json',
+		     	data : formData,
+                success : function(data){
+                        alert("funciono!");
+                        var product= data.productadd[0].productid;
+                        formData.productid= product;
+                        $.ajax({
+		                 	url : "http://localhost:3412/Project1Srv/addsale",
+			                type: 'post',
+			                data : formData,
+			                success : function() {
+			                		console.log('sale added');
+			                		GetSales();
+		                   	},
+                           error: function(data, textStatus, jqXHR){
+                       			 console.log("textStatus: " + textStatus);
+                      			 alert("sale not added!");}          	
+		                   	});
+                   },
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        alert("product not added!");
+                }
+          }); 
         } 
         
         else {
-           alert($('#categories-lists').val());
            alert("Please provide all information.");
 
         }           
             return false; 
-        });
-});
-
+ });   
+                                
 $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
         
                         //alert(loginAccount.username);
@@ -533,14 +564,6 @@ $(document).on('pagebeforeshow', '#create-auction', function(){
        $(document).on('click', '#submit-auction', function() { 
               alert("You have created an auction!");
         });    
-});
-
-$(document).on('pagebeforeshow', '#create-sale', function(){  
-
-                //alert(loginAccount.username);
-       $(document).on('click', '#submit-sale', function() { 
-              alert("Your product is on sale!");
-        });  
 });
 
 $(document).on('pagebeforeshow','#create-page', function(){
@@ -1920,6 +1943,9 @@ function GetAuctions(){
 var currentSalesList = {};
 function GetSales(){
         id= profile.accountid;
+        if(id == undefined){
+        	id= loginAccount.accountid;
+        }
         //alert(profile.accountid);
         $.mobile.loading("show");
         $.ajax({
