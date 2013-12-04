@@ -204,7 +204,7 @@ app.post('/Project1Srv/addsale', function(req, res) {
     client.connect();
 		
 	var query= client.query("INSERT INTO sale(accountid, prodid, starttime, endtime, price, totalquantity) "+
-        "VALUES ("+req.param('account')+", "+req.param('productid')+", '2014-03-22 00:00:00', '"+req.param('date')+" 00:00:00', "+req.param('price')+","+req.param('quantity')+") RETURNING *");
+        "VALUES ("+req.param('account')+", "+req.param('productid')+", localtimestamp, '"+req.param('date')+" 00:00:00', "+req.param('price')+","+req.param('quantity')+") RETURNING *");
     
     query.on("row", function (row, result) {
             result.addRow(row);
