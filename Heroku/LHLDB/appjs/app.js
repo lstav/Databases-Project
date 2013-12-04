@@ -770,6 +770,10 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
         
 });
 
+  $(document).on('click', '#submitcheckout-button', function() { 
+              alert("You bought an item!");
+              PurchaseUser(loginAccount.accountid);
+   });  
 ////////// Shopping Cart
 
 $(document).on('pagebeforeshow', "#shoppingList", function(event, ui){
