@@ -27,7 +27,9 @@ app.use(express.bodyParser());
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
-var conString = "pg://course:course@localhost:5432/db2";
+
+var conString = "pg://postgres:course@localhost:5432/db2";
+
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -190,6 +192,31 @@ app.get('/Project1Srv/sales/:id', function(req, res) {
                 var response = {"userSales" : result.rows};
                 client.end();
                   res.json(response);
+         });
+});
+
+app.post('/Project1Srv/addsale/', function(req, res) {
+	console.log("INSERT sale " + req.param('username'));
+        var client = new pg.Client(conString);
+        client.connect();
+        
+        var query2= client.query("INSERT INTO sale(saleid, accountid, prodid, starttime, endtime, price, totalquantity) "+
+        "VALUES (?, ?, ?, ?, ?, ?, ?)");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var len = result.rows.length;
+                if (len == 0){
+                        res.statusCode = 404;
+                        res.send("Address not found.");
+                }
+                else {        
+                          var response = {"newsale" : result.rows[0]};
+                          client.end();
+                          res.json(response);
+                  }
          });
 });
 
@@ -369,7 +396,7 @@ app.get('/Project1Srv/categories', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM category");
+        var query = client.query("SELECT * FROM category ORDER BY parentid");
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -598,8 +625,29 @@ app.del('/Project1Srv/products/:id', function(req, res) {
 
 });
 
-app.post('/Project1Srv/products', function(req, res) {
-
+app.post('/Project1Srv/products/', function(req, res) {
+	console.log("INSERT product " + req.param('username'));
+        var client = new pg.Client(conString);
+        client.connect();
+		
+		var query = client.query("INSERT INTO product(productid, catid, prodname, condition, description, imagelink) "+
+       "VALUES (?, ?, ?, ?, ?, ?)");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var len = result.rows.length;
+                if (len == 0){
+                        res.statusCode = 404;
+                        res.send("Product not found.");
+                }
+                else {        
+                          var response = {"newproduct" : result.rows[0]};
+                          client.end();
+                          res.json(response);
+                  }
+         });
 });
 
 //////////// History
