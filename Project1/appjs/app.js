@@ -401,6 +401,52 @@ $(document).on('pagebeforeshow', '#create-sale', function(){
 
 });
 
+$(document).on('pagebeforeshow', '#create-auction', function(){  
+          
+         $.ajax({
+                url : "http://localhost:3412/Project1Srv/categories",
+                contentType: "application/json",
+                success : function(data, textStatus, jqXHR){
+                        var categoriesList = data.categories;
+                        var len =categoriesList.length;
+                        var list = $("#categories-lists");
+                        list.empty();
+                        var categories;
+                        categories = categoriesList[0];
+                        var catparents= [];
+                        var catnames= [];
+                        
+                        for(var i=0; i < len; ++i){
+                        	if(categoriesList[i].parentid== 0){
+                        		catparents.push(categoriesList[i].catid);
+                        		catnames.push(categoriesList[i].catname);
+                        	}
+                        }
+                        
+                        for(var j=0; j< catparents.length; j++){
+                        	
+                        	var opt = '<optgroup label="'+ catnames[j]+'">';
+                        	list.append(opt).trigger('create');
+
+                        	for (var i=0; i < len; ++i){	
+                        			if(categoriesList[i].parentid == catparents[j]){
+                        		    var option= '<option value='+ categoriesList[i].catid+'>' + categoriesList[i].catname + '</option>';
+                        	        list.append(option).trigger('create');
+                        	        }
+                       		 }        
+                       		var opt2= '</optgroup>';
+                            list.append(opt2).trigger('create');
+                       		
+                       	}
+                },
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        alert("categories not found!");
+                }
+        }); 
+
+});
+
 $(document).on('click', '#submit-sale', function() { 
 	
         var pname= $('#product-name').val();
@@ -455,6 +501,60 @@ $(document).on('click', '#submit-sale', function() {
         }           
             return false; 
  });   
+ 
+$(document).on('click', '#submit-auction', function() { 
+	
+        var pname= $('#product-name').val();
+        var pprice= $('#pprice').val();
+        var cond= $('#condition').val();
+        var shippingto= $('#shipping-to').val();
+        var enddate= $('#enddate').val();
+        var image= $('#image').val();
+        var visa= $('#checkbox1').is(':checked');
+        var paypal= $('#checkbox2').is(':checked');
+        var cat= $('#categories-lists').val();
+        var dcription= $('#ptext').val();
+
+        if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0 && (visa||paypal)){
+           
+           alert("Submited!");
+	       var formData = {account: loginAccount.accountid, name: pname, price:pprice, condition:cond, catid:cat, pmethod1: visa, pmethod2:paypal, link:image, date:enddate, description:dcription};
+		   var product= {};
+            $.ajax({
+                url : "http://localhost:3412/Project1Srv/products",
+                type: 'post',
+                dataType: 'json',
+		     	data : formData,
+                success : function(data){
+                        alert("funciono!");
+                        var product= data.productadd[0].productid;
+                        formData.productid= product;
+                        $.ajax({
+		                 	url : "http://localhost:3412/Project1Srv/addauction",
+			                type: 'post',
+			                data : formData,
+			                success : function() {
+			                		console.log('auction added');
+			                		GetAuctions();
+		                   	},
+                           error: function(data, textStatus, jqXHR){
+                       			 console.log("textStatus: " + textStatus);
+                      			 alert("auction not added!");}          	
+		                   	});
+                   },
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        alert("product not added!");
+                }
+          }); 
+        } 
+        
+        else {
+           alert("Please provide all information.");
+
+        }           
+            return false; 
+ });
                                 
 $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
         
@@ -494,7 +594,6 @@ $(document).on('pagebeforeshow', "#uSalePage", function(event, ui) {
 
 $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
         
-                                 //alert(loginAccount.username);
                 var productCat = currentAuctionList;
                 var len =productCat.length;
 
@@ -520,22 +619,18 @@ $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
                 var item;
                 for (var i=0; i < len; ++i){
                 item =productCat[i];
-                var element='<a id="bid-icon" data-role="button" data-icon= "grid" data-mini="true" style="color: MidnightBlue " >Bid History</a>';
+                var element='<a id="bid-icon" onClick= GetBids('+item.id+') data-role="button" data-icon= "grid" data-mini="true" style="color: MidnightBlue " >Bid History</a>';
                 list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/>" + item.prodname + "<h4>Price:"+item.price+"</h4></a>"+ element+"</li>");
                 }
                 list.listview("refresh");
                 
-                      $(document).on('click', '#bid-icon', function() { 
-                                                $.mobile.changePage("bids.html");
-                                         });    
-                
-                }
+            }
 
 });
 
 $(document).on('pagebeforeshow', "#bidPage", function(event, ui) {
         
-                        //alert(loginAccount.username);
+                //alert(loginAccount.username);
                 var productbid = productBids;
                 var len =productBids.length;
                 
@@ -976,7 +1071,7 @@ $(document).on('pagebeforeshow', "#historyPage", function(event, ui) {
                 list.empty();
         
                 var h1= '<li><a onClick=BidUser('+loginAccount.accountid+')>My Bids</a></li>';
-                var h2= '<li><a onClick=SalesUser('+loginAccount.accountid+')>Sales</a></li>';
+                var h2= '<li><a onClick=SalesUser('+loginAccount.accountid+')>My Sales</a></li>';
                 var h3= '<li><a onClick=PurchaseUser('+loginAccount.accountid+')>Purchased</a></li>';
            
                 list.append(h1+h2+h3);
@@ -1573,21 +1668,123 @@ function GetProduct(id){
                         }
                 }
         });}
-        
-//////// Shopping Cart
 
-/* function Sortby(id){
-
+function Sortby(id){
+		
+		var catid= currentCategoryProducts[0].catid;
+		var isParent= false;
+        if(catid != undefined){
+        	
         $.ajax({
-                url : "http://localhost:3412/Project1Srv/sortProducts/"+ id,
+                url : "http://localhost:3412/Project1Srv/allProducts",
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                         var products= data.products;
+
+                         for(var i=0; i < products.length; i++){
+                         	if(products[i].parentid == catid){
+                         		isParent= true;
+                         	}
+                         }
+                         
+                        if(isParent){
+        				isParent= false;
+        				AllSortby(id);
+       		 			}
+      
+      					else{
+       					  $.ajax({
+                    	  url : "http://localhost:3412/Project1Srv/sortProducts/"+ id+"/"+catid,
+              			  method: 'get',
+              			  contentType: "application/json",
+                		  dataType:"json",
+               
+                	      success : function(data, textStatus, jqXHR){
+                          currentCategoryProducts= data.productsIncategory;
+						  var productCat = currentCategoryProducts;
+                		  var len =productCat.length;
+                		  var list = $("#product-list");
+                		  list.empty();
+                
+               			  if(len > 0){
+                		  var item;
+                		  for (var i=0; i < len; ++i){
+                			 item =productCat[i];
+                			 list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/> " + item.prodname + "<h4>"+item.price+"<\h4></a></li>");
+                		  }
+                		}
+                
+                		else{
+                        
+                			var msg='<li><a data-rel=back data-role="button">No products</a></li>';
+                			list.append(msg);                        
+                		}
+                                
+                		list.listview("refresh");
+                	},
+                    error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Product loading error.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                		}
+        		        });}
+                         
+                        },                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("products not available.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });}
+        
+}
+
+function AllSortby(id){
+	
+		var patid= currentCategoryProducts[0].catid;
+        
+        if(patid != undefined){
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/sortAllProducts/"+ id+"/"+patid,
                 method: 'get',
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
                         currentCategoryProducts= data.productsIncategory;
-                        $.mobile.navigate("#catProductView");                
-                        //window.location.reload(true);
-                },
+						var productCat = currentCategoryProducts;
+                		var len =productCat.length;
+                		var list = $("#product-list");
+                		list.empty();
+                
+               			if(len > 0){
+                		var item;
+                		for (var i=0; i < len; ++i){
+                			item =productCat[i];
+                			list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/> " + item.prodname + "<h4>"+item.price+"<\h4></a></li>");
+                		}
+                		}
+                
+                		else{
+                        
+                			var msg='<li><a data-rel=back data-role="button">No products</a></li>';
+                			list.append(msg);                        
+                		}
+                                
+                		list.listview("refresh");
+                	},
                 error: function(data, textStatus, jqXHR){
                         console.log("textStatus: " + textStatus);
                         $.mobile.loading("hide");
@@ -1598,9 +1795,11 @@ function GetProduct(id){
                                 alert("Internal Server Error.");
                         }
                 }
-        });
+        });}
         
-}*/
+}
+
+//////// Shopping Cart
 
 function UpdateShoppingCart(){
         alert("Account Saved!");
@@ -1789,7 +1988,7 @@ function GetAllProducts(id){
 }
 
 function GetCategoryProducts(id){
-      
+        
         $.mobile.loading("show");
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/categoryProducts/"+ id,
@@ -1913,6 +2112,9 @@ function GetSubCategory(id){
 var currentAuctionList = {};
 function GetAuctions(){
         id= profile.accountid;
+        if(id == undefined){
+        	id= loginAccount.accountid;
+        }
         $.mobile.loading("show");
         $.ajax({
                 url : "http://localhost:3412/Project1Srv/auctions/"+ id,
