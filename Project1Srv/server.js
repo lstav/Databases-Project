@@ -30,7 +30,6 @@ app.use(express.bodyParser());
 
 var conString = "pg://course:course@localhost:5432/projectdb";
 
-
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
 // identifies the resource to be created, read, updated, or deleted.
@@ -237,6 +236,27 @@ app.get('/Project1Srv/auctions/:id', function(req, res) {
          
 });
 
+app.get('/Project1Srv/auctionProd/:id/:lbid', function(req, res) {
+        
+        var id = req.params.id;
+        var bid= req.params.lbid;
+        console.log("GET auctionid of product:"+ id);
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT auctionid, currentbid FROM auction, product WHERE auction.prodid = product.productid AND auction.prodid ="+id+" AND '"+bid+"' > currentbid");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"auctionProd" : result.rows};
+                client.end();
+                res.json(response);
+         });
+         
+});
+
 app.post('/Project1Srv/addauction', function(req, res) {
 	
 	console.log("INSERT sale ");
@@ -257,6 +277,46 @@ app.post('/Project1Srv/addauction', function(req, res) {
                 res.json(response);
          });
 });
+
+app.post('/Project1Srv/addbid', function(req, res) {
+	
+	console.log("INSERT bid ");
+         
+    var client = new pg.Client(conString);
+    client.connect();
+		
+	var query= client.query("INSERT INTO bid(accountid, bdate, bammmount, auctionid) "+
+        "VALUES ("+req.param('account')+", localtimestamp, "+req.param('bid')+","+req.param('auctionid')+") RETURNING *");
+    
+    query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"addbid" : result.rows};
+                client.end();
+                res.json(response);
+         });
+});
+
+app.put('/Project1Srv/updateMaxbid', function(req, res) {
+	
+	console.log("UPDATE auction currentbid ");
+    
+    var client = new pg.Client(conString);
+    client.connect();
+		
+	var query= client.query("UPDATE auction SET currentbid="+req.param('bid')+" WHERE auctionid="+req.param('auctionid')+" AND currentbid < '"+req.param('bid')+"' RETURNING *");
+    
+    query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"updateMaxbid" : result.rows};
+                client.end();
+                res.json(response);
+         });
+});
+
 
 app.get('/Project1Srv/bidsproducts/:id', function(req, res) {
         
