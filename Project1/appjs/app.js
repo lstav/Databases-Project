@@ -79,13 +79,12 @@ $(document).on('pagebeforeshow', '#sign-up', function(){
 
 
 $(document).on('pagebeforeshow', '#homepage-account', function(){
-                
-           var sessionId= GetSession();
-           if(loginAccount.username == undefined && sessionId[1] != undefined){
-                           loginAccount.username= sessionId[1];
-                           loginAccount.isadmin= sessionId[2];
-                           loginAccount.accountid= GetSession()[0];
-           }
+	
+    var txt = sessionStorage.getItem("account");
+    var obj = eval('(' + txt + ')');
+    if(loginAccount.username == undefined && obj.username != undefined){
+    	loginAccount = obj;
+	}
 
        if(loginAccount.username!= undefined)        {
         $(document).on('click', '#profile-account', function() { 
