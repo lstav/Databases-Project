@@ -865,7 +865,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              bid.empty();
              
              if(!isSale){
-             var msg= '<input type="text" id="bid" value= "Make a bid" data-mini="true"/>';         
+             var msg= '<input type="text" id="bid-product" value= "" placeholder="Make a bid" data-mini="true"/>';         
              bid.append(msg).trigger('create');}
              
              if(loginAccount.username != undefined){
@@ -873,7 +873,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              submit.empty();
              
              if(!isSale){
-             var msg2= '<a><input type="submit" id= "submitBid" value="Submit" onClick= UpdateBid() data-theme="a" data-mini="true"/></a>';
+             var msg2= '<a><input type="submit" id= "submitBid" value="Submit" onClick= InsertBid('+currentProduct.id+') data-theme="a" data-mini="true"/></a>';
              submit.append(msg2).trigger('create');}
              
              var buy= $("#buy-now");
@@ -892,7 +892,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              
              if(!isSale){
              var pop='<a id= "bid-offer" href="#popupLogin" data-rel="popup" data-position-to="window" data-inline="true">';
-             var msg2='<input type= "submit" id= "submitBid" value="Submit" value= "Submit" data-mini="true"/></a>';            
+             var msg2='<input type= "submit" id= "submitBid" value= "Submit" data-mini="true"/></a>';            
              submit.append(pop+msg2).trigger('create');}
                           
              var buy= $("#buy-now");
@@ -2422,6 +2422,80 @@ function DeleteAccount(){
 }
 ///// Bid
 
-function UpdateBid(){
-        alert("Bid submitted!");
+function InsertBid(id){
+        
+        var lbid= $('#bid-product').val(); 
+        var aid= {};
+        var cbid={};
+        if(lbid > 0){
+
+           $.mobile.loading("show");
+       	   $.ajax({
+                url : "http://localhost:3412/Project1Srv/auctionProd/" + id +"/"+lbid,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                	    var result= data.auctionProd;
+                        if(result.length > 0){
+                        	
+                           aid = data.auctionProd[0].auctionid;
+                       	   cbid= data.auctionProd[0].currentbid;
+
+                           var formData = {account: loginAccount.accountid, bid: lbid, auctionid: aid, currentbid:cbid};                           
+          				   $.ajax({
+              				  url : "http://localhost:3412/Project1Srv/addbid",
+              				  type: 'post',
+              				  dataType: 'json',
+		     				  data : formData,
+                			  success : function(data){
+                   		     			var bidid= data.addbid[0].bid;
+                   		     			formData.ibid= bidid; //id of bid
+                   		     			$.ajax({
+		                 						url : "http://localhost:3412/Project1Srv/updateMaxbid",
+			                					type: 'put',
+			                					data : formData,
+			                					success : function(data) {
+			                							currentProduct.price= data.updateMaxbid[0].currentbid;
+			                							$.mobile.loading("hide");
+			                							console.log("auction successfully submitted");
+			                							BidUser(formData.account);
+		                   								},
+                           						error: function(data, textStatus, jqXHR){
+                       								   console.log("textStatus: " + textStatus);
+                      			 					   alert("auction not submitted!");}          	
+		                   				});
+                 	       },
+              		  error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        alert("bid not submitted!");
+                	  }
+          		});}
+          		
+          		else{
+          			$.mobile.loading("hide");
+          			alert("Make an offer greater than the current bid!");
+          		}                  
+               
+                },
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Auction not found.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+      	    });
+		    
+        } 
+        
+        else {
+           alert("Not a valid offer.");
+
+        }           
+            return false; 
 }
