@@ -493,7 +493,8 @@ app.get('/Project1Srv/subcategory/:id', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT * FROM category WHERE parentid =" + id);
+        var query = client.query("SELECT category.catid as catid, category.catname as catname, parent.catname as parentname, category.parentid FROM category, category as parent "+
+        "WHERE parent.catid= category.parentid AND category.parentid=" + id);
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -529,11 +530,90 @@ app.get('/Project1Srv/categoryAll/:id', function(req, res){
          });
 });
 
+app.get('/Project1Srv/searchAll/:term', function(req, res){
+
+		var term = req.params.term;
+		var terms= term.split(/[ ,]+/);
+        
+        var msg= "";
+        
+        for(var i=0; i < terms.length; i++){
+        	if(i==0){
+        		msg+="prodname ilike '%"+terms[i]+"%' ";
+        	}
+        	else{
+        		msg+="or prodname ilike '%"+terms[i]+"%' ";
+        	}
+        }
+    
+        console.log("GET products from search of terms: "+ term);
+
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT prodname, id, price, condition, description, img, catid, catname "+
+                "FROM ( SELECT prodname, productid as id, price, condition, description, imagelink as img, catid, catname "+
+                "FROM account natural join sale natural join product natural join category WHERE account.accountid = sale.accountid AND product.productid = sale.prodid "+ 
+                "AND category.catid= product.catid UNION SELECT prodname, productid as id, max(currentbid) as price, condition, description, imagelink as img, catid, catname "+
+                "FROM account natural join auction natural join product natural join category WHERE auction.prodid = product.productid AND auction.accountid = account.accountid AND category.catid= product.catid "+
+                "GROUP BY prodname, productid, condition, description, imagelink, catid, catname ) as pdt WHERE "+msg);
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        
+        query.on("end", function (result) {
+                var response = {"searchresult" : result.rows};
+                client.end();
+                res.json(response);
+         });        
+});
+
+app.get('/Project1Srv/searchSub/:term/:id', function(req, res){
+		
+		var id= req.params.id;
+		var term = req.params.term;
+		var terms= term.split(/[ ,]+/);
+        
+        var msg= "";
+        
+        for(var i=0; i < terms.length; i++){
+        	if(i==0){
+        		msg+="prodname ilike '%"+terms[i]+"%' ";
+        	}
+        	else{
+        		msg+="or prodname ilike '%"+terms[i]+"%' ";
+        	}
+        }
+    
+        console.log("GET products from search of terms: "+ term);
+
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT prodname, id, max(price) as price, img, condition, description, img, catid, catname "+
+                                        "FROM ( SELECT prodname, product.productid as id, price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname "+
+                                        "FROM category as parent, category, product natural join sale WHERE category.parentId= parent.catid AND product.catid= category.catid AND product.productid = sale.prodid "+
+                                        "UNION SELECT prodname, product.productid as id, currentbid as price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname "+
+                                        "FROM category as parent, category, product natural join auction WHERE category.parentId= parent.catid AND product.catid= category.catid AND product.productid = auction.prodid ) as pdt "+
+                                        "WHERE catid="+id+" AND ("+msg+") GROUP BY prodname, id, img, condition, description, img, catid, catname");
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        
+        query.on("end", function (result) {
+                var response = {"searchresult" : result.rows};
+                client.end();
+                res.json(response);
+         });        
+});
+
 app.get('/Project1Srv/categoryProducts/:id', function(req, res){
 
         var id = req.params.id;
     
-                 console.log("GET products in category:"+ id);
+        console.log("GET products in category:"+ id);
         
         var client = new pg.Client(conString);
         client.connect();
@@ -545,17 +625,14 @@ app.get('/Project1Srv/categoryProducts/:id', function(req, res){
                 "FROM account natural join auction natural join product natural join category WHERE auction.prodid = product.productid AND auction.accountid = account.accountid AND category.catid= product.catid "+
                 "GROUP BY prodname, productid, condition, description, imagelink, catid, catname ) as pdt WHERE catid="+id);
         
-        console.log(query);
-        
         query.on("row", function (row, result) {
             result.addRow(row);
         });
         
         query.on("end", function (result) {
                 var response = {"productsIncategory" : result.rows};
-                currentCategory= id;
                 client.end();
-                  res.json(response);
+                res.json(response);
          });        
 });
 
@@ -595,7 +672,6 @@ app.get('/Project1Srv/sortProducts/:id/:catid', function(req, res){
                 "FROM account natural join auction natural join product natural join category WHERE auction.prodid = product.productid AND auction.accountid = account.accountid AND category.catid= product.catid "+
                 "GROUP BY prodname, productid, condition, description, imagelink, catid, catname ) as pdt WHERE catid="+catid+" ORDER BY prodname");
         }
-        console.log(query);
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -644,7 +720,6 @@ app.get('/Project1Srv/sortAllProducts/:id/:patid', function(req, res){
                                         "FROM category as parent, category, product natural join auction WHERE category.parentId= parent.catid AND product.catid= category.catid AND product.productid = auction.prodid ) as pdt "+
                                         "WHERE catid="+catid+" GROUP BY prodname, id, img, condition, description, img, catid, catname ORDER BY prodname");
         }
-        console.log(query);
         
         query.on("row", function (row, result) {
             result.addRow(row);

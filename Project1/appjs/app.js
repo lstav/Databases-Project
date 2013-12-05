@@ -711,14 +711,19 @@ $(document).on('click', '#sent-button', function() {
       GetSent(loginAccount.accountid);
 }); 
 
+$(document).on('click', '#submit-search-all', function() { 
+      var term= $('#search-term').val();
+      GetSearch(term);
+});
+
 $(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
 
-                                var category= currentCategories;
-                                var len= category.length;
-                                var list=$("#show-categories");
-                                list.empty();
+                var category= currentCategories;
+                var len= category.length;
+                var list=$("#show-categories");
+                list.empty();
                                 
-                                var cname;
+                var cname;
                 for (var i=0; i < len; ++i){
                 cname =category[i].catname;
                 cid= category[i].catid;
@@ -730,21 +735,26 @@ $(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
 
 $(document).on('pagebeforeshow', "#subcatLayout", function(event, ui) {
 
-                                var category= subCategories;
-                                var len= category.length;
-                                var list=$("#show-subcategories");
-                                list.empty();
+                var category= subCategories;
+                var len= category.length;
+                var list=$("#show-subcategories");
+                list.empty();
                                 
-                                if(len > 0){
+                if(len > 0){
                 var pname=$("#pcat");
                 pname.empty();
-                pname.append(currentCategories[0].catname).trigger("create");
+                pname.append(category[0].parentname).trigger("create");
+                
+                var sname=$("#subCatName");
+                sname.empty();
+                var inputName='<input type="text" name="search-all" id="search-term-sub" placeholder="Search in '+category[0].parentname+'" value=""/>';
+                sname.append(inputName).trigger("create");
                 }
                                 
                 
                 list.append("<li onClick= GetAllProducts("+category[0].parentid+")><a>All</a></li>");
                                 
-                                var sname;
+                var sname;
                 for (var i=0; i < len; ++i){
                 sname =category[i].catname;
                 sid= category[i].catid;
@@ -752,6 +762,11 @@ $(document).on('pagebeforeshow', "#subcatLayout", function(event, ui) {
                 }
                 
                 list.listview("refresh" );
+                
+                $(document).on('click', '#submit-search-sub', function() { 
+      				var term= $('#search-term-sub').val();
+      				GetSearchSub(term, category[0].parentid);
+}); 
                 
                  
                                  
@@ -2162,36 +2177,6 @@ function GetSubCategory(id){
         });
 }
 
-var subCategories= {};
-function GetSubCategory(id){
-     
-        $.mobile.loading("show");
-        $.ajax({
-                url : "http://localhost:3412/Project1Srv/subcategory/"+id,
-                method: 'get',
-                contentType: "application/json",
-                dataType:"json",
-                success : function(data, textStatus, jqXHR){
-                        subCategories= data.subcategory;
-                        $.mobile.loading("hide");
-                        $.mobile.navigate("subcategories.html");
-                        
-                       },                        
-                error: function(data, textStatus, jqXHR){
-                        console.log("textStatus: " + textStatus);
-                        $.mobile.loading("hide");
-                        if (data.status == 404){
-                                alert("Category Empty!");
-                        }
-                        else {
-                                alert("Internal Server Error.");
-                        }
-                }
-
-        });
-}
-
-
 var currentAuctionList = {};
 function GetAuctions(){
         id= profile.accountid;
@@ -2580,4 +2565,61 @@ function InsertBid(id, ibid){
 
         }           
             return false; 
+}
+
+//Search
+function GetSearch(term){
+	
+	$.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/searchAll/"+ term,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                        currentCategoryProducts= data.searchresult;
+                        $.mobile.loading("hide");
+                        $.mobile.changePage("productview.html", {
+                                info: term,
+                        });},                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Error searching you terms.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });
+}
+
+function GetSearchSub(term, id){
+	
+	$.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/searchSub/"+ term+"/"+id,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                        currentCategoryProducts= data.searchresult;
+                        $.mobile.loading("hide");
+                        $.mobile.changePage("productview.html", {
+                                info: term,
+                        });},                        
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Error searching you terms.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+
+        });
 }
