@@ -725,8 +725,6 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         list.append("<li><a> <strong>Condition: </strong><kbd>"+currentProduct.condition  +"</kbd></a> </li>");
         list.append("<li><a><strong> Item ID: </strong><kbd>"+currentProduct.id+"</kbd></a> </li>");
         list.append("<li><a> <strong>Listing ends: </strong><kbd>"+currentProduct.endtime.substring(0, 10)+" at "+currentProduct.endtime.substring(12, 20)+"</kbd></a> </li>");
-
-        
         var sell= $("#seller-info");
         sell.empty();
         sell.append("<li><a  onClick= GoProfile("+currentProduct.aid+")>"+currentProduct.seller+"</a></li>");
@@ -785,7 +783,8 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              buy.empty();
              
              if(isSale){
-             var msg3= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder() data-mini="true"/></a>';
+             //alert(currentProduct.saleid);
+             var msg3= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
              buy.append(msg3).trigger('create'); isSale=false;}
              
              }
@@ -1610,6 +1609,8 @@ function UpdateShoppingCart(){
 function DeleteShoppingCart(id){
         var decision = confirm("Delete Product?");
                 if(decision == true) {
+                		var aid= loginAccount.accountid;
+                        var txt = $.parseJSON(getCookie(aid));
                         alert("Product Deleted");                
                 }
 }
@@ -2149,10 +2150,16 @@ function submitMessage(){
 
 ////// Order
 
-function SaveOrder(){
-        alert("Added to shopping cart!");
+function SaveOrder(id){
+	var txt = $.parseJSON(getCookie(loginAccount.accountid));
+	//var text = $.parseJSON(getCookie(loginAccount.accountid));
+	var obj = eval('(' + txt + ')');
+ 	//alert(obj.shoppingcart[0].saleid);
+ 	//alert(text);
+ 	alert(txt);
+ 	//obj.shoppingcart.push('{"saleid":"3"}');
+ 	//alert(obj.shoppingcart[3].saleid);
 }
-
 //////// Administrator
 
 function AddCategory(){
