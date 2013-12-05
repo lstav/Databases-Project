@@ -846,6 +846,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         list.listview("refresh");
         sell.listview("refresh");
         
+        if(currentProduct.isactive){
         if(loginAccount.username == currentProduct.seller){
         	 var bid= $("#bid-name");
         	 var submit= $("#bid-offer");
@@ -913,8 +914,8 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              buy.append(pop2+msg3).trigger('create'); isSale=false;}
                      
              }
-        }
-        
+        }}
+       
         $(document).on('click', '#login-buy', function() { 
 			  var username= $('#un').val();
               var password= $('#pw').val();
@@ -1114,8 +1115,8 @@ $(document).on('pagebeforeshow', "#historyPage", function(event, ui) {
                 list.empty();
         
                 var h1= '<li><a onClick=BidUser('+loginAccount.accountid+')>My Bids</a></li>';
-                var h2= '<li><a onClick=SalesUser('+loginAccount.accountid+')>Sales</a></li>';
-                var h3= '<li><a onClick=PurchaseUser('+loginAccount.accountid+')>Purchased</a></li>';
+                var h2= '<li><a onClick=SalesUser('+loginAccount.accountid+')>My Sales</a></li>';
+                var h3= '<li><a onClick=PurchaseUser('+loginAccount.accountid+')>My Purchases</a></li>';
            
                 list.append(h1+h2+h3);
                 
@@ -1179,7 +1180,7 @@ $(document).on('pagebeforeshow', "#saleList", function(event, ui){
 
                if(len==0){ 
                         var iname= $("#message");
-                        var msg= '<br><a data-rel="back"><center><h2>No bids to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
+                        var msg= '<br><a data-rel="back"><center><h2>No sales to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
                         iname.empty();
                         iname.append(msg).trigger('create');}
                         
@@ -1190,7 +1191,11 @@ $(document).on('pagebeforeshow', "#saleList", function(event, ui){
                 var item;
                 for (var i=0; i < len; ++i){
                 item =usales[i];
-                list.append("<li><a onClick= GetProduct("+item.id+")><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Condition:"+item.condition+" </h4> <h5> Sale:"+item.price+"</h5></a></li>");
+                var stat= "Open";
+                if(!item.isactive){
+                	stat= "Closed";
+                }
+                list.append("<li><a onClick= GetProduct("+item.id+")><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Status:"+stat+" </h4> <h5> Sale:"+item.price+"</h5></a></li>");
                 }
                 list.listview("refresh");}  
 });
