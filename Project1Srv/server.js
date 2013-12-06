@@ -428,6 +428,25 @@ app.get('/Project1Srv/sales-product/:id', function(req, res) {
          });
 });
 
+app.put('/Project1Srv/updateDeactive', function(req, res) {
+	
+	console.log("UPDATE (delete) product from sale/auction");
+    
+    var client = new pg.Client(conString);
+    client.connect();
+		
+	var query= client.query("UPDATE product SET isactive='f' WHERE productid="+req.param('id')+" RETURNING *");
+    
+    query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"updateDeactive" : result.rows};
+                client.end();
+                res.json(response);
+         });
+});
+
 app.get('/Project1Srv/histories', function(req, res) {
         console.log("GET");
         var response = {"histories" : historyList};

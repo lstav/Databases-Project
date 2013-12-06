@@ -847,6 +847,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         sell.listview("refresh");
         
         if(currentProduct.isactive){
+        	
         if(loginAccount.username == currentProduct.seller){
         	 var bid= $("#bid-name");
         	 var submit= $("#bid-offer");
@@ -854,19 +855,22 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              submit.empty();
         	  
         	 if(!isSale){
-             
              var msg= '<input type="button" value= "List of Bids" onClick=GetBids('+currentProduct.id+') data-mini="true"/>';
              bid.append(msg).trigger('create');      
            
-             var msg2= '<input type="submit" href="index.html" value="End Sale" onClick=EndSale() data-theme="a" data-mini="true"/>';
+             var msg2= '<input type="submit" value="End Sale" onClick=EndSale('+currentProduct.id+') data-theme="a" data-mini="true"/>';
              submit.append(msg2).trigger('create');}
              
-             var buy= $("#buy-now");
-             buy.empty();
-             
              if(isSale){
-             var msg3= '<input type="submit" href= "create-sale.html" id= "sale-other" value= "Sell another like this" data-mini="true"/>';
-             buy.append(msg3).trigger('create'); isSale=false;}
+             var msg= '<input type="submit" id= "sale-other" value= "Sell another" data-mini="true"/>';
+             bid.append(msg).trigger('create');
+             
+             var msg2= '<input type="submit" value="End Sale" onClick=EndSale('+currentProduct.id+') data-theme="a" data-mini="true"/>';
+             submit.append(msg2).trigger('create');
+           }
+           
+            var buy= $("#buy-now");
+            buy.empty();
         }
         else
         {
@@ -891,7 +895,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              if(isSale){
              //alert(currentProduct.saleid);
              var msg3= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
-             buy.append(msg3).trigger('create'); isSale=false;}
+             buy.append(msg3).trigger('create');}
              
              }
              
@@ -1576,15 +1580,15 @@ function AccountLogin(username, password){
              								var msg= '<input type="button" value= "List of Bids" onClick=GetBids('+currentProduct.id+') data-mini="true"/>';
              								bid.append(msg).trigger('create');      
            
-             								var msg2= '<input type="submit" href="index.html" value="End Sale" onClick=EndSale() data-theme="a" data-mini="true"/>';
+             								var msg2= '<input type="submit" value="End Sale" onClick=EndSale('+currentProduct.id+') data-theme="a" data-mini="true"/>';
              								submit.append(msg2).trigger('create');}
              
              								var buy= $("#buy-now");
              								buy.empty();
              
             						   if(isSale){
-             								var msg3= '<input type="submit" href= "create-sale.html" id= "sale-other" value= "Sell another like this" data-mini="true"/>';
-             								buy.append(msg3).trigger('create'); isSale=false;}
+             								var msg3= '<input type="submit" id= "sale-other" value= "Sell another like this" data-mini="true"/>';
+             								buy.append(msg3).trigger('create');}
         							}
        							else
        							{
@@ -1743,6 +1747,7 @@ function GetProduct(id){
                 	
                         var result= data.sale;
                         if(result.length != 0){isSale= true;}
+                        else{isSale=false;}
                         $.mobile.loading("hide");        
                         $.mobile.changePage("item.html");
                         },
@@ -2056,8 +2061,21 @@ function SalesUser(id){
         });
 }
 
-function EndSale(){
-        alert("Sale ended!");
+function EndSale(pid){
+		var formData = {id:pid};
+        $.ajax({
+		      url : "http://localhost:3412/Project1Srv/updateDeactive",
+			  type: 'put',
+			  data : formData,
+			  success : function(data) {
+			          console.log("sale ended");
+			          SalesUser(loginAccount.accountid);
+			  },
+              
+              error: function(data, textStatus, jqXHR){
+              		 console.log("textStatus: " + textStatus);
+                     alert("sale not ended!");}          	
+		   });
 }
 
 //////// Category
