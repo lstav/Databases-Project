@@ -835,8 +835,11 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         sell.append("<li><a  onClick= GoProfile("+currentProduct.aid+")>"+currentProduct.seller+"</a></li>");
 
         var idescription= $("#description");
+        idescription.empty();
         idescription.append("<p>"+currentProduct.description+"</p>");
-        $('#item-image').prepend('<center><img id="theImg" src="' + currentProduct.img+'"/></center>');
+        var image= $('#item-image');
+        image.empty();
+        image.prepend('<center><img id="theImg" src="' + currentProduct.img+'"/></center>');
         //table1.table("refresh"); 
         
         var pname= $("#productName2");
@@ -851,15 +854,21 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         if(loginAccount.username == currentProduct.seller){
         	 var bid= $("#bid-name");
         	 var submit= $("#bid-offer");
+        	 var update= $("#update-product");
         	 bid.empty();
              submit.empty();
-        	  
+             update.empty();
+             
         	 if(!isSale){
              var msg= '<input type="button" value= "List of Bids" onClick=GetBids('+currentProduct.id+') data-mini="true"/>';
              bid.append(msg).trigger('create');      
            
              var msg2= '<input type="submit" value="End Sale" onClick=EndSale('+currentProduct.id+') data-theme="a" data-mini="true"/>';
-             submit.append(msg2).trigger('create');}
+             submit.append(msg2).trigger('create');
+             
+             var updt= '<input type="submit" value="Update" onClick=UpdateProductForm('+currentProduct.id+') data-theme="a" data-mini="true"/>';
+             update.append(updt).trigger('create');  
+            }
              
              if(isSale){
              var msg= '<input type="submit" id= "sale-other" value= "Sell another" data-mini="true"/>';
@@ -867,10 +876,17 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              
              var msg2= '<input type="submit" value="End Sale" onClick=EndSale('+currentProduct.id+') data-theme="a" data-mini="true"/>';
              submit.append(msg2).trigger('create');
+             
+             var updt= '<input type="submit" value="Update" onClick=UpdateProductForm('+currentProduct.id+') data-theme="a" data-mini="true"/>';
+             update.append(updt).trigger('create');  
            }
            
+            var shop= $("#shop-now");
+            shop.empty();
+            
             var buy= $("#buy-now");
             buy.empty();
+                   
         }
         else
         {
@@ -889,13 +905,19 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              var msg2= '<a><input type="submit" id= "submitBid1" value="Submit" data-theme="a" data-mini="true"/></a>';
              submit.append(msg2).trigger('create');}
              
+             var shop= $("#shop-now");
+             shop.empty();
+            
              var buy= $("#buy-now");
              buy.empty();
              
              if(isSale){
              //alert(currentProduct.saleid);
-             var msg3= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
-             buy.append(msg3).trigger('create');}
+             var msg3= '<a><input type="submit" id= "purchase" value= "Add to Cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
+             shop.append(msg3).trigger('create');
+             
+             var msg4= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
+             buy.append(msg4).trigger('create');}
              
              }
              
@@ -908,14 +930,20 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
              var pop='<a id= "bid-offer" href= "#popupLogin" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none">';
              var msg2='<input type= "submit" id= "submitBid2" value= "Submit" data-mini="true"/></a>';            
              submit.append(pop+msg2).trigger('create');}
-                          
+             
+             var shop= $("#shop-now");
+             shop.empty();
+                         
              var buy= $("#buy-now");
              buy.empty();
              
              if(isSale){
              var pop2= '<a href="#popupLogin" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none">';
-             var msg3= '<input type= "submit" value= "Buy it now" data-theme="a"data-mini="true" /></a>';
-             buy.append(pop2+msg3).trigger('create'); isSale=false;}
+             var msg3= '<input type= "submit" value= "Add to cart" data-theme="a"data-mini="true" /></a>';
+             var msg4= '<input type= "submit" value= "Buy it now" data-theme="a"data-mini="true" /></a>';
+             
+             shop.append(pop2+msg3).trigger('create');
+             buy.append(pop2+msg4).trigger('create'); }
                      
              }
         }}
@@ -965,6 +993,40 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 
 $(document).on('click', '#auction-bid', function() { 
        InsertBid(currentProduct.id, lbid);
+});
+
+$(document).on('pagebeforeshow', "#productUpdatePage", function(event, ui) {
+
+		var upoprice='href= "#popupUpdatePrice" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none" ';
+		var upopcondition='href= "#popupUpdateCondition" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none" ';
+		var upopend='href= "#popupUpdateEnd" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none" ';
+		        
+        var icon='data-icon="gear"';
+        var list= $("#item-uinfo");
+        list.empty();
+        if(isSale){
+        list.append("<li "+icon+"><a "+upoprice+" ><strong>Price:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");}
+        else{
+        list.append("<li "+icon+"><a "+upoprice+"><strong>Current bid:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");
+        }
+        list.append("<li "+icon+"><a "+upopcondition+"> <strong>Condition: </strong><kbd>"+currentProduct.condition  +"</kbd></a> </li>");
+        list.append("<li "+icon+"><a "+upopend+"> <strong>Listing ends: </strong><kbd>"+currentProduct.endtime.substring(0, 10)+" at "+currentProduct.endtime.substring(12, 20)+"</kbd></a> </li>");
+        list.append("<li><a><strong> Item ID: </strong><kbd>"+currentProduct.id+"</kbd></a> </li>");
+
+        var idescription= $("#udescription");
+        idescription.empty();
+        idescription.append("<p>"+currentProduct.description+"</p>");
+                
+        var image= $('#item-uimage');
+        image.empty();
+        image.prepend('<center><img id="theImg" src="' + currentProduct.img+'"/></center>');
+        
+        var pname= $("#productName2");
+        pname.empty();
+        pname.append("<center>"+currentProduct.prodname+"</center>");
+        
+        list.listview("refresh");
+
 });  
 ////////// Checkout
 
@@ -1572,24 +1634,36 @@ function AccountLogin(username, password){
                                   if(loginAccount.username == currentProduct.seller){
         	 							var bid= $("#bid-name");
         							    var submit= $("#bid-offer");
+        							    var update= $("#update-product");		
         								bid.empty();
              							submit.empty();
-        	  
-             							if(!isSale){
-             
-             								var msg= '<input type="button" value= "List of Bids" onClick=GetBids('+currentProduct.id+') data-mini="true"/>';
-             								bid.append(msg).trigger('create');      
+        	 							update.empty();
+        	 							
+	        							if(!isSale){
+           							    var msg= '<input type="button" value= "List of Bids" onClick=GetBids('+currentProduct.id+') data-mini="true"/>';
+             							bid.append(msg).trigger('create');      
            
-             								var msg2= '<input type="submit" value="End Sale" onClick=EndSale('+currentProduct.id+') data-theme="a" data-mini="true"/>';
-             								submit.append(msg2).trigger('create');}
+             							var msg2= '<input type="submit" value="End Sale" onClick=EndSale('+currentProduct.id+') data-theme="a" data-mini="true"/>';
+             							submit.append(msg2).trigger('create');
+             							
+             							var updt= '<input type="submit" value="Update" onClick=UpdateProductForm('+currentProduct.id+') data-theme="a" data-mini="true"/>';
+           								update.append(updt).trigger('create');}
              
-             								var buy= $("#buy-now");
-             								buy.empty();
+             							if(isSale){
+             							var msg= '<input type="submit" id= "sale-other" value= "Sell another" data-mini="true"/>';
+             							bid.append(msg).trigger('create');
              
-            						   if(isSale){
-             								var msg3= '<input type="submit" id= "sale-other" value= "Sell another like this" data-mini="true"/>';
-             								buy.append(msg3).trigger('create');}
-        							}
+             							var msg2= '<input type="submit" value="End Sale" onClick=EndSale('+currentProduct.id+') data-theme="a" data-mini="true"/>';
+             							submit.append(msg2).trigger('create');
+             							
+             							var updt= '<input type="submit" value="Update" onClick=UpdateProductForm('+currentProduct.id+') data-theme="a" data-mini="true"/>';
+           								update.append(updt).trigger('create');}									
+             								
+             							var shop= $("#shop-now");
+           								shop.empty();
+            
+             					        var buy= $("#buy-now");
+            							buy.empty();}
        							else
        							{
             						 var bid= $("#bid-name");
@@ -1606,13 +1680,19 @@ function AccountLogin(username, password){
              					 	if(!isSale){
              							var msg2= '<a><input type="submit" id= "submitBid1" value="Submit" data-theme="a" data-mini="true"/></a>';
              						    submit.append(msg2).trigger('create');}
-             
+             							
+             							var shop= $("#shop-now");
+            							shop.empty();
+            
              						    var buy= $("#buy-now");
              							buy.empty();
              
              						if(isSale){
-             						var msg3= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder() data-mini="true"/></a>';
-             						buy.append(msg3).trigger('create'); isSale=false;}
+             						var msg3= '<a><input type="submit" id= "purchase" value= "Add to Cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
+             						shop.append(msg3).trigger('create');
+             
+             						var msg4= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
+             						buy.append(msg4).trigger('create');}
              
              					}
         					}
@@ -2076,6 +2156,10 @@ function EndSale(pid){
               		 console.log("textStatus: " + textStatus);
                      alert("sale not ended!");}          	
 		   });
+}
+
+function UpdateProductForm(pid){
+	$.mobile.changePage("uproduct.html");
 }
 
 //////// Category
