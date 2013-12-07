@@ -1898,9 +1898,9 @@ function AccountLogin(username, password){
 		if(len !=0){        
 			loginAccount= data.accountLogin[0];
 			sessionStorage.setItem("account", JSON.stringify(loginAccount));
-			//if (getCookie(loginAccount.accountid) == undefined) {
+			if (getCookie(loginAccount.accountid) == undefined) {
                    setCookie(loginAccount.accountid, JSON.stringify('[]'));
-                             //   }
+            }
                                
 			
 
