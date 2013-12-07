@@ -79,97 +79,99 @@ $(document).on('pagebeforeshow', '#sign-up', function(){
 
 
 $(document).on('pagebeforeshow', '#homepage-account', function(){
-
-	if (sessionStorage.getItem("account") != null) {
-		var txt = sessionStorage.getItem("account");
-		var obj = eval('(' + txt + ')');
-		if(loginAccount.username == undefined && obj.username != undefined){
-			loginAccount = obj;
-		}
+    
+    if (sessionStorage.getItem("account") != null) {
+	var txt = sessionStorage.getItem("account");
+    var obj = eval('(' + txt + ')');
+	if(loginAccount.username == undefined && obj.username != undefined){
+    	loginAccount = obj;
+        }
 	}
-	if(loginAccount.username!= undefined)        {
-		$(document).on('click', '#profile-account', function() { 
-			profile= loginAccount;
-			$.mobile.changePage("account.html");
-		});
-		$(document).on('click', '#cart-button', function() {
-			AllSales(); 
-		});
-		var id= loginAccount.accountid;
-		var iname= $("#welcome");
-		iname.empty();
-		iname.append("<center><h3>hello "+loginAccount.username+"!</h3></center>");
+       if(loginAccount.username!= undefined)        {
+        $(document).on('click', '#profile-account', function() { 
+                  profile= loginAccount;
+              $.mobile.changePage("account.html");
+        });
+         $(document).on('click', '#cart-button', function() {
+                 AllSales(); 
+                 });
+        var id= loginAccount.accountid;
+        var iname= $("#welcome");
+        iname.empty();
+        iname.append("<center><h3>hello "+loginAccount.username+"!</h3></center>");
+        
+         if(loginAccount.isadmin){
+           var admin= $("#administrator-tools");
+           var tool= '<br><a data-role= "button" data-mini= "true" href= "administrator.html"><center><h2>Tools</h2></center></a>';
+           admin.empty();
+           admin.append(tool).trigger('create');
+          }
+          
+             var block1= $("#block1");
+             var msg= '<a id= "profile-account" data-role="button" data-corners="false" data-ajax="false" data-history="true">My Profile</a>';
+             block1.empty();
+             block1.append(msg).trigger('create');
+             
+             var block2= $("#block2");
+             var msg2= '<a href= "message.html" data-role="button" data-corners="false" data-theme="a">Messages</a>';
+             block2.empty();
+             block2.append(msg2).trigger('create'); 
+             
+             var block3= $("#block3");
+             var msg3= '<a id="logout" data-rel= "external" data-role="button" data-corners="false">Log Out</a>';
+             block3.empty();
+             block3.append(msg3).trigger('create');
+       }
+       
+                else{
+                        
+                      //Guest
+                      
+                      var sc = '{"shoppingcart":[' +
+                     '{"saleid":"13" },' +
+                     '{"saleid":"5" },' +
+                     '{"saleid":"8" }]}';
+            setCookie('guest', JSON.stringify(sc));
+            
+                        var block1= $("#block1");
+             var msg= '<a  href= "login.html" data-role="button" data-corners="false">Sign in</a>';
+             block1.empty();
+             block1.append(msg).trigger('create');
+             
+             var block2= $("#block2");
+             var msg2= '<a href= "signup.html" data-role="button" data-corners="false" >Sign up</a>';
+             block2.empty();
+             block2.append(msg2).trigger('create');
+             
+             var block3= $("#block3");
+             var msg3= '<a  href= "index.html" data-role="button" data-icon="home" data-corners="false" data-theme="a">Home</a>';
+             block3.empty();
+             block3.append(msg3).trigger('create'); 
+               
+       }
+        $(document).on('click', '#logout', function() { 
+                sessionStorage.removeItem("account");
+            $.mobile.changePage("login.html");
 
-		if(loginAccount.isadmin){
-			var admin= $("#administrator-tools");
-			var tool= '<br><a data-role= "button" data-mini= "true" href= "administrator.html"><center><h2>Tools</h2></center></a>';
-			admin.empty();
-			admin.append(tool).trigger('create');
-		}
-
-		var block1= $("#block1");
-		var msg= '<a id= "profile-account" data-role="button" data-corners="false" data-ajax="false" data-history="true">My Profile</a>';
-		block1.empty();
-		block1.append(msg).trigger('create');
-
-		var block2= $("#block2");
-		var msg2= '<a href= "message.html" data-role="button" data-corners="false" data-theme="a">Messages</a>';
-		block2.empty();
-		block2.append(msg2).trigger('create'); 
-
-		var block3= $("#block3");
-		var msg3= '<a href= "login.html" data-rel= "external" data-role="button" data-corners="false">Log Out</a>';
-		block3.empty();
-		block3.append(msg3).trigger('create');
-	}
-
-	else{
-
-		//Guest
-
-		var sc = '{"shoppingcart":[' +
-				'{"saleid":"13" },' +
-				'{"saleid":"5" },' +
-				'{"saleid":"8" }]}';
-		setCookie('guest', JSON.stringify(sc));
-
-		var block1= $("#block1");
-		var msg= '<a  href= "login.html" data-role="button" data-corners="false">Sign in</a>';
-		block1.empty();
-		block1.append(msg).trigger('create');
-
-		var block2= $("#block2");
-		var msg2= '<a href= "signup.html" data-role="button" data-corners="false" >Sign up</a>';
-		block2.empty();
-		block2.append(msg2).trigger('create');
-
-		var block3= $("#block3");
-		var msg3= '<a  href= "index.html" data-role="button" data-icon="home" data-corners="false" data-theme="a">Home</a>';
-		block3.empty();
-		block3.append(msg3).trigger('create'); 
-
-	}
-
-	$(document).on('click', '#sale-button', function() { 
-
-		//alert(loginAccount.username);
-		if(loginAccount.username!= undefined)
-		{
-			$.mobile.changePage("create-sale.html");
-		}
-
-		else{
-			$.mobile.changePage("login.html");
-		}
-	});  
-
+ });  
+        $(document).on('click', '#sale-button', function() { 
+                
+                //alert(loginAccount.username);
+              if(loginAccount.username!= undefined)
+              {
+                       $.mobile.changePage("create-sale.html");
+              }
+              
+              else{
+                       $.mobile.changePage("login.html");
+              }
+        });  
+               
 });
 
-$(document).on('click', '#logout', function() { 
-	sessionStorage.clear();
-	$.mobile.changePage("login.html");
-
-});  
+ $(document).on('click', '#logout', function() { 
+                sessionStorage.removeItem("account");
+            $.mobile.changePage("login.html");
 
 $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 
@@ -1856,112 +1858,112 @@ var sc = ['{"shoppingcart":[' +
 var loginAccount={};
 function AccountLogin(username, password){
 
-	console.log("confirming login information");
-	$.mobile.loading("show");
-	$.ajax({
-		url : "http://localhost:3412/Project1Srv/login/"+username+"/"+password,
-		method: 'get',
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-
-		var login= data.accountLogin;
-		var len= login.length;
-		$.mobile.loading("hide");
-		if(len !=0){        
-			loginAccount= data.accountLogin[0];
-			sessionStorage.setItem("account", JSON.stringify(loginAccount));
-			setCookie(loginAccount.accountid, JSON.stringify(sc[loginAccount.accountid-1]));
-
-			if(!buyItem){
-				$.mobile.changePage("index.html");
-			}
-			else{
-				buyItem=false;
-				$( "#popupLogin").popup( "close" );
-				if(loginAccount.username == currentProduct.seller){
-					var bid= $("#bid-name");
-					var submit= $("#bid-offer");
-					var update= $("#update-product");		
-					bid.empty();
-					submit.empty();
-					update.empty();
-
-					if(!isSale){
-						var msg= '<input type="button" value= "List of Bids" onClick=GetBids('+currentProduct.id+') data-mini="true"/>';
-						bid.append(msg).trigger('create');      
-
-						var msg2= '<input type="submit" value="End Sale" onClick=EndSale('+currentProduct.id+') data-theme="a" data-mini="true"/>';
-						submit.append(msg2).trigger('create');
-
-						var updt= '<input type="submit" value="Update" onClick=UpdateProductForm('+currentProduct.id+') data-theme="a" data-mini="true"/>';
-						update.append(updt).trigger('create');}
-
-					if(isSale){
-						var msg= '<input type="submit" id= "sale-other" value= "Sell another" data-mini="true"/>';
-						bid.append(msg).trigger('create');
-
-						var msg2= '<input type="submit" value="End Sale" onClick=EndSale('+currentProduct.id+') data-theme="a" data-mini="true"/>';
-						submit.append(msg2).trigger('create');
-
-						var updt= '<input type="submit" value="Update" onClick=UpdateProductForm('+currentProduct.id+') data-theme="a" data-mini="true"/>';
-						update.append(updt).trigger('create');}									
-
-					var shop= $("#shop-now");
-					shop.empty();
-
-					var buy= $("#buy-now");
-					buy.empty();}
-				else
-				{
-					var bid= $("#bid-name");
-					bid.empty();
-
-					if(!isSale){
-						var msg= '<input type="text" id="bid-product" value= "'+lbid+'" placeholder="Make a bid" data-mini="true"/>';         
-						bid.append(msg).trigger('create');}
-
-					if(loginAccount.username != undefined){
-						var submit= $("#bid-offer");	
-						submit.empty();
-
-						if(!isSale){
-							var msg2= '<a><input type="submit" id= "submitBid1" value="Submit" data-theme="a" data-mini="true"/></a>';
-							submit.append(msg2).trigger('create');}
-
-						var shop= $("#shop-now");
-						shop.empty();
-
-						var buy= $("#buy-now");
-						buy.empty();
-
-						if(isSale){
-							var msg3= '<a><input type="submit" id= "purchase" value= "Add to Cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
-							shop.append(msg3).trigger('create');
-
-							var msg4= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
-							buy.append(msg4).trigger('create');}
-
-					}
-				}
-			}
-		}
-		else{
-			alert("Invalid login information. Try again.");
-		}
-
-	},
-	error: function(data, textStatus, jqXHR){
-		console.log("textStatus: " + textStatus);
-		$.mobile.loading("hide");
-		if (data.status == 404){
-			alert("Login error.");
-		}
-		else {
-			alert("Internal Server Error. Page: Login");
-		}
-	}
-	});        
+        console.log("confirming login information");
+        $.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/login/"+username+"/"+password,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                        
+                        var login= data.accountLogin;
+                        var len= login.length;
+                        $.mobile.loading("hide");
+                        if(len !=0){        
+                                loginAccount= data.accountLogin[0];
+                                sessionStorage.setItem("account", JSON.stringify(loginAccount));
+                                setCookie(loginAccount.accountid, JSON.stringify('{"shoppingcart" : []}'));
+                               
+                                if(!buyItem){
+                                $.mobile.changePage("index.html");
+                                }
+                                else{
+                                  buyItem=false;
+                                  $( "#popupLogin").popup( "close" );
+                                  if(loginAccount.username == currentProduct.seller){
+        	 							var bid= $("#bid-name");
+        							    var submit= $("#bid-offer");
+        							    var update= $("#update-product");		
+        								bid.empty();
+             							submit.empty();
+        	 							update.empty();
+        	 							
+	        							if(!isSale){
+           							    var msg= '<input type="button" value= "List of Bids" onClick=GetBids('+currentProduct.id+') data-mini="true"/>';
+             							bid.append(msg).trigger('create');      
+           
+             							var msg2= '<input type="submit" value="End Sale" onClick=EndSale('+currentProduct.id+') data-theme="a" data-mini="true"/>';
+             							submit.append(msg2).trigger('create');
+             							
+             							var updt= '<input type="submit" value="Update" onClick=UpdateProductForm('+currentProduct.id+') data-theme="a" data-mini="true"/>';
+           								update.append(updt).trigger('create');}
+             
+             							if(isSale){
+             							var msg= '<input type="submit" id= "sale-other" value= "Sell another" data-mini="true"/>';
+             							bid.append(msg).trigger('create');
+             
+             							var msg2= '<input type="submit" value="End Sale" onClick=EndSale('+currentProduct.id+') data-theme="a" data-mini="true"/>';
+             							submit.append(msg2).trigger('create');
+             							
+             							var updt= '<input type="submit" value="Update" onClick=UpdateProductForm('+currentProduct.id+') data-theme="a" data-mini="true"/>';
+           								update.append(updt).trigger('create');}									
+             								
+             							var shop= $("#shop-now");
+           								shop.empty();
+            
+             					        var buy= $("#buy-now");
+            							buy.empty();}
+       							else
+       							{
+            						 var bid= $("#bid-name");
+             						 bid.empty();
+             
+             						if(!isSale){
+             							var msg= '<input type="text" id="bid-product" value= "'+lbid+'" placeholder="Make a bid" data-mini="true"/>';         
+             							bid.append(msg).trigger('create');}
+             
+             						if(loginAccount.username != undefined){
+            							var submit= $("#bid-offer");	
+             							submit.empty();
+             
+             					 	if(!isSale){
+             							var msg2= '<a><input type="submit" id= "submitBid1" value="Submit" data-theme="a" data-mini="true"/></a>';
+             						    submit.append(msg2).trigger('create');}
+             							
+             							var shop= $("#shop-now");
+            							shop.empty();
+            
+             						    var buy= $("#buy-now");
+             							buy.empty();
+             
+             						if(isSale){
+             						var msg3= '<a><input type="submit" id= "purchase" value= "Add to Cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
+             						shop.append(msg3).trigger('create');
+             
+             						var msg4= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
+             						buy.append(msg4).trigger('create');}
+             
+             					}
+        					}
+                          }
+                        }
+                        else{
+                                alert("Invalid login information. Try again.");
+                        }
+                                
+                        },
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("Login error.");
+                        }
+                        else {
+                                alert("Internal Server Error. Page: Login");
+                        }
+                }
+        });        
 }
 
 var profile={};
@@ -2946,13 +2948,13 @@ function DeleteMessageS(){
 
 function SaveOrder(id){
 	var txt = $.parseJSON(getCookie(loginAccount.accountid));
-	//var text = $.parseJSON(getCookie(loginAccount.accountid));
 	var obj = eval('(' + txt + ')');
-	//alert(obj.shoppingcart[0].saleid);
-	//alert(text);
-	alert(txt);
-	//obj.shoppingcart.push('{"saleid":"3"}');
-	//alert(obj.shoppingcart[3].saleid);
+ 	//alert(txt);
+ 	obj.shoppingcart.push('{saleid:' + id + '}');
+ 	//obj.shoppingcart.push('{saleid:"5"}');
+ 	//alert(obj.shoppingcart);
+ 	alert(JSON.stringify(obj));
+ 	setCookie(loginAccount.accountid,JSON.stringify(obj));
 }
 //////// Administrator
 
