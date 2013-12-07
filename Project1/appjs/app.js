@@ -824,12 +824,16 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 var buyItem= false;
 $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 
-	if (sessionStorage.getItem("product") != null) {
-		var txt = sessionStorage.getItem("product");
-		var obj = eval('(' + txt + ')');
-		if(currentProduct.id == undefined && obj.id != undefined){
-			currentProduct = obj;
-		}
+	var txt = sessionStorage.getItem("account");
+	var obj = eval('(' + txt + ')');
+	if(loginAccount != obj){
+		loginAccount = obj;
+	}
+		
+	var txt = sessionStorage.getItem("product");
+	var obj = eval('(' + txt + ')');
+	if(currentProduct != obj){
+		currentProduct = obj;
 	}
 	
 	var list= $("#item-info");
@@ -1332,6 +1336,18 @@ var shoppingcartTotal=0;
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	//alert(loginAccount.username);
 	var ucart={};
+	
+	var txt = sessionStorage.getItem("account");
+	var obj = eval('(' + txt + ')');
+		if(loginAccount.username == undefined && obj.username != undefined){
+			loginAccount = obj;
+		}
+		
+	var txt = sessionStorage.getItem("sales");
+	var obj = eval('(' + txt + ')');
+		if(saleList != obj){
+			saleList = obj;
+		}
 	
 	if(loginAccount.accountid != undefined){
 		ucart= loginAccount.accountid;
@@ -2005,7 +2021,7 @@ function GoProfile(id){
 			dataType:"json",
 			success : function(data, textStatus, jqXHR){
 			profile= data.profile[0];
-			sessionStorage.setItem("profile", JSON.stringify(data.profile[0]));
+			sessionStorage.setItem("profile", JSON.stringify(profile));
 			$.mobile.loading("hide");
 			$.mobile.changePage("profile.html");
 		},
@@ -2080,6 +2096,7 @@ function GoMessages(){
 var currentProduct= {};
 var isSale= false;
 function GetProduct(id){
+	console.log("getting product");
 	$.mobile.loading("show");
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/products/"+ id,
@@ -2091,9 +2108,9 @@ function GetProduct(id){
 		currentProduct= data.product[0];
 		
 		sessionStorage.setItem("product", JSON.stringify(currentProduct));
-			if (getCookie(currentProduct.id) == undefined) {
-                   setCookie(currentProduct.id, JSON.stringify('[]'));
-            }
+			//if (getCookie(currentProduct.id) == undefined) {
+              //     setCookie(currentProduct.id, JSON.stringify('[]'));
+            //}
 
 		$.ajax({
 			url : "http://localhost:3412/Project1Srv/sales-product/"+ id,
@@ -2697,6 +2714,7 @@ function AllSales(){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 		saleList= data.sales;
+		sessionStorage.setItem("sales", JSON.stringify(saleList));
 		$.mobile.loading("hide");
 		var ucart={};
 	
