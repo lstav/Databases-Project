@@ -925,9 +925,8 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 
 				if(isSale){
 					//alert(currentProduct.saleid);
-					var pop3= '<a href="#popupCart" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none">';					
-					var msg3= '<a><input type="submit" id= "purchase" value= "Add to Cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
-					shop.append(pop3+msg3).trigger('create');
+					var msg3= '<a><input type="submit" id= "submitCart" value= "Add to Cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
+					shop.append(msg3).trigger('create');
 
 					var msg4= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
 					buy.append(msg4).trigger('create');}
@@ -952,11 +951,10 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 
 				if(isSale){
 					var pop2= '<a href="#popupLogin" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none">';
-					var pop3= '<a href="#popupCart" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none">';
-					var msg3= '<input type= "submit" value= "Add to cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-theme="a"data-mini="true" /></a>';
+					var msg3= '<input type= "submit" id= "submitCart" value= "Add to cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-theme="a"data-mini="true" /></a>';
 					var msg4= '<input type= "submit" value= "Buy it now" data-theme="a"data-mini="true" /></a>';
 
-					shop.append(pop3+msg3).trigger('create');
+					shop.append(msg3).trigger('create');
 					buy.append(pop2+msg4).trigger('create'); }
 
 			}
@@ -1005,6 +1003,22 @@ $(document).on('pagebeforeshow', "#confirmbid", function(event, ui){
 	var info = $("#info-bid");
 	info.empty();
 	var msg= 'You have placed a bid of $ '+lbid+' on '+currentProduct.prodname+'.';
+	info.append(msg).trigger('create');
+
+});
+
+var lbid= {};
+$(document).on('click', '#submitCart', function() { 
+	
+		$.mobile.changePage("addshopconfirm.html");
+		
+}); 
+
+$(document).on('pagebeforeshow', "#confirmcart", function(event, ui){
+
+	var info = $("#info-itemcart");
+	info.empty();
+	var msg= currentProduct.prodname;
 	info.append(msg).trigger('create');
 
 });
@@ -1319,13 +1333,17 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	//alert(loginAccount.username);
 	var ucart={};
 	
-	if(loginAccount != undefined){
+	if(loginAccount.accountid != undefined){
 		ucart= loginAccount.accountid;
 	}
 	else{
 		ucart= "guest";
+		if(getCookie(ucart) == undefined){
+			alert("not");
+            setCookie(ucart, JSON.stringify('[]'));
+		}
 	}
-
+	
 		$(document).on('click', '#checkout-button', function() {
 			$.mobile.changePage("check.html");
 		});
@@ -1334,15 +1352,18 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 		var obj = eval('(' + txt + ')');
 		//alert(JSON.stringify(obj));
 		//alert(obj[0].shoppingcart);
+		if(saleList != undefined){
 		var sales = saleList;
+		}
+
 		//alert(obj.length);
-		
 		var list = $("#myshopping-list");
 		list.empty();
 		
 		var len = obj.length;
-		
-		if(len != 0){
+
+		if(len != 0 && saleList != undefined){
+
 		var len2 = sales.length;
 		shoppingcartTotal=0;
 
@@ -1937,9 +1958,8 @@ function AccountLogin(username, password){
 						buy.empty();
 
 						if(isSale){
-							var msg3= '<a><input type="submit" id= "purchase" value= "Add to Cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
-							var pop3= '<a href="#popupCart" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none">';
-							shop.append(pop3+msg3).trigger('create');
+							var msg3= '<a><input type="submit" id= "submitCart" value= "Add to Cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
+							shop.append(msg3).trigger('create');
 
 							var msg4= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
 							buy.append(msg4).trigger('create');}
@@ -2250,69 +2270,71 @@ function UpdateShoppingCart(){
 }
 
 function DeleteShoppingCart(id){
-	var decision = confirm("Delete Product?");
-	if(decision == true) {
-		var aid= loginAccount.accountid;
-		var txt = $.parseJSON(getCookie(aid));
-		var obj = eval('(' + txt + ')');
-		obj.splice(id,1);
-    	var nextitem=JSON.stringify(obj);
-	
-		setCookie(loginAccount.accountid,JSON.stringify(nextitem));
-		
-		var ucart={};
-	
-		if(loginAccount != undefined){
-		ucart= loginAccount.accountid;
-		}
-		else{
-		ucart= "guest";
-		if(getCookie(ucart) == undefined){
-            setCookie(ucart, JSON.stringify('[]'));
-		}
-		}
+        var decision = confirm("Delete Product?");
+        if(decision == true) {
 
-		var txt = $.parseJSON(getCookie(ucart));
-		var obj = eval('(' + txt + ')');
-		//alert(JSON.stringify(obj));
-		//alert(obj[0].shoppingcart);
-		var sales = saleList;
-		//alert(obj.length);
-		
-		var list = $("#myshopping-list");
-		list.empty();
-		
-		var len = obj.length;
-		
-		if(len != 0){
-		var len2 = sales.length;
-		shoppingcartTotal=0;
+        		var ucar= {};
+        		if(loginAccount.accountid != undefined){
+				ucart= loginAccount.accountid;
+				}
+				else{
+				ucart= "guest";
+				if(getCookie(ucart) == undefined){
+            		setCookie(ucart, JSON.stringify('[]'));
+				}
+				}
+				
+				var aid= ucart;
+                var txt = $.parseJSON(getCookie(aid));
+                var obj = eval('(' + txt + ')');
+                obj.splice(id,1);
+           		var nextitem=JSON.stringify(obj);
+        		
+                setCookie(ucart,JSON.stringify(nextitem));
 
-		for(var i=0; i<len; i++) {
-			
-			var prod= obj[i].shoppingcart;
+                var txt = $.parseJSON(getCookie(ucart));
+                var obj = eval('(' + txt + ')');
+                //alert(JSON.stringify(obj));
+                //alert(obj[0].shoppingcart);
+                if(saleList != undefined){
+                var sales = saleList;}
+                //alert(obj.length);
+                
+                var list = $("#myshopping-list");
+                list.empty();
+                
+                var len = obj.length;
+                
+                if(len != 0 && saleList != undefined){
+                var len2 = sales.length;
+                shoppingcartTotal=0;
 
-			j = 0;
-			while((prod != sales[j].prodid) && j < len2) {
-				j++;
-			}
+                for(var i=0; i<len; i++) {
+                        
+                        var prod= obj[i].shoppingcart;
 
-			var item;
-			var style='style="position:absolute; top:40%; left: 20px"';
-			
-			item =sales[j];
-			list.append("<li ><a onClick= GetProduct("+item.prodid+") > <img src='"+ item.imagelink+ "' style='margin: 0 0 0 20px; top: 20%'/>"+
-			"<h3>"+item.prodname+"</h3><h2> Price: "+item.price + "</h2><h2> Qty: "+ item.totalquantity+"</h2><a data-icon='delete' onClick=DeleteShoppingCart('"+i+"')>Delete</a></a></li>");
-		}} 
-		else{
-			
-			var msg='<li><a data-rel=back data-role="button">No products</a></li>';
-			list.append(msg);     
-		}
-		
-		list.listview("refresh");   
-	}
+                        j = 0;
+                        while((prod != sales[j].prodid) && j < len2) {
+                                j++;
+                        }
+
+                        var item;
+                        var style='style="position:absolute; top:40%; left: 20px"';
+                        
+                        item =sales[j];
+                        list.append("<li ><a onClick= GetProduct("+item.prodid+") > <img src='"+ item.imagelink+ "' style='margin: 0 0 0 20px; top: 20%'/>"+
+                        "<h3>"+item.prodname+"</h3><h2> Price: "+item.price + "</h2><h2> Qty: "+ item.totalquantity+"</h2><a data-icon='delete' onClick=DeleteShoppingCart('"+i+"')>Delete</a></a></li>");
+                }} 
+                else{
+                        
+                        var msg='<li><a data-rel=back data-role="button">No products</a></li>';
+                        list.append(msg);     
+                }
+                
+                list.listview("refresh");         
+        }
 }
+
 
 //Bids
 var productBids={};
@@ -3024,7 +3046,7 @@ function SaveOrder(id){
 	
 	var ucart={};
 	
-	if(loginAccount != undefined){
+	if(loginAccount.accountid != undefined){
 		ucart= loginAccount.accountid;
 	}
 	else{
