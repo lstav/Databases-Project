@@ -2996,6 +2996,7 @@ function SaveOrder(id){
 	//var txt2 = $.parseJSON(getCookie(loginAccount.accountid));
 	//var obj2 = eval('(' + txt2 + ')');
 	//alert(JSON.stringify(obj2));
+	//$.mobile.navigate("shopping.html");
 }
 //////// Administrator
 
