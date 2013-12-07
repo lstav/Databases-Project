@@ -28,7 +28,8 @@ app.use(express.bodyParser());
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
 
-var conString = "pg://postgres:course@localhost:5432/db2";
+//var conString = "pg://postgres:course@localhost:5432/db2";
+var conString = "pg://course:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -532,9 +533,9 @@ app.get('/Project1Srv/categoryAll/:id', function(req, res){
         client.connect();
 
         var query = client.query("SELECT prodname, id, max(price) as price, img, condition, description, img, catid, catname, isactive "+
-                                        "FROM ( SELECT prodname, product.productid as id, price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname, isactive "+
+                                        "FROM ( SELECT prodname, product.productid as id, price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname, product.isactive as isactive "+
                                         "FROM category as parent, category, product natural join sale WHERE category.parentId= parent.catid AND product.catid= category.catid AND product.productid = sale.prodid "+
-                                        "UNION SELECT prodname, product.productid as id, currentbid as price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname, isactive "+
+                                        "UNION SELECT prodname, product.productid as id, currentbid as price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname, product.isactive as isactive "+
                                         "FROM category as parent, category, product natural join auction WHERE category.parentId= parent.catid AND product.catid= category.catid AND product.productid = auction.prodid ) as pdt "+
                                         "WHERE isactive='t' AND catid="+id+" GROUP BY prodname, id, img, condition, description, img, catid, catname, isactive ");
         
@@ -859,7 +860,7 @@ app.get('/Project1Srv/sales', function(req, res){
         client.connect();
 
         var query = client.query("SELECT * FROM sale, product " +
-                        "where productid = prodid AND isactive= 't'");
+                        "where productid = prodid AND product.isactive= 't'");
         
         query.on("row", function (row, result) {
             result.addRow(row);

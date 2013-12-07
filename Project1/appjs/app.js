@@ -2533,8 +2533,8 @@ function SaveOrder(id){
  	//alert(obj.shoppingcart[0].saleid);
  	//alert(text);
  	alert(txt);
- 	//obj.shoppingcart.push('{"saleid":"3"}');
- 	//alert(obj.shoppingcart[3].saleid);
+ 	obj.shoppingcart.push('{"saleid":"3"}');
+ 	alert(obj.shoppingcart[3].saleid);
 }
 //////// Administrator
 
