@@ -1338,13 +1338,14 @@ var shoppingcartTotal=0;
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	//alert(loginAccount.username);
 	var ucart={};
-	/*
+	
+	if(sessionStorage.getItem("account")) {
 	var txt = sessionStorage.getItem("account");
 	var obj = eval('(' + txt + ')');
 		if(loginAccount.username == undefined && obj.username != undefined){
 			loginAccount = obj;
 		}
-	*/	
+	}
 	var txt = sessionStorage.getItem("sales");
 	var obj = eval('(' + txt + ')');
 		if(saleList != obj){
@@ -3137,7 +3138,7 @@ function ChangePassword(){
 		type : 'post',
 		data : formData,
 		success : function() {
-		alert('DELETE Completed');
+		alert('POST Completed');
 		$.mobile.loading("hide");
 		$.mobile.navigate("index.html");
 	}
