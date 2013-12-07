@@ -127,11 +127,11 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 
 		//Guest
 
-		var sc = '{"shoppingcart":[' +
+		/*var sc = '{"shoppingcart":[' +
 				'{"saleid":"13" },' +
 				'{"saleid":"5" },' +
 				'{"saleid":"8" }]}';
-		setCookie('guest', JSON.stringify(sc));
+		setCookie('guest', JSON.stringify(sc));*/
 
 		var block1= $("#block1");
 		var msg= '<a  href= "login.html" data-role="button" data-corners="false">Sign in</a>';
@@ -1309,38 +1309,60 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	//alert(loginAccount.username);
 
 	if (loginAccount.accountid != undefined) {
+
 		$(document).on('click', '#checkout-button', function() {
 			$.mobile.changePage("check.html");
 		});
-
-		var id= loginAccount.accountid;
-		var sales = saleList;
-		var txt = $.parseJSON(getCookie(id));
+		
+		var txt = $.parseJSON(getCookie(loginAccount.accountid));
 		var obj = eval('(' + txt + ')');
+		//alert(JSON.stringify(obj));
+		//alert(obj[0].shoppingcart);
+		var sales = saleList;
+		//alert(obj.length);
+		
 		var list = $("#myshopping-list");
 		list.empty();
-		var len = obj.shoppingcart.length;
+		
+		var len = obj.length;
+		
+		if(len != 0){
 		var len2 = sales.length;
 		shoppingcartTotal=0;
-		var prod = obj.shoppingcart;
-		var j;
+
 		for(var i=0; i<len; i++) {
+			
+			var prod= obj[i].shoppingcart;
 			//GetProduct(obj.shoppingcart[i].prodid);
 			j = 0;
-			while(prod[i].saleid != sales[j].saleid) {
+			while((prod != sales[j].prodid) && j < len2) {
 				j++;
 			}
+
+			var item;
+			var style='style="position:absolute; top:40%; left: 20px"';
+			
+			item =sales[j];
+			list.append("<li ><a onClick= GetProduct("+item.prodid+") > <img src='"+ item.imagelink+ "' style='margin: 0 0 0 20px; top: 20%'/>"+
+			"<h3>"+item.prodname+"</h3><h2> Price: "+item.price + "</h2><h2> Qty: "+ item.totalquantity+"</h2><a data-icon='delete' onClick=DeleteShoppingCart('"+item.prodid+"')>Delete</a></a></li>");
+			
 			//list.append("<li>" + sales[i].price + "</li>");
 			//list.append("<li>" + sales[j].saleid + "</li>");
 			//prod = currentProduct[0];
-			shoppingcartTotal+= parseFloat(sales[j].price);
-			list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + sales[j].prodid + ")>"+ 
-					"<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
-					"<h4> Price: "+sales[j].price+"<\h4></a></li>");
+			//shoppingcartTotal+= parseFloat(sales[j].price);
+			//list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + sales[j].prodid + ")>"+ 
+			//		"<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
+			//		"<h4> Price: "+sales[j].price+"<\h4></a></li>");
+		}} 
+		else{
+			
+			var msg='<li><a data-rel=back data-role="button">No products</a></li>';
+			list.append(msg);     
 		}
-		list.listview("refresh");  
+		
+		list.listview("refresh"); /*
 	}
-	/* else {
+	 else {
                 	var sales = saleList;
                         var txt = $.parseJSON(getCookie('guest'));
                 var obj = eval('(' + txt + ')');
@@ -1365,8 +1387,8 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
                                 "<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
                                         "<h4> Price: $"+sales[j].price+"<\h4></a></li>");
                 }
-                list.listview("refresh"); 
-                }      */
+                list.listview("refresh");  */
+       }     
 });
 
 //////// History
@@ -1876,7 +1898,7 @@ function AccountLogin(username, password){
 		if(len !=0){        
 			loginAccount= data.accountLogin[0];
 			sessionStorage.setItem("account", JSON.stringify(loginAccount));
-			setCookie(loginAccount.accountid, JSON.stringify('{"shoppingcart" : []}'));
+			setCookie(loginAccount.accountid, JSON.stringify('[]'));
 
 			if(!buyItem){
 				$.mobile.changePage("index.html");
@@ -2952,12 +2974,23 @@ function DeleteMessageS(){
 function SaveOrder(id){
 	var txt = $.parseJSON(getCookie(loginAccount.accountid));
 	var obj = eval('(' + txt + ')');
-	//alert(txt);
-	obj.shoppingcart.push('{saleid:' + id + '}');
-	//obj.shoppingcart.push('{saleid:"5"}');
-	//alert(obj.shoppingcart);
-	alert(JSON.stringify(obj));
-	setCookie(loginAccount.accountid,JSON.stringify(obj));
+	//alert(JSON.stringify(obj));
+	//alert(obj[0].shoppingcart);
+	var sh = ('{"shoppingcart":"' + currentProduct.id + '"}');
+	//alert(sh);
+	var obj2= eval('(' + sh + ')');
+    obj.push(obj2);
+    //alert(JSON.stringify(obj));
+    //alert(obj[1].shoppingcart);
+
+	var nextitem=JSON.stringify(obj);
+	//alert(nextitem);
+	setCookie(loginAccount.accountid,JSON.stringify(nextitem));
+	alert("Added to shopping cart");
+	
+	//var txt2 = $.parseJSON(getCookie(loginAccount.accountid));
+	//var obj2 = eval('(' + txt2 + ')');
+	//alert(JSON.stringify(obj2));
 }
 //////// Administrator
 
