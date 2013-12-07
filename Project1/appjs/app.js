@@ -31,6 +31,8 @@ function getCookie(c_name)
 	return c_value;
 }
 
+
+
 $(document).on('pagebeforeshow', '#login', function(){  
 
 	$(document).on('click', '#submit', function() { 
@@ -77,8 +79,11 @@ $(document).on('pagebeforeshow', '#sign-up', function(){
 	});    
 });
 
-
 $(document).on('pagebeforeshow', '#homepage-account', function(){
+	
+	$(document).on('click', '#cart-button', function() {
+		AllSales(); 
+	});
 
 	if (sessionStorage.getItem("account") != null) {
 		var txt = sessionStorage.getItem("account");
@@ -92,9 +97,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 			profile= loginAccount;
 			$.mobile.changePage("account.html");
 		});
-		$(document).on('click', '#cart-button', function() {
-			AllSales(); 
-		});
+
 		var id= loginAccount.accountid;
 		var iname= $("#welcome");
 		iname.empty();
@@ -124,14 +127,10 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 	}
 
 	else{
-
-		//Guest
-
-		/*var sc = '{"shoppingcart":[' +
-				'{"saleid":"13" },' +
-				'{"saleid":"5" },' +
-				'{"saleid":"8" }]}';
-		setCookie('guest', JSON.stringify(sc));*/
+		
+		if (getCookie("guest") == undefined) {
+			setCookie("guest", JSON.stringify('[]'));
+        }	
 
 		var block1= $("#block1");
 		var msg= '<a  href= "login.html" data-role="button" data-corners="false">Sign in</a>';
@@ -825,9 +824,14 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 var buyItem= false;
 $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 
-	if(currentProduct== undefined){
-		sessionStorage.getItem("product");
+	if (sessionStorage.getItem("product") != null) {
+		var txt = sessionStorage.getItem("product");
+		var obj = eval('(' + txt + ')');
+		if(currentProduct.id == undefined && obj.id != undefined){
+			currentProduct = obj;
+		}
 	}
+	
 	var list= $("#item-info");
 	list.empty();
 	if(isSale){
@@ -921,8 +925,9 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 
 				if(isSale){
 					//alert(currentProduct.saleid);
+					var pop3= '<a href="#popupCart" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none">';					
 					var msg3= '<a><input type="submit" id= "purchase" value= "Add to Cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
-					shop.append(msg3).trigger('create');
+					shop.append(pop3+msg3).trigger('create');
 
 					var msg4= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
 					buy.append(msg4).trigger('create');}
@@ -947,10 +952,11 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 
 				if(isSale){
 					var pop2= '<a href="#popupLogin" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none">';
-					var msg3= '<input type= "submit" value= "Add to cart" data-theme="a"data-mini="true" /></a>';
+					var pop3= '<a href="#popupCart" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none">';
+					var msg3= '<input type= "submit" value= "Add to cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-theme="a"data-mini="true" /></a>';
 					var msg4= '<input type= "submit" value= "Buy it now" data-theme="a"data-mini="true" /></a>';
 
-					shop.append(pop2+msg3).trigger('create');
+					shop.append(pop3+msg3).trigger('create');
 					buy.append(pop2+msg4).trigger('create'); }
 
 			}
@@ -974,6 +980,10 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 		$.mobile.changePage("create-sale.html");
 	});   
 
+});
+
+$(document).on('click', '#shopcart', function() { 
+		$.mobile.changePage("shopping.html");
 });
 
 var lbid= {};
@@ -1307,14 +1317,20 @@ var shoppingcartTotal=0;
 
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	//alert(loginAccount.username);
-
-	if (loginAccount.accountid != undefined) {
+	var ucart={};
+	
+	if(loginAccount != undefined){
+		ucart= loginAccount.accountid;
+	}
+	else{
+		ucart= "guest";
+	}
 
 		$(document).on('click', '#checkout-button', function() {
 			$.mobile.changePage("check.html");
 		});
 		
-		var txt = $.parseJSON(getCookie(loginAccount.accountid));
+		var txt = $.parseJSON(getCookie(ucart));
 		var obj = eval('(' + txt + ')');
 		//alert(JSON.stringify(obj));
 		//alert(obj[0].shoppingcart);
@@ -1360,35 +1376,7 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 			list.append(msg);     
 		}
 		
-		list.listview("refresh"); /*
-	}
-	 else {
-                	var sales = saleList;
-                        var txt = $.parseJSON(getCookie('guest'));
-                var obj = eval('(' + txt + ')');
-                var list = $("#myshopping-list");
-            list.empty();
-                var len = obj.shoppingcart.length;
-                var len2 = sales.length;
-                shoppingcartTotal=0;
-                var prod = obj.shoppingcart;
-                var j;
-                for(var i=0; i<len; i++) {
-                                //GetProduct(obj.shoppingcart[i].prodid);
-                                j = 0;
-                                while(prod[i].saleid != sales[j].saleid) {
-                                        j++;
-                                }
-                                //list.append("<li>" + sales[i].price + "</li>");
-                                //list.append("<li>" + sales[j].saleid + "</li>");
-                                //prod = currentProduct[0];
-                                shoppingcartTotal+= parseFloat(sales[j].price);
-                                list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + sales[j].prodid + ")>"+ 
-                                "<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
-                                        "<h4> Price: $"+sales[j].price+"<\h4></a></li>");
-                }
-                list.listview("refresh");  */
-       }     
+		list.listview("refresh"); 
 });
 
 //////// History
@@ -1677,22 +1665,6 @@ function ConverToJSON(formData){
 	return result;
 }
 
-function SaveSession(account){
-
-	sessionStorage.setItem("fname", account.fname);
-	sessionStorage.setItem("lname", account.lname);
-	//sessionStorage.setItem("aaccountnumber", account.aaccountnumber);
-	sessionStorage.setItem("email", account.email);
-	sessionStorage.setItem("username", account.username);
-	sessionStorage.setItem("accountid", account.accountid);
-	sessionStorage.setItem("isadmin", account.isadmin);
-}
-
-function GetSession(){
-	var session= new Array(sessionStorage.getItem("accountid"), sessionStorage.getItem("username"));
-	return session; 
-}
-
 function SaveAccount(){
 	alert("Account Created!");
 }
@@ -1901,8 +1873,6 @@ function AccountLogin(username, password){
 			if (getCookie(loginAccount.accountid) == undefined) {
                    setCookie(loginAccount.accountid, JSON.stringify('[]'));
             }
-                               
-			
 
 			if(!buyItem){
 				$.mobile.changePage("index.html");
@@ -1968,7 +1938,8 @@ function AccountLogin(username, password){
 
 						if(isSale){
 							var msg3= '<a><input type="submit" id= "purchase" value= "Add to Cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
-							shop.append(msg3).trigger('create');
+							var pop3= '<a href="#popupCart" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none">';
+							shop.append(pop3+msg3).trigger('create');
 
 							var msg4= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
 							buy.append(msg4).trigger('create');}
@@ -2096,9 +2067,13 @@ function GetProduct(id){
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-
-		sessionStorage.setItem("product", JSON.stringify(data.product[0]));  
+		
 		currentProduct= data.product[0];
+		
+		sessionStorage.setItem("product", JSON.stringify(currentProduct));
+			if (getCookie(currentProduct.id) == undefined) {
+                   setCookie(currentProduct.id, JSON.stringify('[]'));
+            }
 
 		$.ajax({
 			url : "http://localhost:3412/Project1Srv/sales-product/"+ id,
@@ -2285,9 +2260,19 @@ function DeleteShoppingCart(id){
 	
 		setCookie(loginAccount.accountid,JSON.stringify(nextitem));
 		
-		if (loginAccount.accountid != undefined) {
+		var ucart={};
+	
+		if(loginAccount != undefined){
+		ucart= loginAccount.accountid;
+		}
+		else{
+		ucart= "guest";
+		if(getCookie(ucart) == undefined){
+            setCookie(ucart, JSON.stringify('[]'));
+		}
+		}
 
-		var txt = $.parseJSON(getCookie(loginAccount.accountid));
+		var txt = $.parseJSON(getCookie(ucart));
 		var obj = eval('(' + txt + ')');
 		//alert(JSON.stringify(obj));
 		//alert(obj[0].shoppingcart);
@@ -2325,8 +2310,7 @@ function DeleteShoppingCart(id){
 			list.append(msg);     
 		}
 		
-		list.listview("refresh"); 
-       }               
+		list.listview("refresh");   
 	}
 }
 
@@ -2692,7 +2676,20 @@ function AllSales(){
 		success : function(data, textStatus, jqXHR){
 		saleList= data.sales;
 		$.mobile.loading("hide");
+		var ucart={};
+	
+		if(loginAccount != undefined){
+		ucart= loginAccount.accountid;
 		$.mobile.changePage("shopping.html");
+		}
+	
+		else{
+			ucart= "guest";
+			if(getCookie(ucart) == undefined){
+          	  setCookie(ucart, JSON.stringify('[]'));
+          	  $.mobile.changePage("shopping.html");
+			}
+		}
 	},                        
 	error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
@@ -3025,7 +3022,18 @@ function DeleteMessageS(){
 
 function SaveOrder(id){
 	
-	var txt = $.parseJSON(getCookie(loginAccount.accountid));
+	var ucart={};
+	
+	if(loginAccount != undefined){
+		ucart= loginAccount.accountid;
+	}
+	else{
+		ucart= "guest";
+		if(getCookie(ucart) == undefined){
+            setCookie(ucart, JSON.stringify('[]'));
+		}
+	}
+	var txt = $.parseJSON(getCookie(ucart));
 	var obj = eval('(' + txt + ')');
 	//alert(JSON.stringify(obj));
 	//alert(obj[0].shoppingcart);
@@ -3038,8 +3046,7 @@ function SaveOrder(id){
 
 	var nextitem=JSON.stringify(obj);
 	//alert(nextitem);
-	setCookie(loginAccount.accountid,JSON.stringify(nextitem));
-	alert("Added to shopping cart");
+	setCookie(ucart,JSON.stringify(nextitem));
 	
 	//var txt2 = $.parseJSON(getCookie(loginAccount.accountid));
 	//var obj2 = eval('(' + txt2 + ')');
