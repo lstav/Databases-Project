@@ -1316,7 +1316,7 @@ app.post('/Project1Srv/accountspassword/', function(req, res) {
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET apassword= '" + req.param('password') + "' " +
 			"WHERE username= '" + req.param('username') + "'");
-
+	/*
 	query.on("row", function (row, result) {
 		result.addRow(row);
 	});
@@ -1332,6 +1332,7 @@ app.post('/Project1Srv/accountspassword/', function(req, res) {
 			res.json(response);
 		}
 	});
+	*/
 });
 
 
@@ -1389,7 +1390,7 @@ app.post('/Project1Srv/accountsdelete/:id', function(req, res) {
 
 // REST Operation - HTTP POST to add a new a account
 app.post('/Project1Srv/accounts', function(req, res) {
-	console.log("POST account: ");
+	console.log("POST account: " + req.param('username'));
 	var client = new pg.Client(conString);
 	client.connect();
 	// Hay que buscar el query correcto
