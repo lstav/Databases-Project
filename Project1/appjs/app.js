@@ -823,11 +823,13 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 
 var buyItem= false;
 $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
-
+	
+	if(sessionStorage.getItem("account") != null) {
 	var txt = sessionStorage.getItem("account");
 	var obj = eval('(' + txt + ')');
 	if(loginAccount != obj){
 		loginAccount = obj;
+	}
 	}
 		
 	var txt = sessionStorage.getItem("product");
@@ -1336,19 +1338,18 @@ var shoppingcartTotal=0;
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	//alert(loginAccount.username);
 	var ucart={};
-	
+	/*
 	var txt = sessionStorage.getItem("account");
 	var obj = eval('(' + txt + ')');
 		if(loginAccount.username == undefined && obj.username != undefined){
 			loginAccount = obj;
 		}
-		
+	*/	
 	var txt = sessionStorage.getItem("sales");
 	var obj = eval('(' + txt + ')');
 		if(saleList != obj){
 			saleList = obj;
 		}
-	
 	if(loginAccount.accountid != undefined){
 		ucart= loginAccount.accountid;
 	}

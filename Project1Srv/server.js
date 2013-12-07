@@ -1389,7 +1389,7 @@ app.post('/Project1Srv/accountsdelete/:id', function(req, res) {
 
 // REST Operation - HTTP POST to add a new a account
 app.post('/Project1Srv/accounts', function(req, res) {
-	console.log("POST account: ");
+	console.log("POST account: " + req.param('username'));
 	var client = new pg.Client(conString);
 	client.connect();
 	// Hay que buscar el query correcto
