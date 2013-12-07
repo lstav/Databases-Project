@@ -1316,7 +1316,7 @@ app.post('/Project1Srv/accountspassword/', function(req, res) {
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET apassword= '" + req.param('password') + "' " +
 			"WHERE username= '" + req.param('username') + "'");
-
+	/*
 	query.on("row", function (row, result) {
 		result.addRow(row);
 	});
@@ -1332,6 +1332,7 @@ app.post('/Project1Srv/accountspassword/', function(req, res) {
 			res.json(response);
 		}
 	});
+	*/
 });
 
 

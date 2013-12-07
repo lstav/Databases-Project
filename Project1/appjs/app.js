@@ -3073,7 +3073,7 @@ function DeleteMessageS(){
 					console.log("textStatus: " + textStatus);
 					$.mobile.loading("hide");
 					if (data.status == 404){
-						alert("Message not found.");
+						alert("404 Message not found.");
 					}
 					else {
 						alert("Internal Server Error.");
@@ -3166,11 +3166,14 @@ function ChangePassword(){
 		url : "http://localhost:3412/Project1Srv/accountspassword/",
 		type : 'post',
 		data : formData,
-		success : function() {
-		alert('POST Completed');
-		$.mobile.loading("hide");
-		$.mobile.navigate("index.html");
-	}
+		success: function(data, textStatus, jqXHR){
+    		alert('POST Completed');
+			$.mobile.loading("hide");
+			$.mobile.changePage("index.html");
+  		},
+  		error: function(jqXHR, textStatus, errorThrown){
+    		alert("failure");
+  		}
 	});
 }
 
