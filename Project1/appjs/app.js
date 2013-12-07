@@ -1252,7 +1252,7 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 		}
 		prod[i] = sales[j];
 		shoppingcartTotal+= parseFloat(String(sales[j].price).substr(1));
-		list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + sales[j].prodid + ")>"+ 
+		list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + i + ")>"+ 
 				"<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
 				"<h4> Price: "+sales[j].price+"<\h4></a></li>");
 	}
@@ -1344,7 +1344,7 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 			
 			item =sales[j];
 			list.append("<li ><a onClick= GetProduct("+item.prodid+") > <img src='"+ item.imagelink+ "' style='margin: 0 0 0 20px; top: 20%'/>"+
-			"<h3>"+item.prodname+"</h3><h2> Price: "+item.price + "</h2><h2> Qty: "+ item.totalquantity+"</h2><a data-icon='delete' onClick=DeleteShoppingCart('"+item.prodid+"')>Delete</a></a></li>");
+			"<h3>"+item.prodname+"</h3><h2> Price: "+item.price + "</h2><h2> Qty: "+ item.totalquantity+"</h2><a data-icon='delete' onClick=DeleteShoppingCart('"+i+"')>Delete</a></a></li>");
 			
 			//list.append("<li>" + sales[i].price + "</li>");
 			//list.append("<li>" + sales[j].saleid + "</li>");
@@ -2279,6 +2279,13 @@ function DeleteShoppingCart(id){
 	if(decision == true) {
 		var aid= loginAccount.accountid;
 		var txt = $.parseJSON(getCookie(aid));
+		alert(id);
+		var obj = eval('(' + txt + ')');
+		obj.splice(id,1);
+    	var nextitem=JSON.stringify(obj);
+	
+		setCookie(loginAccount.accountid,JSON.stringify(nextitem));
+
 		alert("Product Deleted");                
 	}
 }
