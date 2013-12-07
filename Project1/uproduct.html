@@ -66,8 +66,22 @@
 			<div data-role="content" class="center-wrapper">
 				
 				<div id= "item-uimage" ></div><br>
-				 
-				<h2 id= "productName2"  style= "background-color: WhiteSmoke" ></h2>
+				
+			<div class="ui-grid-a">
+          	 
+          	 <div class="ui-block-a">
+             
+                <a href= "#popupUpdateImage" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none; width:100% !important"  id= "update-name" data-role="button" data-corners="false"><center>Change image</center></a></div>
+           
+             <div class="ui-block-b">
+             	
+             	<a href= "#popupUpdateName" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none; width:100% !important" id= "update-image" data-role="button" data-corners="false"><center>Edit name</center></a>
+
+          		 </div>
+
+			</div>
+
+				<h2 id= "productName"  style= "background-color: WhiteSmoke" ></h2>
 								
 				<div data-role= "collapsible" data-collapsed="false" data-collapsed-icon= "false">
 				<h1>Summary</h1>
@@ -79,18 +93,18 @@
 				<div data-role="collapsible" data-collapsed-icon= "false" data-expanded-icon= "false" data-iconpos="right" data-collapsed = "false" style= "background-color: white">
 					<h3>Description</h3>
 					<div id= "udescription" data-role="content" style= "background-color: white"></div>
-					<div id="editudescription" data-role="button"> <a href= "#popupUpdateDescription" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none">Edit</a></div>
 				</div>
-			 
+				
+				<a href= "#popupUpdateDescription" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none; width:100% !important" id= "editudescription" data-role="button" data-corners="false"><center>Change description</center></a>
+		 
 			</div>
 			
 			<div data-role="popup" id="popupUpdateName" data-theme="a" class="ui-corner-all">
 			<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
 			<form>
 				<div style="padding:10px 20px;">
-				  <h3>Name:</h3>
-		          <input type="text" id="update-name" value="" data-theme="a" />
-
+				 <center><h3>Name</h3></center>
+		          <input type="text" name="user" id="upname" value="" data-theme="a" />
 		    	  <a id= "submit-name" data-role="button">Update</a>
 				</div>
 			</form>
@@ -100,9 +114,8 @@
 			<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
 			<form>
 				<div style="padding:10px 20px;">
-				  <center><h3>Price:</h3></center>
-		          <input type="text" id="update-price" value="" data-theme="a" />
-
+				  <center><h3>Price</h3></center>
+		          <input type="text" name="user" id="uprice" value="" data-theme="a" />
 		    	  <a id= "submit-price" data-role="button">Update</a>
 				</div>
 			</form>
@@ -113,7 +126,7 @@
 			<form>
 				<div style="padding:10px 20px;">
 				  <center><h3>Condition:</h3></center>
-		          <select id="update-condition" data-theme="a" data-mini="true">
+		          <select id="upcondition" data-theme="a" data-mini="true">
                     <option value="New">
                         New
                     </option>
@@ -126,14 +139,15 @@
 			</form>
 			</div>
 			
-			<div data-role="popup" id="popupUpdateEnd" data-theme="a" class="ui-corner-all">
+			<div data-role="popup" id="popupUpdateImage" data-theme="a" class="ui-corner-all">
 			<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
 			<form>
 				<div style="padding:10px 20px;">
-				  <center><h3>End date:</h3></center>
-		          <input type="text" id="submit-enddate" value="" placeholder="yyyy/mm/dd" data-theme="a" />
+				  
+				  <center><h3>Change image</h3></center>
+		          <input type="text" name="user" id="upimage" value="http://img856.imageshack.us/img856/4856/n2vc.jpg" data-theme="a" />
+		    	  <a id= "submit-image" data-role="button">Update</a>
 
-		    	  <a id= "submit-enddate" data-role="button">Update</a>
 				</div>
 			</form>
 			</div>
@@ -143,9 +157,8 @@
 			<form>
 				<div style="padding:10px 20px;">
 				  <center><h3>Description:</h3></center>
-					<textarea cols="40" rows="8" name="textarea" id="update-description"></textarea>
-
-		    	  <a id= "submit-description" data-role="button">Update</a>
+					<textarea cols="40" rows="8" name="textarea" id="updescription"></textarea>
+					<a id= "submit-description" data-role="button">Update</a>
 				</div>
 			</form>
 			</div>
