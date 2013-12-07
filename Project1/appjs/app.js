@@ -2279,14 +2279,54 @@ function DeleteShoppingCart(id){
 	if(decision == true) {
 		var aid= loginAccount.accountid;
 		var txt = $.parseJSON(getCookie(aid));
-		alert(id);
 		var obj = eval('(' + txt + ')');
 		obj.splice(id,1);
     	var nextitem=JSON.stringify(obj);
 	
 		setCookie(loginAccount.accountid,JSON.stringify(nextitem));
+		
+		if (loginAccount.accountid != undefined) {
 
-		alert("Product Deleted");                
+		var txt = $.parseJSON(getCookie(loginAccount.accountid));
+		var obj = eval('(' + txt + ')');
+		//alert(JSON.stringify(obj));
+		//alert(obj[0].shoppingcart);
+		var sales = saleList;
+		//alert(obj.length);
+		
+		var list = $("#myshopping-list");
+		list.empty();
+		
+		var len = obj.length;
+		
+		if(len != 0){
+		var len2 = sales.length;
+		shoppingcartTotal=0;
+
+		for(var i=0; i<len; i++) {
+			
+			var prod= obj[i].shoppingcart;
+
+			j = 0;
+			while((prod != sales[j].prodid) && j < len2) {
+				j++;
+			}
+
+			var item;
+			var style='style="position:absolute; top:40%; left: 20px"';
+			
+			item =sales[j];
+			list.append("<li ><a onClick= GetProduct("+item.prodid+") > <img src='"+ item.imagelink+ "' style='margin: 0 0 0 20px; top: 20%'/>"+
+			"<h3>"+item.prodname+"</h3><h2> Price: "+item.price + "</h2><h2> Qty: "+ item.totalquantity+"</h2><a data-icon='delete' onClick=DeleteShoppingCart('"+i+"')>Delete</a></a></li>");
+		}} 
+		else{
+			
+			var msg='<li><a data-rel=back data-role="button">No products</a></li>';
+			list.append(msg);     
+		}
+		
+		list.listview("refresh"); 
+       }               
 	}
 }
 
@@ -2984,6 +3024,7 @@ function DeleteMessageS(){
 ////// Order
 
 function SaveOrder(id){
+	
 	var txt = $.parseJSON(getCookie(loginAccount.accountid));
 	var obj = eval('(' + txt + ')');
 	//alert(JSON.stringify(obj));
