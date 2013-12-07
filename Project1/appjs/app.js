@@ -1817,7 +1817,9 @@ function AccountLogin(username, password){
                         if(len !=0){        
                                 loginAccount= data.accountLogin[0];
                                 sessionStorage.setItem("account", JSON.stringify(loginAccount));
-                                setCookie(loginAccount.accountid, JSON.stringify('{"shoppingcart" : []}'));
+                                if (getCookie(loginAccount.accountid) == undefined) {
+                                	setCookie(loginAccount.accountid, JSON.stringify('{"shoppingcart" : []}'));
+                                }
                                
                                 if(!buyItem){
                                 $.mobile.changePage("index.html");
@@ -2762,7 +2764,7 @@ function submitMessage(){
 function SaveOrder(id){
 	var txt = $.parseJSON(getCookie(loginAccount.accountid));
 	var obj = eval('(' + txt + ')');
- 	//alert(txt);
+ 	alert(txt);
  	obj.shoppingcart.push('{saleid:' + id + '}');
  	//obj.shoppingcart.push('{saleid:"5"}');
  	//alert(obj.shoppingcart);
