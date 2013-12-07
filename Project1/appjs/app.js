@@ -1817,7 +1817,7 @@ function AccountLogin(username, password){
                         if(len !=0){        
                                 loginAccount= data.accountLogin[0];
                                 sessionStorage.setItem("account", JSON.stringify(loginAccount));
-                                setCookie(loginAccount.accountid, JSON.stringify(sc[loginAccount.accountid-1]));
+                                setCookie(loginAccount.accountid, JSON.stringify('{"shoppingcart" : []}'));
                                
                                 if(!buyItem){
                                 $.mobile.changePage("index.html");
@@ -2761,13 +2761,13 @@ function submitMessage(){
 
 function SaveOrder(id){
 	var txt = $.parseJSON(getCookie(loginAccount.accountid));
-	//var text = $.parseJSON(getCookie(loginAccount.accountid));
 	var obj = eval('(' + txt + ')');
- 	//alert(obj.shoppingcart[0].saleid);
- 	//alert(text);
- 	alert(txt);
- 	obj.shoppingcart.push('{"saleid":"3"}');
- 	alert(obj.shoppingcart[3].saleid);
+ 	//alert(txt);
+ 	obj.shoppingcart.push('{saleid:' + id + '}');
+ 	//obj.shoppingcart.push('{saleid:"5"}');
+ 	//alert(obj.shoppingcart);
+ 	alert(JSON.stringify(obj));
+ 	setCookie(loginAccount.accountid,JSON.stringify(obj));
 }
 //////// Administrator
 
