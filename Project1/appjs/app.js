@@ -986,6 +986,10 @@ $(document).on('click', '#shopcart', function() {
 		$.mobile.changePage("shopping.html");
 });
 
+$(document).on('click', '#deletecart', function() { 
+		$.mobile.changePage("shopping.html");
+});
+
 var lbid= {};
 $(document).on('click', '#submitBid1', function() { 
 	lbid= $('#bid-product').val();
@@ -1319,7 +1323,7 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	//alert(loginAccount.username);
 	var ucart={};
 	
-	if(loginAccount != undefined){
+	if(loginAccount.username != undefined){
 		ucart= loginAccount.accountid;
 	}
 	else{
@@ -1360,7 +1364,7 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 			
 			item =sales[j];
 			list.append("<li ><a onClick= GetProduct("+item.prodid+") > <img src='"+ item.imagelink+ "' style='margin: 0 0 0 20px; top: 20%'/>"+
-			"<h3>"+item.prodname+"</h3><h2> Price: "+item.price + "</h2><h2> Qty: "+ item.totalquantity+"</h2><a data-icon='delete' onClick=DeleteShoppingCart('"+i+"')>Delete</a></a></li>");
+			"<h3>"+item.prodname+"</h3><h2> Price: "+item.price + "</h2><h2> Qty: "+ item.totalquantity+"</h2><a id='deletecart' data-icon='delete' onClick=DeleteShoppingCart('"+i+"')>Delete</a></a></li>");
 			
 			//list.append("<li>" + sales[i].price + "</li>");
 			//list.append("<li>" + sales[j].saleid + "</li>");
@@ -2262,7 +2266,7 @@ function DeleteShoppingCart(id){
 		
 		var ucart={};
 	
-		if(loginAccount != undefined){
+		if(loginAccount.username != undefined){
 		ucart= loginAccount.accountid;
 		}
 		else{
@@ -3024,14 +3028,14 @@ function SaveOrder(id){
 	
 	var ucart={};
 	
-	if(loginAccount != undefined){
+	if(loginAccount.username != undefined){
 		ucart= loginAccount.accountid;
 	}
 	else{
 		ucart= "guest";
-		if(getCookie(ucart) == undefined){
-            setCookie(ucart, JSON.stringify('[]'));
-		}
+		//if(getCookie(ucart) == undefined){
+      //      setCookie(ucart, JSON.stringify('[]'));
+	//	}
 	}
 	var txt = $.parseJSON(getCookie(ucart));
 	var obj = eval('(' + txt + ')');
