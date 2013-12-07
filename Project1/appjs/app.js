@@ -118,7 +118,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              block2.append(msg2).trigger('create'); 
              
              var block3= $("#block3");
-             var msg3= '<a href= "login.html" data-rel= "external" data-role="button" data-corners="false">Log Out</a>';
+             var msg3= '<a id="logout" data-rel= "external" data-role="button" data-corners="false">Log Out</a>';
              block3.empty();
              block3.append(msg3).trigger('create');
        }
@@ -149,7 +149,11 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
              block3.append(msg3).trigger('create'); 
                
        }
-       
+        $(document).on('click', '#logout', function() { 
+                sessionStorage.removeItem("account");
+            $.mobile.changePage("login.html");
+
+ });  
         $(document).on('click', '#sale-button', function() { 
                 
                 //alert(loginAccount.username);
@@ -166,7 +170,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 });
 
  $(document).on('click', '#logout', function() { 
-                sessionStorage.clear();
+                sessionStorage.removeItem("account");
             $.mobile.changePage("login.html");
 
  });  
