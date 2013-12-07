@@ -820,6 +820,9 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 var buyItem= false;
 $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 
+		if(currentProduct== undefined){
+			sessionStorage.getItem("product");
+		}
         var list= $("#item-info");
         list.empty();
         if(isSale){
@@ -844,7 +847,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
         
         var pname= $("#productName2");
         pname.empty();
-        pname.append("<center>"+currentProduct.prodname+"</center>");
+        pname.append("<center>"+currentProduct.prodname+"</center>").trigger('create');
         
         list.listview("refresh");
         sell.listview("refresh");
@@ -1010,7 +1013,7 @@ $(document).on('pagebeforeshow', "#productUpdatePage", function(event, ui) {
         list.append("<li "+icon+"><a "+upoprice+"><strong>Current bid:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");
         }
         list.append("<li "+icon+"><a "+upopcondition+"> <strong>Condition: </strong><kbd>"+currentProduct.condition  +"</kbd></a> </li>");
-        list.append("<li "+icon+"><a "+upopend+"> <strong>Listing ends: </strong><kbd>"+currentProduct.endtime.substring(0, 10)+" at "+currentProduct.endtime.substring(12, 20)+"</kbd></a> </li>");
+        list.append("<li><a> <strong>Listing ends: </strong><kbd>"+currentProduct.endtime.substring(0, 10)+" at "+currentProduct.endtime.substring(12, 20)+"</kbd></a> </li>");
         list.append("<li><a><strong> Item ID: </strong><kbd>"+currentProduct.id+"</kbd></a> </li>");
 
         var idescription= $("#udescription");
@@ -1021,13 +1024,201 @@ $(document).on('pagebeforeshow', "#productUpdatePage", function(event, ui) {
         image.empty();
         image.prepend('<center><img id="theImg" src="' + currentProduct.img+'"/></center>');
         
-        var pname= $("#productName2");
+        var pname= $("#productName");
         pname.empty();
-        pname.append("<center>"+currentProduct.prodname+"</center>");
-        
-        list.listview("refresh");
+        pname.append("<center>"+currentProduct.prodname+"</center>").trigger('create');
+               
+        list.listview("refresh");     
 
 });  
+
+$(document).on('click', "#submit-name", function(event, ui) {
+        
+        var uname= $('#upname').val();
+        if(uname.length > 0){
+        	$( "#popupUpdateName").popup( "close" );
+        	
+        	var formData = {name:uname, id: currentProduct.id};
+        	$.ajax({
+		      url : "http://localhost:3412/Project1Srv/updatepname",
+			  type: 'put',
+			  data : formData,
+			  success : function(data) {
+			          console.log("name updated");
+        			  currentProduct.prodname= data.updatepname[0].prodname;
+       				  var pname= $("#productName");
+       				  pname.empty();
+       				  pname.append("<center>"+currentProduct.prodname+"</center>");
+               			  },
+              
+              error: function(data, textStatus, jqXHR){
+              		 console.log("textStatus: " + textStatus);
+                     alert("name not updated!");}          	
+		   });
+        }
+        else{
+        	alert("Please provide a name.");
+        }
+        
+});
+
+$(document).on('click', "#submit-image", function(event, ui) {
+        
+        var uimage= $('#upimage').val();
+        
+        if(uimage.length > 0){
+        	$( "#popupUpdateImage").popup( "close" );
+        	
+        	var formData = {image:uimage, id: currentProduct.id};
+        	$.ajax({
+		      url : "http://localhost:3412/Project1Srv/updatepimage",
+			  type: 'put',
+			  data : formData,
+			  success : function(data) {
+			          console.log("image updated");
+			          currentProduct.img= data.updatepimage[0].imagelink;
+			          var image= $('#item-uimage');
+                      image.empty();
+        			  image.prepend('<center><img id="theImg" src="' + currentProduct.img+'"/></center>');
+               			  },
+              
+              error: function(data, textStatus, jqXHR){
+              		 console.log("textStatus: " + textStatus);
+                     alert("image not updated!");}          	
+		   });
+        	
+        }
+        else{
+        	alert("Please provide a valid image.");
+        }
+        
+});
+
+$(document).on('click', "#submit-price", function(event, ui) {
+	
+        var uprice= $('#uprice').val();
+        if(uprice > 0){
+        	$( "#popupUpdatePrice").popup( "close" );
+        	var formData = {price:uprice, id: currentProduct.id};
+        	$.ajax({
+		      url : "http://localhost:3412/Project1Srv/updateprice",
+			  type: 'put',
+			  data : formData,
+			  success : function(data) {
+			          console.log("price updated");
+			          currentProduct.price= data.updateprice[0].price;
+			          var upoprice='href= "#popupUpdatePrice" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none" ';
+					  var upopcondition='href= "#popupUpdateCondition" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none" ';
+					  var upopend='href= "#popupUpdateEnd" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none" ';
+		        
+       				  var icon='data-icon="gear"';
+      				  var list= $("#item-uinfo");
+        			  list.empty();
+        			  if(isSale){
+        				list.append("<li "+icon+"><a "+upoprice+" ><strong>Price:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");}
+        			  
+        			  else{
+       					list.append("<li "+icon+"><a "+upoprice+"><strong>Current bid:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");
+        				}
+       
+       				  list.append("<li "+icon+"><a "+upopcondition+"> <strong>Condition: </strong><kbd>"+currentProduct.condition  +"</kbd></a> </li>");
+       				  list.append("<li><a> <strong>Listing ends: </strong><kbd>"+currentProduct.endtime.substring(0, 10)+" at "+currentProduct.endtime.substring(12, 20)+"</kbd></a> </li>");
+       	              list.append("<li><a><strong> Item ID: </strong><kbd>"+currentProduct.id+"</kbd></a> </li>");
+        			  
+        			  list.listview("refresh");   
+
+               			  },
+              
+              error: function(data, textStatus, jqXHR){
+              		 console.log("textStatus: " + textStatus);
+                     alert("price not updated!");}          	
+		   });
+        	
+        }
+        else{
+        	alert("Please provide a valid image.");
+        }
+        
+});
+
+$(document).on('click', "#submit-condition", function(event, ui) {
+        
+        var ucondition= $('#upcondition').val();
+        
+        if(ucondition.length > 0){
+        	$( "#popupUpdateCondition").popup( "close" );
+        	var formData = {condition:ucondition, id: currentProduct.id};
+        	$.ajax({
+		      url : "http://localhost:3412/Project1Srv/updatepcondition",
+			  type: 'put',
+			  data : formData,
+			  success : function(data) {
+			          console.log("condition updated");
+			          currentProduct.condition= data.updatepcondition[0].condition;
+			          var upoprice='href= "#popupUpdatePrice" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none" ';
+					  var upopcondition='href= "#popupUpdateCondition" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none" ';
+					  var upopend='href= "#popupUpdateEnd" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none" ';
+		        
+       				  var icon='data-icon="gear"';
+      				  var list= $("#item-uinfo");
+        			  list.empty();
+        			  if(isSale){
+        				list.append("<li "+icon+"><a "+upoprice+" ><strong>Price:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");}
+        			  
+        			  else{
+       					list.append("<li "+icon+"><a "+upoprice+"><strong>Current bid:</strong><kbd>"+currentProduct.price  +"</kbd></a> </li>");
+        				}
+       
+       				  list.append("<li "+icon+"><a "+upopcondition+"> <strong>Condition: </strong><kbd>"+currentProduct.condition  +"</kbd></a> </li>");
+       				  list.append("<li><a> <strong>Listing ends: </strong><kbd>"+currentProduct.endtime.substring(0, 10)+" at "+currentProduct.endtime.substring(12, 20)+"</kbd></a> </li>");
+       	              list.append("<li><a><strong> Item ID: </strong><kbd>"+currentProduct.id+"</kbd></a> </li>");
+        			  
+        			  list.listview("refresh");  
+        
+
+               			  },
+              
+              error: function(data, textStatus, jqXHR){
+              		 console.log("textStatus: " + textStatus);
+                     alert("condition not updated!");}          	
+		   });
+        }
+        else{
+        	alert("Please choose a product condition.");
+        }
+        
+});
+
+$(document).on('click', "#submit-description", function(event, ui) {
+        
+        var udescription= $('#updescription').val();
+        if(udescription.length > 0){
+        	$( "#popupUpdateDescription").popup( "close" );
+        	var formData = {description:udescription, id: currentProduct.id};
+        	$.ajax({
+		      url : "http://localhost:3412/Project1Srv/updatepdescription",
+			  type: 'put',
+			  data : formData,
+			  success : function(data) {
+			          console.log("description updated");
+			          currentProduct.description= data.updatepdescription[0].description;
+
+      	  			  var idescription= $("#udescription");
+                      idescription.empty();
+        			  idescription.append("<p>"+currentProduct.description+"</p>"); 
+
+               			  },
+              
+              error: function(data, textStatus, jqXHR){
+              		 console.log("textStatus: " + textStatus);
+                     alert("description not updated!");}          	
+		   });
+        }
+        else{
+        	alert("Please provide a description.");
+        }
+        
+});
 ////////// Checkout
 
 $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
@@ -1307,7 +1498,7 @@ $(document).on('pagebeforeshow', "#inbox", function(event, ui) {
             var item;
             for (var i=0; i < len; ++i){
             item =message[i];
-            list.append("<li><a onClick= GetMessage("+item.messageid+")> From: "+item.username + "<h4>Subject: 	</h4><p> Date:"+item.date+" </p></a></li>");
+            list.append("<li><a onClick= GetMessage("+item.messageid+")> From: "+item.username + "<h4>Subject: "+ item.subject+"</h4><p> Date:"+item.date+" </p></a></li>");
            }
            list.listview("refresh");}  
 });
@@ -1328,11 +1519,10 @@ $(document).on('pagebeforeshow', "#sent", function(event, ui) {
             var item;
             for (var i=0; i < len; ++i){
             item =message[i];
-            list.append("<li><a onClick= GetMessage("+item.messageid+")> To: "+item.receiver + "<h4>Subject: 	</h4><p> Date:"+item.date+" </p></a></li>");
+            list.append("<li><a onClick= GetMessage("+item.messageid+")> To: "+item.receiver + "<h4>Subject:"+item.subject+"</h4><p> Date:"+item.date+" </p></a></li>");
            }
            list.listview("refresh");}  
 });
-
 
 $(document).on('pagebeforeshow', "#message-view", function(event, ui) {
        var message = viewMessage;
@@ -1353,7 +1543,7 @@ $(document).on('pagebeforeshow', "#message-view", function(event, ui) {
             var sender= '<input type="text" value= "From:'+ item.sender + '" data-mini="true"readonly="readonly"/><br>';
             var receiver= '<input type="text" value= "To: '+ item.receiver + '" data-mini="true" readonly="readonly"/><br>';
             var date= '<input type="text" value= "Date:'+ item.date + '" data-mini="true" readonly="readonly"/><br>';
-            var subject= '<input type="text" value= "Subject: " data-mini="true" readonly="readonly"/><br> ';
+            var subject= '<input type="text" value= "Subject:'+item.subject+'" data-mini="true" readonly="readonly"/><br> ';
             var message= '<textarea cols="40" rows="8" readonly="readonly">'+item.text+'</textarea><br>';
             
             if(loginAccount.username == item.sender){messageFrom= item.receiver;}
@@ -1816,7 +2006,9 @@ function GetProduct(id){
                 contentType: "application/json",
                 dataType:"json",
                 success : function(data, textStatus, jqXHR){
-                        currentProduct= data.product[0];
+                	   
+                	  sessionStorage.setItem("product", JSON.stringify(data.product[0]));  
+                      currentProduct= data.product[0];
 
        			$.ajax({
                 url : "http://localhost:3412/Project1Srv/sales-product/"+ id,
@@ -2520,8 +2712,45 @@ function GetMessage(id){
 
 
 function submitMessage(){
-        alert("Message has been sent");
-        location.href="message.html";
+		var user= $('#messageTo').val();
+		var sub=$('#subject').val();
+		var msg= $('#message').val();
+		var formData = {username: user, subject: sub, text: msg, senderid: loginAccount.accountid};
+		$.mobile.loading("show");
+        $.ajax({
+                url : "http://localhost:3412/Project1Srv/accountid/" + user,
+                method: 'get',
+                contentType: "application/json",
+                dataType:"json",
+                success : function(data, textStatus, jqXHR){
+                		$.mobile.loading("hide");
+                        formData.receiverid = data.account.accountid;
+                        $.ajax({
+		     			 url : "http://localhost:3412/Project1Srv/addmessage",
+			  			 type: 'post',
+			  			 data : formData,
+			  			 success : function(data) {
+			         		 console.log("message sent");
+			         		 $.mobile.loading("hide");
+
+			 			 },
+             			 error: function(data, textStatus, jqXHR){
+            		  		 console.log("textStatus: " + textStatus);
+                    		 alert("message not sent!");}          	
+		  				 });
+                        
+                },
+                error: function(data, textStatus, jqXHR){
+                        console.log("textStatus: " + textStatus);
+                        $.mobile.loading("hide");
+                        if (data.status == 404){
+                                alert("username not found.");
+                        }
+                        else {
+                                alert("Internal Server Error.");
+                        }
+                }
+        });
 }
 
 ////// Order

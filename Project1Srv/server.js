@@ -447,6 +447,111 @@ app.put('/Project1Srv/updateDeactive', function(req, res) {
          });
 });
 
+app.put('/Project1Srv/updatepname', function(req, res) {
+	
+	console.log("UPDATE product name");
+    
+    var client = new pg.Client(conString);
+    client.connect();
+		
+	var query= client.query("UPDATE product SET prodname='"+req.param('name')+"' WHERE productid="+req.param('id')+" RETURNING *");
+    
+    query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"updatepname" : result.rows};
+                client.end();
+                res.json(response);
+         });
+         
+         
+});
+
+app.put('/Project1Srv/updatepimage', function(req, res) {
+	
+	console.log("UPDATE product image");
+    
+    var client = new pg.Client(conString);
+    client.connect();
+		
+	var query= client.query("UPDATE product SET imagelink='"+req.param('image')+"' WHERE productid="+req.param('id')+" RETURNING *");
+    
+    query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"updatepimage" : result.rows};
+                client.end();
+                res.json(response);
+         });
+         
+         
+});
+
+app.put('/Project1Srv/updateprice', function(req, res) {
+	
+	console.log("UPDATE product price");
+    
+    var client = new pg.Client(conString);
+    client.connect();
+		
+	var query= client.query("UPDATE sale SET price="+req.param('price')+" WHERE prodid="+req.param('id')+" RETURNING *");
+    
+    query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"updateprice" : result.rows};
+                client.end();
+                res.json(response);
+         });
+         
+         
+});
+
+app.put('/Project1Srv/updatepcondition', function(req, res) {
+	
+	console.log("UPDATE product condition");
+    
+    var client = new pg.Client(conString);
+    client.connect();
+		
+	var query= client.query("UPDATE product SET condition='"+req.param('condition')+"' WHERE productid="+req.param('id')+" RETURNING *");
+    
+    query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"updatepcondition" : result.rows};
+                client.end();
+                res.json(response);
+         });
+         
+         
+});
+
+app.put('/Project1Srv/updatepdescription', function(req, res) {
+	
+	console.log("UPDATE product description");
+    
+    var client = new pg.Client(conString);
+    client.connect();
+		
+	var query= client.query("UPDATE product SET description='"+req.param('description')+"' WHERE productid="+req.param('id')+" RETURNING *");
+    
+    query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"updatepdescription" : result.rows};
+                client.end();
+                res.json(response);
+         });
+         
+         
+});
+
 app.get('/Project1Srv/histories', function(req, res) {
         console.log("GET");
         var response = {"histories" : historyList};
@@ -992,7 +1097,7 @@ app.get('/Project1Srv/message-inbox/:id', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT date, s.username, receiverid, messageid FROM message, account as s, account as r WHERE s.accountid = message.senderid "+
+        var query = client.query("SELECT date, s.username, receiverid, messageid, subject FROM message, account as s, account as r WHERE s.accountid = message.senderid "+
         "AND r.accountid=message.receiverid AND receiverid=" +id);
         
         query.on("row", function (row, result) {
@@ -1012,7 +1117,7 @@ app.get('/Project1Srv/message-sent/:id', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT date, s.username, receiverid, messageid, r.username as receiver FROM message, account as s, account as r WHERE s.accountid = message.senderid "+
+        var query = client.query("SELECT subject, date, s.username, receiverid, messageid, r.username as receiver FROM message, account as s, account as r WHERE s.accountid = message.senderid "+
         "AND r.accountid=message.receiverid AND senderid=" +id);
         
         query.on("row", function (row, result) {
@@ -1032,7 +1137,7 @@ app.get('/Project1Srv/message-view/:id', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT text, date, s.username as sender, r.username as receiver "+
+        var query = client.query("SELECT text, date, s.username as sender, r.username as receiver, subject "+
 		"FROM message, account as s, account as r WHERE s.accountid = message.senderid AND r.accountid=message.receiverid AND messageid=" +id);
         
         query.on("row", function (row, result) {
@@ -1053,15 +1158,30 @@ app.del('/Project1Srv/messages/:mid', function(req, res) {
 
 });
 
-app.post('/Project1Srv/messages', function(req, res) {
-
+app.post('/Project1Srv/addmessage', function(req, res) {
+	
+	console.log("Send message to: "+req.param('username'));
+         
+    var client = new pg.Client(conString);
+    client.connect();
+		
+	var query= client.query("INSERT INTO message(senderid, text, date, receiverid, subject) VALUES ("+req.param('senderid')+",'"+req.param('text')+"', localtimestamp, "+
+	req.param('receiverid')+","+req.param('subject')+") RETURNING *");
+    
+    query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"addmessage" : result.rows};
+                client.end();
+                res.json(response);
+         });
 });
-
 ////// Shopping Cart
 
 app.get('/Project1Srv/shoppingcart/:id', function(req, res){
         
-            var id = req.params.id;
+        var id = req.params.id;
         console.log("GET shopping cart:"+ id);
         var client = new pg.Client(conString);
         client.connect();
@@ -1103,6 +1223,31 @@ app.get('/Project1Srv/accounts/:aid', function(req, res) {
         client.connect();
 
         var query = client.query("SELECT * from account where accountid = $1" + [aid]);
+        
+        query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var len = result.rows.length;
+                if (len == 0){
+                        res.statusCode = 404;
+                        res.send("Account not found.");
+                }
+                else {        
+                          var response = {"account" : result.rows[0]};
+                        client.end();
+                          res.json(response);
+                  }
+         });
+});
+
+app.get('/Project1Srv/accountid/:user', function(req, res) {
+        var user = req.params.user;
+        console.log("GET accountid of username: " + user);
+        var client = new pg.Client(conString);
+        client.connect();
+
+        var query = client.query("SELECT accountid from account where username = '"+user+"'");
         
         query.on("row", function (row, result) {
             result.addRow(row);
