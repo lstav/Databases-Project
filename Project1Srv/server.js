@@ -1098,7 +1098,7 @@ app.get('/Project1Srv/message-inbox/:id', function(req, res){
         client.connect();
 
         var query = client.query("SELECT date, s.username, receiverid, messageid, subject FROM message, account as s, account as r WHERE s.accountid = message.senderid "+
-        "AND r.accountid=message.receiverid AND receiverid=" +id);
+        "AND r.accountid=message.receiverid AND message.isactive='t' AND receiverid=" +id);
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -1117,8 +1117,8 @@ app.get('/Project1Srv/message-sent/:id', function(req, res){
         var client = new pg.Client(conString);
         client.connect();
 
-        var query = client.query("SELECT subject, date, s.username, receiverid, messageid, r.username as receiver FROM message, account as s, account as r WHERE s.accountid = message.senderid "+
-        "AND r.accountid=message.receiverid AND senderid=" +id);
+        var query = client.query("SELECT date, s.username as receiver, receiverid, messageid, subject FROM message, account as s, account as r WHERE s.accountid = message.senderid "+
+        "AND r.accountid=message.receiverid AND message.isactive='t' AND senderid=" +id);
         
         query.on("row", function (row, result) {
             result.addRow(row);
@@ -1150,12 +1150,23 @@ app.get('/Project1Srv/message-view/:id', function(req, res){
          });
 });
 
-app.put('/Project1Srv/messages/:mid', function(req, res) {
-
-});
-
-app.del('/Project1Srv/messages/:mid', function(req, res) {
-
+app.put('/Project1Srv/deletembox', function(req, res) {
+	
+	console.log("UPDATE (delete) message");
+    
+    var client = new pg.Client(conString);
+    client.connect();
+		
+	var query= client.query("UPDATE message SET isactive='f' WHERE messageid="+req.param('messageid')+" RETURNING *");
+    
+    query.on("row", function (row, result) {
+            result.addRow(row);
+        });
+        query.on("end", function (result) {
+                var response = {"deletembox" : result.rows};
+                client.end();
+                res.json(response);
+         });
 });
 
 app.post('/Project1Srv/addmessage', function(req, res) {
@@ -1166,7 +1177,7 @@ app.post('/Project1Srv/addmessage', function(req, res) {
     client.connect();
 		
 	var query= client.query("INSERT INTO message(senderid, text, date, receiverid, subject) VALUES ("+req.param('senderid')+",'"+req.param('text')+"', localtimestamp, "+
-	req.param('receiverid')+","+req.param('subject')+") RETURNING *");
+	req.param('receiverid')+",'"+req.param('subject')+"') RETURNING *");
     
     query.on("row", function (row, result) {
             result.addRow(row);
