@@ -417,7 +417,7 @@ app.get('/Project1Srv/sales-product/:id', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT prodid as id FROM sale WHERE sale.prodid="+id);
+	var query = client.query("SELECT prodid as id, totalquantity as quantity FROM sale WHERE sale.prodid="+id);
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -655,9 +655,10 @@ app.get('/Project1Srv/categoryAll/:id', function(req, res){
 });
 
 app.get('/Project1Srv/searchAll/:term', function(req, res){
-
+	
 	var term = req.params.term;
 	var terms= term.split(/[ ,]+/);
+	console.log("Searching for terms "+terms);
 
 	var msg= "";
 
@@ -728,6 +729,100 @@ app.get('/Project1Srv/searchSub/:term/:id', function(req, res){
 
 	query.on("end", function (result) {
 		var response = {"searchresult" : result.rows};
+		client.end();
+		res.json(response);
+	});        
+});
+
+
+app.get('/Project1Srv/sortbyterms/:id/:term/:all', function(req, res){
+	
+	var id= req.params.id;
+	var all= req.params.all;
+	var term = req.params.term;
+	var terms= term.split(/[ ,]+/);
+	console.log("Sort terms "+terms+" by "+ id);
+
+	var msg= "";
+
+	for(var i=0; i < terms.length; i++){
+		if(i==0){
+			msg+="prodname ilike '%"+terms[i]+"%' ";
+		}
+		else{
+			msg+="or prodname ilike '%"+terms[i]+"%' ";
+		}
+	}
+
+	var client = new pg.Client(conString);
+	client.connect();
+	
+	if(all == "true"){
+		
+		if (id== "PriceLow"){
+		var query = client.query("SELECT prodname, id, price, condition, description, img, catid, catname, isactive "+
+			"FROM ( SELECT prodname, productid as id, price, condition, description, imagelink as img, catid, catname, isactive "+
+			"FROM account natural join sale natural join product natural join category WHERE account.accountid = sale.accountid AND product.productid = sale.prodid "+ 
+			"AND category.catid= product.catid UNION SELECT prodname, productid as id, max(currentbid) as price, condition, description, imagelink as img, catid, catname, isactive "+
+			"FROM account natural join auction natural join product natural join category WHERE auction.prodid = product.productid AND auction.accountid = account.accountid AND category.catid= product.catid "+
+			"GROUP BY prodname, productid, condition, description, imagelink, catid, catname, isactive ) as pdt WHERE isactive='t' AND "+msg+ "ORDER BY price");
+	}
+
+	else if (id== "PriceHigh"){
+				var query = client.query("SELECT prodname, id, price, condition, description, img, catid, catname, isactive "+
+			"FROM ( SELECT prodname, productid as id, price, condition, description, imagelink as img, catid, catname, isactive "+
+			"FROM account natural join sale natural join product natural join category WHERE account.accountid = sale.accountid AND product.productid = sale.prodid "+ 
+			"AND category.catid= product.catid UNION SELECT prodname, productid as id, max(currentbid) as price, condition, description, imagelink as img, catid, catname, isactive "+
+			"FROM account natural join auction natural join product natural join category WHERE auction.prodid = product.productid AND auction.accountid = account.accountid AND category.catid= product.catid "+
+			"GROUP BY prodname, productid, condition, description, imagelink, catid, catname, isactive ) as pdt WHERE isactive='t' AND "+msg+ "ORDER BY price desc");
+	}
+
+	else if(id=="Name"){
+				var query = client.query("SELECT prodname, id, price, condition, description, img, catid, catname, isactive "+
+			"FROM ( SELECT prodname, productid as id, price, condition, description, imagelink as img, catid, catname, isactive "+
+			"FROM account natural join sale natural join product natural join category WHERE account.accountid = sale.accountid AND product.productid = sale.prodid "+ 
+			"AND category.catid= product.catid UNION SELECT prodname, productid as id, max(currentbid) as price, condition, description, imagelink as img, catid, catname, isactive "+
+			"FROM account natural join auction natural join product natural join category WHERE auction.prodid = product.productid AND auction.accountid = account.accountid AND category.catid= product.catid "+
+			"GROUP BY prodname, productid, condition, description, imagelink, catid, catname, isactive ) as pdt WHERE isactive='t' AND "+msg+ "ORDER BY prodname");
+	}
+		
+	}
+	else{
+		if (id== "PriceLow"){
+		var query = client.query("SELECT prodname, id, max(price) as price, img, condition, description, img, catid, catname, isactive "+
+			"FROM ( SELECT prodname, product.productid as id, price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname, isactive "+
+			"FROM category as parent, category, product natural join sale WHERE category.parentId= parent.catid AND product.catid= category.catid AND product.productid = sale.prodid "+
+			"UNION SELECT prodname, product.productid as id, currentbid as price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname, isactive "+
+			"FROM category as parent, category, product natural join auction WHERE category.parentId= parent.catid AND product.catid= category.catid AND product.productid = auction.prodid ) as pdt "+
+			"WHERE isactive='t' AND catid="+id+" AND ("+msg+") GROUP BY prodname, id, img, condition, description, img, catid, catname, isactive ORDER BY price");
+	}
+
+	else if (id== "PriceHigh"){
+	var query = client.query("SELECT prodname, id, max(price) as price, img, condition, description, img, catid, catname, isactive "+
+			"FROM ( SELECT prodname, product.productid as id, price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname, isactive "+
+			"FROM category as parent, category, product natural join sale WHERE category.parentId= parent.catid AND product.catid= category.catid AND product.productid = sale.prodid "+
+			"UNION SELECT prodname, product.productid as id, currentbid as price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname, isactive "+
+			"FROM category as parent, category, product natural join auction WHERE category.parentId= parent.catid AND product.catid= category.catid AND product.productid = auction.prodid ) as pdt "+
+			"WHERE isactive='t' AND catid="+id+" AND ("+msg+") GROUP BY prodname, id, img, condition, description, img, catid, catname, isactive ORDER BY price desc");
+	}
+
+	else if(id=="Name"){
+	var query = client.query("SELECT prodname, id, max(price) as price, img, condition, description, img, catid, catname, isactive "+
+			"FROM ( SELECT prodname, product.productid as id, price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname, isactive "+
+			"FROM category as parent, category, product natural join sale WHERE category.parentId= parent.catid AND product.catid= category.catid AND product.productid = sale.prodid "+
+			"UNION SELECT prodname, product.productid as id, currentbid as price, condition, description, imagelink as img, parent.catid as catid, parent.catname as catname, isactive "+
+			"FROM category as parent, category, product natural join auction WHERE category.parentId= parent.catid AND product.catid= category.catid AND product.productid = auction.prodid ) as pdt "+
+			"WHERE isactive='t' AND catid="+id+" AND ("+msg+") GROUP BY prodname, id, img, condition, description, img, catid, catname, isactive Order BY prodname");
+	
+	}}
+	
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+
+	query.on("end", function (result) {
+		var response = {"productsortsearch" : result.rows};
 		client.end();
 		res.json(response);
 	});        

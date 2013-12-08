@@ -67,6 +67,17 @@
                                 <a data-role="button" id= "checkout-button" data-transition="slide" data-theme="a" data-corners="false">Checkout</a>
                                 
                         </div>
+                        
+                        <div data-role="popup" id="popupShopDel" data-theme="a" class="ui-corner-all">
+						<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+						<form>
+						<div style="padding:20px 20px;">
+						<center><h3 id="deletename">How many items do you want to remove?</h3></center>
+		          		<input type="text" name="quantity" id="qtyproductcart" value="" placeholder="" data-theme="a" />
+						<a id= "deletecart" data-role="button">Delete</a>
+						</div>
+						</form>
+			</div>
                 </div>        
         </body>
 </html>

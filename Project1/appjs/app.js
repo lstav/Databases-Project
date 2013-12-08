@@ -749,7 +749,22 @@ $(document).on('click', '#submit-search-all', function() {
 	GetSearch(term);
 });
 
+
 $(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
+
+	if(sessionStorage.getItem("account") != null) {
+		var txt = sessionStorage.getItem("account");
+		var obj = eval('(' + txt + ')');
+		if(loginAccount != obj){
+			loginAccount = obj;
+		}
+	}
+
+	var txt = sessionStorage.getItem("categories");
+	var obj = eval('(' + txt + ')');
+	if(currentCategories != obj){
+		currentCategories = obj;
+	}
 
 	var category= currentCategories;
 	var len= category.length;
@@ -766,7 +781,22 @@ $(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
 
 });
 
+
 $(document).on('pagebeforeshow', "#subcatLayout", function(event, ui) {
+
+	if(sessionStorage.getItem("account") != null) {
+		var txt = sessionStorage.getItem("account");
+		var obj = eval('(' + txt + ')');
+		if(loginAccount != obj){
+			loginAccount = obj;
+		}
+	}
+
+	var txt = sessionStorage.getItem("subcategories");
+	var obj = eval('(' + txt + ')');
+	if(subCategories != obj){
+		subCategories = obj;
+	}
 
 	var category= subCategories;
 	var len= category.length;
@@ -805,6 +835,7 @@ $(document).on('pagebeforeshow', "#subcatLayout", function(event, ui) {
 
 });
 
+
 $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 	//alert(loginAccount.username);
 	$.expr[":"].contains = $.expr.createPseudo(function(arg) {
@@ -824,6 +855,35 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 		else{$("li").show();}
 
 	}); 
+	
+	if(sessionStorage.getItem("account") != null) {
+		var txt = sessionStorage.getItem("account");
+		var obj = eval('(' + txt + ')');
+		if(loginAccount != obj){
+			loginAccount = obj;
+		}
+	}
+
+	var allproduct=sessionStorage.getItem("allproductboolean");
+	
+	if(allproduct != undefined){
+
+	if(allproduct == "true"){	
+		var txt = sessionStorage.getItem("allproducts");
+		var obj = eval('(' + txt + ')');
+		if(currentCategoryProducts != obj){
+		currentCategoryProducts = obj;
+	  }
+	}	
+	else{
+		var txt = sessionStorage.getItem("products");
+		var obj = eval('(' + txt + ')');
+		if(currentCategoryProducts != obj){
+		currentCategoryProducts = obj;
+		}
+	}
+	
+	}
 
 	var productCat = currentCategoryProducts;
 	var len =productCat.length;
@@ -851,22 +911,26 @@ $(document).on('pagebeforeshow', "#catProductView", function(event, ui) {
 });
 
 var buyItem= false;
+
 $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
-	
+
 	if(sessionStorage.getItem("account") != null) {
-	var txt = sessionStorage.getItem("account");
-	var obj = eval('(' + txt + ')');
-	if(loginAccount != obj){
-		loginAccount = obj;
+		var txt = sessionStorage.getItem("account");
+		var obj = eval('(' + txt + ')');
+		if(loginAccount != obj){
+			loginAccount = obj;
+		}
 	}
-	}
-		
+
 	var txt = sessionStorage.getItem("product");
 	var obj = eval('(' + txt + ')');
 	if(currentProduct != obj){
 		currentProduct = obj;
 	}
-	
+
+	if(!isSale){
+		isSale = currentProduct.isSale;
+	}
 	var list= $("#item-info");
 	list.empty();
 	if(isSale){
@@ -877,6 +941,10 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	list.append("<li><a> <strong>Condition: </strong><kbd>"+currentProduct.condition  +"</kbd></a> </li>");
 	list.append("<li><a><strong> Item ID: </strong><kbd>"+currentProduct.id+"</kbd></a> </li>");
 	list.append("<li><a> <strong>Listing ends: </strong><kbd>"+currentProduct.endtime.substring(0, 10)+" at "+currentProduct.endtime.substring(12, 20)+"</kbd></a> </li>");
+	if(isSale){
+		list.append("<li><a><strong> Qty Available: </strong><kbd>"+currentProduct.quantity+"</kbd></a> </li>");
+	}
+
 	var sell= $("#seller-info");
 	sell.empty();
 	sell.append("<li><a  onClick= GoProfile("+currentProduct.aid+")>"+currentProduct.seller+"</a></li>");
@@ -888,7 +956,8 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	image.empty();
 	image.prepend('<center><img id="theImg" src="' + currentProduct.img+'"/></center>');
 	//table1.table("refresh"); 
-
+	var cqty= $("#chooseqty");
+	cqty.empty();
 	var pname= $("#productName2");
 	pname.empty();
 	pname.append("<center>"+currentProduct.prodname+"</center>").trigger('create');
@@ -964,7 +1033,11 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 					shop.append(msg3).trigger('create');
 
 					var msg4= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
-					buy.append(msg4).trigger('create');}
+					buy.append(msg4).trigger('create');
+
+					var msg5='<input name="Qty" id="pquantity" placeholder="Quantity" value="" type="text">';
+					cqty.append(msg5).trigger('create');
+				}
 
 			}
 
@@ -988,7 +1061,8 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 					var pop2= '<a href="#popupLogin" data-rel="popup" data-position-to="window" data-inline="true" style="text-decoration: none">';
 					var msg3= '<input type= "submit" id= "submitCart" value= "Add to cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-theme="a"data-mini="true" /></a>';
 					var msg4= '<input type= "submit" value= "Buy it now" data-theme="a"data-mini="true" /></a>';
-
+					var msg5='<input name="Qty" id="pquantity" placeholder="Quantity" value="" type="text">';
+					cqty.append(msg5).trigger('create');
 					shop.append(msg3).trigger('create');
 					buy.append(pop2+msg4).trigger('create'); }
 
@@ -1043,11 +1117,6 @@ $(document).on('pagebeforeshow', "#confirmbid", function(event, ui){
 });
 
 var lbid= {};
-$(document).on('click', '#submitCart', function() { 
-	
-		$.mobile.changePage("addshopconfirm.html");
-		
-}); 
 
 $(document).on('pagebeforeshow', "#confirmcart", function(event, ui){
 
@@ -1367,19 +1436,19 @@ var shoppingcartTotal=0;
 $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 	//alert(loginAccount.username);
 	var ucart={};
-	
+
 	if(sessionStorage.getItem("account")) {
-	var txt = sessionStorage.getItem("account");
-	var obj = eval('(' + txt + ')');
+		var txt = sessionStorage.getItem("account");
+		var obj = eval('(' + txt + ')');
 		if(loginAccount.username == undefined && obj.username != undefined){
 			loginAccount = obj;
 		}
 	}
 	var txt = sessionStorage.getItem("sales");
 	var obj = eval('(' + txt + ')');
-		if(saleList != obj){
-			saleList = obj;
-		}
+	if(saleList != obj){
+		saleList = obj;
+	}
 	if(loginAccount.accountid != undefined){
 		ucart= loginAccount.accountid;
 	}
@@ -1387,35 +1456,35 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 		ucart= "guest";
 		if(getCookie(ucart) == undefined){
 			alert("not");
-            setCookie(ucart, JSON.stringify('[]'));
+			setCookie(ucart, JSON.stringify('[]'));
 		}
 	}
-	
-		$(document).on('click', '#checkout-button', function() {
-			$.mobile.changePage("check.html");
-		});
-		
-		var txt = $.parseJSON(getCookie(ucart));
-		var obj = eval('(' + txt + ')');
-		//alert(JSON.stringify(obj));
-		//alert(obj[0].shoppingcart);
-		if(saleList != undefined){
+
+	$(document).on('click', '#checkout-button', function() {
+		$.mobile.changePage("check.html");
+	});
+
+	var txt = $.parseJSON(getCookie(ucart));
+	var obj = eval('(' + txt + ')');
+	//alert(JSON.stringify(obj));
+	//alert(obj[0].shoppingcart);
+	if(saleList != undefined){
 		var sales = saleList;
-		}
+	}
 
-		//alert(obj.length);
-		var list = $("#myshopping-list");
-		list.empty();
-		
-		var len = obj.length;
+	//alert(obj.length);
+	var list = $("#myshopping-list");
+	list.empty();
 
-		if(len != 0 && saleList != undefined){
+	var len = obj.length;
+
+	if(len != 0 && saleList != undefined){
 
 		var len2 = sales.length;
 		shoppingcartTotal=0;
 
 		for(var i=0; i<len; i++) {
-			
+
 			var prod= obj[i].shoppingcart;
 			//GetProduct(obj.shoppingcart[i].prodid);
 			j = 0;
@@ -1423,13 +1492,30 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 				j++;
 			}
 
-			var item;
-			var style='style="position:absolute; top:40%; left: 20px"';
-			
+			var count =0;
+			var fposition=i;
+
+			for(var n=0; n< len; n++){
+				if(prod == obj[n].shoppingcart){
+					count++;
+
+					if(n < fposition){
+						fposition= n;
+					}
+
+				}
+			}
+
+			var item;			
 			item =sales[j];
-			list.append("<li ><a onClick= GetProduct("+item.prodid+") > <img src='"+ item.imagelink+ "' style='margin: 0 0 0 20px; top: 20%'/>"+
-			"<h3>"+item.prodname+"</h3><h2> Price: "+item.price + "</h2><h2> Qty: "+ item.totalquantity+"</h2><a data-icon='delete' onClick=DeleteShoppingCart('"+i+"')>Delete</a></a></li>");
-			
+
+			if(fposition == i){
+
+				list.append("<li ><a onClick= GetProduct("+item.prodid+") > <img src='"+ item.imagelink+ "' style='margin: 0 0 0 20px; top: 20%'/>"+
+						"<h3>"+item.prodname+"</h3><h2> Price: "+item.price + "</h2><h2> Qty: "+count+"</h2><a data-icon='delete' onClick=DeleteShoppingCart('"+i+"')>Delete</a></a></li>");
+
+			}
+
 			//list.append("<li>" + sales[i].price + "</li>");
 			//list.append("<li>" + sales[j].saleid + "</li>");
 			//prod = currentProduct[0];
@@ -1438,14 +1524,15 @@ $(document).on('pagebeforeshow', "#shopCartView", function(event, ui) {
 			//		"<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
 			//		"<h4> Price: "+sales[j].price+"<\h4></a></li>");
 		}} 
-		else{
-			
-			var msg='<li><a data-rel=back data-role="button">No products</a></li>';
-			list.append(msg);     
-		}
-		
-		list.listview("refresh"); 
+	else{
+
+		var msg='<li><a data-rel=back data-role="button">No products</a></li>';
+		list.append(msg);     
+	}
+
+	list.listview("refresh"); 
 });
+
 
 //////// History
 
@@ -2135,13 +2222,12 @@ function GetProduct(id){
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-		
+
 		currentProduct= data.product[0];
-		
-		sessionStorage.setItem("product", JSON.stringify(currentProduct));
-			//if (getCookie(currentProduct.id) == undefined) {
-              //     setCookie(currentProduct.id, JSON.stringify('[]'));
-            //}
+
+		//if (getCookie(currentProduct.id) == undefined) {
+		//     setCookie(currentProduct.id, JSON.stringify('[]'));
+		//}
 
 		$.ajax({
 			url : "http://localhost:3412/Project1Srv/sales-product/"+ id,
@@ -2151,9 +2237,14 @@ function GetProduct(id){
 			success : function(data, textStatus, jqXHR){
 
 			var result= data.sale;
-			if(result.length != 0){isSale= true;}
-			else{isSale=false;}
-			$.mobile.loading("hide");        
+			if(result.length != 0){
+				isSale= true;
+				currentProduct.quantity=result[0].quantity;
+				currentProduct.isSale= true;
+			}
+			else{isSale=false; currentProduct.isSale=false;}
+			sessionStorage.setItem("product", JSON.stringify(currentProduct));
+			$.mobile.loading("hide");     
 			$.mobile.changePage("item.html");
 		},
 		error: function(data, textStatus, jqXHR){
@@ -2180,9 +2271,58 @@ function GetProduct(id){
 	}
 	});}
 
-function Sortby(id){
 
+function Sortby(id){
+	
 	$( "#orderpop").popup( "close" );
+	var sort= sessionStorage.getItem("search");
+		
+	if(sort == "true"){
+		var term= sessionStorage.getItem("term");
+		var all= allSearch;
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/sortbyterms/"+id+"/"+term+"/"+all,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+					currentCategoryProducts= data.productsortsearch;
+					var productCat = currentCategoryProducts;
+					var len =productCat.length;
+					var list = $("#product-list");
+					list.empty();
+
+					if(len > 0){
+						var item;
+						for (var i=0; i < len; ++i){
+							item =productCat[i];
+							list.append("<li><a onClick=GetProduct("+item.id+")> <img src='"+ item.img+ "'/> " + item.prodname + "<h4>"+item.price+"<\h4></a></li>");
+						}
+					}
+
+					else{
+
+						var msg='<li><a data-rel=back data-role="button">No products</a></li>';
+						list.append(msg);                        
+					}
+
+					list.listview("refresh");
+		},                        
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Error sorting you terms.");
+			}
+			else {
+				alert("Internal Server Error.");
+			}
+		}
+
+		});
+	}
+	
+	else{
 	var catid= currentCategoryProducts[0].catid;
 	var isParent= false;
 	if(catid != undefined){
@@ -2262,6 +2402,7 @@ function Sortby(id){
 
 		});}
 
+	}
 }
 
 function AllSortby(id){
@@ -2318,70 +2459,119 @@ function UpdateShoppingCart(){
 }
 
 function DeleteShoppingCart(id){
-        var decision = confirm("Delete Product?");
+	
+		var decision = confirm("Delete Product?");
         if(decision == true) {
 
-        		var ucar= {};
-        		if(loginAccount.accountid != undefined){
-				ucart= loginAccount.accountid;
-				}
-				else{
-				ucart= "guest";
-				if(getCookie(ucart) == undefined){
-            		setCookie(ucart, JSON.stringify('[]'));
-				}
-				}
-				
-				var aid= ucart;
-                var txt = $.parseJSON(getCookie(aid));
-                var obj = eval('(' + txt + ')');
-                obj.splice(id,1);
-           		var nextitem=JSON.stringify(obj);
-        		
-                setCookie(ucart,JSON.stringify(nextitem));
+		/*$( "#popupShopDel").popup( "open" );
+	
+		$(document).on('click', '#deletecart', function() {
 
-                var txt = $.parseJSON(getCookie(ucart));
-                var obj = eval('(' + txt + ')');
-                //alert(JSON.stringify(obj));
-                //alert(obj[0].shoppingcart);
-                if(saleList != undefined){
-                var sales = saleList;}
-                //alert(obj.length);
-                
-                var list = $("#myshopping-list");
-                list.empty();
-                
-                var len = obj.length;
-                
-                if(len != 0 && saleList != undefined){
-                var len2 = sales.length;
-                shoppingcartTotal=0;
+		var count= $( "#qtyproductcart").val();
 
-                for(var i=0; i<len; i++) {
-                        
-                        var prod= obj[i].shoppingcart;
+		$( "#popupShopDel").popup( "close" );
+		*/
+		var ucar= {};
+		if(loginAccount.accountid != undefined){
+			ucart= loginAccount.accountid;
+		}
+		else{
+			ucart= "guest";
+			if(getCookie(ucart) == undefined){
+				setCookie(ucart, JSON.stringify('[]'));
+			}
+		}
 
-                        j = 0;
-                        while((prod != sales[j].prodid) && j < len2) {
-                                j++;
-                        }
+		var aid= ucart;
+		var txt = $.parseJSON(getCookie(aid));
+		var obj = eval('(' + txt + ')');
 
-                        var item;
-                        var style='style="position:absolute; top:40%; left: 20px"';
-                        
-                        item =sales[j];
-                        list.append("<li ><a onClick= GetProduct("+item.prodid+") > <img src='"+ item.imagelink+ "' style='margin: 0 0 0 20px; top: 20%'/>"+
-                        "<h3>"+item.prodname+"</h3><h2> Price: "+item.price + "</h2><h2> Qty: "+ item.totalquantity+"</h2><a data-icon='delete' onClick=DeleteShoppingCart('"+i+"')>Delete</a></a></li>");
-                }} 
-                else{
-                        
-                        var msg='<li><a data-rel=back data-role="button">No products</a></li>';
-                        list.append(msg);     
-                }
-                
-                list.listview("refresh");         
-        }
+		var pid= obj[id].shoppingcart;
+		var pos=[];
+
+		for (var i=0; i< obj.length; i++){
+			if(pid == obj[i].shoppingcart){
+				pos.push(i);
+			}
+		}
+		
+
+			obj.splice(pos[0],1);
+		
+			var nextitem=JSON.stringify(obj);
+
+			setCookie(ucart,JSON.stringify(nextitem));
+
+			var txt = $.parseJSON(getCookie(ucart));
+			var obj = eval('(' + txt + ')');
+
+			if(saleList != undefined){
+				var sales = saleList;
+			}
+
+			//alert(obj.length);
+			var list = $("#myshopping-list");
+			list.empty();
+
+			var len = obj.length;
+
+			if(len != 0 && saleList != undefined){
+
+				var len2 = sales.length;
+				shoppingcartTotal=0;
+
+				for(var i=0; i<len; i++) {
+
+					var prod= obj[i].shoppingcart;
+					//GetProduct(obj.shoppingcart[i].prodid);
+					j = 0;
+					while((prod != sales[j].prodid) && j < len2) {
+						j++;
+					}
+
+					var count =0;
+					var fposition=i;
+
+					for(var n=0; n< len; n++){
+						if(prod == obj[n].shoppingcart){
+							count++;
+
+							if(n < fposition){
+								fposition= n;
+							}
+
+						}
+					}
+
+					var item;			
+					item =sales[j];
+
+					if(fposition == i){
+
+						list.append("<li ><a onClick= GetProduct("+item.prodid+") > <img src='"+ item.imagelink+ "' style='margin: 0 0 0 20px; top: 20%'/>"+
+								"<h3>"+item.prodname+"</h3><h2> Price: "+item.price + "</h2><h2> Qty: "+count+"</h2><a data-icon='delete' onClick=DeleteShoppingCart('"+i+"')>Delete</a></a></li>");
+
+					}
+
+					//list.append("<li>" + sales[i].price + "</li>");
+					//list.append("<li>" + sales[j].saleid + "</li>");
+					//prod = currentProduct[0];
+					//shoppingcartTotal+= parseFloat(sales[j].price);
+					//list.append("<li data-icon='delete' ><a onClick=DeleteShoppingCart(" + sales[j].prodid + ")>"+ 
+					//		"<img src='"+ sales[j].imagelink+ "'/>" + sales[j].prodname + 
+					//		"<h4> Price: "+sales[j].price+"<\h4></a></li>");
+				}} 
+			else{
+
+				var msg='<li><a data-rel=back data-role="button">No products</a></li>';
+				list.append(msg);     
+			}
+
+			list.listview("refresh"); }
+
+	/*});*/
 }
+
 
 
 //Bids
@@ -2549,7 +2739,8 @@ function UpdateProductForm(pid){
 var currentCategoryProducts = {};
 
 function GetAllProducts(id){
-
+	
+	sessionStorage.setItem("search", false);
 	$.mobile.loading("show");
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/categoryAll/"+ id,
@@ -2558,6 +2749,9 @@ function GetAllProducts(id){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 		currentCategoryProducts= data.allProducts;
+		sessionStorage.setItem("allproducts", JSON.stringify(currentCategoryProducts));
+		sessionStorage.setItem("allproductboolean", true);
+
 		$.mobile.loading("hide");
 		$.mobile.changePage("productview.html", {
 			info: id,
@@ -2577,7 +2771,8 @@ function GetAllProducts(id){
 }
 
 function GetCategoryProducts(id){
-
+	
+	sessionStorage.setItem("search", false);
 	$.mobile.loading("show");
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/categoryProducts/"+ id,
@@ -2586,6 +2781,9 @@ function GetCategoryProducts(id){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 		currentCategoryProducts= data.productsIncategory;
+		sessionStorage.setItem("products", JSON.stringify(currentCategoryProducts));
+		sessionStorage.setItem("allproductboolean", false);
+
 		$.mobile.loading("hide");
 		$.mobile.changePage("productview.html", {
 			info: id,
@@ -2615,6 +2813,7 @@ function GetCategories(){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 		currentCategories= data.category;
+		sessionStorage.setItem("categories", JSON.stringify(currentCategories));
 		$.mobile.loading("hide");
 		$.mobile.changePage("Categories.html");
 
@@ -2650,6 +2849,7 @@ function GetSubCategory(id){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 		subCategories= data.subcategory;
+		sessionStorage.setItem("subcategories", JSON.stringify(subCategories));
 		$.mobile.loading("hide");
 		$.mobile.navigate("subcategories.html");
 
@@ -3092,38 +3292,74 @@ function DeleteMessageS(){
 ////// Order
 
 function SaveOrder(id){
-	
+
 	var ucart={};
-	
+
 	if(loginAccount.accountid != undefined){
 		ucart= loginAccount.accountid;
 	}
 	else{
 		ucart= "guest";
 		if(getCookie(ucart) == undefined){
-            setCookie(ucart, JSON.stringify('[]'));
+			setCookie(ucart, JSON.stringify('[]'));
 		}
 	}
-	var txt = $.parseJSON(getCookie(ucart));
-	var obj = eval('(' + txt + ')');
-	//alert(JSON.stringify(obj));
-	//alert(obj[0].shoppingcart);
-	var sh = ('{"shoppingcart":"' + currentProduct.id + '"}');
-	//alert(sh);
-	var obj2= eval('(' + sh + ')');
-    obj.push(obj2);
-    //alert(JSON.stringify(obj));
-    //alert(obj[1].shoppingcart);
 
-	var nextitem=JSON.stringify(obj);
-	//alert(nextitem);
-	setCookie(ucart,JSON.stringify(nextitem));
+	var quantity= $('#pquantity').val();
 	
-	//var txt2 = $.parseJSON(getCookie(loginAccount.accountid));
-	//var obj2 = eval('(' + txt2 + ')');
-	//alert(JSON.stringify(obj2));
-	//$.mobile.navigate("shopping.html");
+	if(quantity == 0){
+		alert("Please provide quantity.");
+	}
+
+	else if(quantity <= currentProduct.quantity && quantity != 0){
+		var txt = $.parseJSON(getCookie(ucart));
+		var obj = eval('(' + txt + ')');
+		//alert(JSON.stringify(obj));
+		//alert(obj[0].shoppingcart);
+		var count=0;
+
+		for(var i=0; i < obj.length; i++){
+			if(obj[i].shoppingcart == currentProduct.id){
+				count++;
+			}
+		}
+		var total= parseInt(count)+parseInt(quantity);
+
+		if(total <= currentProduct.quantity ){
+
+			for(var j=0; j < quantity; j++){
+
+				var sh = ('{"shoppingcart":"' + currentProduct.id + '"}');
+				//alert(sh);
+				var obj2= eval('(' + sh + ')');
+				obj.push(obj2);
+				//alert(JSON.stringify(obj));
+				//alert(obj[1].shoppingcart);
+
+				var nextitem=JSON.stringify(obj);
+				//alert(nextitem);
+				setCookie(ucart,JSON.stringify(nextitem));
+
+			}
+
+			//var txt2 = $.parseJSON(getCookie(loginAccount.accountid));
+			//var obj2 = eval('(' + txt2 + ')');
+			//alert(JSON.stringify(obj2));
+			//$.mobile.navigate("shopping.html");
+			$.mobile.changePage("addshopconfirm.html");
+
+		}
+
+		else{
+			alert("Product already in shopping cart.");
+
+		}
+	}
+	else{
+		alert("Provide a valid quantity.");
+	}
 }
+
 //////// Administrator
 
 function AddCategory(){
@@ -3273,8 +3509,12 @@ function InsertBid(id, ibid){
 }
 
 //Search
+var AllSearch=true;
 function GetSearch(term){
 
+	sessionStorage.setItem("search", true);
+	sessionStorage.setItem("term", term);
+	allSearch=true;
 	$.mobile.loading("show");
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/searchAll/"+ term,
@@ -3283,6 +3523,8 @@ function GetSearch(term){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 		currentCategoryProducts= data.searchresult;
+		sessionStorage.setItem("products", JSON.stringify(currentCategoryProducts));
+		sessionStorage.setItem("allproductboolean", false);
 		$.mobile.loading("hide");
 		$.mobile.changePage("productview.html", {
 			info: term,
@@ -3303,6 +3545,9 @@ function GetSearch(term){
 
 function GetSearchSub(term, id){
 
+	sessionStorage.setItem("search", false);
+	sessionStorage.setItem("term", term);
+	allSeach= false;
 	$.mobile.loading("show");
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/searchSub/"+ term+"/"+id,
@@ -3311,6 +3556,8 @@ function GetSearchSub(term, id){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 		currentCategoryProducts= data.searchresult;
+		sessionStorage.setItem("products", JSON.stringify(currentCategoryProducts));
+		sessionStorage.setItem("allproductboolean", false);
 		$.mobile.loading("hide");
 		$.mobile.changePage("productview.html", {
 			info: term,
