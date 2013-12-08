@@ -1363,15 +1363,15 @@ app.post('/Project1Srv/accounts', function(req, res) {
 	client.connect();
 	// Hay que buscar el query correcto
 	var saquery = client.query("insert into address(address) VALUES('"+ req.param('shipping') +"') returning addressid");
-	var baquery = client.query("insert into address(address) VALUES('"+ req.param('billing') +"') returning addressid");
+	console.log(saquery.values);
+	/*var baquery = client.query("insert into address(address) VALUES('"+ req.param('billing') +"') returning addressid");
 	var daquery = client.query("insert into depositaccount(bankaccountnumber) VALUES('"+ req.param('bank') +"') returning depositaccountid");
 	var ccquery = client.query("insert into creditcard(addressid, cardtype, cardnumber, securitynumber, expdate) VALUES("+ baquery +", '"+ 
 	req.param('credittype') +"', '"+ req.param('creditnumber') +"', '"+ req.param('securitynumber') +"', '"+ 
 	req.param('expdate') +"') returning creditid");
-	
 	var query = client.query("insert into account (username, fname, lname, email, apassword, shippingid, billingid, depositid)" +
 			"values ('"+ req.param('username') +"', '"+ req.param('fname') +"', '"+ req.param('lname') +"', '"+
-			 req.param('email') +"', '"+ req.param('password') +"', "+ saquery +", "+ baquery +", "+ daquery +")");
+			 req.param('email') +"', '"+ req.param('password') +"', "+ saquery +", "+ baquery +", "+ daquery +")");*/
 });
 
 

@@ -375,7 +375,12 @@ $(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
     return $(this).attr('data-score');
   }
 });*/
-$('#rank').raty();
+	$('#rank').raty({
+		starOn: 'appjs/star-on-big.png',
+  		starOff: 'appjs/star-off-big.png',
+  		number: 4
+	});
+	
 	$(document).on('click', '#submitrank', function() {
 		alert("Rank submited!");
 		$.mobile.changePage("profile.html");
@@ -2631,7 +2636,7 @@ function GetCategories(){
 }
 
 function RankUser(){
-	$.mobile.changePage("userrank.html");                                     
+	$.mobile.navigate("userrank.html");                                     
 }
 
 
