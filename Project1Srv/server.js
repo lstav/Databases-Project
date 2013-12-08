@@ -1439,22 +1439,6 @@ app.post('/Project1Srv/accountsdeleted/', function(req, res) {
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
 			"WHERE username= '" + req.param('username') + "'");
-
-	query.on("row", function (row, result) {
-		result.addRow(row);
-	});
-	query.on("end", function (result) {
-		var len = result.rows.length;
-		if (len == 0){
-			res.statusCode = 404;
-			res.send("Address not found.");
-		}
-		else {        
-			var response = {"address" : result.rows[0]};
-			client.end();
-			res.json(response);
-		}
-	});
 });
 
 app.post('/Project1Srv/accountsdelete/:id', function(req, res) {
@@ -1465,22 +1449,6 @@ app.post('/Project1Srv/accountsdelete/:id', function(req, res) {
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
 			"WHERE accountid= '" + id + "'");
-
-	query.on("row", function (row, result) {
-		result.addRow(row);
-	});
-	query.on("end", function (result) {
-		var len = result.rows.length;
-		if (len == 0){
-			res.statusCode = 404;
-			res.send("Address not found.");
-		}
-		else {        
-			var response = {"address" : result.rows[0]};
-			client.end();
-			res.json(response);
-		}
-	});
 });
 
 // REST Operation - HTTP POST to add a new a account
@@ -1489,24 +1457,16 @@ app.post('/Project1Srv/accounts', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 	// Hay que buscar el query correcto
-	var query = client.query("insert into account (username, fname, lname, email, apassword, shippingid, billingid, depositid)" +
-			"values ('jsmith', 'john', 'smith', 'jsmith@example.com', 1234, 2, 2, 2)");
-
-	query.on("row", function (row, result) {
-		result.addRow(row);
-	});
-	query.on("end", function (result) {
-		var len = result.rows.length;
-		if (len == 0){
-			res.statusCode = 404;
-			res.send("Address not found.");
-		}
-		else {        
-			var response = {"address" : result.rows[0]};
-			client.end();
-			res.json(response);
-		}
-	});
+	var saquery = client.query("insert into address(addressid, address) VALUES((select (max(addressid)+1) as addressid from address),'"+ req.param('shipping') +"') returning addressid");
+	//console.log(saquery);
+	var baquery = client.query("insert into address(addressid, address) VALUES((select (max(addressid)+1) as addressid from address),'"+ req.param('billing') +"') returning addressid");
+	var daquery = client.query("insert into depositaccount(depositaccountid, bankaccountnumber) VALUES((select (max(depositaccountid)+1) as depositaccountid from depositaccount),'"+ req.param('bank') +"') returning depositaccountid");
+	var ccquery = client.query("insert into creditcard(creditid, addressid, cardtype, cardnumber, securitynumber, expdate) VALUES((select (max(creditid)+1) as creditid from creditcard),"+ baquery +", '"+ 
+	req.param('credittype') +"', '"+ req.param('creditnumber') +"', '"+ req.param('securitynumber') +"', '"+ 
+	req.param('expdate') +"') returning creditid");
+	var query = client.query("insert into account (accountid, username, fname, lname, email, apassword, shippingid, billingid, depositid)" +
+			"values ((select (max(accountid)+1) as accountid from account),'"+ req.param('username') +"', '"+ req.param('fname') +"', '"+ req.param('lname') +"', '"+
+			 req.param('email') +"', '"+ req.param('password') +"', "+ saquery +", "+ baquery +", "+ daquery +")");
 });
 
 

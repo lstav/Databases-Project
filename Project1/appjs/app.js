@@ -32,7 +32,11 @@ function getCookie(c_name)
 }
 
 
-
+/*$(document).on('pagebeforeshow', "#userrank-page", function(event, ui) {
+	$('rank').raty(
+		starn
+	);	
+});*/
 $(document).on('pagebeforeshow', '#login', function(){  
 
 	$(document).on('click', '#submit', function() { 
@@ -366,19 +370,17 @@ $(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
 	if(profile.username == undefined && obj.username != undefined){
 		profile = obj;
 	}
-	$(document).on('click', '#submitrank', function() {
-		alert("Rank submited!");
-		$.mobile.changePage("profile.html");
+	/*$('#star').raty({
+  score: function() {
+    return $(this).attr('data-score');
+  }
+});*/
+	$('#rank').raty({
+		starOn: 'appjs/star-on-big.png',
+  		starOff: 'appjs/star-off-big.png',
+  		number: 4
 	});
-
-	var pname= $("#urname");
-	pname.empty();
-	pname.append("<center>"+profile.username+"</center>");
-});
-
-
-$(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
-
+	
 	$(document).on('click', '#submitrank', function() {
 		alert("Rank submited!");
 		$.mobile.changePage("profile.html");
@@ -2833,7 +2835,7 @@ function GetCategories(){
 }
 
 function RankUser(){
-	$.mobile.changePage("userrank.html");                                     
+	$.mobile.navigate("userrank.html");                                     
 }
 
 
@@ -3370,11 +3372,14 @@ function AddCategory(){
 		url : "http://localhost:3412/Project1Srv/categories/",
 		type: 'post',
 		data : formData,
-		success : function() {
-		console.log('POST Completed');
-		$.mobile.loading("hide");
-		$.mobile.navigate("administrator.html");
-	}
+		success: function(data, textStatus, jqXHR){
+    		alert('POST Completed');
+			$.mobile.loading("hide");
+			$.mobile.changePage("administrator.html");
+  		},
+  		error: function(jqXHR, textStatus, errorThrown){
+    		alert("failure");
+  		}
 	});
 }
 
@@ -3386,11 +3391,14 @@ function AddAccount(){
 		url : "http://localhost:3412/Project1Srv/accounts/",
 		type: 'post',
 		data : formData,
-		success : function(result) {
-		console.log('POST Completed');
-		$.mobile.loading("hide");
-		$.mobile.navigate("account.html");
-	}
+		success: function(data, textStatus, jqXHR){
+    		alert('POST Completed');
+			$.mobile.loading("hide");
+			$.mobile.changePage("account.html");
+  		},
+  		error: function(jqXHR, textStatus, errorThrown){
+    		alert("failure");
+  		}
 	});
 }
 
