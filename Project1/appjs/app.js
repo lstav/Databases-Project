@@ -376,19 +376,6 @@ $(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
 	pname.append("<center>"+profile.username+"</center>");
 });
 
-
-$(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
-
-	$(document).on('click', '#submitrank', function() {
-		alert("Rank submited!");
-		$.mobile.changePage("profile.html");
-	});
-
-	var pname= $("#urname");
-	pname.empty();
-	pname.append("<center>"+profile.username+"</center>");
-});
-
 $(document).on('pagebeforeshow', '#create-sale', function(){  
 
 	$.ajax({
@@ -3134,11 +3121,14 @@ function AddCategory(){
 		url : "http://localhost:3412/Project1Srv/categories/",
 		type: 'post',
 		data : formData,
-		success : function() {
-		console.log('POST Completed');
-		$.mobile.loading("hide");
-		$.mobile.navigate("administrator.html");
-	}
+		success: function(data, textStatus, jqXHR){
+    		alert('POST Completed');
+			$.mobile.loading("hide");
+			$.mobile.changePage("administrator.html");
+  		},
+  		error: function(jqXHR, textStatus, errorThrown){
+    		alert("failure");
+  		}
 	});
 }
 
@@ -3150,11 +3140,14 @@ function AddAccount(){
 		url : "http://localhost:3412/Project1Srv/accounts/",
 		type: 'post',
 		data : formData,
-		success : function(result) {
-		console.log('POST Completed');
-		$.mobile.loading("hide");
-		$.mobile.navigate("account.html");
-	}
+		success: function(data, textStatus, jqXHR){
+    		alert('POST Completed');
+			$.mobile.loading("hide");
+			$.mobile.changePage("account.html");
+  		},
+  		error: function(jqXHR, textStatus, errorThrown){
+    		alert("failure");
+  		}
 	});
 }
 
