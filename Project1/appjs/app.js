@@ -32,7 +32,11 @@ function getCookie(c_name)
 }
 
 
-
+/*$(document).on('pagebeforeshow', "#userrank-page", function(event, ui) {
+	$('rank').raty(
+		starn
+	);	
+});*/
 $(document).on('pagebeforeshow', '#login', function(){  
 
 	$(document).on('click', '#submit', function() { 
@@ -366,6 +370,12 @@ $(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
 	if(profile.username == undefined && obj.username != undefined){
 		profile = obj;
 	}
+	/*$('#star').raty({
+  score: function() {
+    return $(this).attr('data-score');
+  }
+});*/
+$('#rank').raty();
 	$(document).on('click', '#submitrank', function() {
 		alert("Rank submited!");
 		$.mobile.changePage("profile.html");
