@@ -1394,6 +1394,7 @@ app.post('/Project1Srv/accounts', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 	// Hay que buscar el query correcto
+	//var saquery = client.query("insert")
 	var query = client.query("insert into account (username, fname, lname, email, apassword, shippingid, billingid, depositid)" +
 			"values ('jsmith', 'john', 'smith', 'jsmith@example.com', 1234, 2, 2, 2)");
 
