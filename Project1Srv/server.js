@@ -1344,22 +1344,6 @@ app.post('/Project1Srv/accountsdeleted/', function(req, res) {
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
 			"WHERE username= '" + req.param('username') + "'");
-
-	query.on("row", function (row, result) {
-		result.addRow(row);
-	});
-	query.on("end", function (result) {
-		var len = result.rows.length;
-		if (len == 0){
-			res.statusCode = 404;
-			res.send("Address not found.");
-		}
-		else {        
-			var response = {"address" : result.rows[0]};
-			client.end();
-			res.json(response);
-		}
-	});
 });
 
 app.post('/Project1Srv/accountsdelete/:id', function(req, res) {
@@ -1370,22 +1354,6 @@ app.post('/Project1Srv/accountsdelete/:id', function(req, res) {
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
 			"WHERE accountid= '" + id + "'");
-
-	query.on("row", function (row, result) {
-		result.addRow(row);
-	});
-	query.on("end", function (result) {
-		var len = result.rows.length;
-		if (len == 0){
-			res.statusCode = 404;
-			res.send("Address not found.");
-		}
-		else {        
-			var response = {"address" : result.rows[0]};
-			client.end();
-			res.json(response);
-		}
-	});
 });
 
 // REST Operation - HTTP POST to add a new a account
