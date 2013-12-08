@@ -28,8 +28,8 @@ app.use(express.bodyParser());
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
 
-var conString = "pg://postgres:course@localhost:5432/db2";
-//var conString = "pg://course:course@localhost:5432/db2";
+//var conString = "pg://postgres:course@localhost:5432/db2";
+var conString = "pg://course:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -1457,16 +1457,22 @@ app.post('/Project1Srv/accounts', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 	// Hay que buscar el query correcto
-	var saquery = client.query("insert into address(addressid, address) VALUES((select (max(addressid)+1) as addressid from address),'"+ req.param('shipping') +"') returning addressid");
+	/*var saquery = "insert into address(addressid, address) VALUES((select (max(addressid)+1) as addressid from address),'"+ req.param('shipping') +"') returning addressid";
 	//console.log(saquery);
-	var baquery = client.query("insert into address(addressid, address) VALUES((select (max(addressid)+1) as addressid from address),'"+ req.param('billing') +"') returning addressid");
-	var daquery = client.query("insert into depositaccount(depositaccountid, bankaccountnumber) VALUES((select (max(depositaccountid)+1) as depositaccountid from depositaccount),'"+ req.param('bank') +"') returning depositaccountid");
-	var ccquery = client.query("insert into creditcard(creditid, addressid, cardtype, cardnumber, securitynumber, expdate) VALUES((select (max(creditid)+1) as creditid from creditcard),"+ baquery +", '"+ 
+	var baquery = "insert into address(addressid, address) VALUES((select (max(addressid)+1) as addressid from address),'"+ req.param('billing') +"') returning addressid";
+	var daquery = "insert into depositaccount(depositaccountid, bankaccountnumber) VALUES((select (max(depositaccountid)+1) as depositaccountid from depositaccount),'"+ req.param('bank') +"') returning depositaccountid";
+	var ccquery = "insert into creditcard(creditid, addressid, cardtype, cardnumber, securitynumber, expdate) VALUES((select (max(creditid)+1) as creditid from creditcard),"+ baquery +", '"+ 
 	req.param('credittype') +"', '"+ req.param('creditnumber') +"', '"+ req.param('securitynumber') +"', '"+ 
-	req.param('expdate') +"') returning creditid");
+	req.param('expdate') +"') returning creditid";*/
 	var query = client.query("insert into account (accountid, username, fname, lname, email, apassword, shippingid, billingid, depositid)" +
 			"values ((select (max(accountid)+1) as accountid from account),'"+ req.param('username') +"', '"+ req.param('fname') +"', '"+ req.param('lname') +"', '"+
-			 req.param('email') +"', '"+ req.param('password') +"', "+ saquery +", "+ baquery +", "+ daquery +")");
+			 req.param('email') +"', '"+ req.param('password') 
+			 +"', (insert into address(addressid, address) VALUES((select (max(addressid)+1) as addressid from address),'"+ req.param('shipping') +"') returning addressid)," + 
+			 " (insert into address(addressid, address) VALUES((select (max(addressid)+1) as addressid from address),'"+ req.param('billing') +"') returning addressid)," + 
+			 " (insert into depositaccount(depositaccountid, bankaccountnumber) VALUES((select (max(depositaccountid)+1) as depositaccountid from depositaccount),'"+ req.param('bank') +"') returning depositaccountid));" +
+			 "insert into creditcard(creditid, addressid, cardtype, cardnumber, securitynumber, expdate) VALUES((select (max(creditid)+1) as creditid from creditcard),"+ baquery +", '"+ 
+			req.param('credittype') +"', '"+ req.param('creditnumber') +"', '"+ req.param('securitynumber') +"', '"+ 
+			req.param('expdate') +"') returning creditid");
 });
 
 
