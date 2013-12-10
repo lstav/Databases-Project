@@ -3466,7 +3466,7 @@ function AddAccount(){
 		success: function(data, textStatus, jqXHR){
     		alert('POST Completed');
 			$.mobile.loading("hide");
-			$.mobile.changePage("account.html");
+			$.mobile.changePage("login.html");
   		},
   		error: function(jqXHR, textStatus, errorThrown){
     		alert("failure");
