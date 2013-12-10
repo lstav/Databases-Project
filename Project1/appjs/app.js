@@ -31,12 +31,6 @@ function getCookie(c_name)
 	return c_value;
 }
 
-
-/*$(document).on('pagebeforeshow', "#userrank-page", function(event, ui) {
-	$('rank').raty(
-		starn
-	);	
-});*/
 $(document).on('pagebeforeshow', '#login', function(){  
 
 	$(document).on('click', '#submit', function() { 
@@ -63,12 +57,12 @@ $(document).on('pagebeforeshow', '#sign-up', function(){
 
 		var username= $('#username').val();
 		var password= $('#password').val();
-		var first= $('#firstname').val();
-		var last= $('#lastname').val();
+		var first= $('#fname').val();
+		var last= $('#lname').val();
 		var email= $('#email').val();
-		var address= $('#address').val();
-		var creditcard=$('#creditcard').val();
-		var billingaddress= $('#billingaddress').val();
+		var address= $('#shipping').val();
+		var creditcard=$('#creditnumber').val();
+		var billingaddress= $('#billing').val();
 
 		if(username.length > 0 && password.length > 0 && first.length > 0 && last.length > 0 && email.length > 0 && address.length > 0 && creditcard.length >0 && billingaddress.length > 0){
 
@@ -229,6 +223,7 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 
 $(document).on('click', '#account-update', function() { 
 	
+	
 	$('#upd-username').val(loginAccount.username); 
 	$('#upd-fname').val(loginAccount.fname);
 	$('#upd-lname').val(loginAccount.lname);
@@ -252,7 +247,7 @@ $(document).on('click', '#account-update', function() {
 	$('#expDate').html("Expiration Date: " + loginAccount.expdate);
 	$('#email').html("Email: " + loginAccount.email);
 	$('#password').html("Password: " + pass); 
-
+	
 
 });  
 
@@ -263,12 +258,44 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	if(loginAccount.username == undefined && obj.username != undefined){
 		loginAccount = obj;
 	}
+	//alert(loginAccount.username);
+	if(loginAccount.username!= undefined){
 
-	var len = loginAccount.apassword.length;
-	var pass = "";
-	for (var i=0; i < len; ++i){
-		pass = pass + "*";
+		$(document).on('click', '#edit-account', function() { 
+			$.mobile.changePage("settings.html");
+		});
+		$(document).on('click', '#rankers-button', function() { 
+			GetRankers(loginAccount.accountid);
+
+		});  
+		var stars = "";
+
+		for(var i=0; i<loginAccount.rank; i++) {
+			stars = stars + "*";
+		}
+
+		var list = $("#account-settings");
+		list.empty();
+		var account = loginAccount;
+		        
+		list.append('<li><label for="username">Username: <input id="username" name="username" type="text" value="'+ loginAccount.username+'"></label></li>' +
+					'<li><label for="fname">First Name: <input id="fname" name="fname" type="text" value="'+ loginAccount.fname+'"></label></li>' +
+					'<li><label for="lname">Last Name: <input id="lname" name="lname" type="text" value="'+ loginAccount.lname+'"></label></li>' +
+					'<li><label for="shipping">Shipping Address: <input id="shipping" name="shipping" type="text" value="'+ loginAccount.shipping+'"></label></li>' +
+					'<li><label for="billing">Billing Address: <input id="billing" name="billing" type="text" value="'+ loginAccount.billing+'"></label></li>' +
+					'<li><label for="creditnumber">Credit Card Number: <input id="creditnumber" name="creditnumber" type="text" value="'+ loginAccount.cardnumber+'"></label></li>' +
+					'<li><label for="credittype">Credit Card Type: <input id="credittype" name="credittype" type="text" value="'+ loginAccount.cardtype+'"></label></li>' +
+					'<li><label for="securitynumber">Security Number: <input id="securitynumber" name="securitynumber" type="text" value="'+ loginAccount.securitynumber+'"></label></li>' +
+					'<li><label for="expdate">Expiration Date: <input id="expdate" name="expdate" type="text" value="'+ loginAccount.expdate+'"></label></li>' +
+					'<li><label for="email">Email: <input id="email" name="email" type="text" value="'+ loginAccount.email+'"></label></li>' +
+					'<li><label for="password">Password: <input id="password" name="password" type="text" value="'+ loginAccount.apassword+'"></label></li>');
+					//'<li><label for="bank">Bank Account: <input id="bank" name="bank" type="text" value="'+ loginAccount.lname+'"></label></li>');
+		list.listview("refresh");}
+
+	else{
+		$.mobile.changePage("login.html");
 	}
+	/*
 	//alert(loginAccount.username);
 	$('#upd-username').val(loginAccount.username); 
 	$('#upd-fname').val(loginAccount.fname);
@@ -293,7 +320,7 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	$('#expDate').html("Expiration Date: " + loginAccount.expdate);
 	$('#email').html("Email: " + loginAccount.email);
 	$('#password').html("Password: " + pass); 
-
+	*/
 	$(document).on('click', '#deleteaccount', function() { 
 		DeleteAccounts(loginAccount.accountid);
 	}); 
@@ -3484,16 +3511,16 @@ function ChangePassword(){
 		type : 'post',
 		data : formData,
 		//contentType: "application/json",
-		//dataType:"json",
+		dataType:"json",
 		success: function(data, textStatus, jqXHR){
     		alert('Password Changed');
 			$.mobile.loading("hide");
-			$.mobile.changePage("index.html");
+			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(errorThrown, textStatus, jqXHR){
     		alert("Error 444: No response");
     		$.mobile.loading("hide");
-			$.mobile.changePage("index.html");
+			$.mobile.changePage("index.html", {transition: "none"});
   		}
 	});
 }

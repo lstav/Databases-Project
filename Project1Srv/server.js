@@ -93,7 +93,8 @@ app.get('/Project1Srv/login/:username/:password', function(req, res) {
 			"from account, address where account.shippingid = address.addressid) as s natural join " +
 			"(select address as billing, b.addressid as billingid, cardnumber, cardtype, securitynumber, expdate " + 
 			"from account, address as b, creditcard as c " +
-			"where account.billingid = b.addressid and c.addressid = b.addressid) as b " + 
+			"where account.billingid = b.addressid and c.addressid = b.addressid) as b natural join " +
+			"(select depositaccountid as depositid, bankaccountnumber as bank)" + 
 			"where account.username = '" + username + "' and account.isactive = 'TRUE'");
 
 	query.on("row", function (row, result) {
@@ -1409,27 +1410,22 @@ app.post('/Project1Srv/accountspassword/', function(req, res) {
 	client.connect();
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET apassword= '" + req.param('password') + "' " +
-			"WHERE username= '" + req.param('username') + "'");
+			"WHERE username= '" + req.param('username') + "' RETURNING account.username");
 	
 	query.on("row", function (row, result) {
 		result.addRow(row);
 	});
-	
 	query.on("end", function (result) {
 		var len = result.rows.length;
 		if (len == 0){
-			//res.statusCode = 404;
-			//res.send("Address not found.");
-			var response = {"accountspassword" : result.rows[0]};
-			client.end();
-			//res.json(response);
-			res.json(true);
+			res.statusCode = 404;
+			res.send("Address not found.");
 		}
 		else {        
-			var response = {"accountspassword" : result.rows[0]};
+			var response = {'accountspassword ' : result.rows[0]};
 			client.end();
-			//res.json(response);
-			res.json(true);
+			console.log(response);
+			res.json(response);
 		}
 	});
 });
