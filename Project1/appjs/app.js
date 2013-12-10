@@ -751,6 +751,11 @@ $(document).on('click', '#submit-search-all', function() {
 	GetSearch(term);
 });
 
+$(document).on('click', '#submit-search-all2', function() { 
+	var term= $('#search-term2').val();
+	GetSearch(term);
+});
+
 
 $(document).on('pagebeforeshow', "#catLayout", function(event, ui) {
 
@@ -1501,10 +1506,77 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 });
 
 $(document).on('click', '#submitcheckout-button', function() {
-		setCookie(loginAccount.accountid, JSON.stringify('[]'));
-		setCookie("guest", JSON.stringify('[]'));
-		alert("Thanks for shopping!!");
-		$.mobile.changePage("index.html");
+	var ucart={};
+	if(sessionStorage.getItem("account")) {
+		var txt = sessionStorage.getItem("account");
+		var obj = eval('(' + txt + ')');
+		if(loginAccount.username == undefined && obj.username != undefined){
+			loginAccount = obj;
+		}
+	}
+	
+	if(loginAccount.accountid != undefined){
+		ucart= loginAccount.accountid;
+	}
+	
+	else{
+		ucart= "guest";
+		if(getCookie(ucart) == undefined){
+			setCookie(ucart, JSON.stringify('[]'));
+		}
+	}
+	
+	var txt = $.parseJSON(getCookie(ucart));
+	var obj = eval('(' + txt + ')');
+	var len = obj.length;
+	var totalPrice=0.00;
+	
+	for(var i=0; i < len; i++){
+
+		var formData = {id:obj[i].shoppingcart, count: 0, position:i, firstposition: i};
+		for(var j=0; j < len; j++){
+			if(obj[j].shoppingcart == formData.id){
+				formData.count = formData.count+1;
+				if(j < formData.position){
+					formData.firstposition=j;
+				}
+			}
+		}
+		if(formData.firstposition == formData.position){
+		$.ajax({
+		url : "http://localhost:3412/Project1Srv/updateSale",
+		type: 'put',
+		data : formData,
+		success : function(data) {
+				
+				formData.qty= data.updateSale[0].totalquantity;
+
+				/*$.ajax({
+				url : "http://localhost:3412/Project1Srv/updateDeactive",
+				type: 'put',
+				data : formData,
+				success : function(data) {
+					console.log("product is not in sale list anymore");
+				},
+	
+				error: function(data, textStatus, jqXHR){
+				console.log("textStatus: " + textStatus);
+				alert("product sale not updated!");}          	
+				});	*/
+				
+				setCookie(loginAccount.accountid, JSON.stringify('[]'));
+				setCookie("guest", JSON.stringify('[]'));
+				alert("Thanks for shopping!!");
+				$.mobile.changePage("index.html");
+		},
+
+		error: function(data, textStatus, jqXHR){
+		console.log("textStatus: " + textStatus);
+		alert("sale not ended!");}          	
+		
+		});}
+	}
+		
 });
 
 ////////// Shopping Cart
@@ -3591,7 +3663,6 @@ function InsertBid(id, ibid){
 //Search
 var AllSearch=true;
 function GetSearch(term){
-
 	sessionStorage.setItem("search", true);
 	sessionStorage.setItem("term", term);
 	allSearch=true;
@@ -3624,10 +3695,9 @@ function GetSearch(term){
 }
 
 function GetSearchSub(term, id){
-
 	sessionStorage.setItem("search", false);
 	sessionStorage.setItem("term", term);
-	allSeach= false;
+	allSearch= false;
 	$.mobile.loading("show");
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/searchSub/"+ term+"/"+id,
