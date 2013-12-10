@@ -3526,10 +3526,9 @@ function ChangePassword(){
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountspassword/",
 		type : 'post',
+		dataType: 'json',
 		data : formData,
-		//contentType: "application/json",
-		dataType:"html or json",
-		success: function(datar, textStatus, jqXHR){
+		success: function(data){
     		alert('Password Changed');
 			$.mobile.loading("hide");
 			$.mobile.changePage("index.html", {transition: "none"});
