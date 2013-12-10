@@ -288,8 +288,9 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 					'<li><label for="securitynumber">Security Number: <input id="securitynumber" name="securitynumber" type="text" value="'+ loginAccount.securitynumber+'"></label></li>' +
 					'<li><label for="expdate">Expiration Date: <input id="expdate" name="expdate" type="text" value="'+ loginAccount.expdate+'"></label></li>' +
 					'<li><label for="email">Email: <input id="email" name="email" type="text" value="'+ loginAccount.email+'"></label></li>' +
-					'<li><label for="password">Password: <input id="password" name="password" type="text" value="'+ loginAccount.apassword+'"></label></li>');
-					//'<li><label for="bank">Bank Account: <input id="bank" name="bank" type="text" value="'+ loginAccount.lname+'"></label></li>');
+					'<li><label for="password">Password: <input id="password" name="password" type="text" value="'+ loginAccount.apassword+'"></label></li>' +
+					'<li><label for="bank">Bank Account: <input id="bank" name="bank" type="text" value="'+ loginAccount.bank+'"></label></li>');
+		list.append('<li><input value="Submit" type="submit" onClick=SaveAccount() /></li>');
 		list.listview("refresh");}
 
 	else{
@@ -2007,10 +2008,6 @@ function ConverToJSON(formData){
 	return result;
 }
 
-function SaveAccount(){
-	alert("Account Created!");
-}
-
 var currentAddress = {};
 
 function GetAddress(addressid){
@@ -2066,8 +2063,28 @@ function GetRankers(id){
 }
 
 
-function UpdateAccount(){
-	alert("Account Saved!");
+function SaveAccount(){
+	$.mobile.loading("show");
+	var form = $("#accountpass-form");
+	var formData = form.serializeArray();
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accounts/",
+		type : 'post',
+		data : formData,
+		//contentType: "application/json",
+		dataType:"json",
+		success: function(data, textStatus, jqXHR){
+    		alert('Password Changed');
+			$.mobile.loading("hide");
+			$.mobile.changePage("index.html", {transition: "none"});
+  		},
+  		error: function(errorThrown, textStatus, jqXHR){
+    		//alert("Error 444: No response");
+    		alert(errorThrown + " " + textStatus + " " + jqXHR);
+    		$.mobile.loading("hide");
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
 }
 
 function DeleteAccounts(id){
@@ -3511,15 +3528,15 @@ function ChangePassword(){
 		type : 'post',
 		data : formData,
 		//contentType: "application/json",
-		dataType:"json",
-		success: function(data, textStatus, jqXHR){
+		dataType:"html or json",
+		success: function(datar, textStatus, jqXHR){
     		alert('Password Changed');
 			$.mobile.loading("hide");
 			$.mobile.changePage("index.html", {transition: "none"});
   		},
-  		error: function(errorThrown, textStatus, jqXHR){
+  		error: function(jqXHR, textStatus, errorThrownn){
     		alert("Error 444: No response");
-    		$.mobile.loading("hide");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
 			$.mobile.changePage("index.html", {transition: "none"});
   		}
 	});
