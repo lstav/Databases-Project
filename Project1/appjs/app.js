@@ -3189,7 +3189,6 @@ function GetMessage(id){
 	});
 }
 
-
 function submitMessage(){
 	var user= $('#messageTo').val();
 	var sub=$('#subject').val();
