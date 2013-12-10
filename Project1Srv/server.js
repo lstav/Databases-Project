@@ -28,8 +28,8 @@ app.use(express.bodyParser());
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
 
-var conString = "pg://postgres:course@localhost:5432/db2";
-//var conString = "pg://course:course@localhost:5432/db2";
+//var conString = "pg://postgres:course@localhost:5432/db2";
+var conString = "pg://course:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -1411,10 +1411,11 @@ app.post('/Project1Srv/accountspassword/', function(req, res) {
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET apassword= '" + req.param('password') + "' " +
 			"WHERE username= '" + req.param('username') + "'");
-	/*
+	
 	query.on("row", function (row, result) {
 		result.addRow(row);
 	});
+	
 	query.on("end", function (result) {
 		var len = result.rows.length;
 		if (len == 0){
@@ -1422,12 +1423,12 @@ app.post('/Project1Srv/accountspassword/', function(req, res) {
 			res.send("Address not found.");
 		}
 		else {        
-			var response = {"address" : result.rows[0]};
+			/*var response = {"accountspassword" : result.rows[0]};
 			client.end();
-			res.json(response);
+			res.json(response);*/
+			res.send("success");
 		}
 	});
-	*/
 });
 
 
@@ -1439,6 +1440,7 @@ app.post('/Project1Srv/accountsdeleted/', function(req, res) {
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
 			"WHERE username= '" + req.param('username') + "'");
+	client.end();
 });
 
 app.post('/Project1Srv/accountsdelete/:id', function(req, res) {
@@ -1449,14 +1451,15 @@ app.post('/Project1Srv/accountsdelete/:id', function(req, res) {
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
 			"WHERE accountid= '" + id + "'");
+			
+	client.end();
 });
 
 // REST Operation - HTTP POST to add a new a account
-app.post('/Project1Srv/accounts', function(req, res) {
+app.post('/Project1Srv/accountscreated', function(req, res) {
 	console.log("POST account: " + req.param('username'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
 
 	var query = client.query("with said as(insert into address(addressid, address)" + 
 		"VALUES((select (max(addressid)+1) as addressid from address), '"+ req.param('shipping') +"')" + "returning addressid), "  +
@@ -1471,6 +1474,8 @@ app.post('/Project1Srv/accounts', function(req, res) {
 		"insert into creditcard " +
 		"values((select (max(creditid)+1) as creditid from creditcard),(select billingid from aid),'"+ req.param('credittype') +
 		"','"+ req.param('creditnumber') +"','"+ req.param('securitynumber') +"','"+ req.param('expdate') +"');");
+		
+	client.end();
 });
 
 

@@ -3460,16 +3460,18 @@ function AddAccount(){
 	var form = $("#account-form");
 	var formData = form.serializeArray();
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accounts/",
+		url : "http://localhost:3412/Project1Srv/accountscreated/",
 		type: 'post',
 		data : formData,
-		success: function(data, textStatus, jqXHR){
-    		alert('POST Completed');
+		success: function(errorThrown, textStatus, jqXHR){
+    		alert('Account Created');
 			$.mobile.loading("hide");
 			$.mobile.changePage("login.html");
   		},
-  		error: function(jqXHR, textStatus, errorThrown){
-    		alert("failure");
+  		error: function(jqXHR, textStatus, data){
+    		alert("Error 444: No response");
+    		$.mobile.loading("hide");
+			$.mobile.changePage("index.html");
   		}
 	});
 }
@@ -3482,13 +3484,15 @@ function ChangePassword(){
 		url : "http://localhost:3412/Project1Srv/accountspassword/",
 		type : 'post',
 		data : formData,
-		success: function(data, textStatus, jqXHR){
-    		alert('POST Completed');
+		success: function(data){
+    		alert('Password Changed');
 			$.mobile.loading("hide");
 			$.mobile.changePage("index.html");
   		},
   		error: function(jqXHR, textStatus, errorThrown){
-    		alert("failure");
+    		alert("Error 444: No response");
+    		$.mobile.loading("hide");
+			$.mobile.changePage("index.html");
   		}
 	});
 }
