@@ -1418,14 +1418,18 @@ app.post('/Project1Srv/accountspassword/', function(req, res) {
 	query.on("end", function (result) {
 		var len = result.rows.length;
 		if (len == 0){
-			res.statusCode = 404;
-			res.send("Address not found.");
+			//res.statusCode = 404;
+			//res.send("Address not found.");
+			var response = {"accountspassword" : result.rows[0]};
+			client.end();
+			//res.json(response);
+			res.json(true);
 		}
 		else {        
-			/*var response = {"accountspassword" : result.rows[0]};
+			var response = {"accountspassword" : result.rows[0]};
 			client.end();
-			res.json(response);*/
-			res.send("success");
+			//res.json(response);
+			res.json(true);
 		}
 	});
 });

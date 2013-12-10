@@ -3483,12 +3483,14 @@ function ChangePassword(){
 		url : "http://localhost:3412/Project1Srv/accountspassword/",
 		type : 'post',
 		data : formData,
-		success: function(data){
+		//contentType: "application/json",
+		//dataType:"json",
+		success: function(data, textStatus, jqXHR){
     		alert('Password Changed');
 			$.mobile.loading("hide");
 			$.mobile.changePage("index.html");
   		},
-  		error: function(jqXHR, textStatus, errorThrown){
+  		error: function(errorThrown, textStatus, jqXHR){
     		alert("Error 444: No response");
     		$.mobile.loading("hide");
 			$.mobile.changePage("index.html");
