@@ -449,6 +449,26 @@ app.put('/Project1Srv/updateDeactive', function(req, res) {
 	});
 });
 
+app.put('/Project1Srv/updateSale', function(req, res) {
+
+	console.log("UPDATE sale info");
+
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query= client.query("UPDATE sale SET totalquantity= totalquantity-"+req.param('count')+" WHERE prodid="+req.param('id')+" RETURNING *");
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"updateSale" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+
 app.put('/Project1Srv/updatepname', function(req, res) {
 
 	console.log("UPDATE product name");
