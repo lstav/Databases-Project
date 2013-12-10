@@ -1266,7 +1266,6 @@ app.put('/Project1Srv/deletembox', function(req, res) {
 });
 
 app.post('/Project1Srv/addmessage', function(req, res) {
-
 	console.log("Send message to: "+req.param('username'));
 
 	var client = new pg.Client(conString);
