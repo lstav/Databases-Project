@@ -28,8 +28,8 @@ app.use(express.bodyParser());
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
 
-var conString = "pg://postgres:course@localhost:5432/db2";
-//var conString = "pg://course:course@localhost:5432/db2";
+//var conString = "pg://postgres:course@localhost:5432/db2";
+var conString = "pg://course:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -93,7 +93,8 @@ app.get('/Project1Srv/login/:username/:password', function(req, res) {
 			"from account, address where account.shippingid = address.addressid) as s natural join " +
 			"(select address as billing, b.addressid as billingid, cardnumber, cardtype, securitynumber, expdate " + 
 			"from account, address as b, creditcard as c " +
-			"where account.billingid = b.addressid and c.addressid = b.addressid) as b " + 
+			"where account.billingid = b.addressid and c.addressid = b.addressid) as b natural join " +
+			"(select depositaccountid as depositid, bankaccountnumber as bank FROM depositaccount) as d " + 
 			"where account.username = '" + username + "' and account.isactive = 'TRUE'");
 
 	query.on("row", function (row, result) {
@@ -1286,7 +1287,6 @@ app.put('/Project1Srv/deletembox', function(req, res) {
 });
 
 app.post('/Project1Srv/addmessage', function(req, res) {
-
 	console.log("Send message to: "+req.param('username'));
 
 	var client = new pg.Client(conString);
@@ -1420,18 +1420,27 @@ app.get('/Project1Srv/address/:addressid', function(req, res) {
 
 
 // REST Operation - HTTP PUT to updated an account based on its id
-app.put('/Project1Srv/accounts/:aid', function(req, res) {
-
-});
-
-app.post('/Project1Srv/accountspassword/', function(req, res) {
-	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+app.post('/Project1Srv/accounts/', function(req, res) {
+	console.log("PUT account: " + req.param('username'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
-	var query = client.query("UPDATE account SET apassword= '" + req.param('password') + "' " +
-			"WHERE username= '" + req.param('username') + "'");
-	/*
+	
+	var query = client.query("UPDATE address SET address = '"+req.param("shipping")+"'" +
+		"where addressid = (SELECT shippingid FROM account WHERE username = '"+req.param("username")+"');" +
+		"UPDATE address SET address = '"+req.param("billing")+"'" +
+		"where addressid = (SELECT billingid FROM account WHERE username = '"+req.param("username")+"');" +
+		"UPDATE depositaccount SET bankaccountnumber = '"+req.param("bank")+"'" +
+		"WHERE depositaccountid = (SELECT depositid FROM account WHERE username = '"+req.param("username")+"');" +
+		"UPDATE creditcard SET cardtype = '"+req.param("credittype")+"', cardnumber = '"+req.param("creditnumber")+"', securitynumber = '"+req.param("securitynumber")+"'," +
+		"expdate = '"+req.param("expdate")+"'" +
+		"WHERE addressid = (SELECT billingid FROM account WHERE username = '"+req.param("username")+"');"+
+		"UPDATE account SET username = '"+req.param("username")+"', fname = '"+req.param("fname")+"', lname = '"+req.param("lname")+"',"+
+		"email = '"+req.param("email")+"', apassword = '"+req.param("password")+"'"+
+		"where username = '"+req.param("username")+"'");
+		
+	/*var query = client.query("UPDATE account SET apassword= '" + req.param('password') + "' " +
+			"WHERE username= '" + req.param('username') + "' RETURNING account.username");*/
+	
 	query.on("row", function (row, result) {
 		result.addRow(row);
 	});
@@ -1442,12 +1451,30 @@ app.post('/Project1Srv/accountspassword/', function(req, res) {
 			res.send("Address not found.");
 		}
 		else {        
-			var response = {"address" : result.rows[0]};
+			var response = {"accountspassword" : result.rows[0]};
 			client.end();
+			
 			res.json(response);
 		}
 	});
-	*/
+});
+
+app.post('/Project1Srv/accountspassword/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE account SET apassword= '" + req.param('password') + "' " +
+			"WHERE username= '" + req.param('username') + "' RETURNING account.username");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
 });
 
 
@@ -1459,6 +1486,7 @@ app.post('/Project1Srv/accountsdeleted/', function(req, res) {
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
 			"WHERE username= '" + req.param('username') + "'");
+	client.end();
 });
 
 app.post('/Project1Srv/accountsdelete/:id', function(req, res) {
@@ -1469,24 +1497,31 @@ app.post('/Project1Srv/accountsdelete/:id', function(req, res) {
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
 			"WHERE accountid= '" + id + "'");
+			
+	client.end();
 });
 
 // REST Operation - HTTP POST to add a new a account
-app.post('/Project1Srv/accounts', function(req, res) {
+app.post('/Project1Srv/accountscreated', function(req, res) {
 	console.log("POST account: " + req.param('username'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
-	var saquery = client.query("insert into address(addressid, address) VALUES((select (max(addressid)+1) as addressid from address),'"+ req.param('shipping') +"') returning addressid");
-	//console.log(saquery);
-	var baquery = client.query("insert into address(addressid, address) VALUES((select (max(addressid)+1) as addressid from address),'"+ req.param('billing') +"') returning addressid");
-	var daquery = client.query("insert into depositaccount(depositaccountid, bankaccountnumber) VALUES((select (max(depositaccountid)+1) as depositaccountid from depositaccount),'"+ req.param('bank') +"') returning depositaccountid");
-	var ccquery = client.query("insert into creditcard(creditid, addressid, cardtype, cardnumber, securitynumber, expdate) VALUES((select (max(creditid)+1) as creditid from creditcard),"+ baquery +", '"+ 
-	req.param('credittype') +"', '"+ req.param('creditnumber') +"', '"+ req.param('securitynumber') +"', '"+ 
-	req.param('expdate') +"') returning creditid");
-	var query = client.query("insert into account (accountid, username, fname, lname, email, apassword, shippingid, billingid, depositid)" +
-			"values ((select (max(accountid)+1) as accountid from account),'"+ req.param('username') +"', '"+ req.param('fname') +"', '"+ req.param('lname') +"', '"+
-			 req.param('email') +"', '"+ req.param('password') +"', "+ saquery +", "+ baquery +", "+ daquery +")");
+
+	var query = client.query("with said as(insert into address(addressid, address)" + 
+		"VALUES((select (max(addressid)+1) as addressid from address), '"+ req.param('shipping') +"')" + "returning addressid), "  +
+		"baid as(insert into address(addressid, address) VALUES((select (max(addressid)+2) as addressid from address), '"+ req.param('billing') +"') returning addressid), " +
+		"daid as(insert into depositaccount(depositaccountid, bankaccountnumber) " +
+		"VALUES((select (max(depositaccountid)+1) as depositaccountid from depositaccount),'"+ req.param('bank') +"') " +
+		"returning depositaccountid), " +
+		"aid as(insert into account (accountid, username, fname, lname,email, apassword, shippingid, billingid, depositid) " +
+		"values((select (max(accountid)+1) as accountid from account),'"+ req.param('username') +"','"+ req.param('fname') +
+		"','"+ req.param('lname') +"','"+ req.param('email') +"','"+ req.param('password') +
+		"', " +	"(select addressid from said) " + ",(select addressid from baid) " + ",(select depositaccountid from daid))returning*) " +
+		"insert into creditcard " +
+		"values((select (max(creditid)+1) as creditid from creditcard),(select billingid from aid),'"+ req.param('credittype') +
+		"','"+ req.param('creditnumber') +"','"+ req.param('securitynumber') +"','"+ req.param('expdate') +"');");
+		
+	client.end();
 });
 
 
