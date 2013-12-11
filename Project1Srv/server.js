@@ -1479,7 +1479,7 @@ app.put('/Project1Srv/accountspassword/', function(req, res) {
 
 
 // REST Operation - HTTP DELETE to delete an account based on its id
-app.post('/Project1Srv/accountsdeleted/', function(req, res) {
+app.put('/Project1Srv/accountsdeleted/', function(req, res) {
 	console.log("DELETE account: " + req.param('username'));
 	var client = new pg.Client(conString);
 	client.connect();
@@ -1489,7 +1489,7 @@ app.post('/Project1Srv/accountsdeleted/', function(req, res) {
 	client.end();
 });
 
-app.post('/Project1Srv/accountsdelete/:id', function(req, res) {
+app.put('/Project1Srv/accountsdelete/:id', function(req, res) {
 	var id = req.params.id;
 	console.log("DELETE account: " + id);
 	var client = new pg.Client(conString);

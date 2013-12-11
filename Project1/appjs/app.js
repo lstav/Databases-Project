@@ -2169,11 +2169,10 @@ function DeleteAccounts(id){
 		$.mobile.loading("show");
 		$.ajax({
 			url : "http://localhost:3412/Project1Srv/accountsdelete/" + id,
-			type: 'post',
+			type: 'put',
 			contentType: "application/json",
 			dataType:"json",
 			success : function(data, textStatus, jqXHR) {
-			console.log('POST Completed');
 			$.mobile.loading("hide");
 			$.mobile.navigate("index.html");
 		}
@@ -3624,7 +3623,7 @@ function DeleteAccount(){
 	var formData = form.serializeArray();
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountsdeleted/",
-		type : 'post',
+		type : 'put',
 		data : formData,
 		success : function() {
 		console.log('DELETE Completed');
