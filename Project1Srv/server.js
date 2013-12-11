@@ -1459,6 +1459,187 @@ app.post('/Project1Srv/accounts/', function(req, res) {
 	});
 });
 
+app.put('/Project1Srv/accountfname/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE account SET fname= '" + req.param('password') + "' " +
+			"WHERE username= '" + req.param('username') + "' RETURNING account.username");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountlname/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE account SET lname= '" + req.param('password') + "' " +
+			"WHERE username= '" + req.param('username') + "' RETURNING account.username");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountshipping/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE address SET address= '" + req.param('password') + "' " +
+			"WHERE addressid = (SELECT shippingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountbilling/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE address SET address= '" + req.param('password') + "' " +
+			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountcardnumber/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE creditcard SET cardnumber= '" + req.param('password') + "' " +
+			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountcardtype/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE creditcard SET cardnumber= '" + req.param('password') + "' " +
+			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountsecurity/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE creditcard SET securitynumber= '" + req.param('password') + "' " +
+			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountexpdate/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE creditcard SET expdate= '" + req.param('password') + "' " +
+			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountemail/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE account SET email= '" + req.param('password') + "' " +
+			"WHERE username = '" + req.param('username') + "' RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountbank/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE depositaccountid SET bankaccountnumber= '" + req.param('password') + "' " +
+			"WHERE depositaccountid = (SELECT depositid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+
 app.put('/Project1Srv/accountspassword/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
@@ -1478,15 +1659,23 @@ app.put('/Project1Srv/accountspassword/', function(req, res) {
 });
 
 
+
 // REST Operation - HTTP DELETE to delete an account based on its id
-app.put('/Project1Srv/accountsdeleted/', function(req, res) {
+app.post('/Project1Srv/accountsdeleted/', function(req, res) {
 	console.log("DELETE account: " + req.param('username'));
 	var client = new pg.Client(conString);
 	client.connect();
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
 			"WHERE username= '" + req.param('username') + "'");
-	client.end();
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountsdeleted" : result.rows};
+		client.end();
+		res.json(response);
+	});
 });
 
 app.put('/Project1Srv/accountsdelete/:id', function(req, res) {
