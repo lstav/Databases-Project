@@ -327,11 +327,20 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	}); 
 	
 	$(document).on('click', '#account-updatepassword', function() { 
-		ChangePassword();
+		var pass= $("#upd-password").val();
+		var formData = {username: loginAccount.username, password: pass};
+		ChangePassword(formData);
 	}); 
 
 });
 
+$(document).on('click', '#admpassword', function() {
+		var user= $("#admchangeusername").val();
+		var pass= $("#admchangepassword").val();
+		var formData = {username: loginAccount.username, password: pass};
+		ChangePassword(formData); 
+}); 
+	
 $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 
 	var txt = sessionStorage.getItem("profile");
@@ -3594,11 +3603,10 @@ function AddAccount(){
 	});
 }
 
-function ChangePassword(){
-	//var form = $("#accountpass-form");
-	var pass= $("#upd-password").val();
-	var formData = {username: loginAccount.username, password: pass};
-	//alert(formData.password);
+function ChangePassword(info){
+
+	var formData = info;
+
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountspassword/",
 		type : 'put',
