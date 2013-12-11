@@ -334,10 +334,12 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 
 });
 
-$(document).on('click', '#admpassword', function() {
+$(document).on('click', '#admaccount', function() {
 		var user= $("#admchangeusername").val();
 		var pass= $("#admchangepassword").val();
-		var formData = {username: loginAccount.username, password: pass};
+		var formData = {username: user, password: pass};
+		alert(formData.username);
+		alert(formData.password);
 		ChangePassword(formData); 
 }); 
 	
@@ -3606,7 +3608,6 @@ function AddAccount(){
 function ChangePassword(info){
 
 	var formData = info;
-
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountspassword/",
 		type : 'put',
@@ -3614,8 +3615,7 @@ function ChangePassword(info){
 		data : formData,
 		success: function(data){
     		alert('Password Changed');
-    		$('password').val("hola");
-			$.mobile.navigate("#account-view.html", {transition: "none"});
+			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
     		alert("Error 444: No response");
