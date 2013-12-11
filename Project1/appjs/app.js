@@ -485,18 +485,25 @@ $(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
 	if(profile.username == undefined && obj.username != undefined){
 		profile = obj;
 	}
+	
+	var txt2 = sessionStorage.getItem("accounts");
+	var obj2 = eval('(' + txt2 + ')');
+	if(loginAccount.username == undefined && obj2.username != undefined){
+		loginAccount = obj2;
+	}
 	/*$('#star').raty({
   score: function() {
     return $(this).attr('data-score');
   }
-});*/
+});
 	$('#rank').raty({
 		starOn: 'appjs/star-on-big.png',
   		starOff: 'appjs/star-off-big.png',
   		number: 4
-	});
+	});*/
 	
 	$(document).on('click', '#submitrank', function() {
+		RankUser();
 		alert("Rank submited!");
 		$.mobile.changePage("profile.html", {transition: "none"});
 	});
