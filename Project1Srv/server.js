@@ -641,23 +641,90 @@ app.get('/Project1Srv/categories', function(req, res){
 	});
 });
 
-app.get('/Project1Srv/todaysale', function(req, res){
+app.get('/Project1Srv/todaysales', function(req, res){
 
-	console.log("GET categories");
+	console.log("GET today sales");
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT * FROM category WHERE isactive='TRUE' ORDER BY catname");
+	var query = client.query("SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+			"FROM product, sale NATURAL JOIN checkout,invoice " +
+			"WHERE productid = prodid AND invid=invoiceid " +
+			"AND date = CURRENT_DATE " +
+			"group by prodid,prodname " +
+			"UNION " +
+			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+			"FROM winningBid AS W, auction AS A,product " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid " +
+			"AND enddate = CURRENT_DATE " +
+			"group by prodid,prodname");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"categories" : result.rows};
+		var response = {"todaysales" : result.rows};
 		client.end();
 		res.json(response);
 	});
 });
+
+app.get('/Project1Srv/weeksales', function(req, res){
+
+	console.log("GET this week sales");
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+			"FROM product, sale NATURAL JOIN checkout,invoice " +
+			"WHERE productid = prodid AND invid=invoiceid " +
+			"AND date > CURRENT_DATE-7 " +
+			"group by prodid,prodname " +
+			"UNION " +
+			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+			"FROM winningBid AS W, auction AS A,product " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid " +
+			"AND enddate > CURRENT_DATE-7 " +
+			"group by prodid,prodname");
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"weeksales" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.get('/Project1Srv/monthsales', function(req, res){
+
+	console.log("GET this month sales");
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+			"FROM product, sale NATURAL JOIN checkout,invoice " +
+			"WHERE productid = prodid AND invid=invoiceid " +
+			"AND EXTRACT(MONTH FROM date) > EXTRACT(MONTH FROM CURRENT_DATE)-1 " +
+			"group by prodid,prodname " +
+			"UNION " +
+			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+			"FROM winningBid AS W, auction AS A,product " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid " +
+			"AND EXTRACT(MONTH FROM enddate) > EXTRACT(MONTH FROM CURRENT_DATE)-1 " +
+			"group by prodid,prodname");
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"monthsales" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
 
 app.get('/Project1Srv/subcategory/:id', function(req, res){
 

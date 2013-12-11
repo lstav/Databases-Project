@@ -2153,14 +2153,14 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 		categories = categoriesList[0];
 		for (var i=0; i < len; ++i){
 			list.append("<li data-icon='delete' ><a onClick=DeleteCategory(" + categoriesList[i].catid + ")>"+ 
-					categoriesList[i].catname + "</li>");
+					categoriesList[i].catname + "</a></li>");
 		}        
 		list.listview("refresh");
 	},
 	error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
 		alert("Data not found!");
-		$.mobile.changePage("index.html", {transition: "none"});
+		//$.mobile.changePage("index.html", {transition: "none"});
 	}
 	});
 	
@@ -2175,19 +2175,58 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 		var today;
 		today = todayList[0];
 		for (var i=0; i < len; ++i){
-			today.name;
-			today.id;
-			today.quantity;
-			today.total;
-			
-			list.append("<li><p>" + today[i].name + " " + today[i].quantity + "</p></li>");
+			list.append("<li><a>" + todayList[i].name + " " + todayList[i].quantity + " " + todayList[i].total + "</a></li>");
 		}        
 		list.listview("refresh");
 	},
 	error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
-		alert("Data not found!");
-		$.mobile.changePage("index.html", {transition: "none"});
+		alert("Data not found Today!");
+		//$.mobile.changePage("index.html", {transition: "none"});
+	}
+	});
+	
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/weeksales",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+		var weekList = data.weeksales;
+		var len =weekList.length;
+		var list = $("#week-lists");
+		list.empty();
+		var week;
+		week = weekList[0];
+		for (var i=0; i < len; ++i){
+			list.append("<li><a>" + weekList[i].name + " " + weekList[i].quantity + " " + weekList[i].total + "</a></li>");
+		}        
+		list.listview("refresh");
+	},
+	error: function(data, textStatus, jqXHR){
+		console.log("textStatus: " + textStatus);
+		alert("Data not found this Week!");
+		//$.mobile.changePage("index.html", {transition: "none"});
+	}
+	});
+	
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/monthsales",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+		var monthList = data.monthsales;
+		var len =monthList.length;
+		var list = $("#month-lists");
+		list.empty();
+		var month;
+		month = monthList[0];
+		for (var i=0; i < len; ++i){
+			list.append("<li><a>" + monthList[i].name + " " + monthList[i].quantity + " " + monthList[i].total + "</a></li>");
+		}        
+		list.listview("refresh");
+	},
+	error: function(data, textStatus, jqXHR){
+		console.log("textStatus: " + textStatus);
+		alert("Data not found this Month!");
+		//$.mobile.changePage("index.html", {transition: "none"});
 	}
 	});
 });
@@ -2311,7 +2350,7 @@ function DeleteCategory(id){
 		$.mobile.loading("show");
 		$.ajax({
 			url : "http://localhost:3412/Project1Srv/categories/" + id,
-			type: 'put',
+			type: 'post',
 			contentType: "application/json",
 			dataType:"json",
 			success : function(data, textStatus, jqXHR) {
