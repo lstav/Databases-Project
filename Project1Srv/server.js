@@ -24,6 +24,16 @@ app.configure(function () {
 
 app.use(express.bodyParser());
 
+var interval = setInterval(function(){checkAuction();},60000);
+
+function checkAuction(){
+	var client = new pg.Client(conString);
+	client.connect();
+	
+	var query = client.query("UPDATE product SET isactive = FALSE WHERE productid IN(select prodid from auction,product where productid=prodid AND enddate < current_timestamp and isactive)"); 
+	console.log('Auctions Updated');
+}
+
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
