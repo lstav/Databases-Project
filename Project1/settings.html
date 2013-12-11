@@ -47,9 +47,11 @@
 			<form id="account-form" data-role="content" class="center-wrapper">
  				<!--<fieldset data-role="controlgroup"> -->
  			<div data-role="collapsible" data-collapsed="false" data-collapsed-icon= "false">
-                <h2>Account Information</h2>
- 				<ul id="account-settings" data-role="listview" data-icon="false">
- 					<li><label for="username">Username: <input id="username" name="username" type="text" data-mini="true"></label></li>
+                 <div data-role="collapsible" data-collapsed="false" data-collapsed-icon= "false">
+                                        <h2>Account Information</h2>
+                                        <ul id="account-settings" data-role="listview">
+                                </div>
+
  					<!--<li><label for="username">Username: <input id="username" name="username" type="text" data-mini="true"></label>
 						<a id="username">
 						<a href="#popupUsername" data-rel="popup" data-position-to="window" data-icon= "gear"></a></a>
@@ -161,6 +163,14 @@
  			 			</div>
 					</li>-->
   			</ul></div>
+  			
+  			<div data-role="popup" id="popupPassword">
+ 			 	<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+ 			 	<div style="padding:20px 20px;">
+				<center><h3>New password:</h3></center>
+        	 	<input id="upd-password" name="name" type="text">
+        	 	<a id="account-updatepassword" data-role="button" data-transition="slide" href="#account-view">Submit</a></div>
+ 			</div>
   			
 			<!--</fieldset>-->
 			</form>

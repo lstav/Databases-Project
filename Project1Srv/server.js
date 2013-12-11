@@ -28,8 +28,8 @@ app.use(express.bodyParser());
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
 
-//var conString = "pg://postgres:course@localhost:5432/db2";
-var conString = "pg://course:course@localhost:5432/db2";
+var conString = "pg://postgres:course@localhost:5432/db2";
+//var conString = "pg://course:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -1459,7 +1459,7 @@ app.post('/Project1Srv/accounts/', function(req, res) {
 	});
 });
 
-app.post('/Project1Srv/accountspassword/', function(req, res) {
+app.put('/Project1Srv/accountspassword/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
 	client.connect();

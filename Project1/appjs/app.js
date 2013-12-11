@@ -288,9 +288,9 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 					'<li><label for="securitynumber">Security Number: <input id="securitynumber" name="securitynumber" type="text" value="'+ loginAccount.securitynumber+'"></label></li>' +
 					'<li><label for="expdate">Expiration Date: <input id="expdate" name="expdate" type="text" value="'+ loginAccount.expdate+'"></label></li>' +
 					'<li><label for="email">Email: <input id="email" name="email" type="text" value="'+ loginAccount.email+'"></label></li>' +
-					'<li><label for="password">Password: <input id="password" name="password" type="text" value="'+ loginAccount.apassword+'"></label></li>' +
-					'<li><label for="bank">Bank Account: <input id="bank" name="bank" type="text" value="'+ loginAccount.bank+'"></label></li>');
-		list.append('<li><input value="Submit" type="submit" onClick=SaveAccount() /></li>');
+					'<li><label for="bank">Bank Account: <input id="bank" name="bank" type="text" value="'+ loginAccount.bank+'"></label></li>'+
+					'<li><a><label for="password">Password: ******** <a href="#popupPassword" data-rel="popup" data-position-to="window" data-icon="gear">Change</a></a></li>');
+
 		list.listview("refresh");}
 
 	else{
@@ -324,6 +324,10 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	*/
 	$(document).on('click', '#deleteaccount', function() { 
 		DeleteAccounts(loginAccount.accountid);
+	}); 
+	
+	$(document).on('click', '#account-updatepassword', function() { 
+		ChangePassword();
 	}); 
 
 });
@@ -3592,18 +3596,19 @@ function AddAccount(){
 }
 
 function ChangePassword(){
-	$.mobile.loading("show");
-	var form = $("#accountpass-form");
-	var formData = form.serializeArray();
+	//var form = $("#accountpass-form");
+	var pass= $("#upd-password").val();
+	var formData = {username: loginAccount.username, password: pass};
+	//alert(formData.password);
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountspassword/",
-		type : 'post',
+		type : 'put',
 		dataType: 'json',
 		data : formData,
 		success: function(data){
     		alert('Password Changed');
-			$.mobile.loading("hide");
-			$.mobile.changePage("index.html", {transition: "none"});
+    		$('password').val("hola");
+			$.mobile.navigate("#account-view.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
     		alert("Error 444: No response");
