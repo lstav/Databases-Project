@@ -2160,6 +2160,34 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
 		alert("Data not found!");
+		$.mobile.changePage("index.html", {transition: "none"});
+	}
+	});
+	
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/todaysales",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+		var todayList = data.todaysales;
+		var len =todayList.length;
+		var list = $("#today-lists");
+		list.empty();
+		var today;
+		today = todayList[0];
+		for (var i=0; i < len; ++i){
+			today.name;
+			today.id;
+			today.quantity;
+			today.total;
+			
+			list.append("<li><p>" + today[i].name + " " + today[i].quantity + "</p></li>");
+		}        
+		list.listview("refresh");
+	},
+	error: function(data, textStatus, jqXHR){
+		console.log("textStatus: " + textStatus);
+		alert("Data not found!");
+		$.mobile.changePage("index.html", {transition: "none"});
 	}
 	});
 });
@@ -2283,14 +2311,20 @@ function DeleteCategory(id){
 		$.mobile.loading("show");
 		$.ajax({
 			url : "http://localhost:3412/Project1Srv/categories/" + id,
-			type: 'post',
+			type: 'put',
 			contentType: "application/json",
 			dataType:"json",
 			success : function(data, textStatus, jqXHR) {
 			console.log('POST Completed');
 			$.mobile.loading("hide");
-			$.mobile.changePage("administrator.html", {transition: "none"});
-		}
+			$.mobile.changePage("index.html", {transition: "none"});
+		},
+  			error: function(errorThrown, textStatus, jqXHR){
+	    		alert("Error 444: No response");
+    			$.mobile.loading("hide");
+				$.mobile.changePage("index.html", {transition: "none"});
+  			}
+		
 		});
 	}
 }
@@ -3710,6 +3744,9 @@ function ChangeFName(info){
 		data : formData,
 		success: function(data){
     		alert('First Name Changed');
+    		//alert(loginAccount.username);
+    		//alert(loginAccount.apassword);
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
 			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
@@ -3730,6 +3767,7 @@ function ChangeLName(info){
 		data : formData,
 		success: function(data){
     		alert('Last Name Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
 			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
@@ -3750,6 +3788,7 @@ function ChangeShipping(info){
 		data : formData,
 		success: function(data){
     		alert('Shipping Address Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
 			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
@@ -3770,6 +3809,7 @@ function ChangeBilling(info){
 		data : formData,
 		success: function(data){
     		alert('Billing Address Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
 			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
@@ -3790,6 +3830,7 @@ function ChangeCardNumber(info){
 		data : formData,
 		success: function(data){
     		alert('Card Number Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
 			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
@@ -3810,6 +3851,7 @@ function ChangeCardType(info){
 		data : formData,
 		success: function(data){
     		alert('Card Type Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
 			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
@@ -3830,6 +3872,7 @@ function ChangeSecurity(info){
 		data : formData,
 		success: function(data){
     		alert('Security Number Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
 			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
@@ -3850,6 +3893,7 @@ function ChangeExpDate(info){
 		data : formData,
 		success: function(data){
     		alert('Expiration Date Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
 			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
@@ -3870,6 +3914,7 @@ function ChangeEmail(info){
 		data : formData,
 		success: function(data){
     		alert('Email Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
 			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
@@ -3890,6 +3935,7 @@ function ChangeBank(info){
 		data : formData,
 		success: function(data){
     		alert('Bank Account Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
 			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
@@ -3910,6 +3956,7 @@ function ChangePassword(info){
 		data : formData,
 		success: function(data){
     		alert('Password Changed');
+    		//AccountLogin(loginAccount.username, formDate.password);
 			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
