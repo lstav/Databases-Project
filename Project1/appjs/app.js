@@ -2175,7 +2175,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 		var today;
 		today = todayList[0];
 		for (var i=0; i < len; ++i){
-			list.append("<li><a>" + todayList[i].name + " " + todayList[i].quantity + " " + todayList[i].total + "</a></li>");
+			list.append("<li><a>" + todayList[i].name + " Quantity: " + todayList[i].quantity + " <h4>" + todayList[i].total + "</h4></a></li>");
 		}        
 		list.listview("refresh");
 	},
