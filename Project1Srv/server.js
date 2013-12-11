@@ -28,8 +28,8 @@ app.use(express.bodyParser());
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
 
-var conString = "pg://postgres:course@localhost:5432/db2";
-//var conString = "pg://course:course@localhost:5432/db2";
+//var conString = "pg://postgres:course@localhost:5432/db2";
+var conString = "pg://course:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -1498,7 +1498,14 @@ app.put('/Project1Srv/accountsdelete/:id', function(req, res) {
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
 			"WHERE accountid= '" + id + "'");
 			
-	client.end();
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountsdelete" : result.rows};
+		client.end();
+		res.json(response);
+	});
 });
 
 // REST Operation - HTTP POST to add a new a account
@@ -1521,7 +1528,14 @@ app.post('/Project1Srv/accountscreated', function(req, res) {
 		"values((select (max(creditid)+1) as creditid from creditcard),(select billingid from aid),'"+ req.param('credittype') +
 		"','"+ req.param('creditnumber') +"','"+ req.param('securitynumber') +"','"+ req.param('expdate') +"');");
 		
-	client.end();
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountscreated" : result.rows};
+		client.end();
+		res.json(response);
+	});
 });
 
 

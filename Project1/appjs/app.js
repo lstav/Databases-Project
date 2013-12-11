@@ -2173,9 +2173,16 @@ function DeleteAccounts(id){
 			contentType: "application/json",
 			dataType:"json",
 			success : function(data, textStatus, jqXHR) {
-			$.mobile.loading("hide");
-			$.mobile.navigate("index.html");
-		}
+				$.mobile.loading("hide");
+				sessionStorage.removeItem("accounts", {transition: "none"});
+				$.mobile.navigate("login.html");
+			},
+  			error: function(errorThrown, textStatus, jqXHR){
+	    		//alert("Error 444: No response");
+    			alert(errorThrown + " " + textStatus + " " + jqXHR);
+    			$.mobile.loading("hide");
+				$.mobile.changePage("index.html", {transition: "none"});
+  			}
 		});
 	}
 }
@@ -3595,9 +3602,10 @@ function AddAccount(){
 }
 
 function ChangePassword(){
-	//var form = $("#accountpass-form");
-	var pass= $("#upd-password").val();
-	var formData = {username: loginAccount.username, password: pass};
+	var form = $("#accountpass-form");
+	var formData = form.serializeArray();
+	//var pass= $("#upd-password").val();
+	//var formData = {username: loginAccount.username, password: pass};
 	//alert(formData.password);
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountspassword/",
