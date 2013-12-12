@@ -1399,7 +1399,7 @@ app.get('/Project1Srv/message-sent/:id', function(req, res){
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT date, s.username as receiver, receiverid, messageid, subject FROM message, account as s, account as r WHERE s.accountid = message.senderid "+
+	var query = client.query("SELECT date, r.username as receiver, receiverid, messageid, subject FROM message, account as s, account as r WHERE s.accountid = message.senderid "+
 			"AND r.accountid=message.receiverid AND message.isactive='t' AND senderid=" +id);
 
 	query.on("row", function (row, result) {
