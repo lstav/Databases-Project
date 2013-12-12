@@ -624,20 +624,27 @@ $(document).on('click', '#submit-sale', function() {
 	var pname= $('#product-name').val();
 	var pprice= $('#pprice').val();
 	var cond= $('#condition').val();
-	var shippingto= $('#shipping-to').val();
 	var enddate= $('#enddate').val();
 	var image= $('#image').val();
-	var visa= $('#checkbox1').is(':checked');
-	var paypal= $('#checkbox2').is(':checked');
 	var cat= $('#categories-lists').val();
 	var dcription= $('#ptext').val();
 	var qty= $('#pqty').val();
-
-	if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0 && (visa||paypal)){
-
-		var formData = {account: loginAccount.accountid, name: pname, price:pprice, condition:cond, catid:cat, pmethod1: visa, pmethod2:paypal, link:image, date:enddate, description:dcription, quantity: qty};
+	if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0){
+	
+		var formData = {account: loginAccount.accountid, name: pname, price:pprice, condition:cond, catid:cat, date:enddate, description:dcription, quantity: qty};
 		var product= {};
+		if(image == undefined){
+			image= "http://img856.imageshack.us/img856/4856/n2vc.jpg";
+		}
+		formData.image= image;
 		$.ajax({
+			url : "http://lhl.herokuapp.com/LHL/images",
+			type: 'post',
+			dataType: 'json',
+			data : formData,
+			success : function(data){
+			formData.image= data; 	
+			$.ajax({
 			url : "http://lhl.herokuapp.com/LHL/products",
 			type: 'post',
 			dataType: 'json',
@@ -657,12 +664,17 @@ $(document).on('click', '#submit-sale', function() {
 				console.log("textStatus: " + textStatus);
 				alert("sale not added!");}          	
 			});
-		},
-		error: function(data, textStatus, jqXHR){
+			},
+			error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
 			alert("product not added!");
-		}
-		}); 
+			}
+			}); 
+			},
+			error: function(data, textStatus, jqXHR){
+				console.log("textStatus: " + textStatus);
+				alert("image not added!");}          	
+			});
 	} 
 
 	else {
@@ -677,35 +689,36 @@ $(document).on('click', '#submit-auction', function() {
 	var pname= $('#product-name').val();
 	var pprice= $('#pprice').val();
 	var cond= $('#condition').val();
-	var shippingto= $('#shipping-to').val();
 	var enddate= $('#enddate').val();
 	var image= $('#image').val();
-	var visa= $('#checkbox1').is(':checked');
-	var paypal= $('#checkbox2').is(':checked');
 	var cat= $('#categories-lists').val();
 	var dcription= $('#ptext').val();
 
-	if(pname.length > 0){
-	//if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0 && (visa||paypal)){
+	if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0 && (visa||paypal)){
 		var formData = {account: loginAccount.accountid, name: pname, price:pprice, condition:cond, 
-			catid:cat, pmethod1: visa, pmethod2:paypal, date:enddate, description:dcription};
+			catid:cat, date:enddate, description:dcription};
 		var product= {};
+		
+		if(image == undefined){
+			image= "http://img856.imageshack.us/img856/4856/n2vc.jpg";
+		}
+		formData.image= image;
 		$.ajax({
-			url : "http://lhl.herokuapp.com/LHL/images/"+image,
+			url : "http://lhl.herokuapp.com/LHL/images",
 			type: 'post',
 			dataType: 'json',
 			data : formData,
 			success : function(data){
 			formData.image= data; 
-			
+			alert(data);
 			$.ajax({
 				url : "http://lhl.herokuapp.com/LHL/products",
 				type: 'post',
 				dataType:"json",
+				data:formData,
 				success : function(data) {
 					var product= data.productadd[0].productid;
-					formData.productid= product;
-					/*
+					formData.productid= product;				
 					$.ajax({
 					url : "http://lhl.herokuapp.com/LHL/addauction",
 					type: 'post',
@@ -717,7 +730,7 @@ $(document).on('click', '#submit-auction', function() {
 					error: function(data, textStatus, jqXHR){
 					console.log("textStatus: " + textStatus);
 					alert("auction not added!");}          	
-					});*/
+					});
 				},
 				error: function(data, textStatus, jqXHR){
 				console.log("textStatus: " + textStatus);
