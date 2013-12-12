@@ -1181,7 +1181,7 @@ app.post('/LHL/categories', function(req, res) {
 
 	var query = client.query("INSERT INTO category (catid, catname, parentid)" +
 			"values ((select (max(catid)+1) as catid from category), '" + req.param('name')+ "', " 
-			+ req.param('parent')+ ")");
+			+ req.param('parent')+ ") RETURNING *");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
