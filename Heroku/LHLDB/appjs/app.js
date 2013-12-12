@@ -630,8 +630,9 @@ $(document).on('click', '#submit-sale', function() {
 	var cat= $('#categories-lists').val();
 	var dcription= $('#ptext').val();
 	var qty= $('#pqty').val();
-	if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0){
 	
+	if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0){
+
 		var formData = {account: loginAccount.accountid, name: pname, price:pprice, condition:cond, catid:cat, date:enddate, description:dcription, quantity: qty};
 		var product= {};
 		if(image == undefined){
@@ -695,7 +696,7 @@ $(document).on('click', '#submit-auction', function() {
 	var cat= $('#categories-lists').val();
 	var dcription= $('#ptext').val();
 
-	if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0 && (visa||paypal)){
+	if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0){
 		var formData = {account: loginAccount.accountid, name: pname, price:pprice, condition:cond, 
 			catid:cat, date:enddate, description:dcription};
 		var product= {};
@@ -711,7 +712,6 @@ $(document).on('click', '#submit-auction', function() {
 			data : formData,
 			success : function(data){
 			formData.image= data; 
-			alert(data);
 			$.ajax({
 				url : "http://lhl.herokuapp.com/LHL/products",
 				type: 'post',
