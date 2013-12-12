@@ -2116,8 +2116,8 @@ app.get('/LHL/invoice/:id', function(req, res) {
 
 });
 
-var interval = setInterval(function(){checkAuction();checkSale();},1800000);
-
+var interval = setInterval(function(){checkSale();},1800000);
+/*
 function checkAuction(){
 	var client = new pg.Client(conString);
 	client.connect();
@@ -2153,6 +2153,7 @@ function checkAuction(){
 	console.log('Auctions Updated');
 	client.end();
 }
+*/
 function checkSale(){
 	var client = new pg.Client(conString);
 	client.connect();
