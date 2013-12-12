@@ -2495,6 +2495,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 		url : "http://lhl.herokuapp.com/LHL/categories",
 		method:"get",
 		contentType: "application/json",
+		async: false,
 		success : function(data, textStatus, jqXHR){
 		var categoriesList = data.categories;
 		var len =categoriesList.length;
@@ -2521,6 +2522,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 		url : "http://lhl.herokuapp.com/LHL/todaysales",
 		method:"get",
 		contentType: "application/json",
+		async: false,
 		success : function(data, textStatus, jqXHR){
 		var todayList = data.todaysales;
 		var len =todayList.length;
@@ -2544,6 +2546,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 		url : "http://lhl.herokuapp.com/LHL/weeksales",
 		contentType: "application/json",
 		method:"get",
+		async: false,
 		success : function(data, textStatus, jqXHR){
 		var weekList = data.weeksales;
 		var len =weekList.length;
@@ -2567,6 +2570,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 		url : "http://lhl.herokuapp.com/LHL/monthsales",
 		method:"get",
 		contentType: "application/json",
+		async: false,
 		success : function(data, textStatus, jqXHR){
 		var monthList = data.monthsales;
 		var len =monthList.length;
@@ -4273,6 +4277,7 @@ function AddCategory(){
 	$.ajax({
 		url : "http://lhl.herokuapp.com/LHL/categories/",
 		type: 'post',
+		async: false,
 		data : formData,
 		success: function(data, textStatus, jqXHR){
     		alert('POST Completed');
@@ -4555,6 +4560,7 @@ function ChangePassword(){
 		url : "http://lhl.herokuapp.com/LHL/accountspassword/",
 		type : 'post',
 		dataType: 'json',
+		async: false,
 		data : formData,
 		success: function(data, textStatus, jqXHR){
     		alert("Error 444: No response");
