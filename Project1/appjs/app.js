@@ -4449,7 +4449,7 @@ function DeleteAccount(){
 	var formData = form.serializeArray();
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountsdeleted/",
-		type : 'post',
+		type : 'put',
 		data : formData,
 		success : function() {
 			console.log('DELETE Completed');
