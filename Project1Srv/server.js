@@ -1849,7 +1849,7 @@ app.post('/Project1Srv/rankuser/', function(req, res) {
 });
 
 // REST Operation - HTTP DELETE to delete an account based on its id
-app.post('/Project1Srv/accountsdeleted/:user', function(req, res) {
+app.put('/Project1Srv/accountsdeleted/:user', function(req, res) {
 	var user = req.params.user;
 	console.log("DELETE account: " + user);
 	var client = new pg.Client(conString);

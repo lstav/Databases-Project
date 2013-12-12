@@ -4456,7 +4456,7 @@ function DeleteAccount(info){
 	var formData = info;
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountsdeleted/" + formData.username,
-		method : 'post',
+		method : 'put',
 		contentType: "application/json",
 		dataType:"json",
 		//data : formData,
