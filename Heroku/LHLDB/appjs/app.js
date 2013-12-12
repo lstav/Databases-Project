@@ -30,6 +30,7 @@ function getCookie(c_name)
 	}
 	return c_value;
 }
+
 var notifyMessages=[];
 var interval = setInterval(function(){notifyMessages();},60000);
 
@@ -2103,11 +2104,13 @@ $(document).on('pagebeforeshow', "#purchaseList", function(event, ui){
 		for (var i=0; i < len; ++i){
 			item =usales[i];
 			
-			list.append("<li><a data-icon='star' onClick= GetInvoice("+item.invoice+")><img src='"+ item.img+ "'/>"+
-				item.prodname + "<h4> Qty: "+item.quantity+"<br>Total price:"+
-				item.price+"<\h4><a onClick = GoProfile("+ item.sellerid +") data-position-to='window' data-icon='gear'>Rank</a></a></li>");
+			var element='<a onClick = GoProfile('+ item.sellerid +') data-icon= "grid" data-mini="true">Profile</a>';
+			
+			list.append("<li><a onClick= GetInvoice("+item.invoice+")><img src='"+ item.img+ "'/>"+	item.prodname + "<h4>Qty: "+ item.quantity+"</h4><h4>Total Price: "+
+			item.price+"</h4>"+element+"</a></li>");
 		}
-				
+		
+			
 		var ulist = $("#unpaid-list");
 		ulist.empty();
 		var item;
@@ -2118,8 +2121,10 @@ $(document).on('pagebeforeshow', "#purchaseList", function(event, ui){
 			ulist.append("<li data-icon='star' onClick= BidCheck("+item.auctionid+")><a><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Price:"+item.price+"<\h4></a></li>");
 			}
 			else{
-				list.append("<li data-icon='star' onClick=GetAuctionInvoice("+item.auctionid+")><a><img src='"+ item.img+ "'/> <h4>"+item.prodname + 
-				"</h4><h4>Qty: 1 <br> "+"Total price:"+item.price+"<\h4></a></li>");
+				var element='<a onClick = GoProfile('+ item.sellerid +') data-icon= "grid" data-mini="true">Profile</a>';
+			
+				list.append("<li><a onClick= GetAuctionInvoice("+item.auctionid+")><img src='"+ item.img+ "'/>"+item.prodname + "<h4>Qty: 1 </h4><h4>Total Price: "+
+				item.price+"</h4>"+element+"</a></li>");
 			}						
 		}
 		list.listview("refresh");
