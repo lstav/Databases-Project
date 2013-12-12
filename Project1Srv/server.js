@@ -24,15 +24,22 @@ app.configure(function () {
 
 app.use(express.bodyParser());
 
-var interval = setInterval(function(){checkSale();},60000);
+var interval = setInterval(function(){checkAuction();checkSale();},60000);
 
+function checkAuction(){
+	var client = new pg.Client(conString);
+	client.connect();
+	
+	var query = client.query("UPDATE product SET isactive = FALSE WHERE productid IN(select prodid from auction,product where productid=prodid AND enddate < current_timestamp and isactive)"); 	
+	console.log('Auctions Updated');
+	client.end();
+}
 function checkSale(){
 	var client = new pg.Client(conString);
 	client.connect();
 	
-	var query = client.query("UPDATE product SET isactive = FALSE WHERE productid IN(select prodid from auction,product where productid=prodid AND enddate < current_timestamp and isactive)"); 
-	var query2 = client.query("UPDATE product SET isactive = FALSE WHERE productid IN(select prodid from sale,product where productid=prodid AND enddate < current_timestamp and isactive)");
-	console.log('Auctions Updated');
+	var query = client.query("UPDATE product SET isactive = FALSE WHERE productid IN(select prodid from sale,product where productid=prodid AND endtime < current_timestamp and isactive)"); 	
+	console.log('Sales Updated');
 	client.end();
 }
 
@@ -41,8 +48,8 @@ function checkSale(){
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
 
-var conString = "pg://postgres:course@localhost:5432/db2";
-//var conString = "pg://course:course@localhost:5432/db2";
+//var conString = "pg://postgres:course@localhost:5432/db2";
+var conString = "pg://course:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -671,18 +678,30 @@ app.get('/Project1Srv/todaysales', function(req, res){
 	console.log("GET today sales");
 	var client = new pg.Client(conString);
 	client.connect();
-
-	var query = client.query("SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
-			"FROM product, sale NATURAL JOIN checkout,invoice " +
-			"WHERE productid = prodid AND invid=invoiceid " +
-			"AND date = CURRENT_DATE " +
-			"group by prodid,prodname " +
-			"UNION " +
-			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
-			"FROM winningBid AS W, auction AS A,product " +
-			"WHERE prodid = productid AND W.auctionid=A.auctionid " +
-			"AND enddate = CURRENT_DATE " +
-			"group by prodid,prodname");
+	var query = client.query("SELECT * " +
+		"From(SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+		"FROM product, sale NATURAL JOIN checkout,invoice " +
+		"WHERE productid = prodid AND invid=invoiceid " +
+		"AND date = CURRENT_DATE " +
+		"group by prodid,prodname " +
+		"UNION " +
+		"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+		"FROM winningBid AS W, auction AS A,product " +
+		"WHERE prodid = productid AND W.auctionid=A.auctionid AND W.isPayed " +
+		"AND enddate = CURRENT_DATE " +
+		"group by prodid,prodname) as SaleInfo " + 
+		"NATURAL JOIN (SELECT sum(Quantity) " +
+		"FROM(SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+		"FROM product, sale NATURAL JOIN checkout,invoice " +
+		"WHERE productid = prodid AND invid=invoiceid " +
+		"AND date = CURRENT_DATE " +
+		"group by prodid,prodname " +
+		"UNION " +
+		"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+		"FROM winningBid AS W, auction AS A,product " +
+		"WHERE prodid = productid AND W.auctionid=A.auctionid AND W.isPayed " +
+		"AND enddate = CURRENT_DATE " +
+		"group by prodid,prodname) as ST)as SaleToday");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -700,7 +719,8 @@ app.get('/Project1Srv/weeksales', function(req, res){
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+	var query = client.query("SELECT * " +
+			"From(SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
 			"FROM product, sale NATURAL JOIN checkout,invoice " +
 			"WHERE productid = prodid AND invid=invoiceid " +
 			"AND date > CURRENT_DATE-7 " +
@@ -708,9 +728,21 @@ app.get('/Project1Srv/weeksales', function(req, res){
 			"UNION " +
 			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
 			"FROM winningBid AS W, auction AS A,product " +
-			"WHERE prodid = productid AND W.auctionid=A.auctionid " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid AND W.isPayed " +
 			"AND enddate > CURRENT_DATE-7 " +
-			"group by prodid,prodname");
+			"group by prodid,prodname) as SaleInfo " + 
+			"NATURAL JOIN (SELECT sum(Quantity) " +
+			"FROM(SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+			"FROM product, sale NATURAL JOIN checkout,invoice " +
+			"WHERE productid = prodid AND invid=invoiceid " +
+			"AND date > CURRENT_DATE-7 " +
+			"group by prodid,prodname " +
+			"UNION " +
+			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+			"FROM winningBid AS W, auction AS A,product " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid AND W.isPayed " +
+			"AND enddate > CURRENT_DATE-7 " +
+			"group by prodid,prodname) as ST)as SaleToday");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -728,7 +760,8 @@ app.get('/Project1Srv/monthsales', function(req, res){
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+	var query = client.query("SELECT * " +
+			"From(SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
 			"FROM product, sale NATURAL JOIN checkout,invoice " +
 			"WHERE productid = prodid AND invid=invoiceid " +
 			"AND EXTRACT(MONTH FROM date) > EXTRACT(MONTH FROM CURRENT_DATE)-1 " +
@@ -736,9 +769,21 @@ app.get('/Project1Srv/monthsales', function(req, res){
 			"UNION " +
 			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
 			"FROM winningBid AS W, auction AS A,product " +
-			"WHERE prodid = productid AND W.auctionid=A.auctionid " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid AND W.isPayed " +
 			"AND EXTRACT(MONTH FROM enddate) > EXTRACT(MONTH FROM CURRENT_DATE)-1 " +
-			"group by prodid,prodname");
+			"group by prodid,prodname) as SaleInfo " + 
+			"NATURAL JOIN (SELECT sum(Quantity) " +
+			"FROM(SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+			"FROM product, sale NATURAL JOIN checkout,invoice " +
+			"WHERE productid = prodid AND invid=invoiceid " +
+			"AND EXTRACT(MONTH FROM date) > EXTRACT(MONTH FROM CURRENT_DATE)-1 " +
+			"group by prodid,prodname " +
+			"UNION " +
+			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+			"FROM winningBid AS W, auction AS A,product " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid AND W.isPayed " +
+			"AND EXTRACT(MONTH FROM enddate) > EXTRACT(MONTH FROM CURRENT_DATE)-1 " +
+			"group by prodid,prodname) as ST)as SaleToday");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -1801,7 +1846,7 @@ app.post('/Project1Srv/rankuser/', function(req, res) {
 });
 
 // REST Operation - HTTP DELETE to delete an account based on its id
-app.post('/Project1Srv/accountsdeleted/', function(req, res) {
+app.put('/Project1Srv/accountsdeleted/', function(req, res) {
 	console.log("DELETE account: " + req.param('username'));
 	var client = new pg.Client(conString);
 	client.connect();

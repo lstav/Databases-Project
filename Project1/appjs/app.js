@@ -160,7 +160,10 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 
 	}
 	$(document).on('click', '#logout', function() { 
+		loginAccount = {};
 		sessionStorage.removeItem("account");
+		sessionStorage.clear();
+		
 		$.mobile.changePage("login.html", {transition: "none"});
 
 	});  
@@ -179,8 +182,9 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 
 });
 
-$(document).on('click', '#logout', function() { 
-
+$(document).on('click', '#logout', function() {
+	loginAccount = {}; 
+	sessionStorage.clear();
 	sessionStorage.removeItem("account");
 	$.mobile.changePage("login.html", {transition: "none"});
 
@@ -2645,7 +2649,9 @@ function DeleteAccounts(id){
 			dataType:"json",
 			success : function(data, textStatus, jqXHR) {
 				$.mobile.loading("hide");
+				loginAccount = {};
 				sessionStorage.removeItem("account");
+				sessionStorage.clear();
 				$.mobile.changePage("login.html", {transition: "none"});
 			},
   			error: function(errorThrown, textStatus, jqXHR){
@@ -3629,6 +3635,7 @@ function RankUser(info){
     		alert('Rank Submitted');
     		//AccountLogin(loginAccount.username, formDate.password);
     		sessionStorage.removeItem("profile");
+    		GoProfile(formData.seller);
 			$.mobile.changePage("profile.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
@@ -4442,10 +4449,11 @@ function DeleteAccount(){
 	var formData = form.serializeArray();
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountsdeleted/",
-		type : 'post',
+		type : 'put',
 		data : formData,
 		success : function() {
 			console.log('DELETE Completed');
+			loginAccount = {};
 			sessionStorage.removeItem("account");
 			$.mobile.loading("hide");
 			$.mobile.changePage("index.html", {transition: "none"});
