@@ -4453,6 +4453,7 @@ function DeleteAccount(){
 		data : formData,
 		success : function() {
 			console.log('DELETE Completed');
+			loginAccount = {};
 			sessionStorage.removeItem("account");
 			$.mobile.loading("hide");
 			$.mobile.changePage("index.html", {transition: "none"});
