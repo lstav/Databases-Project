@@ -1964,7 +1964,7 @@ app.post('/LHL/insertcheckout', function(req, res) {
 	client.connect();
 
 	var query= client.query("INSERT INTO checkout(checkoutid, creditid, invid, totalprice, saleid, quantity) " +
-	"VALUES ((select (max(checkoutid)+1) as checkoutid from checkout)"+req.param('creditid')+","+req.param('invoiceid')+","+req.param('totalprice')+","+req.param('saleid')+","+
+	"VALUES ((select (max(checkoutid)+1) as checkoutid from checkout), "+req.param('creditid')+","+req.param('invoiceid')+","+req.param('totalprice')+","+req.param('saleid')+","+
 	req.param('count')+") RETURNING *");
 
 	query.on("row", function (row, result) {

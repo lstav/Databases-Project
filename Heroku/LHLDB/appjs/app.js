@@ -1251,7 +1251,7 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 					var msg3= '<a><input type="submit" id= "submitCart" value= "Add to Cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
 					shop.append(msg3).trigger('create');
 
-					var msg4= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
+					var msg4= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrderC(' + currentProduct.saleid + ') data-mini="true"/></a>';
 					buy.append(msg4).trigger('create');
 
 					var msg5='<input name="Qty" id="pquantity" placeholder="Quantity" value="" type="text">';
@@ -2833,7 +2833,7 @@ function AccountLogin(username, password){
 							var msg3= '<a><input type="submit" id= "submitCart" value= "Add to Cart" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
 							shop.append(msg3).trigger('create');
 
-							var msg4= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrder(' + currentProduct.saleid + ') data-mini="true"/></a>';
+							var msg4= '<a><input type="submit" id= "purchase" value= "Buy it now" onClick= SaveOrderC(' + currentProduct.saleid + ') data-mini="true"/></a>';
 							buy.append(msg4).trigger('create');}
 
 					}
@@ -4190,6 +4190,76 @@ function SaveOrder(id){
 		alert("Provide a valid quantity.");
 	}
 }
+
+function SaveOrderC(id){
+
+	var ucart={};
+
+	if(loginAccount.accountid != undefined){
+		ucart= loginAccount.accountid;
+	}
+	else{
+		ucart= "guest";
+		if(getCookie(ucart) == undefined){
+			setCookie(ucart, JSON.stringify('[]'));
+		}
+	}
+
+	var quantity= $('#pquantity').val();
+	
+	if(quantity == 0){
+		alert("Please provide quantity.");
+	}
+
+	else if(quantity <= currentProduct.quantity && quantity != 0){
+		var txt = $.parseJSON(getCookie(ucart));
+		var obj = eval('(' + txt + ')');
+		//alert(JSON.stringify(obj));
+		//alert(obj[0].shoppingcart);
+		var count=0;
+
+		for(var i=0; i < obj.length; i++){
+			if(obj[i].shoppingcart == currentProduct.id){
+				count++;
+			}
+		}
+		var total= parseInt(count)+parseInt(quantity);
+
+		if(total <= currentProduct.quantity ){
+
+			for(var j=0; j < quantity; j++){
+
+				var sh = ('{"shoppingcart":"' + currentProduct.id + '"}');
+				//alert(sh);
+				var obj2= eval('(' + sh + ')');
+				obj.push(obj2);
+				//alert(JSON.stringify(obj));
+				//alert(obj[1].shoppingcart);
+
+				var nextitem=JSON.stringify(obj);
+				//alert(nextitem);
+				setCookie(ucart,JSON.stringify(nextitem));
+
+			}
+
+			//var txt2 = $.parseJSON(getCookie(loginAccount.accountid));
+			//var obj2 = eval('(' + txt2 + ')');
+			//alert(JSON.stringify(obj2));
+			//$.mobile.navigate("shopping.html");
+			$.mobile.changePage("check.html", {transition: "none"});
+
+		}
+
+		else{
+			alert("Product already in shopping cart.");
+
+		}
+	}
+	else{
+		alert("Provide a valid quantity.");
+	}
+}
+
 
 //////// Administrator
 
