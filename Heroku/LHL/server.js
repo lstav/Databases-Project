@@ -230,8 +230,8 @@ app.post('/LHL/addsale', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query= client.query("INSERT INTO sale(accountid, prodid, starttime, endtime, price, totalquantity) "+
-			"VALUES ("+req.param('account')+", "+req.param('productid')+", localtimestamp, '"+req.param('date')+" 00:00:00', "+req.param('price')+","+req.param('quantity')+") RETURNING *");
+	var query= client.query("INSERT INTO sale(saleid, accountid, prodid, starttime, endtime, price, totalquantity) "+
+			"VALUES ((select (max(saleid)+1) as saleid from sale)"+req.param('account')+", "+req.param('productid')+", localtimestamp, '"+req.param('date')+" 00:00:00', "+req.param('price')+","+req.param('quantity')+") RETURNING *");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -314,8 +314,8 @@ app.post('/LHL/addauction', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query= client.query("INSERT INTO auction(accountid, prodid, currentbid, startdate, enddate) "+
-			"VALUES ("+req.param('account')+", "+req.param('productid')+","+req.param('price')+", localtimestamp, '"+req.param('date')+" 00:00:00') RETURNING *");
+	var query= client.query("INSERT INTO auction(auctionid, accountid, prodid, currentbid, startdate, enddate) "+
+			"VALUES ((select (max(auctionid)+1) as auctionid from auction), "+req.param('account')+", "+req.param('productid')+","+req.param('price')+", localtimestamp, '"+req.param('date')+" 00:00:00') RETURNING *");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -334,8 +334,8 @@ app.post('/LHL/addbid', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query= client.query("INSERT INTO bid(accountid, bdate, bammmount, auctionid) "+
-			"VALUES ("+req.param('account')+", localtimestamp, "+req.param('bid')+","+req.param('auctionid')+") RETURNING *");
+	var query= client.query("INSERT INTO bid(bid, accountid, bdate, bammmount, auctionid) "+
+			"VALUES ((select (max(bid)+1) as bid from bid), "+req.param('account')+", localtimestamp, "+req.param('bid')+","+req.param('auctionid')+") RETURNING *");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -1179,8 +1179,8 @@ app.post('/LHL/categories', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("INSERT INTO category (catname, parentid)" +
-			"values ('" + req.param('name')+ "', " 
+	var query = client.query("INSERT INTO category (catid, catname, parentid)" +
+			"values ((select (max(catid)+1) as catid from category), '" + req.param('name')+ "', " 
 			+ req.param('parent')+ ")");
 
 	query.on("row", function (row, result) {
@@ -1281,8 +1281,8 @@ app.post('/LHL/products', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("INSERT INTO product(catid, prodname, condition, description, imagelink) "+
-			"VALUES ("+ req.param('catid')+", '"+ req.param('name')+"' , '"+ req.param('condition')+"', '"+ req.param('description')+"', '"+req.param('image')+"')  RETURNING *");
+	var query = client.query("INSERT INTO product(productid, catid, prodname, condition, description, imagelink) "+
+			"VALUES ((select (max(productid)+1) as productid from product), "+ req.param('catid')+", '"+ req.param('name')+"' , '"+ req.param('condition')+"', '"+ req.param('description')+"', '"+req.param('image')+"')  RETURNING *");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -1464,7 +1464,7 @@ app.post('/LHL/addmessage', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query= client.query("INSERT INTO message(senderid, text, date, receiverid, subject) VALUES ("+req.param('senderid')+",'"+req.param('text')+"', localtimestamp, "+
+	var query= client.query("INSERT INTO message(messageid, senderid, text, date, receiverid, subject) VALUES ((select (max(messageid)+1) as messageid from message), "+req.param('senderid')+",'"+req.param('text')+"', localtimestamp, "+
 			req.param('receiverid')+",'"+req.param('subject')+"') RETURNING *");
 
 	query.on("row", function (row, result) {
@@ -1943,8 +1943,8 @@ app.post('/LHL/insertinvoice', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query= client.query("INSERT INTO invoice(buyerid, date) "+
-			"VALUES ("+req.param('buyerid')+", localtimestamp) RETURNING *");
+	var query= client.query("INSERT INTO invoice(invoiceid, buyerid, date) "+
+			"VALUES ((select (max(invoiceid)+1) as invoiceid from invoice), "+req.param('buyerid')+", localtimestamp) RETURNING *");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -1963,8 +1963,8 @@ app.post('/LHL/insertcheckout', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query= client.query("INSERT INTO checkout(creditid, invid, totalprice, saleid, quantity) " +
-	"VALUES ("+req.param('creditid')+","+req.param('invoiceid')+","+req.param('totalprice')+","+req.param('saleid')+","+
+	var query= client.query("INSERT INTO checkout(checkoutid, creditid, invid, totalprice, saleid, quantity) " +
+	"VALUES ((select (max(checkoutid)+1) as checkoutid from checkout)"+req.param('creditid')+","+req.param('invoiceid')+","+req.param('totalprice')+","+req.param('saleid')+","+
 	req.param('count')+") RETURNING *");
 
 	query.on("row", function (row, result) {
