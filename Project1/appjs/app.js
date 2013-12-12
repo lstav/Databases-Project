@@ -212,7 +212,7 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 
 		var img= $("#user-image");
 		img.empty();
-		img.append("<p> <center> <img src='http://img707.imageshack.us/img707/9563/i5n.gif'/> </center> </p>");
+		img.append("<p> <center> <img src='http://img404.imageshack.us/img404/4849/blt.gif'/> </center> </p>");
 		list.listview("refresh");}
 
 	else{
@@ -707,7 +707,55 @@ $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
 
 	}
 
+		var alist = $("#await-list");
+		alist.empty();
+		var item;
+		for (var i=0; i < currentWinningList.length; ++i){
+			item =currentWinningList[i];			
+			var element='<a onClick=Acceptbid("'+item.auctionid+'") data-role="button" data-icon= "grid" data-mini="true">Accept bid</a>';
+			alist.append("<li><a> <img src='"+ item.imagelink+ "'/>" + item.prodname + "<h4>Price:"+item.price+"</h4></a>"+ element+"</li>");
+		}
+		alist.listview("refresh");
+
 });
+
+var winauctionid={};
+function Acceptbid(auctionid){
+	winauctionid=auctionid;
+	$.mobile.changePage("acceptbid.html");
+}	
+
+$(document).on('click', '#active-winning', function() { 
+		
+		var formData={auctionid: winauctionid};
+		$.ajax({
+			url : "http://localhost:3412/Project1Srv/updatewinningbid",
+			type: 'put',
+			data : formData,
+			success : function(data) {
+				formData.senderid=5;
+				formData.receiverid= data.updatewinningbid[0].accountid;
+				formData.subject="Auction: "+formData.auctionid; 
+				formData.text="You won an auction! Please check your pending payments. Have a good day!";
+					$.ajax({
+						url : "http://localhost:3412/Project1Srv/addmessage",
+						type: 'post',
+						data:formData,
+						success : function(data) {
+							$.mobile.changePage("account.html");			
+						},
+	
+					error: function(data, textStatus, jqXHR){
+					console.log("textStatus: " + textStatus);
+					alert("sending message to owner of auction unsuccessfull");}          	
+					});	
+			},
+
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("winningbid not updated!");}          	
+		});
+});   
 
 $(document).on('pagebeforeshow', "#bidPage", function(event, ui) {
 
@@ -1404,8 +1452,11 @@ $(document).on('click', "#submit-description", function(event, ui) {
 });
 ////////// Checkout
 
+var productscheckout=[];
+
 $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) { 
 
+	productscheckout=[];
 	var ucart={};
 	if(sessionStorage.getItem("account")) {
 		var txt = sessionStorage.getItem("account");
@@ -1495,7 +1546,7 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 			var price= splitPrice[1];
 			var productPrice= parseFloat(price);
 			totalPrice += count * productPrice;
-			
+			productscheckout.push({"id": item.prodid, "totalprice": totalPrice, "count":count, prodname: item.prodname, cost: item.price});		
 			}	
 		}
 	} 
@@ -1545,9 +1596,9 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 	payment.append("<li>Credit Card: "+loginAccount.cardtype+"</li>");
 	payment.append("<li>Card number:"+loginAccount.cardnumber.substr(5,6)+"</li>");	
 	payment.listview("refresh");
-
 });
 
+var formBuyer={};
 $(document).on('click', '#submitcheckout-button', function() {
 	var ucart={};
 	if(sessionStorage.getItem("account")) {
@@ -1568,89 +1619,159 @@ $(document).on('click', '#submitcheckout-button', function() {
 			setCookie(ucart, JSON.stringify('[]'));
 		}
 	}
-	
-	var txt = $.parseJSON(getCookie(ucart));
-	var obj = eval('(' + txt + ')');
-	var len = obj.length;
-	var totalPrice=0.00;
-	
-	for(var i=0; i < len; i++){
 
-		var formData = {id:obj[i].shoppingcart, count: 0, position:i, firstposition: i};
-		for(var j=0; j < len; j++){
-			if(obj[j].shoppingcart == formData.id){
-				formData.count = formData.count+1;
-				if(j < formData.position){
-					formData.firstposition=j;
-				}
-			}
-		}
-		if(formData.firstposition == formData.position){
+	
+	formBuyer= {buyerid:loginAccount.accountid, totalprice:0};
+	$.ajax({
+	url : "http://localhost:3412/Project1Srv/insertinvoice",
+	type: 'post',
+	data : formBuyer,
+	success : function(data) {
+		formBuyer.invoiceid=data.insertinvoice[0].invoiceid;
+		formBuyer.date=data.insertinvoice[0].date;
+	for(var i=0; i < productscheckout.length; i++){
+
+		var formData = {id:productscheckout[i].id, count: productscheckout[i].count, totalprice: productscheckout[i].totalprice,
+			invoiceid: data.insertinvoice[0].invoiceid};
+			
+		formBuyer.totalprice= formBuyer.totalprice+ formData.totalprice;
+			
+		var id= loginAccount.accountid;
 		$.ajax({
-		url : "http://localhost:3412/Project1Srv/updateSale",
-		type: 'put',
-		data : formData,
-		success : function(data) {
+			url : "http://localhost:3412/Project1Srv/creditinfo/"+id,
+			type: 'get',
+			success : function(data) {
+					formData.creditid= data.creditinfo[0].creditid;				
+					$.ajax({
+						url : "http://localhost:3412/Project1Srv/insertcheckout",
+						type: 'post',
+						data:formData,
+						success : function(data) {
+							
+						$.ajax({
+						url : "http://localhost:3412/Project1Srv/updateSale",
+						type: 'put',
+						data : formData,
+						success : function(data) {
 				
-				formData.qty= data.updateSale[0].totalquantity;
+						setCookie(loginAccount.accountid, JSON.stringify('[]'));
+						setCookie("guest", JSON.stringify('[]'));
+						invoiceID= formBuyer.invoiceid;
+						$.mobile.changePage("thx.html");
+						},
 
-				/*$.ajax({
-				url : "http://localhost:3412/Project1Srv/updateDeactive",
-				type: 'put',
-				data : formData,
-				success : function(data) {
-					console.log("product is not in sale list anymore");
+						error: function(data, textStatus, jqXHR){
+						console.log("textStatus: " + textStatus);
+						alert("sale not ended!");}          	
+		
+					});},
+	
+					error: function(data, textStatus, jqXHR){
+					console.log("textStatus: " + textStatus);
+					alert("checkout not successfull");}          	
+					});						
 				},
 	
-				error: function(data, textStatus, jqXHR){
-				console.log("textStatus: " + textStatus);
-				alert("product sale not updated!");}          	
-				});	*/
-				
-				setCookie(loginAccount.accountid, JSON.stringify('[]'));
-				setCookie("guest", JSON.stringify('[]'));
-				alert("Thanks for shopping!!");
-				$.mobile.changePage("index.html");
-		},
-
 		error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
-		alert("sale not ended!");}          	
-		
-		});}
+		alert("credit not successfull");}          	
+		});	
+			
 	}
+	
+	},
+	
+	error: function(data, textStatus, jqXHR){
+	console.log("textStatus: " + textStatus);
+	alert("invoice not created");}          	
+	});	
 		
 });
+
+$(document).on('click', '#openinvoice', function(){ 
+
+		GetInvoice(invoiceID);
+});   
+
+
+var invoiceID={};
+function GetInvoice(aid){
+	invoiceID= aid;
+	$.mobile.changePage("invoice.html");
+}
+$(document).on('pagebeforeshow', "#invoice-show", function(event, ui) {
+		var id= invoiceID;
+		$.ajax({
+		url : "http://localhost:3412/Project1Srv/invoice/"+id,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+
+		var productscheckout= data.invoiceuser;
+		var number = $("#invoicenumber");
+		var date = $("#date");
+		var payment = $("#due");
+		var balance = $("#balance-due");
+		var total = $("#total");
+		var paid = $("#amountpaid");
+		var products = $("#show-itemrow");
+		var name = $("#customer");
+		var address = $("#address");
+
+		name.empty();
+		address.empty();
+		number.empty();
+		date.empty();
+		payment.empty();
+		balance.empty();
+		total.empty();
+		paid.empty();
+		products.empty;
+		var bigtotal=0;
+		
+		products.append('<tr>'+
+		      '<th>Item</th>'+
+		      '<th>Unit Cost</th>'+
+		      '<th>Quantity</th>'+
+		      '<th>Price</th>'+
+		 	  '</tr>');
+	
+		for(var i=0; i< productscheckout.length; i++){
+		
+		products.append('<tr><td class="item-name"><center><p>'+productscheckout[i].prodname+'</p></center></td>'+
+		      '<td><center><p class="cost">'+productscheckout[i].price+'</p></center></td>'+
+		      '<td><center><p class="qty">'+productscheckout[i].quantity+'</p></center></td>'+
+		      '<td><center><p>'+productscheckout[i].totalprice+'</p></center></td></tr>');
+		      var splitPrice= productscheckout[i].totalprice.split("$");
+			  var price= splitPrice[1];
+			  var productPrice= parseFloat(price);
+			  bigtotal += productPrice;	
+		}
+
+		name.append(loginAccount.fname +" "+ loginAccount.lname).trigger('create');
+		address.append(loginAccount.billing).trigger('create');
+		number.append(" # "+invoiceID).trigger('create');
+		date.append(productscheckout[0].date).trigger('create');
+		payment.append(" $ "+bigtotal).trigger('create');
+		balance.append(" $0.00").trigger('create');
+		total.append(" $ "+bigtotal).trigger('create');
+		paid.append(" $ "+bigtotal).trigger('create');
+		products.trigger('create');
+		
+		
+		},                        
+		error: function(data, textStatus, jqXHR){
+		console.log("textStatus: " + textStatus);
+		alert("Error");
+	}
+	});
+	
+});
+
+
 
 ////////// Shopping Cart
-
-$(document).on('pagebeforeshow', "#shoppingList", function(event, ui){
-
-	var shopping = shoppinglist;
-	var len =shopping.length;
-
-	if(len==0){ 
-		var iname= $("#message");
-		var msg= '<br><a data-rel="back"><center><h2>No products to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
-		iname.empty();
-		iname.append(msg).trigger('create');}
-
-	else{
-
-		if(loginAccount.username != undefined){
-
-			var list = $("#myshopping-list");
-			list.empty();
-			var item;
-			for (var i=0; i < len; ++i){
-				item =shopping[i];
-				list.append("<li><a onClick= GetProduct("+item.id+")><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Price:"+item.price+"<\h4></a></li>");
-			}
-			list.listview("refresh");}
-
-	}
-
-});
 
 var shoppingcartTotal=0;
 
@@ -1851,28 +1972,200 @@ $(document).on('pagebeforeshow', "#historyList", function(event, ui){
 
 });
 
+var creditid={};
 $(document).on('pagebeforeshow', "#purchaseList", function(event, ui){
 
 	var usales = purchases;
 	var len =usales.length;
 
-	if(len==0){ 
-		var iname= $("#message");
-		var msg= '<br><a data-rel="back"><center><h2>No purchases to display.</h2><br> <img src="http://img43.imageshack.us/img43/6572/4v4.gif" /></center></a> ';
-		iname.empty();
-		iname.append(msg).trigger('create');}
-
-	else{
 
 		var list = $("#mypurchase-list");
 		list.empty();
 		var item;
 		for (var i=0; i < len; ++i){
 			item =usales[i];
-			list.append("<li><a onClick= GetProduct("+item.id+")><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Your bid:"+item.bid+"<\h4></a></li>");
+			list.append("<li data-icon='star' onClick= GetInvoice('"+item.invoice+"')><a><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Qty: "+item.quantity+"<br>Total price:"+item.price+"<\h4></a></li>");
 		}
-		list.listview("refresh");}
+				
+		var ulist = $("#unpaid-list");
+		ulist.empty();
+		var item;
+		for (var i=0; i < winningBids.length; ++i){
+			item =winningBids[i];
+			if(!item.ispayed){
+			creditid=item.creditid;
+			ulist.append("<li data-icon='star' onClick= BidCheck("+item.auctionid+")><a><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Price:"+item.price+"<\h4></a></li>");
+			}
+			else{
+				list.append("<li data-icon='star' onClick=GetAuctionInvoice("+item.auctionid+")><a><img src='"+ item.img+ "'/> <h4>"+item.prodname + 
+				"</h4><h4>Qty: 1 <br> "+"Total price:"+item.price+"<\h4></a></li>");
+			}						
+		}
+		list.listview("refresh");
+		ulist.listview("refresh");
 
+});
+
+var auctionBid={};
+function BidCheck(auctionid){
+	auctionBid= auctionid;
+	$.mobile.changePage("bidcheck.html");
+}
+
+$(document).on('pagebeforeshow', "#bidcheckpage", function(event, ui){
+	
+	var id= auctionBid;
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/auction/"+id,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+		var auction= data.auction[0];
+		
+		var date = $("#bidinfocheck");
+		date.empty();
+		date.append("<li>" + new Date() + "</li>");
+		date.append("<li> Total price: " + auction.price + "</li>");
+		date.listview("refresh");
+		
+		var prod = $("#bidmyshoppinglist");
+		prod.empty();
+		prod.append("<li>Name: " + auction.prodname + "</li>");
+		prod.listview("refresh");
+
+		var ship = $("#bidshipping-list");
+		ship.empty();
+		var gearstyle= '<a href="#popupShippingBid" data-icon="gear" data-rel="popup" data-position-to="window"></a>';
+		ship.append("<li>Name: " + loginAccount.fname + " " + loginAccount.lname+"</li>");
+		ship.append("<li><a>"+loginAccount.shipping +gearstyle+"</a></li>");
+		ship.listview("refresh");
+	
+		$('#bidnameshipping').val(loginAccount.fname+" "+ loginAccount.lname); 
+		$('#bidaddressshipping').val(loginAccount.shipping);
+	
+		$(document).on('click', '#changeshippingaddressauction', function() {
+		
+		$( "#popupShippingBid").popup( "close" );
+		name= $("#bidnameshipping").val();
+		address=$("#bidaddressshipping").val();
+		
+		if(name == undefined){
+			name= loginAccount.fname+ " "+ loginAccount.lname;
+		}
+		if(address== undefined){
+			address= loginAccount.shipping;
+		}
+		var ship = $("#bidshipping-list");
+		ship.empty();
+		var gearstyle= '<a href="#popupShippingBid" data-icon="gear" data-rel="popup" data-position-to="window"></a>';
+		ship.append("<li>Name: " + name +"</li>");
+		ship.append("<li><a>"+address+gearstyle+"</a></li>");
+		ship.listview("refresh");
+	});
+	
+	var payment = $("#bidpayment-list");
+	payment.empty();
+	payment.append("<li>Name: " + loginAccount.fname + " " + loginAccount.lname+"</li>");
+	payment.append("<li> Billing Address: <br> "+ loginAccount.billing);
+	payment.append("<li>Credit Card: "+loginAccount.cardtype+"</li>");
+	payment.append("<li>Card number:"+loginAccount.cardnumber.substr(5,6)+"</li>");	
+	payment.listview("refresh");
+
+	},                        
+	error: function(data, textStatus, jqXHR){
+		console.log("textStatus: " + textStatus);
+		alert("Error");
+	}
+
+	});
+	
+});
+
+$(document).on('click', '#bidsubmitcheckout-button', function(){
+		var formData={auctionid: auctionBid};
+		$.ajax({
+		url : "http://localhost:3412/Project1Srv/updatepaymentwinningbid",
+		type : 'put',
+		data : formData,
+		dataType:"json",
+		success: function(data, textStatus, jqXHR){
+    		GetAuctionInvoice(formData.auctionid);
+  		},
+  		error: function(errorThrown, textStatus, jqXHR){
+    		alert("Error 444: No response");
+    		console.log(errorThrown + " " + textStatus + " " + jqXHR);
+    		$.mobile.loading("hide");
+  		}
+		});
+	
+	
+	
+});
+
+function GetAuctionInvoice(aid){
+		auctionBid= aid;
+	    $.mobile.changePage("auctioninvoice.html");
+}
+
+$(document).on('pagebeforeshow', '#auctioninvoice-show', function(event, ui){
+	
+	var id= auctionBid;	
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/auction/"+id,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+		var auction= data.auction[0];
+		
+		var date = $("#adate");
+		var payment = $("#adue");
+		var balance = $("#abalance-due");
+		var total = $("#atotal");
+		var paid = $("#aamountpaid");
+		var products = $("#ashow-itemrow");
+		var name = $("#acustomer");
+		var address = $("#aaddress");
+
+		name.empty();
+		address.empty();
+		date.empty();
+		payment.empty();
+		balance.empty();
+		total.empty();
+		paid.empty();
+		products.empty;
+		
+		products.append('<tr>'+
+		      '<th>Item</th>'+
+		      '<th>Unit Cost</th>'+
+		      '<th>Quantity</th>'+
+		      '<th>Price</th>'+
+		 	  '</tr>');
+		
+		products.append('<tr><td class="item-name"><center><p>'+auction.prodname+'</p></center></td>'+
+		      '<td><center><p class="cost">'+auction.price+'</p></center></td>'+
+		      '<td><center><p class="qty"> 1 </p></center></td>'+
+		      '<td><center><p>'+auction.price+'</p></center></td></tr>');	
+
+		name.append(loginAccount.fname +" "+ loginAccount.lname).trigger('create');
+		address.append(loginAccount.billing).trigger('create');
+		date.append(new Date()).trigger('create');
+		payment.append(auction.price).trigger('create');
+		balance.append(" $0.00").trigger('create');
+		total.append(auction.price).trigger('create');
+		paid.append(auction.price).trigger('create');
+		products.trigger('create');
+
+		},                        
+		error: function(data, textStatus, jqXHR){
+		console.log("textStatus: " + textStatus);
+		alert("Error");
+	}
+
+	});
+	
 });
 
 $(document).on('pagebeforeshow', "#saleList", function(event, ui){
@@ -2077,6 +2370,8 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 					categoriesList[i].catname + "</li>");
 		}        
 		list.listview("refresh");
+		
+		
 	},
 	error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
@@ -2890,6 +3185,7 @@ function BidUser(id){
 }
 
 var purchases={};
+var winningBids={};
 function PurchaseUser(id){
 
 	$.mobile.loading("show");
@@ -2900,8 +3196,23 @@ function PurchaseUser(id){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 		purchases= data.purchaseuser;
+		$.ajax({
+		url : "http://localhost:3412/Project1Srv/winningbid/"+id,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+		winningBids= data.winningbid;
 		$.mobile.loading("hide");
 		$.mobile.changePage("purchaseuser.html");
+	},                        
+	error: function(data, textStatus, jqXHR){
+		console.log("textStatus: " + textStatus);
+		$.mobile.loading("hide");
+		alert("Internal Server Error.");
+	}
+
+	});
 	},                        
 	error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
@@ -2952,8 +3263,73 @@ function EndSale(pid){
 		type: 'put',
 		data : formData,
 		success : function(data) {
-		console.log("sale ended");
-		SalesUser(loginAccount.accountid);
+		if(!isSale){
+		var formData={auctionid: currentProduct.saleid, accountid: loginAccount.accountid, bidammmount: currentProduct.price};
+		
+		$.ajax({
+			url : "http://localhost:3412/Project1Srv/choosewinning",
+			type: 'get',
+			data:formData,
+			success : function(data) { 
+				
+				if(data.choosewinning.length != 0){
+				formData.bid= data.choosewinning[0].bid;
+				formData.bidder= data.choosewinning[0].bidder;				
+				formData.receiverid= data.choosewinning[0].owner; 
+				formData.senderid= 5;
+				var id= formData.bidder;
+				$.ajax({
+					url:"http://localhost:3412/Project1Srv/creditinfo/"+id,
+					type:'get',
+					success: function(data){
+						formData.creditid= data.creditinfo[0].creditid;
+						$.ajax({
+						url:"http://localhost:3412/Project1Srv/insertwinningbid",
+						type:'post',
+						data:formData,
+						success: function(data){
+						formData.subject="Auction: "+formData.auctionid; 
+						formData.text="The winning bid of your auction on: "+ currentProduct.prodname+" has been placed with a total of: "+ formData.bidammmount+"." +
+						"To accept this bid, check your auction status at Items bidding in your profile page. Have a good day!";
+					$.ajax({
+						url : "http://localhost:3412/Project1Srv/addmessage",
+						type: 'post',
+						data:formData,
+						success : function(data) {
+							if(loginAccount.accountid == formData.receiverid){
+								currentProduct.choosewinningbid= true;
+								sessionStorage.setItem("product", JSON.stringify(currentProduct));
+								$.mobile.changePage("index.html");
+							}
+							
+
+						},
+	
+					error: function(data, textStatus, jqXHR){
+					console.log("textStatus: " + textStatus);
+					alert("sending message to owner of auction unsuccessfull");}          	
+					});	},
+					
+					error: function(data, textStatus, jqXHR){
+					console.log("textStatus: " + textStatus);
+					alert("insert winning bid unsuccessfull");}          	
+					}); 
+						
+					},
+					
+					error: function(data, textStatus, jqXHR){
+					console.log("textStatus: " + textStatus);
+					alert("choosing credit info not successfull");}
+				});
+				}
+					
+				},
+	
+			error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("choosing winning bid not successfull");}          	
+			});
+		}
 	},
 
 	error: function(data, textStatus, jqXHR){
@@ -3100,6 +3476,8 @@ function GetSubCategory(id){
 }
 
 var currentAuctionList = {};
+var currentWinningList={};
+
 function GetAuctions(){
 	id= profile.accountid;
 	if(id == undefined){
@@ -3112,11 +3490,24 @@ function GetAuctions(){
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-		currentAuctionList= data.userAuctions;
-		$.mobile.loading("hide");
-		$.mobile.changePage("uauctions.html", {
-			info: id,
-		});},                        
+			
+		currentAuctionList= data.userAuctions;		
+		var id= loginAccount.accountid;
+		$.ajax({
+		url : "http://localhost:3412/Project1Srv/getwinningbids/"+id,
+		type: 'get',
+	    success : function(data) {
+
+				currentWinningList= data.getwinningbids;
+				$.mobile.loading("hide");
+				$.mobile.changePage("uauctions.html");
+				},
+	
+	    error: function(data, textStatus, jqXHR){
+		console.log("textStatus: " + textStatus);
+		alert("get winning bid unsuccessfull");}          	
+		});},
+		                        
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
 			$.mobile.loading("hide");

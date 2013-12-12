@@ -238,6 +238,27 @@ app.get('/Project1Srv/auctions/:id', function(req, res) {
 
 });
 
+app.get('/Project1Srv/auction/:id', function(req, res) {
+
+	var id = req.params.id;
+	console.log("GET auction :"+ id);
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT prodname, currentbid as price, productid as id, imagelink as img FROM account natural join auction, product "+
+			"WHERE auction.prodid = product.productid AND auction.accountid = account.accountid AND auction.auctionid="+id);
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"auction" : result.rows};
+		client.end();
+		res.json(response);
+	});
+
+});
+
 app.get('/Project1Srv/auctionProd/:id/:lbid', function(req, res) {
 
 	var id = req.params.id;
@@ -367,13 +388,14 @@ app.get('/Project1Srv/bidusers/:id', function(req, res) {
 app.get('/Project1Srv/purchaseusers/:id', function(req, res) {
 
 	var id = req.params.id;
-	console.log("GET purchases of user:"+ id);
+	console.log("GET products bought by user: "+ id);
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT prodname, product.productid as id, max(bammmount) as bid, imagelink as img, max(bdate) as bdate, account.username as bidder, catid "+
-			"FROM account, bid, auction, product WHERE auction.auctionid = bid.auctionid AND account.accountid= bid.accountid AND product.productid = auction.prodid "+
-			"AND account.accountid= "+id+" GROUP BY prodname, product.productid, imagelink, account.username, catid");
+	var query = client.query("SELECT invid as invoice, totalprice as price, sale.saleid as saleid, product.productid as productid, "+
+	"product.prodname as prodname, creditcard.accountid as accountid, product.imagelink as img, checkout.quantity as quantity "+
+	"FROM checkout, sale, product, creditcard where checkout.saleid= sale.saleid and product.productid= sale.prodid and checkout.creditid= creditcard.creditid "+
+	"and creditcard.accountid="+id);
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -1042,7 +1064,7 @@ app.get('/Project1Srv/products/:id', function(req, res){
 			"SELECT seller, saleid, id, price, starttime, endtime, prodname, condition, description, img, aid, isactive " +
 					"FROM ( SELECT username as seller, saleid, productid as id, price, starttime, endtime, prodname, condition, description, imagelink as img, accountid as aid, product.isactive as isactive "+
 					"FROM account natural join sale, product WHERE account.accountid = sale.accountid AND product.productid = sale.prodid UNION "+
-					"SELECT username as seller, auctionid, productid as id, currentbid as price, startdate as starttime, enddate as endtime, prodname, condition, description, imagelink as img, accountid as aid, product.isactive as isactive " + 
+					"SELECT username as seller, auctionid as saleid, productid as id, currentbid as price, startdate as starttime, enddate as endtime, prodname, condition, description, imagelink as img, accountid as aid, product.isactive as isactive " + 
 					"FROM account natural join auction, product WHERE auction.prodid = product.productid AND auction.accountid = account.accountid) as pdt WHERE id=" + id);
 
 	query.on("row", function (row, result) {
@@ -1287,7 +1309,7 @@ app.put('/Project1Srv/deletembox', function(req, res) {
 });
 
 app.post('/Project1Srv/addmessage', function(req, res) {
-	console.log("Send message to: "+req.param('username'));
+	console.log("Send message to: "+req.param('receiverid'));
 
 	var client = new pg.Client(conString);
 	client.connect();
@@ -1522,6 +1544,211 @@ app.post('/Project1Srv/accountscreated', function(req, res) {
 		"','"+ req.param('creditnumber') +"','"+ req.param('securitynumber') +"','"+ req.param('expdate') +"');");
 		
 	client.end();
+});
+
+app.post('/Project1Srv/insertinvoice', function(req, res) {
+
+	console.log("INSERT invoice ");
+
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query= client.query("INSERT INTO invoice(buyerid, date) "+
+			"VALUES ("+req.param('buyerid')+", localtimestamp) RETURNING *");
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"insertinvoice" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+
+app.post('/Project1Srv/insertcheckout', function(req, res) {
+
+	console.log("INSERT checkout ");
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query= client.query("INSERT INTO checkout(creditid, invid, totalprice, saleid, quantity) " +
+	"VALUES ("+req.param('creditid')+","+req.param('invoiceid')+","+req.param('totalprice')+","+req.param('id')+","+
+	req.param('count')+") RETURNING *");
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"insertcheckout" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.get('/Project1Srv/creditinfo/:id', function(req, res) {
+	var id = req.params.id;
+	console.log("Get credit information.");
+	
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT creditid FROM creditcard WHERE accountid="+id);
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"creditinfo" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.get('/Project1Srv/choosewinning', function(req, res) {
+	var id= req.param('auctionid');
+	
+	console.log("Get winning bid information of auction: "+id);
+	
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT bid, bid.accountid as bidder, bammmount, auction.auctionid, auction.accountid as owner, prodid, bdate FROM bid, auction " +
+	"WHERE auction.auctionid=bid.auctionid AND auction.currentbid = bid.bammmount AND auction.auctionid="+id);
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"choosewinning" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.post('/Project1Srv/insertwinningbid', function(req, res) {
+
+	console.log("INSERT winning bid");
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query= client.query("INSERT INTO winningbid(bid, accountid, auctionid, bidammount, creditid) "+
+    "VALUES ("+req.param('bid')+","+req.param('bidder')+","+req.param('auctionid')+", '"+
+    req.param('bidammmount')+"' , "+req.param('creditid')+") RETURNING *");
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"insertwinningbid" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.get('/Project1Srv/getwinningbids/:id', function(req, res) {
+	var id= req.params.id;
+	
+	console.log("Get unapproved winning bids of account: "+id);
+	
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT auction.auctionid as auctionid, product.productid as productid, product.prodname as prodname, winningbid.bidammount as price,"+
+	" product.imagelink as imagelink FROM winningbid, auction, product where winningbid.auctionid= auction.auctionid"+
+	" and product.productid= auction.prodid and isapproved='f' and auction.accountid="+id);
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"getwinningbids" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/updatewinningbid', function(req, res) {
+
+	console.log("UPDATE (approve) winning bid ");
+
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query= client.query("UPDATE winningbid SET isapproved='t' WHERE auctionid="+req.param('auctionid')+" RETURNING *");
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"updatewinningbid" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.get('/Project1Srv/winningbid/:id', function(req, res) {
+	var id= req.params.id;
+	
+	console.log("Get unapproved winning bids of account: "+id);
+	
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT ispayed, product.prodname as prodname, auction.auctionid as auctionid, auction.currentbid as price, product.imagelink as img, "+
+	" winningbid.creditid as creditid from winningbid,auction,product where auction.prodid= product.productid and auction.auctionid= winningbid.auctionid "+
+	" and auction.currentbid = winningbid.bidammount and isapproved='t' and winningbid.accountid="+id);
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"winningbid" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/updatepaymentwinningbid', function(req, res) {
+	var id= req.param('auctionid');
+	console.log("UPDATE (payment) winning bid ");
+
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query= client.query("UPDATE winningbid SET ispayed='t' WHERE auctionid="+id+" RETURNING *");
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"updatepaymentwinningbid" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.get('/Project1Srv/invoice/:id', function(req, res) {
+
+	var id = req.params.id;
+	console.log("GET products bought by user: "+ id);
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT invoice.invoiceid as invoice, invoice.date as date, checkout.totalprice as totalprice, sale.price as price, "+
+	" checkout.quantity as quantity, checkout.saleid as saleid, product.prodname as prodname FROM invoice, checkout, sale, product, creditcard "+
+	" WHERE invoice.invoiceid= checkout.invid AND checkout.saleid= sale.saleid AND sale.prodid= product.productid AND creditcard.creditid=checkout.creditid AND creditcard.accountid="+id);
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"invoiceuser" : result.rows};
+		client.end();
+		res.json(response);
+	});
+
 });
 
 
