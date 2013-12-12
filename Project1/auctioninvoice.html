@@ -18,12 +18,12 @@
 <body>
 
 
-		<div id= "invoice-show" data-role="page" style= "background:white">
+		<div id= "auctioninvoice-show" data-role="page" style= "background:white">
 		<center><p id="header">INVOICE</p></center>
 		
 		<div id="identity">
 		
-            <p id="invoice-address"></p>
+            <p id="ainvoice-address"></p>
 
             <div id="logo">
              <center><img src= 'http://img534.imageshack.us/img534/9476/fbm3.gif' /></center>
@@ -33,24 +33,24 @@
 		
 		<div style="clear:both"></div>
 		
-		<div id="customerinvoice">
+		<div id="customer">
 
-            <h3 id="customer"></h3>
-            <p id="address"></p>
+            <h3 id="acustomer"></h3>
+            <p id="aaddress"></p>
 
             <table id="meta">
                 <tr>
-                    <td class="meta-head">Invoice </td>
-                    <td><p id="invoicenumber"></p></td>
+                    <td class="meta-head"> </td>
+                    <td><p id="ainvoicenumber"></p></td>
                 </tr>
                 <tr>
 
                     <td class="meta-head">Date</td>
-                    <td><p id="date"></p></td>
+                    <td><p id="adate"></p></td>
                 </tr>
                 <tr>
                     <td class="meta-head">Amount Due</td>
-                    <td><div id="due"></div></td>
+                    <td><div id="adue"></div></td>
                 </tr>
 
             </table>
@@ -58,28 +58,27 @@
 		</div>
 		
 		<table id="items">
-		 <div class="item-row" id="show-itemrow">
-		  
-		  
-		 </div>
+		
+		  <div id="ashow-itemrow">
+		  </div>
 	  
 		  <tr>
 
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Total</td>
-		      <td class="total-value"><div id="total"></div></td>
+		      <td class="total-value"><div id="atotal"></div></td>
 		  </tr>
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line-paid">Ammount paid</td>
-		      <td colspan="2" class="total-line" id="amountpaid"></td>
+		      <td colspan="2" class="total-line" id="aamountpaid"></td>
 
 		      <td class="total-value"><p id="paid"></p></td>
 		  </tr>
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line-balance">Balance Due</td>
-		      <td class="total-value balance"><p id="balance-due"></p></td>
+		      <td class="total-value balance"><p id="abalance-due"></p></td>
 		  </tr>
 		
 		</table>
