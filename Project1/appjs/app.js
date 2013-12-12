@@ -423,8 +423,8 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 $(document).on('click', '#admaccount', function() {
 		var user= $("#admchangeusername").val();
 		var pass= $("#admchangepassword").val();
-		var formData = {username: user, password: pass};
-		//alert(formData.username);
+		var formData = {username: "user", password: pass};
+		alert(user);
 		//alert(formData.password);
 		ChangePassword(formData); 
 }); 
