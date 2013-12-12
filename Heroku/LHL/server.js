@@ -2134,6 +2134,51 @@ app.get('/LHL/invoice/:id', function(req, res) {
 
 });
 
+var interval = setInterval(function(){checkAuction();checkSale();},1800000);
+
+function checkAuction(){
+	var client = new pg.Client(conString);
+	client.connect();
+	
+	var query = client.query("With aupdate as(UPDATE product SET isactive = FALSE WHERE productid IN " +
+"(select prodid from auction,product where productid=prodid " + 
+"AND enddate < current_timestamp and isactive) Returning *), " +
+"win as(SELECT buyer.accountid as buyer, buyer.username as buyername, " +
+"A.auctionid as auction,prodname as pname, " +
+"A.accountid as seller,bid.bdate as date,max,creditid " +
+"FROM auction as A, (select * from aupdate) as product,address NATURAL JOIN creditcard, " + 
+"account as buyer NATURAL JOIN bid NATURAL JOIN " +
+"(select auctionid,max(bammmount)as max " +
+"from bid " +
+"group by auctionid)as MaxBids "+ 
+"WHERE A.auctionid=MaxBids.auctionid AND max=bammmount AND prodid=productid " +
+"AND address.addressid=buyer.billingid AND A.prodid=productid), "+
+"w2 as( "+
+"INSERT INTO winningbid(bid,accountid,auctionid,biddate,bidammount,creditid) "+
+"Values(default,(SELECT buyer from win), " +
+"(SELECT auction FROM win),(SELECT date FROM win),(SELECT max FROM win), "+ 
+"(SELECT creditid FROM win)) RETURNING*), " +
+"w3 as (Select buyer,pname,buyername,max,seller FROM win NATURAL JOIN w2) "+
+"INSERT INTO message(messageid,senderid,receiverid,subject,text,date) "+
+"VALUES((select (max(messageid)+1) as messageid from message) " +
+",(select buyer from w3),(select seller from w3),'Auction Ended', " +
+"'The winning bid of your auction on: '||(select prodname from w3)||" has been placed with a total of: "||(select max from w3)||"." + "+
+""To accept this bid, check your auction status at Items bidding in your profile page. Have a good day!",current_timestamp), " +
+"((select (max(messageid)+2) as messageid from message) " +
+",(select seller from w3),(select buyer from w3),'Auction Ended', "+
+"'You won the auction '||(select prodname from w3)||'! Please check your pending payments. Have a good day!'," " +
+"current_timestamp)"); 	
+	console.log('Auctions Updated');
+	client.end();
+}
+function checkSale(){
+	var client = new pg.Client(conString);
+	client.connect();
+	
+	var query = client.query("UPDATE product SET isactive = FALSE WHERE productid IN(select prodid from sale,product where productid=prodid AND endtime < current_timestamp and isactive)"); 	
+	console.log('Sales Updated');
+	client.end();
+}
 
 // Server starts running when listen is called.
 app.listen(process.env.PORT || 3412);

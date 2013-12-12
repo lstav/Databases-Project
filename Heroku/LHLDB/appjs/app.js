@@ -3487,7 +3487,7 @@ function EndSale(pid){
 		success : function(data) {
 		if(!isSale){
 		var formData={auctionid: currentProduct.saleid, accountid: loginAccount.accountid, bidammmount: currentProduct.price};
-		
+		alert("Sale Ended");
 		$.ajax({
 			url : "http://lhl.herokuapp.com/LHL/choosewinning",
 			type: 'get',
@@ -3523,7 +3523,7 @@ function EndSale(pid){
 								sessionStorage.setItem("product", JSON.stringify(currentProduct));
 								$.mobile.changePage("index.html");
 							}
-							
+							$.mobile.changePage("index.html");
 
 						},
 	
