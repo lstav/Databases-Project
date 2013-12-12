@@ -41,13 +41,12 @@ var conString = process.env.DATABASE_URL;
 // d) DELETE - Remove an individual object, or collection (Database delete operation)
 
 // REST Operation - HTTP GET 
-app.post('/LHL/images/:image', function(req, res){
-	var image = req.params.image;
-	cloudinary.uploader.upload(image,
+app.post('/LHL/images', function(req, res){
+	cloudinary.uploader.upload(req.param('image'),
 	function(result) { 
 		console.log(result.url); 
 		res.json(result.url);
-	});
+	}, {width: 320, height:420});
 });
 
 app.get('/LHL/accounts', function(req, res) {
@@ -1264,7 +1263,7 @@ app.post('/LHL/products', function(req, res) {
 	client.connect();
 
 	var query = client.query("INSERT INTO product(catid, prodname, condition, description, imagelink) "+
-			"VALUES ("+ req.param('catid')+", '"+ req.param('name')+"' , '"+ req.param('condition')+"', '"+ req.param('description')+"', 'http://img856.imageshack.us/img856/4856/n2vc.jpg')  RETURNING *");
+			"VALUES ("+ req.param('catid')+", '"+ req.param('name')+"' , '"+ req.param('condition')+"', '"+ req.param('description')+"', '"+req.param('image')+"')  RETURNING *");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
