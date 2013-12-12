@@ -446,7 +446,7 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 	for(var i=0; i<profile.rank; i++) {
 		stars = stars + "*";
 	}
-
+	alert(profile.rank);
 	//alert(loginAccount.username);
 	var list= $("#profile-info");
 	list.empty();
