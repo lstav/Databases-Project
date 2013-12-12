@@ -30,6 +30,19 @@ function getCookie(c_name)
 	}
 	return c_value;
 }
+var notifyMessages=[];
+var interval = setInterval(function(){notifyMessages();},60000);
+
+function notifyMessages(){
+	var client = new pg.Client(conString);
+	client.connect();
+	
+	var query = client.query("SELECT COUNT(*)FROM message WHERE isRead = FALSE AND receiverid = 1)"); 
+	if(query > 0){
+		
+	}
+	client.end();
+}
 
 $(document).on('pagebeforeshow', '#login', function(){  
 
@@ -186,7 +199,7 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 		$(document).on('click', '#edit-account', function() { 
 			$.mobile.changePage("settings.html", {transition: "none"});
 		});
-		$(document).on('click', '#rankers-button', function() { 
+		$(document).on('click', '#rankersaccount-button', function() { 
 			GetRankers(loginAccount.accountid);
 
 		});  
@@ -503,9 +516,10 @@ $(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
 	});*/
 	
 	$(document).on('click', '#submitrank', function() {
-		RankUser();
-		alert("Rank submited!");
-		$.mobile.changePage("profile.html", {transition: "none"});
+		var rank= $("#rank").val();
+		var formData = {user: loginAccount.accountid, seller: profile.accountid, ranking: rank};
+		//alert(formData.ranking);
+		RankUser(formData);
 	});
 
 	var pname= $("#urname");
@@ -2285,6 +2299,13 @@ $(document).on('click', "#reply", function(event, ui) {
 
 $(document).on('pagebeforeshow', "#newMessage", function(event, ui) {
 
+	if (sessionStorage.getItem("account") != null) {
+		var txt = sessionStorage.getItem("account");
+		var obj = eval('(' + txt + ')');
+		if(loginAccount.username == undefined && obj.username != undefined){
+			loginAccount = obj;
+		}
+	}
 	if(reply){
 		reply= false;
 		var message = $("#messageTo");
@@ -2468,7 +2489,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 		var today;
 		today = todayList[0];
 		for (var i=0; i < len; ++i){
-			list.append("<li><a>" + todayList[i].name + " Quantity: " + todayList[i].quantity + " <h4>" + todayList[i].total + "</h4></a></li>");
+			list.append("<li><a><h3>" + todayList[i].name + "</h3><h4> Quantity: " + todayList[i].quantity + " </h4><h4>" + todayList[i].total + "</h4></a></li>");
 		}        
 		list.listview("refresh");
 	},
@@ -2490,7 +2511,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 		var week;
 		week = weekList[0];
 		for (var i=0; i < len; ++i){
-			list.append("<li><a>" + weekList[i].name + " " + weekList[i].quantity + " " + weekList[i].total + "</a></li>");
+			list.append("<li><a><h3>" + weekList[i].name + "</h3><h4> Quantity: " + weekList[i].quantity + " </h4><h4>" + weekList[i].total + "</h4></a></li>");
 		}        
 		list.listview("refresh");
 	},
@@ -2512,7 +2533,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 		var month;
 		month = monthList[0];
 		for (var i=0; i < len; ++i){
-			list.append("<li><a>" + monthList[i].name + " " + monthList[i].quantity + " " + monthList[i].total + "</a></li>");
+			list.append("<li><a><h3>" + monthList[i].name + "</h3><h4> Quantity: " + monthList[i].quantity + " </h4><h4>" + monthList[i].total + "</h4></a></li>");
 		}        
 		list.listview("refresh");
 	},
@@ -3596,8 +3617,27 @@ function GetCategories(){
 	});
 }
 
-function RankUser(){
-	$.mobile.changePage("userrank.html", {transition: "none"});                                     
+function RankUser(info){
+	$.mobile.loading("show");
+	var formData = info;
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/rankuser/",
+		type : 'post',
+		dataType: 'json',
+		data : formData,
+		success: function(errorThrown, textStatus, jqXHR){
+    		alert('Rank Submitted');
+    		//AccountLogin(loginAccount.username, formDate.password);
+    		sessionStorage.removeItem("profile");
+			$.mobile.changePage("profile.html", {transition: "none"});
+  		},
+  		error: function(jqXHR, textStatus, errorThrownn){
+    		alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
+	//$.mobile.changePage("userrank.html", {transition: "none"});                                     
 }
 
 
@@ -3888,7 +3928,7 @@ function submitMessage(){
 			success : function(data) {
 			console.log("message sent");
 			$.mobile.loading("hide");
-
+			$.mobile.changePage("#sentMessages");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -3907,6 +3947,7 @@ function submitMessage(){
 		}
 	}
 	});
+	$.mobile.changePage("#sentMessages");
 }
 
 function DeleteMessageI(){

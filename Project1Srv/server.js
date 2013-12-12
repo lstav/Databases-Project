@@ -32,6 +32,7 @@ function checkAuction(){
 	
 	var query = client.query("UPDATE product SET isactive = FALSE WHERE productid IN(select prodid from auction,product where productid=prodid AND enddate < current_timestamp and isactive)"); 
 	console.log('Auctions Updated');
+	client.end();
 }
 
 // Database connection string: pg://<username>:<password>@host:port/dbname 
@@ -1776,6 +1777,26 @@ app.put('/Project1Srv/accountspassword/', function(req, res) {
 });
 
 
+app.post('/Project1Srv/rankuser/', function(req, res) {
+	console.log("POST rank: " + req.param('user') + ", " + req.param('ranking'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("INSERT INTO rank (rankid, accountid, stars, buyerid) " +
+		"VALUES ((select (max(rankid)+1) as rankid from rank),"+ req.param('seller') +
+		", "+ req.param('ranking') +", "+ req.param('user') +")");
+	/*var query = client.query("UPDATE account SET apassword= '" + req.param('password') + "' " +
+			"WHERE username= '" + req.param('username') + "' RETURNING account.username");*/
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"rankuser" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
 
 // REST Operation - HTTP DELETE to delete an account based on its id
 app.post('/Project1Srv/accountsdeleted/', function(req, res) {
