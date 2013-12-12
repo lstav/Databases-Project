@@ -1964,7 +1964,7 @@ app.get('/Project1Srv/creditinfo/:id', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT creditid FROM creditcard WHERE accountid="+id);
+	var query = client.query("SELECT creditid FROM creditcard WHERE addressid=(SELECT billingid FROM account WHERE accountid ="+id +")");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
