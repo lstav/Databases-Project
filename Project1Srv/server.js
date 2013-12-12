@@ -48,8 +48,8 @@ function checkSale(){
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
 
-//var conString = "pg://postgres:course@localhost:5432/db2";
-var conString = "pg://course:course@localhost:5432/db2";
+var conString = "pg://postgres:course@localhost:5432/db2";
+//var conString = "pg://course:course@localhost:5432/db2";
 
 // REST Operations
 // Idea: Data is created, read, updated, or deleted through a URL that 
@@ -1628,7 +1628,7 @@ app.put('/Project1Srv/accountfname/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
+
 	var query = client.query("UPDATE account SET fname= '" + req.param('password') + "' " +
 			"WHERE username= '" + req.param('username') + "' RETURNING account.username");
 	
@@ -1646,7 +1646,7 @@ app.put('/Project1Srv/accountlname/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
+
 	var query = client.query("UPDATE account SET lname= '" + req.param('password') + "' " +
 			"WHERE username= '" + req.param('username') + "' RETURNING account.username");
 	
@@ -1664,7 +1664,7 @@ app.put('/Project1Srv/accountshipping/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
+
 	var query = client.query("UPDATE address SET address= '" + req.param('password') + "' " +
 			"WHERE addressid = (SELECT shippingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
 	
@@ -1682,7 +1682,7 @@ app.put('/Project1Srv/accountbilling/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
+
 	var query = client.query("UPDATE address SET address= '" + req.param('password') + "' " +
 			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
 	
@@ -1700,7 +1700,7 @@ app.put('/Project1Srv/accountcardnumber/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
+
 	var query = client.query("UPDATE creditcard SET cardnumber= '" + req.param('password') + "' " +
 			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
 	
@@ -1718,7 +1718,7 @@ app.put('/Project1Srv/accountcardtype/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
+
 	var query = client.query("UPDATE creditcard SET cardnumber= '" + req.param('password') + "' " +
 			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
 	
@@ -1736,7 +1736,7 @@ app.put('/Project1Srv/accountsecurity/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
+
 	var query = client.query("UPDATE creditcard SET securitynumber= '" + req.param('password') + "' " +
 			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
 	
@@ -1754,7 +1754,7 @@ app.put('/Project1Srv/accountexpdate/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
+
 	var query = client.query("UPDATE creditcard SET expdate= '" + req.param('password') + "' " +
 			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
 	
@@ -1772,7 +1772,7 @@ app.put('/Project1Srv/accountemail/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
+
 	var query = client.query("UPDATE account SET email= '" + req.param('password') + "' " +
 			"WHERE username = '" + req.param('username') + "' RETURNING *");
 	
@@ -1790,7 +1790,7 @@ app.put('/Project1Srv/accountbank/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
+
 	var query = client.query("UPDATE depositaccountid SET bankaccountnumber= '" + req.param('password') + "' " +
 			"WHERE depositaccountid = (SELECT depositid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
 	
@@ -1809,7 +1809,7 @@ app.put('/Project1Srv/accountspassword/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
 	client.connect();
-	// Hay que buscar el query correcto
+
 	var query = client.query("UPDATE account SET apassword= '" + req.param('password') + "' " +
 			"WHERE username= '" + req.param('username') + "' RETURNING account.username");
 	

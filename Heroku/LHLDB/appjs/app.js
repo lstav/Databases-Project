@@ -2490,6 +2490,7 @@ $(document).on('pagebeforeshow', "#message-view", function(event, ui) {
 $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	$.ajax({
 		url : "http://lhl.herokuapp.com/LHL/categories",
+		method:"get",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 		var categoriesList = data.categories;
@@ -2515,6 +2516,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	
 	$.ajax({
 		url : "http://lhl.herokuapp.com/LHL/todaysales",
+		method:"get",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 		var todayList = data.todaysales;
@@ -2538,6 +2540,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	$.ajax({
 		url : "http://lhl.herokuapp.com/LHL/weeksales",
 		contentType: "application/json",
+		method:"get",
 		success : function(data, textStatus, jqXHR){
 		var weekList = data.weeksales;
 		var len =weekList.length;
@@ -2559,6 +2562,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	
 	$.ajax({
 		url : "http://lhl.herokuapp.com/LHL/monthsales",
+		method:"get",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 		var monthList = data.monthsales;
@@ -4455,7 +4459,7 @@ function ChangePassword(info){
 	var formData = info;
 	$.ajax({
 		url : "http://lhl.herokuapp.com/LHL/accountspassword/",
-		method : 'put',
+		type : 'put',
 		dataType: 'json',
 		data : formData,
 		success: function(data){
