@@ -4483,7 +4483,7 @@ function ChangePassword(){
 		type : 'post',
 		dataType: 'json',
 		data : formData,
-		success: function(data){
+		success: function(data, textStatus, jqXHR){
     		alert("Error 444: No response");
     		//AccountLogin(loginAccount.username, formDate.password);
 			$.mobile.changePage("index.html", {transition: "none"});
