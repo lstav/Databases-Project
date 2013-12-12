@@ -658,17 +658,30 @@ app.get('/LHL/todaysales', function(req, res){
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
-			"FROM product, sale NATURAL JOIN checkout,invoice " +
-			"WHERE productid = prodid AND invid=invoiceid " +
-			"AND date = CURRENT_DATE " +
-			"group by prodid,prodname " +
-			"UNION " +
-			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
-			"FROM winningBid AS W, auction AS A,product " +
-			"WHERE prodid = productid AND W.auctionid=A.auctionid " +
-			"AND enddate = CURRENT_DATE " +
-			"group by prodid,prodname");
+	var query = client.query("SELECT * " +
+		"From(SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+		"FROM product, sale NATURAL JOIN checkout,invoice " +
+		"WHERE productid = prodid AND invid=invoiceid " +
+		"AND date = CURRENT_DATE " +
+		"group by prodid,prodname " +
+		"UNION " +
+		"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+		"FROM winningBid AS W, auction AS A,product " +
+		"WHERE prodid = productid AND W.auctionid=A.auctionid AND W.isPayed " +
+		"AND enddate = CURRENT_DATE " +
+		"group by prodid,prodname) as SaleInfo " + 
+		"NATURAL JOIN (SELECT sum(Quantity) " +
+		"FROM(SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+		"FROM product, sale NATURAL JOIN checkout,invoice " +
+		"WHERE productid = prodid AND invid=invoiceid " +
+		"AND date = CURRENT_DATE " +
+		"group by prodid,prodname " +
+		"UNION " +
+		"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+		"FROM winningBid AS W, auction AS A,product " +
+		"WHERE prodid = productid AND W.auctionid=A.auctionid AND W.isPayed " +
+		"AND enddate = CURRENT_DATE " +
+		"group by prodid,prodname) as ST)as SaleToday");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -686,7 +699,8 @@ app.get('/LHL/weeksales', function(req, res){
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+	var query = client.query("SELECT * " +
+			"From(SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
 			"FROM product, sale NATURAL JOIN checkout,invoice " +
 			"WHERE productid = prodid AND invid=invoiceid " +
 			"AND date > CURRENT_DATE-7 " +
@@ -694,9 +708,21 @@ app.get('/LHL/weeksales', function(req, res){
 			"UNION " +
 			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
 			"FROM winningBid AS W, auction AS A,product " +
-			"WHERE prodid = productid AND W.auctionid=A.auctionid " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid AND W.isPayed " +
 			"AND enddate > CURRENT_DATE-7 " +
-			"group by prodid,prodname");
+			"group by prodid,prodname) as SaleInfo " + 
+			"NATURAL JOIN (SELECT sum(Quantity) " +
+			"FROM(SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+			"FROM product, sale NATURAL JOIN checkout,invoice " +
+			"WHERE productid = prodid AND invid=invoiceid " +
+			"AND date > CURRENT_DATE-7 " +
+			"group by prodid,prodname " +
+			"UNION " +
+			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+			"FROM winningBid AS W, auction AS A,product " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid AND W.isPayed " +
+			"AND enddate > CURRENT_DATE-7 " +
+			"group by prodid,prodname) as ST)as SaleToday");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -714,7 +740,8 @@ app.get('/LHL/monthsales', function(req, res){
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+	var query = client.query("SELECT * " +
+			"From(SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
 			"FROM product, sale NATURAL JOIN checkout,invoice " +
 			"WHERE productid = prodid AND invid=invoiceid " +
 			"AND EXTRACT(MONTH FROM date) > EXTRACT(MONTH FROM CURRENT_DATE)-1 " +
@@ -722,9 +749,21 @@ app.get('/LHL/monthsales', function(req, res){
 			"UNION " +
 			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
 			"FROM winningBid AS W, auction AS A,product " +
-			"WHERE prodid = productid AND W.auctionid=A.auctionid " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid AND W.isPayed " +
 			"AND EXTRACT(MONTH FROM enddate) > EXTRACT(MONTH FROM CURRENT_DATE)-1 " +
-			"group by prodid,prodname");
+			"group by prodid,prodname) as SaleInfo " + 
+			"NATURAL JOIN (SELECT sum(Quantity) " +
+			"FROM(SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+			"FROM product, sale NATURAL JOIN checkout,invoice " +
+			"WHERE productid = prodid AND invid=invoiceid " +
+			"AND EXTRACT(MONTH FROM date) > EXTRACT(MONTH FROM CURRENT_DATE)-1 " +
+			"group by prodid,prodname " +
+			"UNION " +
+			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+			"FROM winningBid AS W, auction AS A,product " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid AND W.isPayed " +
+			"AND EXTRACT(MONTH FROM enddate) > EXTRACT(MONTH FROM CURRENT_DATE)-1 " +
+			"group by prodid,prodname) as ST)as SaleToday");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
