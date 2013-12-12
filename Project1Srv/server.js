@@ -32,6 +32,7 @@ function checkAuction(){
 	
 	var query = client.query("UPDATE product SET isactive = FALSE WHERE productid IN(select prodid from auction,product where productid=prodid AND enddate < current_timestamp and isactive)"); 
 	console.log('Auctions Updated');
+	client.end();
 }
 
 // Database connection string: pg://<username>:<password>@host:port/dbname 

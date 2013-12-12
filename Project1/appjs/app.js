@@ -30,6 +30,19 @@ function getCookie(c_name)
 	}
 	return c_value;
 }
+var notifyMessages=[];
+var interval = setInterval(function(){notifyMessages();},60000);
+
+function notifyMessages(){
+	var client = new pg.Client(conString);
+	client.connect();
+	
+	var query = client.query("SELECT COUNT(*)FROM message WHERE isRead = FALSE AND receiverid = 1)"); 
+	if(query > 0){
+		
+	}
+	client.end();
+}
 
 $(document).on('pagebeforeshow', '#login', function(){  
 
@@ -1994,6 +2007,13 @@ $(document).on('click', "#reply", function(event, ui) {
 
 $(document).on('pagebeforeshow', "#newMessage", function(event, ui) {
 
+	if (sessionStorage.getItem("account") != null) {
+		var txt = sessionStorage.getItem("account");
+		var obj = eval('(' + txt + ')');
+		if(loginAccount.username == undefined && obj.username != undefined){
+			loginAccount = obj;
+		}
+	}
 	if(reply){
 		reply= false;
 		var message = $("#messageTo");
@@ -3499,7 +3519,7 @@ function submitMessage(){
 			success : function(data) {
 			console.log("message sent");
 			$.mobile.loading("hide");
-
+			$.mobile.changePage("#sentMessages");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -3518,6 +3538,7 @@ function submitMessage(){
 		}
 	}
 	});
+	$.mobile.changePage("#sentMessages");
 }
 
 function DeleteMessageI(){
