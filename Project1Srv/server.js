@@ -1616,7 +1616,7 @@ app.post('/Project1Srv/accounts/', function(req, res) {
 			res.send("Address not found.");
 		}
 		else {        
-			var response = {"accountspassword" : result.rows[0]};
+			var response = {"accounts" : result.rows[0]};
 			client.end();
 			
 			res.json(response);
@@ -1636,7 +1636,7 @@ app.put('/Project1Srv/accountfname/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountfname" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1654,7 +1654,7 @@ app.put('/Project1Srv/accountlname/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountlname" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1672,7 +1672,7 @@ app.put('/Project1Srv/accountshipping/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountshipping" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1690,7 +1690,7 @@ app.put('/Project1Srv/accountbilling/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountbilling" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1708,7 +1708,7 @@ app.put('/Project1Srv/accountcardnumber/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountcardnumber" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1726,7 +1726,7 @@ app.put('/Project1Srv/accountcardtype/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountcardtype" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1744,7 +1744,7 @@ app.put('/Project1Srv/accountsecurity/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountsecurity" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1762,7 +1762,7 @@ app.put('/Project1Srv/accountexpdate/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountexpdate" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1780,7 +1780,7 @@ app.put('/Project1Srv/accountemail/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountemail" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1798,7 +1798,7 @@ app.put('/Project1Srv/accountbank/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountbank" : result.rows};
 		client.end();
 		res.json(response);
 	});
