@@ -9,7 +9,8 @@
  		<script src="js/jquery-1.9.1.min.js"></script>
   		<script src="js/jquery.mobile-1.3.2.min.js"></script> 
 		<script src="appjs/product.js"></script>
-
+		<script src="appjs/app.js"></script>
+		<script src="appjs/jquery.session.js"></script>
 		
 		<style>
 		.center-wrapper{
@@ -90,6 +91,8 @@
 					<h3>Description</h3>
 					<div id= "description" data-role="content" style= "background-color: white"></div>
 					</div>
+					
+			 <div data-role="fieldcontain" id="chooseqty"></div>
 
 			 <div class="ui-grid-a">
           	 
@@ -102,17 +105,16 @@
              
              </div>
              
-             <div class="ui-grid-b">
+             <div class="ui-grid-a">
           	 
-          	 <div class="ui-block-a"></div>
+          	 <div class="ui-block-a" id="shop-now"></div>
             
              <div class="ui-block-b" id= "buy-now"></div>
           	
-          	 <div class="ui-block-c"></div>
-
-             </div>
-            
-			
+             </div> 
+             
+             <div id= "update-product"></div>
+			 
 			</div>
 			
 			<div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">

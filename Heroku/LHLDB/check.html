@@ -48,7 +48,7 @@
     			</div><!-- /panel -->
     			
     			<div data-role="header">
-				<h1>Checkout Item</h1>
+				<h1>Checkout</h1>
 					<a data-role="button" data-position="left" data-icon="back" data-iconpos="notext" data-rel="back">Back</a>
 					<div data-role= "controlgroup" data-position="right" data-type="horizontal" class= "ui-btn-right" >
 						<a data-role="button"  data-icon="home" data-iconpos="notext" href="index.html"> Home</a>
@@ -56,26 +56,45 @@
 					</div>
 				</div>
 					
-				<div id= "purchase" data-role= "content">
-							
-				<div style="color:white">
-                	<p>Date:</p>
-                 	<ul id="date-list" data-role="listview" data-inset="true"></ul>
-                </div> 
+				<div id= "purchase" data-role= "content">			
+				
+				 <div data-role="collapsible" data-collapsed="false" data-collapsed-icon= "false">
+                    <h2>Order</h2>
+                 	<ul id="infocheck" data-role="listview" data-inset="true"></ul>
+                 </div>
                 
 				 <div data-role="collapsible" data-collapsed="false" data-collapsed-icon= "false">
-                    <h2>Order:</h2>
-                 	<ul id="product-list" data-role="listview" data-inset="true"></ul>
+                    <h2>Products</h2>
+                 	<ul id="myshoppinglist" data-role="listview" data-inset="true"></ul>
                  </div>
                     				 
-   				<div data-role="collapsible" data-collapsed="false" data-collapsed-icon="false" style= "background-color: white">
+   				<div data-role="collapsible" data-collapsed="false" data-collapsed-icon="false">
                 	<h1>Shipping Address</h1>
                  	<ul id="shipping-list" data-role="listview" data-inset="true"></ul>
                 </div>
-						
-				<ul style="color:white" id="totalPurchase"></ul>				
+                
+                <div data-role="collapsible" data-collapsed="false" data-collapsed-icon="false">
+                	<h1>Payment Information</h1>
+                 	<ul id="payment-list" data-role="listview" data-inset="true"></ul>
+                </div>
+			
 				<a data-role="button" id="submitcheckout-button" data-theme="a">Submit</a>
 				</div>
+				
+				<div data-role="popup" id="popupShipping" data-theme="a" class="ui-corner-all">
+				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+				<form>
+				<div style="padding:10px 20px;">
+				  <h3>Change shipping address</h3>
+		          <label for="nameshipping" >Name:</label>
+		          <input type="text" name="user" id="nameshipping" value="" data-theme="a" />
+
+		          <label for="address" >Address:</label>
+					<textarea cols="40" rows="8" name="textarea" id="addressshipping"></textarea>		    	 
+					 <a id= "changeshippingaddress" data-role="button">Submit</a>
+				</div>
+				</form>
+			</div>
 
 				
 			</div>

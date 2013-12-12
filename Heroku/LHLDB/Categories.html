@@ -10,6 +10,7 @@
   		<script src="js/jquery.mobile-1.3.2.min.js"></script> 
 		<script src="appjs/product.js"></script>
 		<script src="appjs/app.js"></script>
+		<script type="text/javascript" src="/cse/brand?form=cse-search-box&amp;lang=en"></script>
 		
 		<style type="text/css">
 		.ui-mobile-viewport{
@@ -28,6 +29,7 @@
 		.ui-panel-content-wrap-closed{
     	background: none;
 		}
+
 		</style> 
 	</head>
 	
@@ -53,79 +55,20 @@
 				</div>
 			</div>
 			
-			<div id= "showCategories" data-role="content"><br>
+			<div id= "showCategories" data-role="content">
 				
+					<div class= "ui-grid-a">
+						<div class="ui-block-a" style= "width:70% !important">
+							<input type="text" name="search-all2" id="search-term2" placeholder="Search a product" value=""/>
+						</div>
+						<div class="ui-block-b"  style= "width:30% !important">
+							<input type="submit" data-icon="search" id="submit-search-all2" value="Go"/>
+						</div>
+					</div>
 					<div data-role= "collapsible" data-collapsed="false" data-collapsed-icon= "false">
-					
 					<h1>Categories:</h1>
 					<div id= "show-categories" data-role="listview" data-corners="true"></div></div>
-					
-					<!--<div data-role="collapsible" data-collapsed="false">
-						<h1>Books</h1>
-						<ul data-role="listview" data-inset="true">
-						<li><a onClick= GetCategoryProducts(1)>Arts & Photography</a></li>
-						<li><a onClick= GetCategoryProducts(1)>Comic & Graphic Novels</a></li>
-						<li><a onClick= GetCategoryProducts(1)>Mystery, Thriller & Suspense</a></li>
-						<li><a onClick= GetCategoryProducts(1)>Romance</a></li>
-						<li><a onClick= GetCategoryProducts(1)>Science Fiction & Fantasy</a></li></ul></div>						
-						
-					<div data-role="collapsible" data-collapsed="false">
-						<h1>Magazines</h1>
-						<ul data-role="listview" data-inset="true">
-						<li><a onClick= GetCategoryProducts(2)>Entertainment</a></li>
-						<li><a onClick= GetCategoryProducts(2)>Fashion & Style</a></li>
-						<li><a onClick= GetCategoryProducts(2)>Movies & Music</a></li>	
-						<li><a onClick= GetCategoryProducts(2)>News & Politics</a></li>
-						<li><a onClick= GetCategoryProducts(2)>Science</a></li></ul></div>
-					
-					<div data-role="collapsible" data-collapsed="false">
-						<h1>Electronics</h1>
-						<ul data-role="listview" data-inset="true" >
-						<li><a onClick= GetCategoryProducts("TvElectronics")>TV</a></li>
-						<li><a onClick= GetCategoryProducts"AudioElectronics")>Audio</a></li>
-						<li><a onClick= GetCategoryProducts("PhonesElectronics")>Phones</a></li>
-						<li><a onClick= GetCategoryProducts("CamerasElectronics")>Cameras</a></li>
-						<li><a onClick= GetCategoryProducts("VideoElectronics")>Video</a></li></ul></div>	
-											
-					<div data-role="collapsible" data-collapsed="false">
-						<h1>Computers</h1>
-						<ul data-role="listview" data-inset="true" >
-						<li><a onClick= GetCategoryProducts("LaptopsComp")>Laptops</a></li>
-						<li><a onClick= GetCategoryProducts("DesktopComp")>Desktops</a></li>
-						<li><a onClick= GetCategoryProducts("TabletsComp")>Tablets</a></li>
-						<li><a onClick= GetCategoryProducts("PrintersComp")>Printers</a></li></ul></div>	
-						
-					<div data-role="collapsible" data-collapsed="false">
-						<h1>Clothing</h1>
-						<ul data-role="listview" data-inset="true" >
-						<li><a onClick= GetCategoryProducts("ChildrenClothes")>Children</a></li>
-						<div class="Sub" data-role="collapsible" data-inset="false" data-iconpos="right">
-							<h1>Men</h1>
-							<ul data-role="listview" data-inset="true" >
-							<li><a onClick= GetCategoryProducts("MenShirts")>Shirts</a></li>
-							<li><a onClick= GetCategoryProducts("MenPants")>Pants</a></li></ul></div>
-					
-						<div class="Sub" data-role="collapsible" data-inset="false" data-iconpos="right">
-							<h1>Women</h1>
-							<ul data-role="listview" data-inset="true" >
-							<li><a onClick= GetCategoryProducts("WomenShirts")>Shirts</a></li>
-							<li><a onClick= GetCategoryProducts("WomenPants")>Pants</a></li>
-							<li><a onClick= GetCategoryProducts("WomenDresses")>Dresses</a></li></ul></div></ul></div>
-							
-					<div data-role="collapsible" data-collapsed="false">
-						<h1>Shoes</h1>
-						<ul data-role="listview" data-inset="true" >
-						<li><a onClick= GetCategoryProducts("ChildrenShoes")>Children</a></li>
-						<li><a onClick= GetCategoryProducts("MenShoes")>Men</a></li>
-						<li><a onClick= GetCategoryProducts("WomenShoes")>Women</a></li></ul></div>
-					
-					<div data-role="collapsible" data-collapsed="false">
-						<h1>Sports & Outdoors</h1>
-						<ul data-role="listview" data-inset="true" >							
-						<li><a onClick= GetCategoryProducts("BicycleSports")>Bicycles</a></li>
-						<li><a onClick= GetCategoryProducts("KayakSports")>Kayaks</a></li>
-						<li><a onClick= GetCategoryProducts("GolfSports")>Golf</a></li>
-						<li><a onClick= GetCategoryProducts("FishingSports")>Fishing</a></li></ul></div> -->
+				
 			</div>
 			
 		</div>
