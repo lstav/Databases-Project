@@ -1823,6 +1823,23 @@ app.put('/Project1Srv/accountspassword/', function(req, res) {
 	});
 });
 
+app.post('/Project1Srv/accountspassword/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("UPDATE account SET apassword= '" + req.param('password') + "' " +
+			"WHERE username= '" + req.param('username') + "' RETURNING account.username");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
 
 app.post('/Project1Srv/rankuser/', function(req, res) {
 	console.log("POST rank: " + req.param('user') + ", " + req.param('ranking'));
@@ -1849,14 +1866,13 @@ app.post('/Project1Srv/rankuser/', function(req, res) {
 });
 
 // REST Operation - HTTP DELETE to delete an account based on its id
-app.put('/Project1Srv/accountsdeleted/:user', function(req, res) {
-	var user = req.params.user;
-	console.log("DELETE account: " + user);
+app.post('/Project1Srv/accountsdeleted/', function(req, res) {
+	console.log("DELETE account: " + req.param('delusername'));
 	var client = new pg.Client(conString);
 	client.connect();
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
-			"WHERE username= '" + req.param('username') + "'");
+			"WHERE username= '" + req.param('delusername') + "'");
 	query.on("row", function (row, result) {
 		result.addRow(row);
 	});

@@ -444,7 +444,7 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 	for(var i=0; i<profile.rank; i++) {
 		stars = stars + "*";
 	}
-	alert(profile.rank);
+	//alert(profile.rank);
 	//alert(loginAccount.username);
 	var list= $("#profile-info");
 	list.empty();
@@ -2558,7 +2558,6 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 $(document).on('click', '#admindelete', function() {
 	var user = $("#delusername").val();
 	var formData = {username: user};
-	alert(formData);
 	DeleteAccount(formData);
 }); 
 
@@ -4458,22 +4457,45 @@ function ChangePassword(info){
 	});
 }
 
-function DeleteAccount(info){
-	var formData = info;
+function ChangePassword(){
+	var form = $("#accountpass-form");
+	var formData = form.serializeArray();
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accountsdeleted/" + formData.username,
-		method : 'put',
-		contentType: "application/json",
+		url : "http://localhost:3412/Project1Srv/accountspassword/",
+		type : 'post',
+		dataType: 'json',
+		data : formData,
+		success: function(data){
+    		alert("Error 444: No response");
+    		//AccountLogin(loginAccount.username, formDate.password);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		},
+  		error: function(jqXHR, textStatus, errorThrownn){
+    		alert('Password Changed');
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
+}	
+
+function DeleteAccount(){
+	var form = $("#account-form");
+	var formData = form.serializeArray();
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accountsdeleted/",
+		type : 'post',
+		//contentType: "application/json",
 		dataType:"json",
-		//data : formData,
+		data : formData,
 		success : function(data, textStatus, jqXHR) {
-			$.mobile.loading("hide");
+			alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+    		$.mobile.loading("hide");
 			$.mobile.changePage("index.html", {transition: "none"});
 		},
 		error: function(errorThrown, textStatus, jqXHR){
-    		alert("Error 444: No response");
-    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
-    		$.mobile.loading("hide");
+    		alert("Account Deleted");
+			$.mobile.loading("hide");
 			$.mobile.changePage("index.html", {transition: "none"});
   		}
 	});

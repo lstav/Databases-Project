@@ -94,9 +94,9 @@
 						<form id="accountpass-form" data-ajax="false"> 
 							<fieldset data-role="controlgroup">
 								<ul data-role="listview" data-inset="true">
-									<li><input type="text" placeholder="Username" name="username" id="admchangeusername" /></li>
-									<li><input type="text" placeholder="Password" name="password" id="admchangepassword" /></li>
-									<li><input value="Submit" type="submit" id="admaccount" /></li>
+									<li><input type="text" placeholder="Username" name="username" id="username" /></li>
+									<li><input type="text" placeholder="Password" name="password" id="password" /></li>
+									<li><input value="Submit" type="submit" onClick=ChangePassword() id="admaccount" /></li>
 								</ul>
 							</fieldset>
 						</form>
@@ -106,8 +106,8 @@
 						<form id="account-form" data-ajax="false"> 
 							<fieldset data-role="controlgroup">
 								<ul data-role="listview" data-inset="true">
-									<li><input type="text" placeholder="Username" name="username" id="username" /></li>
-									<li><input value="Delete" type="submit" onClick=DeleteAccount() /></li>
+									<li><input type="text" placeholder="Username" name="delusername" id="delusername" /></li>
+									<li><input value="Delete" type="submit" onClick=DeleteAccount() id="admindelete"/></li>
 								</ul>
 							</fieldset>
 						</form>

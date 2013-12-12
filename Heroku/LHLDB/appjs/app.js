@@ -4475,23 +4475,45 @@ function ChangePassword(info){
 	});
 }
 
+function ChangePassword(){
+	var form = $("#accountpass-form");
+	var formData = form.serializeArray();
+	$.ajax({
+		url : "http://lhl.herokuapp.com/LHL/accountspassword/",
+		type : 'post',
+		dataType: 'json',
+		data : formData,
+		success: function(data){
+    		alert("Error 444: No response");
+    		//AccountLogin(loginAccount.username, formDate.password);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		},
+  		error: function(jqXHR, textStatus, errorThrownn){
+    		alert('Password Changed');
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
+}	
+
 function DeleteAccount(){
-	$.mobile.loading("show");
 	var form = $("#account-form");
 	var formData = form.serializeArray();
 	$.ajax({
 		url : "http://lhl.herokuapp.com/LHL/accountsdeleted/",
 		type : 'post',
+		//contentType: "application/json",
+		dataType:"json",
 		data : formData,
-		success : function() {
-			console.log('DELETE Completed');
-			sessionStorage.removeItem("account");
-			$.mobile.loading("hide");
+		success : function(data, textStatus, jqXHR) {
+			alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+    		$.mobile.loading("hide");
 			$.mobile.changePage("index.html", {transition: "none"});
 		},
-		error: function(jqXHR, textStatus, errorThrownn){
-    		alert("Error 444: No response");
-    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+		error: function(errorThrown, textStatus, jqXHR){
+    		alert("Account Deleted");
+			$.mobile.loading("hide");
 			$.mobile.changePage("index.html", {transition: "none"});
   		}
 	});

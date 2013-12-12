@@ -1623,7 +1623,7 @@ app.post('/LHL/accounts/', function(req, res) {
 			res.send("Address not found.");
 		}
 		else {        
-			var response = {"accountspassword" : result.rows[0]};
+			var response = {"accounts" : result.rows[0]};
 			client.end();
 			
 			res.json(response);
@@ -1643,7 +1643,7 @@ app.put('/LHL/accountfname/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountfname" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1661,7 +1661,7 @@ app.put('/LHL/accountlname/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountlname" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1679,7 +1679,7 @@ app.put('/LHL/accountshipping/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountshipping" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1697,7 +1697,7 @@ app.put('/LHL/accountbilling/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountbilling" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1715,7 +1715,7 @@ app.put('/LHL/accountcardnumber/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountcardnumber" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1733,7 +1733,7 @@ app.put('/LHL/accountcardtype/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountcardtype" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1751,7 +1751,7 @@ app.put('/LHL/accountsecurity/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountsecurity" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1769,7 +1769,7 @@ app.put('/LHL/accountexpdate/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountexpdate" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1787,7 +1787,7 @@ app.put('/LHL/accountemail/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountemail" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1805,7 +1805,7 @@ app.put('/LHL/accountbank/', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var response = {"accountspassword" : result.rows};
+		var response = {"accountbank" : result.rows};
 		client.end();
 		res.json(response);
 	});
@@ -1830,6 +1830,23 @@ app.put('/LHL/accountspassword/', function(req, res) {
 	});
 });
 
+app.post('/LHL/accountspassword/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("UPDATE account SET apassword= '" + req.param('password') + "' " +
+			"WHERE username= '" + req.param('username') + "' RETURNING account.username");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
 
 app.post('/LHL/rankuser/', function(req, res) {
 	console.log("POST rank: " + req.param('user') + ", " + req.param('ranking'));
@@ -1854,12 +1871,12 @@ app.post('/LHL/rankuser/', function(req, res) {
 
 // REST Operation - HTTP DELETE to delete an account based on its id
 app.post('/LHL/accountsdeleted/', function(req, res) {
-	console.log("DELETE account: " + req.param('username'));
+	console.log("DELETE account: " + req.param('delusername'));
 	var client = new pg.Client(conString);
 	client.connect();
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
-			"WHERE username= '" + req.param('username') + "'");
+			"WHERE username= '" + req.param('delusername') + "'");
 	query.on("row", function (row, result) {
 		result.addRow(row);
 	});
