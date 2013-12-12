@@ -103,7 +103,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 			loginAccount = obj;
 		}
 	}
-	if(loginAccount.username!= undefined)        {
+	if(loginAccount.username!= undefined) {
 		$(document).on('click', '#profile-account', function() { 
 			profile= loginAccount;
 			$.mobile.changePage("account.html", {transition: "none"});
@@ -160,9 +160,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 
 	}
 	$(document).on('click', '#logout', function() { 
-		loginAccount = {};
 		sessionStorage.removeItem("account");
-		sessionStorage.clear();
 		
 		$.mobile.changePage("login.html", {transition: "none"});
 
@@ -183,8 +181,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 });
 
 $(document).on('click', '#logout', function() {
-	loginAccount = {}; 
-	sessionStorage.clear();
+
 	sessionStorage.removeItem("account");
 	$.mobile.changePage("login.html", {transition: "none"});
 
@@ -1848,10 +1845,10 @@ $(document).on('pagebeforeshow', "#invoice-show", function(event, ui) {
 		address.append(loginAccount.billing).trigger('create');
 		number.append(" # "+invoiceID).trigger('create');
 		date.append(productscheckout[0].date).trigger('create');
-		payment.append(" $ "+bigtotal).trigger('create');
+		payment.append(" $ "+bigtotal.toFixed(2)).trigger('create');
 		balance.append(" $0.00").trigger('create');
-		total.append(" $ "+bigtotal).trigger('create');
-		paid.append(" $ "+bigtotal).trigger('create');
+		total.append(" $ "+bigtotal.toFixed(2)).trigger('create');
+		paid.append(" $ "+bigtotal.toFixed(2)).trigger('create');
 		products.trigger('create');
 		
 		
@@ -2079,7 +2076,10 @@ $(document).on('pagebeforeshow', "#purchaseList", function(event, ui){
 		var item;
 		for (var i=0; i < len; ++i){
 			item =usales[i];
-			list.append("<li data-icon='star' onClick= GetInvoice('"+item.invoice+"')><a><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Qty: "+item.quantity+"<br>Total price:"+item.price+"<\h4></a></li>");
+						
+			list.append("<li><a data-icon='star' onClick= GetInvoice("+item.invoice+")><img src='"+ item.img+ "'/>"+
+				item.prodname + "<h4> Qty: "+item.quantity+"<br>Total price:"+
+				item.price+"<\h4><a onClick = GoProfile("+ item.sellerid +") data-position-to='window' data-icon='gear'>Rank</a></a></li>");
 		}
 				
 		var ulist = $("#unpaid-list");
@@ -2547,6 +2547,12 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 		//$.mobile.changePage("index.html", {transition: "none"});
 	}
 	});
+	
+	$(document).on('click', '#admindelete', function() {
+		var user = $("#delusername").val();
+		var formData = {username: user};
+		DeleteAccount(formData);
+	}); 
 });
 
 ///////////////////////////////
@@ -2649,9 +2655,8 @@ function DeleteAccounts(id){
 			dataType:"json",
 			success : function(data, textStatus, jqXHR) {
 				$.mobile.loading("hide");
-				loginAccount = {};
 				sessionStorage.removeItem("account");
-				sessionStorage.clear();
+				
 				$.mobile.changePage("login.html", {transition: "none"});
 			},
   			error: function(errorThrown, textStatus, jqXHR){
@@ -2674,14 +2679,15 @@ function DeleteCategory(id){
 			contentType: "application/json",
 			dataType:"json",
 			success : function(data, textStatus, jqXHR) {
-			console.log('POST Completed');
-			$.mobile.loading("hide");
-			$.mobile.changePage("index.html", {transition: "none"});
-		},
-  			error: function(errorThrown, textStatus, jqXHR){
-	    		alert("Error 444: No response");
+				alert("Error 444: No response");
     			$.mobile.loading("hide");
 				$.mobile.changePage("index.html", {transition: "none"});
+		},
+  			error: function(errorThrown, textStatus, jqXHR){
+  				alert('Categoty Deleted');
+				$.mobile.loading("hide");
+				$.mobile.changePage("index.html", {transition: "none"});
+	    		
   			}
 		
 		});
@@ -3636,7 +3642,7 @@ function RankUser(info){
     		//AccountLogin(loginAccount.username, formDate.password);
     		sessionStorage.removeItem("profile");
     		GoProfile(formData.seller);
-			$.mobile.changePage("profile.html", {transition: "none"});
+			//$.mobile.changePage("profile.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
     		alert("Error 444: No response");
@@ -4170,12 +4176,14 @@ function AddCategory(){
 		type: 'post',
 		data : formData,
 		success: function(data, textStatus, jqXHR){
-    		alert('POST Completed');
-			$.mobile.loading("hide");
-			$.mobile.changePage("administrator.html", {transition: "none"});
+    		alert("failure");
+    		$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrown){
-    		alert("failure");
+  			alert('POST Completed');
+			$.mobile.loading("hide");
+			$.mobile.changePage("index.html", {transition: "none"});
+    		
   		}
 	});
 }
@@ -4443,24 +4451,23 @@ function ChangePassword(info){
 	});
 }
 
-function DeleteAccount(){
-	$.mobile.loading("show");
-	var form = $("#account-form");
-	var formData = form.serializeArray();
+function DeleteAccount(info){
+
+	var formData = info;
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accountsdeleted/",
-		type : 'put',
-		data : formData,
-		success : function() {
-			console.log('DELETE Completed');
-			loginAccount = {};
-			sessionStorage.removeItem("account");
+		url : "http://localhost:3412/Project1Srv/accountsdeleted/" + formData.username,
+		method : 'post',
+		contentType: "application/json",
+		dataType:"json",
+		//data : formData,
+		success : function(data, textStatus, jqXHR) {
 			$.mobile.loading("hide");
 			$.mobile.changePage("index.html", {transition: "none"});
 		},
-		error: function(jqXHR, textStatus, errorThrownn){
+		error: function(errorThrown, textStatus, jqXHR){
     		alert("Error 444: No response");
     		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+    		$.mobile.loading("hide");
 			$.mobile.changePage("index.html", {transition: "none"});
   		}
 	});

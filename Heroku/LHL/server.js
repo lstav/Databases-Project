@@ -399,7 +399,7 @@ app.get('/LHL/purchaseusers/:id', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT invid as invoice, totalprice as price, sale.saleid as saleid, product.productid as productid, " +
+	var query = client.query("SELECT invid as invoice, totalprice as price, sale.saleid as saleid, sale.accountid as sellerid, product.productid as productid, " +
 	"product.prodname as prodname, account.accountid, product.imagelink as img, checkout.quantity as quantity FROM checkout, sale, product, "+
 	"creditcard, address, account where checkout.saleid= sale.saleid and product.productid= sale.prodid and checkout.creditid= creditcard.creditid "+
     "and creditcard.addressid= address.addressid and address.addressid= account.billingid and account.accountid="+id);

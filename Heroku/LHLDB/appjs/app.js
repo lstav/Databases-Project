@@ -2102,7 +2102,10 @@ $(document).on('pagebeforeshow', "#purchaseList", function(event, ui){
 		var item;
 		for (var i=0; i < len; ++i){
 			item =usales[i];
-			list.append("<li data-icon='star' onClick= GetInvoice('"+item.invoice+"')><a><img src='"+ item.img+ "'/>"+item.prodname + "<h4> Qty: "+item.quantity+"<br>Total price:"+item.price+"<\h4></a></li>");
+			
+			list.append("<li><a data-icon='star' onClick= GetInvoice("+item.invoice+")><img src='"+ item.img+ "'/>"+
+				item.prodname + "<h4> Qty: "+item.quantity+"<br>Total price:"+
+				item.price+"<\h4><a onClick = GoProfile("+ item.sellerid +") data-position-to='window' data-icon='gear'>Rank</a></a></li>");
 		}
 				
 		var ulist = $("#unpaid-list");
