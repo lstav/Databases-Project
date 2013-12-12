@@ -162,7 +162,6 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 	$(document).on('click', '#logout', function() { 
 		loginAccount = {};
 		sessionStorage.removeItem("account");
-		sessionStorage.clear();
 		
 		$.mobile.changePage("login.html", {transition: "none"});
 
@@ -183,8 +182,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 });
 
 $(document).on('click', '#logout', function() {
-	loginAccount = {}; 
-	sessionStorage.clear();
+	loginAccount = {};
 	sessionStorage.removeItem("account");
 	$.mobile.changePage("login.html", {transition: "none"});
 
@@ -2660,7 +2658,7 @@ function DeleteAccounts(id){
 				$.mobile.loading("hide");
 				loginAccount = {};
 				sessionStorage.removeItem("account");
-				sessionStorage.clear();
+				
 				$.mobile.changePage("login.html", {transition: "none"});
 			},
   			error: function(errorThrown, textStatus, jqXHR){
@@ -3645,7 +3643,6 @@ function RankUser(info){
     		alert('Rank Submitted');
     		//AccountLogin(loginAccount.username, formDate.password);
     		sessionStorage.removeItem("profile");
-    		profile = {};
     		GoProfile(formData.seller);
 			//$.mobile.changePage("profile.html", {transition: "none"});
   		},
