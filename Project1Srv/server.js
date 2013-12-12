@@ -24,15 +24,22 @@ app.configure(function () {
 
 app.use(express.bodyParser());
 
-var interval = setInterval(function(){checkSale();},60000);
+var interval = setInterval(function(){checkAuction();checkSale();},60000);
 
+function checkAuction(){
+	var client = new pg.Client(conString);
+	client.connect();
+	
+	var query = client.query("UPDATE product SET isactive = FALSE WHERE productid IN(select prodid from auction,product where productid=prodid AND enddate < current_timestamp and isactive)"); 	
+	console.log('Auctions Updated');
+	client.end();
+}
 function checkSale(){
 	var client = new pg.Client(conString);
 	client.connect();
 	
-	var query = client.query("UPDATE product SET isactive = FALSE WHERE productid IN(select prodid from auction,product where productid=prodid AND enddate < current_timestamp and isactive)"); 
-	var query2 = client.query("UPDATE product SET isactive = FALSE WHERE productid IN(select prodid from sale,product where productid=prodid AND enddate < current_timestamp and isactive)");
-	console.log('Auctions Updated');
+	var query = client.query("UPDATE product SET isactive = FALSE WHERE productid IN(select prodid from sale,product where productid=prodid AND endtime < current_timestamp and isactive)"); 	
+	console.log('Sales Updated');
 	client.end();
 }
 
