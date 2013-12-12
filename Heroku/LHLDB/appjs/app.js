@@ -1659,7 +1659,6 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 			item =sales[j];
 
 			if(fposition == i){
-			alert("here");
 				list.append("<li data-icon= 'false' ><a> <img src='"+ item.imagelink+ "' style='margin: 0 0 0 20px; top: 20%'/>"+
 						"<h3>"+item.prodname+"</h3><h2> Price: "+item.price + "</h2><h2> Qty: "+count+"</h2></a></li>");
 
@@ -1667,7 +1666,6 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 			var price= splitPrice[1];
 			var productPrice= parseFloat(price);
 			totalPrice += count * productPrice;
-			alert(totalPrice);
 			productscheckout.push({"id": item.prodid, "totalprice": totalPrice, "count":count, "prodname": item.prodname, "cost": item.price, "saleid": item.saleid});		
 			}	
 		}
@@ -4278,7 +4276,7 @@ function AddCategory(){
 			$.mobile.changePage("administrator.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrown){
-    		alert("failure");
+    		alert("Category not added.");
   		}
 	});
 }
