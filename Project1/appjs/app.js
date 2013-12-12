@@ -103,7 +103,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 			loginAccount = obj;
 		}
 	}
-	if(loginAccount.username!= undefined)        {
+	if(loginAccount.username!= undefined) {
 		$(document).on('click', '#profile-account', function() { 
 			profile= loginAccount;
 			$.mobile.changePage("account.html", {transition: "none"});
@@ -160,7 +160,6 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 
 	}
 	$(document).on('click', '#logout', function() { 
-		loginAccount = {};
 		sessionStorage.removeItem("account");
 		
 		$.mobile.changePage("login.html", {transition: "none"});
@@ -182,7 +181,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 });
 
 $(document).on('click', '#logout', function() {
-	loginAccount = {};
+
 	sessionStorage.removeItem("account");
 	$.mobile.changePage("login.html", {transition: "none"});
 
@@ -2656,7 +2655,6 @@ function DeleteAccounts(id){
 			dataType:"json",
 			success : function(data, textStatus, jqXHR) {
 				$.mobile.loading("hide");
-				loginAccount = {};
 				sessionStorage.removeItem("account");
 				
 				$.mobile.changePage("login.html", {transition: "none"});
