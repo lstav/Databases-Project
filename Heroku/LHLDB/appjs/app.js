@@ -630,8 +630,9 @@ $(document).on('click', '#submit-sale', function() {
 	var cat= $('#categories-lists').val();
 	var dcription= $('#ptext').val();
 	var qty= $('#pqty').val();
-	if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0){
 	
+	if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0){
+
 		var formData = {account: loginAccount.accountid, name: pname, price:pprice, condition:cond, catid:cat, date:enddate, description:dcription, quantity: qty};
 		var product= {};
 		if(image == undefined){
@@ -695,7 +696,7 @@ $(document).on('click', '#submit-auction', function() {
 	var cat= $('#categories-lists').val();
 	var dcription= $('#ptext').val();
 
-	if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0 && (visa||paypal)){
+	if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0){
 		var formData = {account: loginAccount.accountid, name: pname, price:pprice, condition:cond, 
 			catid:cat, date:enddate, description:dcription};
 		var product= {};
@@ -711,7 +712,6 @@ $(document).on('click', '#submit-auction', function() {
 			data : formData,
 			success : function(data){
 			formData.image= data; 
-			alert(data);
 			$.ajax({
 				url : "http://lhl.herokuapp.com/LHL/products",
 				type: 'post',
@@ -2490,6 +2490,7 @@ $(document).on('pagebeforeshow', "#message-view", function(event, ui) {
 $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	$.ajax({
 		url : "http://lhl.herokuapp.com/LHL/categories",
+		method:"get",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 		var categoriesList = data.categories;
@@ -2515,6 +2516,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	
 	$.ajax({
 		url : "http://lhl.herokuapp.com/LHL/todaysales",
+		method:"get",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 		var todayList = data.todaysales;
@@ -2538,6 +2540,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	$.ajax({
 		url : "http://lhl.herokuapp.com/LHL/weeksales",
 		contentType: "application/json",
+		method:"get",
 		success : function(data, textStatus, jqXHR){
 		var weekList = data.weeksales;
 		var len =weekList.length;
@@ -2559,6 +2562,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	
 	$.ajax({
 		url : "http://lhl.herokuapp.com/LHL/monthsales",
+		method:"get",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 		var monthList = data.monthsales;
@@ -4455,7 +4459,7 @@ function ChangePassword(info){
 	var formData = info;
 	$.ajax({
 		url : "http://lhl.herokuapp.com/LHL/accountspassword/",
-		method : 'put',
+		type : 'put',
 		dataType: 'json',
 		data : formData,
 		success: function(data){

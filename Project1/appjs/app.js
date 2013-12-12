@@ -410,7 +410,6 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	$(document).on('click', '#account-updatepassword', function() { 
 		var pass= $("#upd-password").val();
 		var formData = {username: loginAccount.username, password: pass};
-		//alert(formData.username);
 		ChangePassword(formData);
 	}); 
 	
@@ -423,10 +422,9 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 $(document).on('click', '#admaccount', function() {
 		var user= $("#admchangeusername").val();
 		var pass= $("#admchangepassword").val();
-		var formData = {username: "user", password: pass};
-		alert(user);
-		//alert(formData.password);
-		ChangePassword(formData); 
+
+		var formData = {username: user, password: pass};
+		ChangePassword(formData);
 }); 
 	
 $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
@@ -2463,6 +2461,7 @@ $(document).on('pagebeforeshow', "#message-view", function(event, ui) {
 $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/categories",
+		method:"get",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 		var categoriesList = data.categories;
@@ -2488,6 +2487,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/todaysales",
+		method:"get",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 		var todayList = data.todaysales;
@@ -2510,6 +2510,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/weeksales",
+		method:"get",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 		var weekList = data.weeksales;
@@ -2532,6 +2533,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/monthsales",
+		method:"get",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 		var monthList = data.monthsales;
@@ -2551,13 +2553,14 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 		//$.mobile.changePage("index.html", {transition: "none"});
 	}
 	});
-	
-	$(document).on('click', '#admindelete', function() {
-		var user = $("#delusername").val();
-		var formData = {username: user};
-		DeleteAccount(formData);
-	}); 
 });
+
+$(document).on('click', '#admindelete', function() {
+	var user = $("#delusername").val();
+	var formData = {username: user};
+	alert(formData);
+	DeleteAccount(formData);
+}); 
 
 ///////////////////////////////
 function ConverToJSON(formData){
@@ -4439,7 +4442,7 @@ function ChangePassword(info){
 	var formData = info;
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountspassword/",
-		method : 'put',
+		type : 'put',
 		dataType: 'json',
 		data : formData,
 		success: function(data){
@@ -4456,7 +4459,6 @@ function ChangePassword(info){
 }
 
 function DeleteAccount(info){
-
 	var formData = info;
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountsdeleted/" + formData.username,
