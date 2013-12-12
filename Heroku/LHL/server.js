@@ -1187,16 +1187,8 @@ app.post('/LHL/categories', function(req, res) {
 		result.addRow(row);
 	});
 	query.on("end", function (result) {
-		var len = result.rows.length;
-		if (len == 0){
-			res.statusCode = 404;
-			res.send("Address not found.");
-		}
-		else {        
-			var response = {"address" : result.rows[0]};
 			client.end();
 			res.json(response);
-		}
 	});
 	//console.log(req.param('parent'));
 });
@@ -1876,7 +1868,7 @@ app.post('/LHL/accountsdeleted/', function(req, res) {
 	client.connect();
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
-			"WHERE username= '" + req.param('delusername') + "'");
+			"WHERE username= '" + req.param('delusername') + "' RETURNING *");
 	query.on("row", function (row, result) {
 		result.addRow(row);
 	});
