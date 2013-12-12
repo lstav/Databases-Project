@@ -2552,7 +2552,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	});
 	
 	$(document).on('click', '#admindelete', function() {
-		var user = $("#username").val();
+		var user = $("#delusername").val();
 		var formData = {username: user};
 		DeleteAccount(formData);
 	}); 
@@ -3645,8 +3645,9 @@ function RankUser(info){
     		alert('Rank Submitted');
     		//AccountLogin(loginAccount.username, formDate.password);
     		sessionStorage.removeItem("profile");
+    		profile = {};
     		GoProfile(formData.seller);
-			$.mobile.changePage("profile.html", {transition: "none"});
+			//$.mobile.changePage("profile.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
     		alert("Error 444: No response");
@@ -4459,10 +4460,11 @@ function DeleteAccount(info){
 
 	var formData = info;
 	$.ajax({
-		url : "http://localhost:3412/Project1Srv/accountsdeleted/",
-		method : 'put',
+		url : "http://localhost:3412/Project1Srv/accountsdeleted/" + formData.username,
+		method : 'post',
+		contentType: "application/json",
 		dataType:"json",
-		data : formData,
+		//data : formData,
 		success : function(data, textStatus, jqXHR) {
 			$.mobile.loading("hide");
 			$.mobile.changePage("index.html", {transition: "none"});
