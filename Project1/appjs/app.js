@@ -446,7 +446,7 @@ $(document).on('pagebeforeshow', "#profile-page", function( event, ui ) {
 	for(var i=0; i<profile.rank; i++) {
 		stars = stars + "*";
 	}
-
+	alert(profile.rank);
 	//alert(loginAccount.username);
 	var list= $("#profile-info");
 	list.empty();
@@ -4460,7 +4460,7 @@ function DeleteAccount(info){
 	var formData = info;
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountsdeleted/" + formData.username,
-		method : 'post',
+		method : 'put',
 		contentType: "application/json",
 		dataType:"json",
 		//data : formData,
