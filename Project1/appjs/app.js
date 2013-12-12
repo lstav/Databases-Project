@@ -93,7 +93,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 	if(loginAccount.username!= undefined)        {
 		$(document).on('click', '#profile-account', function() { 
 			profile= loginAccount;
-			$.mobile.changePage("account.html");
+			$.mobile.changePage("account.html", {transition: "none"});
 		});
 
 		var id= loginAccount.accountid;
@@ -148,7 +148,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 	}
 	$(document).on('click', '#logout', function() { 
 		sessionStorage.removeItem("account");
-		$.mobile.changePage("login.html");
+		$.mobile.changePage("login.html", {transition: "none"});
 
 	});  
 	$(document).on('click', '#sale-button', function() { 
@@ -156,11 +156,11 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 		//alert(loginAccount.username);
 		if(loginAccount.username!= undefined)
 		{
-			$.mobile.changePage("create-sale.html");
+			$.mobile.changePage("create-sale.html", {transition: "none"});
 		}
 
 		else{
-			$.mobile.changePage("login.html");
+			$.mobile.changePage("login.html", {transition: "none"});
 		}
 	});  
 
@@ -169,7 +169,7 @@ $(document).on('pagebeforeshow', '#homepage-account', function(){
 $(document).on('click', '#logout', function() { 
 
 	sessionStorage.removeItem("account");
-	$.mobile.changePage("login.html");
+	$.mobile.changePage("login.html", {transition: "none"});
 
 });
 
@@ -184,7 +184,7 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 	if(loginAccount.username!= undefined){
 
 		$(document).on('click', '#edit-account', function() { 
-			$.mobile.changePage("settings.html");
+			$.mobile.changePage("settings.html", {transition: "none"});
 		});
 		$(document).on('click', '#rankers-button', function() { 
 			GetRankers(loginAccount.accountid);
@@ -216,7 +216,7 @@ $(document).on('pagebeforeshow', "#accounts", function( event, ui ) {
 		list.listview("refresh");}
 
 	else{
-		$.mobile.changePage("login.html");
+		$.mobile.changePage("login.html", {transition: "none"});
 	}
 
 });
@@ -262,7 +262,7 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	if(loginAccount.username!= undefined){
 
 		$(document).on('click', '#edit-account', function() { 
-			$.mobile.changePage("settings.html");
+			$.mobile.changePage("settings.html", {transition: "none"});
 		});
 		$(document).on('click', '#rankers-button', function() { 
 			GetRankers(loginAccount.accountid);
@@ -278,23 +278,23 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 		list.empty();
 		var account = loginAccount;
 		        
-		list.append('<li><label for="username">Username: <input id="username" name="username" type="text" value="'+ loginAccount.username+'"></label></li>' +
-					'<li><label for="fname">First Name: <input id="fname" name="fname" type="text" value="'+ loginAccount.fname+'"></label></li>' +
-					'<li><label for="lname">Last Name: <input id="lname" name="lname" type="text" value="'+ loginAccount.lname+'"></label></li>' +
-					'<li><label for="shipping">Shipping Address: <input id="shipping" name="shipping" type="text" value="'+ loginAccount.shipping+'"></label></li>' +
-					'<li><label for="billing">Billing Address: <input id="billing" name="billing" type="text" value="'+ loginAccount.billing+'"></label></li>' +
-					'<li><label for="creditnumber">Credit Card Number: <input id="creditnumber" name="creditnumber" type="text" value="'+ loginAccount.cardnumber+'"></label></li>' +
-					'<li><label for="credittype">Credit Card Type: <input id="credittype" name="credittype" type="text" value="'+ loginAccount.cardtype+'"></label></li>' +
-					'<li><label for="securitynumber">Security Number: <input id="securitynumber" name="securitynumber" type="text" value="'+ loginAccount.securitynumber+'"></label></li>' +
-					'<li><label for="expdate">Expiration Date: <input id="expdate" name="expdate" type="text" value="'+ loginAccount.expdate+'"></label></li>' +
-					'<li><label for="email">Email: <input id="email" name="email" type="text" value="'+ loginAccount.email+'"></label></li>' +
-					'<li><label for="bank">Bank Account: <input id="bank" name="bank" type="text" value="'+ loginAccount.bank+'"></label></li>'+
-					'<li><a><label for="password">Password: ******** <a href="#popupPassword" data-rel="popup" data-position-to="window" data-icon="gear">Change</a></a></li>');
+		list.append('<li><a data-icon="false">Username: '+loginAccount.username+'</a></li>' +
+					'<li><a>First Name: '+loginAccount.fname+'<a href="#popupFName" data-rel="popup" data-position-to="window" data-icon="gear">Change</a></a></li>' +
+					'<li><a>Last Name: '+loginAccount.lname+'<a href="#popupLName" data-rel="popup" data-position-to="window" data-icon="gear">Change</a></a></li>' +
+					'<li><a>Shipping Address: '+loginAccount.shipping+'<a href="#popupShipping" data-rel="popup" data-position-to="window" data-icon="gear">Change</a></a></li>' +
+					'<li><a>Billing Address: '+loginAccount.billing+'<a href="#popupBilling" data-rel="popup" data-position-to="window" data-icon="gear">Change</a></a></li>' +
+					'<li><a>Credit Card Number: '+loginAccount.cardnumber+'<a href="#popupCardNumber" data-rel="popup" data-position-to="window" data-icon="gear">Change</a></a></li>' +
+					'<li><a>Credit Card Type: '+loginAccount.cardtype+'<a href="#popupCardType" data-rel="popup" data-position-to="window" data-icon="gear">Change</a></a></li>' +
+					'<li><a>Security Number: '+loginAccount.securitynumber+'<a href="#popupSecurity" data-rel="popup" data-position-to="window" data-icon="gear">Change</a></a></li>' +
+					'<li><a>Expiration Date: '+loginAccount.expdate+'<a href="#popupExpDate" data-rel="popup" data-position-to="window" data-icon="gear">Change</a></a></li>' +
+					'<li><a>Email: '+ loginAccount.email +'<a href="#popupEmail" data-rel="popup" data-position-to="window" data-icon="gear">Change</a></a></li>' +
+					'<li><a>Bank Account: '+ loginAccount.bank +'<a href="#popupBank" data-rel="popup" data-position-to="window" data-icon="gear">Change</a></a></li>'+
+					'<li><a>Password: ******** <a href="#popupPassword" data-rel="popup" data-position-to="window" data-icon="gear">Change</a></a></li>');
 
 		list.listview("refresh");}
 
 	else{
-		$.mobile.changePage("login.html");
+		$.mobile.changePage("login.html", {transition: "none"});
 	}
 	/*
 	//alert(loginAccount.username);
@@ -322,14 +322,86 @@ $(document).on('pagebeforeshow', "#account-view", function( event, ui ) {
 	$('#email').html("Email: " + loginAccount.email);
 	$('#password').html("Password: " + pass); 
 	*/
-	$(document).on('click', '#deleteaccount', function() { 
-		DeleteAccounts(loginAccount.accountid);
+	
+	$(document).on('click', '#account-updatefname', function() { 
+		var pass= $("#upd-fname").val();
+		var formData = {username: loginAccount.username, password: pass};
+		//alert(formData.username);
+		ChangeFName(formData);
+	}); 
+	
+	$(document).on('click', '#account-updatelname', function() { 
+		var pass= $("#upd-lname").val();
+		var formData = {username: loginAccount.username, password: pass};
+		//alert(formData.username);
+		ChangeLName(formData);
+	}); 
+	
+	$(document).on('click', '#account-updateshipping', function() { 
+		var pass= $("#upd-shipping").val();
+		var formData = {username: loginAccount.username, password: pass};
+		//alert(formData.username);
+		ChangeShipping(formData);
+	}); 
+	
+	$(document).on('click', '#account-updatebilling', function() { 
+		var pass= $("#upd-billing").val();
+		var formData = {username: loginAccount.username, password: pass};
+		//alert(formData.username);
+		ChangeBilling(formData);
+	}); 
+	
+	$(document).on('click', '#account-updatecardnumber', function() { 
+		var pass= $("#upd-cardnumber").val();
+		var formData = {username: loginAccount.username, password: pass};
+		//alert(formData.username);
+		ChangeCardNumber(formData);
+	}); 
+	
+	$(document).on('click', '#account-updatetype', function() { 
+		var pass= $("#upd-cardtype").val();
+		var formData = {username: loginAccount.username, password: pass};
+		//alert(formData.username);
+		ChangeCardType(formData);
+	}); 
+	
+	$(document).on('click', '#account-updatesecurity', function() { 
+		var pass= $("#upd-security").val();
+		var formData = {username: loginAccount.username, password: pass};
+		//alert(formData.username);
+		ChangeSecurity(formData);
+	}); 
+	
+	$(document).on('click', '#account-updateexpdate', function() { 
+		var pass= $("#upd-expdate").val();
+		var formData = {username: loginAccount.username, password: pass};
+		//alert(formData.username);
+		ChangeExpDate(formData);
+	}); 
+	
+	$(document).on('click', '#account-updateemail', function() { 
+		var pass= $("#upd-email").val();
+		var formData = {username: loginAccount.username, password: pass};
+		//alert(formData.username);
+		ChangeEmail(formData);
+	}); 
+	
+	$(document).on('click', '#account-updatebank', function() { 
+		var pass= $("#upd-bank").val();
+		var formData = {username: loginAccount.username, password: pass};
+		//alert(formData.username);
+		ChangeBank(formData);
 	}); 
 	
 	$(document).on('click', '#account-updatepassword', function() { 
 		var pass= $("#upd-password").val();
 		var formData = {username: loginAccount.username, password: pass};
+		//alert(formData.username);
 		ChangePassword(formData);
+	}); 
+	
+	$(document).on('click', '#deleteaccount', function() { 
+		DeleteAccounts(loginAccount.accountid);
 	}); 
 
 });
@@ -338,8 +410,8 @@ $(document).on('click', '#admaccount', function() {
 		var user= $("#admchangeusername").val();
 		var pass= $("#admchangepassword").val();
 		var formData = {username: user, password: pass};
-		alert(formData.username);
-		alert(formData.password);
+		//alert(formData.username);
+		//alert(formData.password);
 		ChangePassword(formData); 
 }); 
 	
@@ -413,20 +485,27 @@ $(document).on('pagebeforeshow', "#userrank-page", function( event, ui ) {
 	if(profile.username == undefined && obj.username != undefined){
 		profile = obj;
 	}
+	
+	var txt2 = sessionStorage.getItem("accounts");
+	var obj2 = eval('(' + txt2 + ')');
+	if(loginAccount.username == undefined && obj2.username != undefined){
+		loginAccount = obj2;
+	}
 	/*$('#star').raty({
   score: function() {
     return $(this).attr('data-score');
   }
-});*/
+});
 	$('#rank').raty({
 		starOn: 'appjs/star-on-big.png',
   		starOff: 'appjs/star-off-big.png',
   		number: 4
-	});
+	});*/
 	
 	$(document).on('click', '#submitrank', function() {
+		RankUser();
 		alert("Rank submited!");
-		$.mobile.changePage("profile.html");
+		$.mobile.changePage("profile.html", {transition: "none"});
 	});
 
 	var pname= $("#urname");
@@ -702,7 +781,7 @@ $(document).on('pagebeforeshow', "#auctionPage", function(event, ui) {
 		list.listview("refresh");
 
 		$(document).on('click', '#bid-icon', function() { 
-			$.mobile.changePage("bids.html");
+			$.mobile.changePage("bids.html", {transition: "none"});
 		});    
 
 	}
@@ -783,11 +862,11 @@ $(document).on('pagebeforeshow', "#bidPage", function(event, ui) {
 
 $(document).on('pagebeforeshow','#create-page', function(){
 	$(document).on('click', '#auction-button', function() {
-		$.mobile.changePage("auctions.html");
+		$.mobile.changePage("auctions.html", {transition: "none"});
 	});
 
 	$(document).on('click', '#sale-button', function() {
-		$.mobile.changePage("sales.html");
+		$.mobile.changePage("sales.html", {transition: "none"});
 	});
 });
 
@@ -1182,20 +1261,20 @@ $(document).on('pagebeforeshow', "#productPage", function(event, ui) {
 	});  
 
 	$(document).on('click', '#sale-other', function() { 
-		$.mobile.changePage("create-sale.html");
+		$.mobile.changePage("create-sale.html", {transition: "none"});
 	});   
 
 });
 
 $(document).on('click', '#shopcart', function() { 
-		$.mobile.changePage("shopping.html");
+		$.mobile.changePage("shopping.html", {transition: "none"});
 });
 
 var lbid= {};
 $(document).on('click', '#submitBid1', function() { 
 	lbid= $('#bid-product').val();
 	if(lbid > 0){
-		$.mobile.changePage("bidconfirm.html");}
+		$.mobile.changePage("bidconfirm.html", {transition: "none"});}
 	else{
 		alert("Insert a valid ammount.");
 	}
@@ -1546,7 +1625,7 @@ $(document).on('pagebeforeshow', "#checkoutItem", function(event, ui) {
 			var price= splitPrice[1];
 			var productPrice= parseFloat(price);
 			totalPrice += count * productPrice;
-			productscheckout.push({"id": item.prodid, "totalprice": totalPrice, "count":count, prodname: item.prodname, cost: item.price});		
+			productscheckout.push({"id": item.prodid, "totalprice": totalPrice, "count":count, "prodname": item.prodname, "cost": item.price, "saleid": item.saleid});		
 			}	
 		}
 	} 
@@ -1632,7 +1711,7 @@ $(document).on('click', '#submitcheckout-button', function() {
 	for(var i=0; i < productscheckout.length; i++){
 
 		var formData = {id:productscheckout[i].id, count: productscheckout[i].count, totalprice: productscheckout[i].totalprice,
-			invoiceid: data.insertinvoice[0].invoiceid};
+			invoiceid: data.insertinvoice[0].invoiceid, saleid: productscheckout[i].saleid};
 			
 		formBuyer.totalprice= formBuyer.totalprice+ formData.totalprice;
 			
@@ -1671,7 +1750,6 @@ $(document).on('click', '#submitcheckout-button', function() {
 					alert("checkout not successfull");}          	
 					});						
 				},
-	
 		error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
 		alert("credit not successfull");}          	
@@ -1689,7 +1767,6 @@ $(document).on('click', '#submitcheckout-button', function() {
 });
 
 $(document).on('click', '#openinvoice', function(){ 
-
 		GetInvoice(invoiceID);
 });   
 
@@ -1894,7 +1971,7 @@ $(document).on('click', '#checkout-button', function() {
 		var obj = eval('(' + txt + ')');
 		
 		if(obj.length > 0){
-			$.mobile.changePage("check.html");
+			$.mobile.changePage("check.html", {transition: "none"});
 		}
 		else{
 			alert("You do not have items in your cart.");
@@ -1906,7 +1983,7 @@ $(document).on('click', '#checkout-button', function() {
 		var obj = eval('(' + txt + ')');
 		
 		if(obj.length > 0){
-			$.mobile.changePage("shoplogin.html");
+			$.mobile.changePage("shoplogin.html", {transition: "none"});
 		}
 		else{
 			alert("You do not have items in your cart.");
@@ -2202,7 +2279,7 @@ var reply= false;
 $(document).on('click', "#reply", function(event, ui) {
 
 	reply= true;
-	$.mobile.changePage("newMessage.html");
+	$.mobile.changePage("newMessage.html", {transition: "none"});
 
 });
 
@@ -2367,7 +2444,7 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 		categories = categoriesList[0];
 		for (var i=0; i < len; ++i){
 			list.append("<li data-icon='delete' ><a onClick=DeleteCategory(" + categoriesList[i].catid + ")>"+ 
-					categoriesList[i].catname + "</li>");
+					categoriesList[i].catname + "</a></li>");
 		}        
 		list.listview("refresh");
 		
@@ -2376,6 +2453,73 @@ $(document).on('pagebeforeshow', "#Admin", function(event, ui) {
 	error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
 		alert("Data not found!");
+		//$.mobile.changePage("index.html", {transition: "none"});
+	}
+	});
+	
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/todaysales",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+		var todayList = data.todaysales;
+		var len =todayList.length;
+		var list = $("#today-lists");
+		list.empty();
+		var today;
+		today = todayList[0];
+		for (var i=0; i < len; ++i){
+			list.append("<li><a>" + todayList[i].name + " Quantity: " + todayList[i].quantity + " <h4>" + todayList[i].total + "</h4></a></li>");
+		}        
+		list.listview("refresh");
+	},
+	error: function(data, textStatus, jqXHR){
+		console.log("textStatus: " + textStatus);
+		alert("Data not found Today!");
+		//$.mobile.changePage("index.html", {transition: "none"});
+	}
+	});
+	
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/weeksales",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+		var weekList = data.weeksales;
+		var len =weekList.length;
+		var list = $("#week-lists");
+		list.empty();
+		var week;
+		week = weekList[0];
+		for (var i=0; i < len; ++i){
+			list.append("<li><a>" + weekList[i].name + " " + weekList[i].quantity + " " + weekList[i].total + "</a></li>");
+		}        
+		list.listview("refresh");
+	},
+	error: function(data, textStatus, jqXHR){
+		console.log("textStatus: " + textStatus);
+		alert("Data not found this Week!");
+		//$.mobile.changePage("index.html", {transition: "none"});
+	}
+	});
+	
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/monthsales",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+		var monthList = data.monthsales;
+		var len =monthList.length;
+		var list = $("#month-lists");
+		list.empty();
+		var month;
+		month = monthList[0];
+		for (var i=0; i < len; ++i){
+			list.append("<li><a>" + monthList[i].name + " " + monthList[i].quantity + " " + monthList[i].total + "</a></li>");
+		}        
+		list.listview("refresh");
+	},
+	error: function(data, textStatus, jqXHR){
+		console.log("textStatus: " + textStatus);
+		alert("Data not found this Month!");
+		//$.mobile.changePage("index.html", {transition: "none"});
 	}
 	});
 });
@@ -2429,7 +2573,7 @@ function GetRankers(id){
 		success : function(data, textStatus, jqXHR){
 		currentRankers = data.rankers;
 		$.mobile.loading("hide");
-		$.mobile.changePage("reviews.html");
+		$.mobile.changePage("reviews.html", {transition: "none"});
 	},
 	error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
@@ -2475,13 +2619,20 @@ function DeleteAccounts(id){
 		$.mobile.loading("show");
 		$.ajax({
 			url : "http://localhost:3412/Project1Srv/accountsdelete/" + id,
-			type: 'put',
+			method: 'put',
 			contentType: "application/json",
 			dataType:"json",
 			success : function(data, textStatus, jqXHR) {
-			$.mobile.loading("hide");
-			$.mobile.navigate("index.html");
-		}
+				$.mobile.loading("hide");
+				sessionStorage.removeItem("account");
+				$.mobile.changePage("login.html", {transition: "none"});
+			},
+  			error: function(errorThrown, textStatus, jqXHR){
+	    		alert("Error 444: No response");
+    			alert(errorThrown + " " + textStatus + " " + jqXHR);
+    			$.mobile.loading("hide");
+				$.mobile.changePage("index.html", {transition: "none"});
+  			}
 		});
 	}
 }
@@ -2498,8 +2649,14 @@ function DeleteCategory(id){
 			success : function(data, textStatus, jqXHR) {
 			console.log('POST Completed');
 			$.mobile.loading("hide");
-			$.mobile.navigate("administrator.html");
-		}
+			$.mobile.changePage("index.html", {transition: "none"});
+		},
+  			error: function(errorThrown, textStatus, jqXHR){
+	    		alert("Error 444: No response");
+    			$.mobile.loading("hide");
+				$.mobile.changePage("index.html", {transition: "none"});
+  			}
+		
 		});
 	}
 }
@@ -2544,13 +2701,13 @@ function AccountLogin(username, password){
 			}
 
 			if(!buyItem && !goToCheckout){
-				$.mobile.changePage("index.html");
+				$.mobile.changePage("index.html", {transition: "none"});
 			}
 			
 			else if(!buyItem && goToCheckout){
 				$( "#popupLoginShop").popup( "close" );
 				goToCheckout= false;
-				$.mobile.changePage("check.html");
+				$.mobile.changePage("check.html", {transition: "none"});
 			}
 		
 			else{
@@ -2649,7 +2806,7 @@ function GoProfile(id){
 
 	if(loginAccount.accountid == id){
 		$.mobile.loading("hide");
-		$.mobile.changePage("account.html");
+		$.mobile.changePage("account.html", {transition: "none"});
 	}
 
 	else{
@@ -2662,7 +2819,7 @@ function GoProfile(id){
 			profile= data.profile[0];
 			sessionStorage.setItem("profile", JSON.stringify(profile));
 			$.mobile.loading("hide");
-			$.mobile.changePage("profile.html");
+			$.mobile.changePage("profile.html", {transition: "none"});
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -2709,12 +2866,12 @@ function GoAccount(){
 
 	if(loginAccount.username!= undefined){
 
-		$.mobile.changePage("account.html");
+		$.mobile.changePage("account.html", {transition: "none"});
 
 	}
 
 	else{
-		$.mobile.changePage("login.html");
+		$.mobile.changePage("login.html", {transition: "none"});
 	}
 }
 
@@ -2722,12 +2879,12 @@ function GoMessages(){
 
 	if(loginAccount.username!= undefined){
 
-		$.mobile.changePage("message.html");
+		$.mobile.changePage("message.html", {transition: "none"});
 
 	}
 
 	else{
-		$.mobile.changePage("login.html");
+		$.mobile.changePage("login.html", {transition: "none"});
 	}
 }
 ////// Product
@@ -2766,7 +2923,7 @@ function GetProduct(id){
 			else{isSale=false; currentProduct.isSale=false;}
 			sessionStorage.setItem("product", JSON.stringify(currentProduct));
 			$.mobile.loading("hide");     
-			$.mobile.changePage("item.html");
+			$.mobile.changePage("item.html", {transition: "none"});
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -3112,7 +3269,7 @@ function GetBids(id){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 		productBids= data.bids;
-		$.mobile.changePage("bids.html");
+		$.mobile.changePage("bids.html", {transition: "none"});
 	},                        
 	error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
@@ -3139,7 +3296,7 @@ function GetShoppingCart(id){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 		shoppinglist= data.shoppingcart;
-		$.mobile.changePage("shopping.html");
+		$.mobile.changePage("shopping.html", {transition: "none"});
 	},                        
 	error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
@@ -3168,7 +3325,7 @@ function BidUser(id){
 		success : function(data, textStatus, jqXHR){
 		userBids= data.biduser;
 		$.mobile.loading("hide");
-		$.mobile.changePage("biduser.html");
+		$.mobile.changePage("biduser.html", {transition: "none"});
 	},                        
 	error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
@@ -3204,7 +3361,7 @@ function PurchaseUser(id){
 		success : function(data, textStatus, jqXHR){
 		winningBids= data.winningbid;
 		$.mobile.loading("hide");
-		$.mobile.changePage("purchaseuser.html");
+		$.mobile.changePage("purchaseuser.html", {transition: "none"});
 	},                        
 	error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
@@ -3240,7 +3397,7 @@ function SalesUser(id){
 		success : function(data, textStatus, jqXHR){
 		sales= data.saleuser;
 		$.mobile.loading("hide");
-		$.mobile.changePage("saleuser.html");
+		$.mobile.changePage("saleuser.html", {transition: "none"});
 	},                        
 	error: function(data, textStatus, jqXHR){
 		console.log("textStatus: " + textStatus);
@@ -3339,7 +3496,7 @@ function EndSale(pid){
 }
 
 function UpdateProductForm(pid){
-	$.mobile.changePage("uproduct.html");
+	$.mobile.changePage("uproduct.html", {transition: "none"});
 }
 
 //////// Category
@@ -3360,7 +3517,7 @@ function GetAllProducts(id){
 		sessionStorage.setItem("allproductboolean", true);
 
 		$.mobile.loading("hide");
-		$.mobile.changePage("productview.html", {
+		$.mobile.changePage("productview.html", {transition: "none"}, {
 			info: id,
 		});},                        
 		error: function(data, textStatus, jqXHR){
@@ -3392,7 +3549,7 @@ function GetCategoryProducts(id){
 		sessionStorage.setItem("allproductboolean", false);
 
 		$.mobile.loading("hide");
-		$.mobile.changePage("productview.html", {
+		$.mobile.changePage("productview.html", {transition: "none"}, {
 			info: id,
 		});},                        
 		error: function(data, textStatus, jqXHR){
@@ -3422,7 +3579,7 @@ function GetCategories(){
 		currentCategories= data.category;
 		sessionStorage.setItem("categories", JSON.stringify(currentCategories));
 		$.mobile.loading("hide");
-		$.mobile.changePage("Categories.html");
+		$.mobile.changePage("Categories.html", {transition: "none"});
 
 	},                        
 	error: function(data, textStatus, jqXHR){
@@ -3440,7 +3597,7 @@ function GetCategories(){
 }
 
 function RankUser(){
-	$.mobile.navigate("userrank.html");                                     
+	$.mobile.changePage("userrank.html", {transition: "none"});                                     
 }
 
 
@@ -3458,7 +3615,7 @@ function GetSubCategory(id){
 		subCategories= data.subcategory;
 		sessionStorage.setItem("subcategories", JSON.stringify(subCategories));
 		$.mobile.loading("hide");
-		$.mobile.navigate("subcategories.html");
+		$.mobile.changePage("subcategories.html", {transition: "none"});
 
 	},                        
 	error: function(data, textStatus, jqXHR){
@@ -3538,7 +3695,7 @@ function GetSales(){
 		success : function(data, textStatus, jqXHR){
 		currentSalesList= data.userSales;
 		$.mobile.loading("hide");
-		$.mobile.changePage("usales.html", {
+		$.mobile.changePage("usales.html", {transition: "none"}, {
 			info: id,
 		});},                        
 		error: function(data, textStatus, jqXHR){
@@ -3573,14 +3730,14 @@ function AllSales(){
 	
 		if(loginAccount != undefined){
 		ucart= loginAccount.accountid;
-		$.mobile.changePage("shopping.html");
+		$.mobile.changePage("shopping.html", {transition: "none"});
 		}
 	
 		else{
 			ucart= "guest";
 			if(getCookie(ucart) == undefined){
           	  setCookie(ucart, JSON.stringify('[]'));
-          	  $.mobile.changePage("shopping.html");
+          	  $.mobile.changePage("shopping.html", {transition: "none"});
 			}
 		}
 	},                        
@@ -3611,7 +3768,7 @@ function GetHistory(hid){
 		success : function(data, textStatus, jqXHR){
 		currentHistory= data.history;
 		$.mobile.loading("hide");
-		$.mobile.navigate("#history", {
+		$.mobile.changePage("#history", {transition: "none"}, {
 			info: hid,
 		});},
 		error: function(data, textStatus, jqXHR){
@@ -3640,7 +3797,7 @@ function GetInbox(id){
 		success : function(data, textStatus, jqXHR){
 		inboxMessage = data.message;
 		$.mobile.loading("hide");
-		$.mobile.navigate("inbox.html");
+		$.mobile.changePage("inbox.html", {transition: "none"});
 
 	},
 	error: function(data, textStatus, jqXHR){
@@ -3667,7 +3824,7 @@ function GetSent(id){
 		success : function(data, textStatus, jqXHR){
 		sentMessage = data.message;
 		$.mobile.loading("hide");
-		$.mobile.navigate("sentMessages.html");
+		$.mobile.changePage("sentMessages.html", {transition: "none"});
 
 	},
 	error: function(data, textStatus, jqXHR){
@@ -3694,7 +3851,7 @@ function GetMessage(id){
 		success : function(data, textStatus, jqXHR){
 		viewMessage = data.message;
 		$.mobile.loading("hide");
-		$.mobile.navigate("messageView.html");
+		$.mobile.changePage("messageView.html", {transition: "none"});
 
 	},
 	error: function(data, textStatus, jqXHR){
@@ -3940,7 +4097,7 @@ function SaveOrder(id){
 			//var obj2 = eval('(' + txt2 + ')');
 			//alert(JSON.stringify(obj2));
 			//$.mobile.navigate("shopping.html");
-			$.mobile.changePage("addshopconfirm.html");
+			$.mobile.changePage("addshopconfirm.html", {transition: "none"});
 
 		}
 
@@ -3967,7 +4124,7 @@ function AddCategory(){
 		success: function(data, textStatus, jqXHR){
     		alert('POST Completed');
 			$.mobile.loading("hide");
-			$.mobile.changePage("administrator.html");
+			$.mobile.changePage("administrator.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrown){
     		alert("failure");
@@ -3986,12 +4143,233 @@ function AddAccount(){
 		success: function(errorThrown, textStatus, jqXHR){
     		alert('Account Created');
 			$.mobile.loading("hide");
-			$.mobile.changePage("login.html");
+			$.mobile.changePage("login.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, data){
     		alert("Error 444: No response");
     		$.mobile.loading("hide");
-			$.mobile.changePage("index.html");
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
+}
+
+/*
+function ChangePassword(){
+	var form = $("#accountpass-form");
+	var formData = form.serializeArray();
+	//var pass= $("#upd-password").val();
+	//var formData = {username: loginAccount.username, password: pass};
+	//alert(formData.password);
+*/
+
+function ChangeFName(info){
+
+	var formData = info;
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accountfname/",
+		method : 'put',
+		dataType: 'json',
+		data : formData,
+		success: function(data){
+    		alert('First Name Changed');
+    		//alert(loginAccount.username);
+    		//alert(loginAccount.apassword);
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		},
+  		error: function(jqXHR, textStatus, errorThrownn){
+    		alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
+}
+
+function ChangeLName(info){
+
+	var formData = info;
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accountlname/",
+		method : 'put',
+		dataType: 'json',
+		data : formData,
+		success: function(data){
+    		alert('Last Name Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		},
+  		error: function(jqXHR, textStatus, errorThrownn){
+    		alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
+}
+
+function ChangeShipping(info){
+
+	var formData = info;
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accountshipping/",
+		method : 'put',
+		dataType: 'json',
+		data : formData,
+		success: function(data){
+    		alert('Shipping Address Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		},
+  		error: function(jqXHR, textStatus, errorThrownn){
+    		alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
+}
+
+function ChangeBilling(info){
+
+	var formData = info;
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accountbilling/",
+		method : 'put',
+		dataType: 'json',
+		data : formData,
+		success: function(data){
+    		alert('Billing Address Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		},
+  		error: function(jqXHR, textStatus, errorThrownn){
+    		alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
+}
+
+function ChangeCardNumber(info){
+
+	var formData = info;
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accountcardnumber/",
+		method : 'put',
+		dataType: 'json',
+		data : formData,
+		success: function(data){
+    		alert('Card Number Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		},
+  		error: function(jqXHR, textStatus, errorThrownn){
+    		alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
+}
+
+function ChangeCardType(info){
+
+	var formData = info;
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accountcardtype/",
+		method : 'put',
+		dataType: 'json',
+		data : formData,
+		success: function(data){
+    		alert('Card Type Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		},
+  		error: function(jqXHR, textStatus, errorThrownn){
+    		alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
+}
+
+function ChangeSecurity(info){
+
+	var formData = info;
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accountsecurity/",
+		method : 'put',
+		dataType: 'json',
+		data : formData,
+		success: function(data){
+    		alert('Security Number Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		},
+  		error: function(jqXHR, textStatus, errorThrownn){
+    		alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
+}
+
+function ChangeExpDate(info){
+
+	var formData = info;
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accountexpdate/",
+		method : 'put',
+		dataType: 'json',
+		data : formData,
+		success: function(data){
+    		alert('Expiration Date Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		},
+  		error: function(jqXHR, textStatus, errorThrownn){
+    		alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
+}
+
+function ChangeEmail(info){
+
+	var formData = info;
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accountemail/",
+		method : 'put',
+		dataType: 'json',
+		data : formData,
+		success: function(data){
+    		alert('Email Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		},
+  		error: function(jqXHR, textStatus, errorThrownn){
+    		alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
+	});
+}
+
+function ChangeBank(info){
+
+	var formData = info;
+	$.ajax({
+		url : "http://localhost:3412/Project1Srv/accountbank/",
+		method : 'put',
+		dataType: 'json',
+		data : formData,
+		success: function(data){
+    		alert('Bank Account Changed');
+    		AccountLogin(loginAccount.username, loginAccount.apassword);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		},
+  		error: function(jqXHR, textStatus, errorThrownn){
+    		alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
   		}
 	});
 }
@@ -4001,11 +4379,12 @@ function ChangePassword(info){
 	var formData = info;
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountspassword/",
-		type : 'put',
+		method : 'put',
 		dataType: 'json',
 		data : formData,
 		success: function(data){
     		alert('Password Changed');
+    		//AccountLogin(loginAccount.username, formDate.password);
 			$.mobile.changePage("index.html", {transition: "none"});
   		},
   		error: function(jqXHR, textStatus, errorThrownn){
@@ -4022,13 +4401,19 @@ function DeleteAccount(){
 	var formData = form.serializeArray();
 	$.ajax({
 		url : "http://localhost:3412/Project1Srv/accountsdeleted/",
-		type : 'put',
+		type : 'post',
 		data : formData,
 		success : function() {
-		console.log('DELETE Completed');
-		$.mobile.loading("hide");
-		$.mobile.navigate("index.html");
-	}
+			console.log('DELETE Completed');
+			sessionStorage.removeItem("account");
+			$.mobile.loading("hide");
+			$.mobile.changePage("index.html", {transition: "none"});
+		},
+		error: function(jqXHR, textStatus, errorThrownn){
+    		alert("Error 444: No response");
+    		//alert(errorThrown + " " + textStatus + " " + jqXHR);
+			$.mobile.changePage("index.html", {transition: "none"});
+  		}
 	});
 }
 ///// Bid
@@ -4128,7 +4513,7 @@ function GetSearch(term){
 		sessionStorage.setItem("products", JSON.stringify(currentCategoryProducts));
 		sessionStorage.setItem("allproductboolean", false);
 		$.mobile.loading("hide");
-		$.mobile.changePage("productview.html", {
+		$.mobile.changePage("productview.html", {transition: "none"}, {
 			info: term,
 		});},                        
 		error: function(data, textStatus, jqXHR){
@@ -4160,7 +4545,7 @@ function GetSearchSub(term, id){
 		sessionStorage.setItem("products", JSON.stringify(currentCategoryProducts));
 		sessionStorage.setItem("allproductboolean", false);
 		$.mobile.loading("hide");
-		$.mobile.changePage("productview.html", {
+		$.mobile.changePage("productview.html", {transition: "none"}, {
 			info: term,
 		});},                        
 		error: function(data, textStatus, jqXHR){

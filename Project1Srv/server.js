@@ -24,6 +24,16 @@ app.configure(function () {
 
 app.use(express.bodyParser());
 
+var interval = setInterval(function(){checkAuction();},60000);
+
+function checkAuction(){
+	var client = new pg.Client(conString);
+	client.connect();
+	
+	var query = client.query("UPDATE product SET isactive = FALSE WHERE productid IN(select prodid from auction,product where productid=prodid AND enddate < current_timestamp and isactive)"); 
+	console.log('Auctions Updated');
+}
+
 // Database connection string: pg://<username>:<password>@host:port/dbname 
 
 //var conString = "pg://cuitailwlenzuo:hg3c_iWgd_9NAKdADhq9H4eaXA@ec2-50-19-246-223.compute-1.amazonaws.com:5432/dfbtujmpbf387c";
@@ -641,7 +651,7 @@ app.get('/Project1Srv/categories', function(req, res){
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT * FROM category ORDER BY catname");
+	var query = client.query("SELECT * FROM category WHERE isactive='TRUE' ORDER BY catname");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -652,6 +662,91 @@ app.get('/Project1Srv/categories', function(req, res){
 		res.json(response);
 	});
 });
+
+app.get('/Project1Srv/todaysales', function(req, res){
+
+	console.log("GET today sales");
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+			"FROM product, sale NATURAL JOIN checkout,invoice " +
+			"WHERE productid = prodid AND invid=invoiceid " +
+			"AND date = CURRENT_DATE " +
+			"group by prodid,prodname " +
+			"UNION " +
+			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+			"FROM winningBid AS W, auction AS A,product " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid " +
+			"AND enddate = CURRENT_DATE " +
+			"group by prodid,prodname");
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"todaysales" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.get('/Project1Srv/weeksales', function(req, res){
+
+	console.log("GET this week sales");
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+			"FROM product, sale NATURAL JOIN checkout,invoice " +
+			"WHERE productid = prodid AND invid=invoiceid " +
+			"AND date > CURRENT_DATE-7 " +
+			"group by prodid,prodname " +
+			"UNION " +
+			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+			"FROM winningBid AS W, auction AS A,product " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid " +
+			"AND enddate > CURRENT_DATE-7 " +
+			"group by prodid,prodname");
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"weeksales" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.get('/Project1Srv/monthsales', function(req, res){
+
+	console.log("GET this month sales");
+	var client = new pg.Client(conString);
+	client.connect();
+
+	var query = client.query("SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(totalprice) AS Total " +
+			"FROM product, sale NATURAL JOIN checkout,invoice " +
+			"WHERE productid = prodid AND invid=invoiceid " +
+			"AND EXTRACT(MONTH FROM date) > EXTRACT(MONTH FROM CURRENT_DATE)-1 " +
+			"group by prodid,prodname " +
+			"UNION " +
+			"SELECT prodid AS ID,prodname AS Name, count(prodname) AS Quantity,sum(bidammount) AS Total " +
+			"FROM winningBid AS W, auction AS A,product " +
+			"WHERE prodid = productid AND W.auctionid=A.auctionid " +
+			"AND EXTRACT(MONTH FROM enddate) > EXTRACT(MONTH FROM CURRENT_DATE)-1 " +
+			"group by prodid,prodname");
+
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"monthsales" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
 
 app.get('/Project1Srv/subcategory/:id', function(req, res){
 
@@ -1481,6 +1576,187 @@ app.post('/Project1Srv/accounts/', function(req, res) {
 	});
 });
 
+app.put('/Project1Srv/accountfname/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE account SET fname= '" + req.param('password') + "' " +
+			"WHERE username= '" + req.param('username') + "' RETURNING account.username");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountlname/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE account SET lname= '" + req.param('password') + "' " +
+			"WHERE username= '" + req.param('username') + "' RETURNING account.username");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountshipping/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE address SET address= '" + req.param('password') + "' " +
+			"WHERE addressid = (SELECT shippingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountbilling/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE address SET address= '" + req.param('password') + "' " +
+			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountcardnumber/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE creditcard SET cardnumber= '" + req.param('password') + "' " +
+			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountcardtype/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE creditcard SET cardnumber= '" + req.param('password') + "' " +
+			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountsecurity/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE creditcard SET securitynumber= '" + req.param('password') + "' " +
+			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountexpdate/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE creditcard SET expdate= '" + req.param('password') + "' " +
+			"WHERE addressid = (SELECT billingid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountemail/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE account SET email= '" + req.param('password') + "' " +
+			"WHERE username = '" + req.param('username') + "' RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+app.put('/Project1Srv/accountbank/', function(req, res) {
+	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
+	var client = new pg.Client(conString);
+	client.connect();
+	// Hay que buscar el query correcto
+	var query = client.query("UPDATE depositaccountid SET bankaccountnumber= '" + req.param('password') + "' " +
+			"WHERE depositaccountid = (SELECT depositid FROM account WHERE username = '" + req.param('username') + "')  RETURNING *");
+	
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountspassword" : result.rows};
+		client.end();
+		res.json(response);
+	});
+});
+
+
 app.put('/Project1Srv/accountspassword/', function(req, res) {
 	console.log("PUT account: " + req.param('username') + ", " + req.param('password'));
 	var client = new pg.Client(conString);
@@ -1500,15 +1776,23 @@ app.put('/Project1Srv/accountspassword/', function(req, res) {
 });
 
 
+
 // REST Operation - HTTP DELETE to delete an account based on its id
-app.put('/Project1Srv/accountsdeleted/', function(req, res) {
+app.post('/Project1Srv/accountsdeleted/', function(req, res) {
 	console.log("DELETE account: " + req.param('username'));
 	var client = new pg.Client(conString);
 	client.connect();
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
 			"WHERE username= '" + req.param('username') + "'");
-	client.end();
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountsdeleted" : result.rows};
+		client.end();
+		res.json(response);
+	});
 });
 
 app.put('/Project1Srv/accountsdelete/:id', function(req, res) {
@@ -1520,7 +1804,14 @@ app.put('/Project1Srv/accountsdelete/:id', function(req, res) {
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
 			"WHERE accountid= '" + id + "'");
 			
-	client.end();
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountsdelete" : result.rows};
+		client.end();
+		res.json(response);
+	});
 });
 
 // REST Operation - HTTP POST to add a new a account
@@ -1543,7 +1834,14 @@ app.post('/Project1Srv/accountscreated', function(req, res) {
 		"values((select (max(creditid)+1) as creditid from creditcard),(select billingid from aid),'"+ req.param('credittype') +
 		"','"+ req.param('creditnumber') +"','"+ req.param('securitynumber') +"','"+ req.param('expdate') +"');");
 		
-	client.end();
+	query.on("row", function (row, result) {
+		result.addRow(row);
+	});
+	query.on("end", function (result) {
+		var response = {"accountscreated" : result.rows};
+		client.end();
+		res.json(response);
+	});
 });
 
 app.post('/Project1Srv/insertinvoice', function(req, res) {
@@ -1574,7 +1872,7 @@ app.post('/Project1Srv/insertcheckout', function(req, res) {
 	client.connect();
 
 	var query= client.query("INSERT INTO checkout(creditid, invid, totalprice, saleid, quantity) " +
-	"VALUES ("+req.param('creditid')+","+req.param('invoiceid')+","+req.param('totalprice')+","+req.param('id')+","+
+	"VALUES ("+req.param('creditid')+","+req.param('invoiceid')+","+req.param('totalprice')+","+req.param('saleid')+","+
 	req.param('count')+") RETURNING *");
 
 	query.on("row", function (row, result) {
@@ -1738,7 +2036,7 @@ app.get('/Project1Srv/invoice/:id', function(req, res) {
 
 	var query = client.query("SELECT invoice.invoiceid as invoice, invoice.date as date, checkout.totalprice as totalprice, sale.price as price, "+
 	" checkout.quantity as quantity, checkout.saleid as saleid, product.prodname as prodname FROM invoice, checkout, sale, product, creditcard "+
-	" WHERE invoice.invoiceid= checkout.invid AND checkout.saleid= sale.saleid AND sale.prodid= product.productid AND creditcard.creditid=checkout.creditid AND creditcard.accountid="+id);
+	" WHERE invoice.invoiceid= checkout.invid AND checkout.saleid= sale.saleid AND sale.prodid= product.productid AND creditcard.creditid=checkout.creditid AND invoice.invoiceid="+id);
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
