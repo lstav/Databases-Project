@@ -1748,29 +1748,33 @@ $(document).on('click', '#submitcheckout-button', function() {
 	url : "http://lhl.herokuapp.com/LHL/insertinvoice",
 	type: 'post',
 	data : formBuyer,
+	async: false,
 	success : function(data) {
 		formBuyer.invoiceid=data.insertinvoice[0].invoiceid;
 		formBuyer.date=data.insertinvoice[0].date;
 	for(var i=0; i < productscheckout.length; i++){
-
 		var formData = {id:productscheckout[i].id, count: productscheckout[i].count, totalprice: productscheckout[i].totalprice,
 			invoiceid: data.insertinvoice[0].invoiceid, saleid: productscheckout[i].saleid};
+
 		formBuyer.totalprice= formBuyer.totalprice+ formData.totalprice;
 		var id= loginAccount.accountid;
 		$.ajax({
 			url : "http://lhl.herokuapp.com/LHL/creditinfo/"+id,
 			type: 'get',
+			async: false,
 			success : function(data) {
-					formData.creditid= data.creditinfo[0].creditid;			
+					formData.creditid= data.creditinfo[0].creditid;	
 					$.ajax({
 						url : "http://lhl.herokuapp.com/LHL/insertcheckout",
 						type: 'post',
+						async: false,
 						data:formData,
 						success : function(data) {
 						$.ajax({
 						url : "http://lhl.herokuapp.com/LHL/updateSale",
 						type: 'put',
 						data : formData,
+						async: false,
 						success : function(data) {
 				
 						setCookie(loginAccount.accountid, JSON.stringify('[]'));
@@ -1855,7 +1859,6 @@ $(document).on('pagebeforeshow', "#invoice-show", function(event, ui) {
 		 	  '</tr>');
 	
 		for(var i=0; i< productscheckout.length; i++){
-		
 		products.append('<tr><td class="item-name"><center><p>'+productscheckout[i].prodname+'</p></center></td>'+
 		      '<td><center><p class="cost">'+productscheckout[i].price+'</p></center></td>'+
 		      '<td><center><p class="qty">'+productscheckout[i].quantity+'</p></center></td>'+
