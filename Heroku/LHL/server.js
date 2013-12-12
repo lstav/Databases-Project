@@ -231,7 +231,7 @@ app.post('/LHL/addsale', function(req, res) {
 	client.connect();
 
 	var query= client.query("INSERT INTO sale(saleid, accountid, prodid, starttime, endtime, price, totalquantity) "+
-			"VALUES ((select (max(saleid)+1) as saleid from sale)"+req.param('account')+", "+req.param('productid')+", localtimestamp, '"+req.param('date')+" 00:00:00', "+req.param('price')+","+req.param('quantity')+") RETURNING *");
+			"VALUES ((select (max(saleid)+1) as saleid from sale), "+req.param('account')+", "+req.param('productid')+", localtimestamp, '"+req.param('date')+" 00:00:00', "+req.param('price')+","+req.param('quantity')+") RETURNING *");
 
 	query.on("row", function (row, result) {
 		result.addRow(row);

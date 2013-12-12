@@ -1755,18 +1755,21 @@ $(document).on('click', '#submitcheckout-button', function() {
 
 		var formData = {id:productscheckout[i].id, count: productscheckout[i].count, totalprice: productscheckout[i].totalprice,
 			invoiceid: data.insertinvoice[0].invoiceid, saleid: productscheckout[i].saleid};
+			
 		formBuyer.totalprice= formBuyer.totalprice+ formData.totalprice;
+			
 		var id= loginAccount.accountid;
 		$.ajax({
 			url : "http://lhl.herokuapp.com/LHL/creditinfo/"+id,
 			type: 'get',
 			success : function(data) {
-					formData.creditid= data.creditinfo[0].creditid;			
+					formData.creditid= data.creditinfo[0].creditid;				
 					$.ajax({
 						url : "http://lhl.herokuapp.com/LHL/insertcheckout",
 						type: 'post',
 						data:formData,
 						success : function(data) {
+							
 						$.ajax({
 						url : "http://lhl.herokuapp.com/LHL/updateSale",
 						type: 'put',
