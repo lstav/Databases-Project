@@ -405,10 +405,10 @@ app.get('/Project1Srv/purchaseusers/:id', function(req, res) {
 	var client = new pg.Client(conString);
 	client.connect();
 
-	var query = client.query("SELECT invid as invoice, totalprice as price, sale.saleid as saleid, product.productid as productid, "+
-	"product.prodname as prodname, creditcard.accountid as accountid, product.imagelink as img, checkout.quantity as quantity "+
-	"FROM checkout, sale, product, creditcard where checkout.saleid= sale.saleid and product.productid= sale.prodid and checkout.creditid= creditcard.creditid "+
-	"and creditcard.accountid="+id);
+	var query = client.query("SELECT invid as invoice, totalprice as price, sale.saleid as saleid, sale.accountid as sellerid, product.productid as productid, " +
+	"product.prodname as prodname, account.accountid, product.imagelink as img, checkout.quantity as quantity FROM checkout, sale, product, "+
+	"creditcard, address, account where checkout.saleid= sale.saleid and product.productid= sale.prodid and checkout.creditid= creditcard.creditid "+
+    "and creditcard.addressid= address.addressid and address.addressid= account.billingid and account.accountid="+id);
 
 	query.on("row", function (row, result) {
 		result.addRow(row);
@@ -1825,8 +1825,12 @@ app.post('/Project1Srv/rankuser/', function(req, res) {
 	var query = client.query("INSERT INTO rank (rankid, accountid, stars, buyerid) " +
 		"VALUES ((select (max(rankid)+1) as rankid from rank),"+ req.param('seller') +
 		", "+ req.param('ranking') +", "+ req.param('user') +")");
-	/*var query = client.query("UPDATE account SET apassword= '" + req.param('password') + "' " +
-			"WHERE username= '" + req.param('username') + "' RETURNING account.username");*/
+	
+	/*var query2 = client.query("UPDATE account " +
+		"SET rank = (SELECT round(avg(stars)) FROM rank NATURAL JOIN account " +
+		"WHERE accountid=" + req.param('seller') + ") " +
+		"WHERE accountid = " + req.param('seller') + ")");
+	*/
 	
 	query.on("row", function (row, result) {
 		result.addRow(row);
