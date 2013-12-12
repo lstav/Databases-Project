@@ -685,37 +685,51 @@ $(document).on('click', '#submit-auction', function() {
 	var cat= $('#categories-lists').val();
 	var dcription= $('#ptext').val();
 
-	if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0 && (visa||paypal)){
-
-		var formData = {account: loginAccount.accountid, name: pname, price:pprice, condition:cond, catid:cat, pmethod1: visa, pmethod2:paypal, link:image, date:enddate, description:dcription};
+	if(pname.length > 0){
+	//if(pname.length > 0 && pprice.length> 0 && enddate.length > 0 && cat > 0 && (visa||paypal)){
+		var formData = {account: loginAccount.accountid, name: pname, price:pprice, condition:cond, 
+			catid:cat, pmethod1: visa, pmethod2:paypal, date:enddate, description:dcription};
 		var product= {};
 		$.ajax({
-			url : "http://lhl.herokuapp.com/LHL/products",
+			url : "http://lhl.herokuapp.com/LHL/images/"+image,
 			type: 'post',
 			dataType: 'json',
 			data : formData,
 			success : function(data){
-			var product= data.productadd[0].productid;
-			formData.productid= product;
+			formData.image= data; 
+			
 			$.ajax({
-				url : "http://lhl.herokuapp.com/LHL/addauction",
+				url : "http://lhl.herokuapp.com/LHL/products",
 				type: 'post',
-				data : formData,
-				success : function() {
-				console.log('auction added');
-				GetAuctions();
-			},
-			error: function(data, textStatus, jqXHR){
+				dataType:"json",
+				success : function(data) {
+					var product= data.productadd[0].productid;
+					formData.productid= product;
+					/*
+					$.ajax({
+					url : "http://lhl.herokuapp.com/LHL/addauction",
+					type: 'post',
+					data : formData,
+					success : function() {
+					console.log('auction added');
+					GetAuctions();
+					},
+					error: function(data, textStatus, jqXHR){
+					console.log("textStatus: " + textStatus);
+					alert("auction not added!");}          	
+					});*/
+				},
+				error: function(data, textStatus, jqXHR){
 				console.log("textStatus: " + textStatus);
-				alert("auction not added!");}          	
-			});
+				alert("product not added!");}          	
+			}); 
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
-			alert("product not added!");
+			alert("image not loaded!");
 		}
 		}); 
-	} 
+	}
 
 	else {
 		alert("Please provide all information.");

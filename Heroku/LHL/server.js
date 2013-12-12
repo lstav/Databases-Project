@@ -41,6 +41,15 @@ var conString = process.env.DATABASE_URL;
 // d) DELETE - Remove an individual object, or collection (Database delete operation)
 
 // REST Operation - HTTP GET 
+app.post('/LHL/images/:image', function(req, res){
+	var image = req.params.image;
+	cloudinary.uploader.upload(image,
+	function(result) { 
+		console.log(result.url); 
+		res.json(result.url);
+	});
+});
+
 app.get('/LHL/accounts', function(req, res) {
 	console.log("GET");
 
