@@ -10,7 +10,7 @@
   		<script src="js/jquery.mobile-1.3.2.min.js"></script> 
 		<script src="appjs/product.js"></script>
 		
-		 <style type="text/css">
+	   <style type="text/css">
 		.ui-mobile-viewport{
     	background: url("http://img39.imageshack.us/img39/2575/b83n.jpg") repeat;
     	background-size: 100% 100% !important;
@@ -59,18 +59,17 @@
 						
 				<form id="item-form">
             <div data-role="fieldcontain">
-                <input name="productname" id="Product Name" placeholder="Product Name"
-                value="" type="text" data-mini="true">
+                <input name="productname" id="product-name" placeholder="Product Name"
+                value="" type="text">
             </div>
             <div data-role="fieldcontain">
-                <input name="Price" id="Price" placeholder="Product Price" value="" type="text"
-                data-mini="true">
+                <input name="Price" id="pprice" placeholder="Product Price" value="" type="text">
             </div>
             <div data-role="fieldcontain">
                 <label for="Condition">
                     Condition
-                </label>
-                <select id="Condition" name="" data-theme="a" data-mini="true">
+                </label><br>
+                <select id="condition" name="" data-theme="a">
                     <option value="New">
                         New
                     </option>
@@ -79,15 +78,46 @@
                     </option>
                 </select>
             </div>
+            
             <div data-role="fieldcontain">
-                <input name="Shipping" id="Shipping to" placeholder="Shipping" value=""
-                type="text" data-mini="true">
+                <label for="category">
+                  Category:
+                </label><br>
+                <select id="categories-lists" name="" data-theme="a"></select>
+            </div>
+            
+             <div data-role="fieldcontain">
+             	 <label for="product-quantity">
+                    Quantity:
+                </label><br>
+                <input id="pqty" placeholder="1"
+                value="1" type="text">
+            </div>
+			            
+             <div id="shipping-info" data-role="fieldcontain">
+                <fieldset data-role="controlgroup" data-type="vertical">
+                   <label for="shipping">
+                    Shipping to:
+                  </label><br>
+                    <input id="checkbox-world" name="Worldwide" type="checkbox">
+                    <label for="checkbox-world">
+                        Worldwide
+                    </label>
+                    <input id="checkbox-america" name="America" type="checkbox">
+                    <label for="checkbox-america">
+                        Americas
+                    </label>
+                    <input id="checkbox-europe" name="Europe" type="checkbox">
+                    <label for="checkbox-europe">
+                        Europe
+                    </label>
+                </fieldset>
             </div>
             <div id="Payments accepted" data-role="fieldcontain">
-                <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
-                    <legend>
-                        Payments
-                    </legend>
+                <fieldset data-role="controlgroup" data-type="vertical">
+                   <label for="payment">
+                    Payments
+                  </label><br>
                     <input id="checkbox1" name="Visa" type="checkbox">
                     <label for="checkbox1">
                         Visa
@@ -99,16 +129,23 @@
                 </fieldset>
             </div>
             <div data-role="fieldcontain">
-                <input name="Duration" id="Time duration" placeholder="Time duration"
-                value="" type="text" data-mini="true">
+                <label for="enddate">End Date</label><br>
+				<input name="enddate" id="enddate" placeholder="yyyy-mm-dd" type="text"/>
             </div>
+            
             <div data-role="fieldcontain">
-            	<label for="image">Choose Image</label>
-                <input name="Image" id="image" placeholder="Image" value="" type="file" data-mini="true">
+            	<label for="image">Choose Image</label><br>
+                <input name="Image" id="image" placeholder="Image" value="" type="file">
             </div>
-            <input id="submit-sale" type="submit" data-theme="a" value="Submit"
-            data-mini="true">
+            
+            	
+			<div data-role="fieldcontain">
+				<label for="textarea">Product description:</label><br>
+				<textarea cols="40" rows="8" name="textarea" id="ptext"></textarea>
+			</div>
+            <input id="submit-sale" type="submit" data-theme="a" value="Submit">
         </form>
+			
 			
 		    </div>
 			

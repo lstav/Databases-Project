@@ -36,22 +36,18 @@
 			</div>
 			
 			<div data-role="content" class="center-wrapper">
-						
-				<div class="ui-grid-b">
-					<div class="ui-block-a"></div>
-					<div id= "message" class="ui-block-b" style= "color: DarkRed"></div>
-					<div id= "order-list" class="ui-block-c" >
-						<a href="#orderpop" data-rel="popup" data-role= "button" data-corners="false" data-icon="arrow-d" data-iconpos="right">Order by</a>
-						<div data-role="popup" id= "orderpop">
-            			<ul data-role="listview" data-icon="false"  data-inset="false">
-            				<li><a onClick=Sortby("PriceLow") >Price: Low to High</a></li>
-            				<li><a onClick=Sortby("PriceHigh") >Price: High to Low</a></li>
-            				<li><a onClick=Sortby("Name")>Product name</a></li>
-            			</ul></div>
-				    </div>
-				</div><br>
-			
-				<ul data-role="listview" id="auction-list"></ul>
+				
+				<div data-role="collapsible" data-collapsed="false" data-collapsed-icon= "false">
+					<h2>Auctions</h2>
+					<ul data-role="listview" id="auction-list"></ul>
+				</div>
+				
+				<div data-role="collapsible" data-collapsed="false" data-collapsed-icon= "false">
+					<h2>Awaiting approval</h2>
+					<ul data-role="listview" id="await-list">
+						<li>No auctions available.</li>
+					</ul>
+				</div>
 				
 				<div class="ui-grid-b">
 					<div class="ui-block-a"></div>

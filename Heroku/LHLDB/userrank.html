@@ -10,7 +10,9 @@
 		<script src="appjs/account.js"></script>
 		<script src="appjs/app.js"></script>
 		<script src="appjs/jquery.session.js"></script>
-		
+		<script src="appjs/jquery.min.js"></script>
+		<script src="appjs/jquery.raty.js"></script>
+		<script src="appjs/jquery.raty.min.js"></script>
 		<style>
 			.center-wrapper{
   				text-align: center;
@@ -47,7 +49,7 @@
 					<a href="#mypanel" data-role="button" data-icon="bars" data-iconpos="notext">Menu</a>
 				</div>
 			</div>
-			<form data-role="content" style="color:white">
+			<form id="rank-form" data-role="content" style="color:white">
 				
 				<div id= "urank-image"></div> 
 
@@ -61,12 +63,13 @@
 				<div class="ui-grid-b">
 					<div class= "ui-block-a">
 					</div>
-					<div class= "ui-block-b">
+					<div class= "ui-block-b" align="center">
 						<label for="rank">
                 			Rank User
             			</label>
-            			<input id="rank" type="range" name="slider" value="0" min="0" max="4"
+            			<input id="rank" type="range" name="rank" value="0" min="0" max="4"
             				data-highlight="true" data-theme="a" data-track-theme="e" data-mini="true">
+            		
 					</div>
 				</div>
 				<input id="submitrank" type="submit" data-theme="c" value="Submit" data-mini="true">
