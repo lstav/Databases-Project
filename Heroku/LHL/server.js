@@ -1868,7 +1868,7 @@ app.post('/LHL/accountsdeleted/', function(req, res) {
 	client.connect();
 	// Hay que buscar el query correcto
 	var query = client.query("UPDATE account SET isactive='FALSE' " +
-			"WHERE username= '" + req.param('delusername') + "'");
+			"WHERE username= '" + req.param('delusername') + "' RETURNING *");
 	query.on("row", function (row, result) {
 		result.addRow(row);
 	});
